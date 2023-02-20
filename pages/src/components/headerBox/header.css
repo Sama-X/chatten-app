@@ -1,0 +1,129 @@
+.headerBox{
+    display: flex;
+    justify-content:space-between;
+    /* width: 100%; */
+    padding: 10px 2%;
+    border-bottom: 1px solid #5D5D67;
+}
+.headerLeft img{
+    height: 40px;
+    display: inline-block;
+    width: 40px;
+}
+.headerRight{
+    display: flex;
+    padding: 8px;
+    background-color: #30323C;
+    border-radius: 6px;
+}
+.headerRight img{
+    height: 24px;
+    display: inline-block;
+    width: 24px;
+}
+
+/* left model */
+
+.drawHeaderBox{
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 18px;
+}
+.drawHeaderBox img{
+    width:125px;
+    height: 30px;
+    display: inline-block;
+}
+.drawHeaderBox div{
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 16px;
+    font-family: SourceSansPro-Regular, SourceSansPro;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 20px;
+    /* height: 20px; */
+    padding: 5px;
+    letter-spacing: 1px;
+}
+.otherMenuBox{
+    padding-left: 5px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(93, 93, 103, 1);
+}
+.otherMenuItem{
+    display: flex;
+    margin-bottom: 26px;
+}
+.otherMenuLeft{
+    display: flex;
+    width: 100%;
+}
+.otherMenuLeft img{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+.otherMenuLeft div{
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 24px;
+}
+.leftNumber{
+    color: #E84142;
+    font-size: 14px;
+}
+.otherMenuLeft .leftBottom{
+    font-size: 12px;
+}
+.otherMenuRight{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.otherMenuRightDiv{
+    width: 155px;
+}
+.otherMenuRightItem{
+    display: flex;
+    border-radius: 16px;
+    border: 1px solid #E84142;
+    padding: 1px 5px;
+    height: 22px;
+    width: 60px;
+    justify-content: center;
+}
+.otherMenuRight img{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 0;
+}
+.otherMenuRightItem div{
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #E84142;
+    line-height: 16px;
+    margin-top: 1px;
+}
+.ant-menu-submenu-title{
+    padding-left: 5px !important;
+    background: #30323C;
+    border-radius: 4px;
+}
+.ant-menu-item{
+    padding-left: 5px !important;
+}
+
+
+/* huiyuan */
+.memberBox{
+    width: 100%;
+}
+.memberBox img{
+    width: 100%;
+}
