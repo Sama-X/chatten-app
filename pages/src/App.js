@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import IndexBox from './index/index.js'
+import IndexBox from './components/index/index.js'
+import 'antd/dist/reset.css';
 
 function App() {
   return (

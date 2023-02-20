@@ -1,0 +1,44 @@
+.contentBox{
+    width: 100%;
+    padding: 10px 2%;
+}
+.contentLogo{
+    width: 89px;
+    height: 50px;
+    margin: 31px auto 24px;
+}
+.contentItemBox{
+    height: 65vh;
+    overflow: scroll;
+}
+.contentTitleItem{
+    margin-bottom:40px;
+}
+.contentTitleBox{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    font-size: 18px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 24px;
+    margin-bottom: 16px;
+}
+.contentTitleBox img{
+    width:24px;
+    height: 24px;
+    display: inline-block;
+}
+.contentQuestionBox{
+    width: 95%;
+    margin: 12px auto;
+    font-size: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 52px;
+    height: 52px;
+    background: #30323C;
+    border-radius: 8px;
+}

@@ -1,0 +1,48 @@
+.footerBox{
+    width: 100%;
+    border-top: 1px solid #5D5D67;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    padding: 12px 0;
+    background: #30323C;
+}
+.footerTokenBox{
+    width: 95%;
+    margin: 0 auto;
+    text-align: center;
+}
+/* fengexian */
+/* no token */
+.noTokenBtn{
+    width: 100%;
+    line-height: 48px;
+    background: #E84142;
+    border-radius: 8px;
+}
+/* token */
+.tokenInputBox{
+    position: relative;
+}
+.tokenInput{
+    width: 100%;
+    border-radius: 8px;
+}
+.tokenIcon{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 28px;
+    height: 28px;
+    z-index: 1;
+    display: inline-block;
+}
+/* fengexian */
+.footerTokenContent{
+    font-size: 14px;
+    margin-top: 14px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #ECECF1;
+    line-height: 20px;
+}
