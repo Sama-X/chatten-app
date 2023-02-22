@@ -1,16 +1,13 @@
-import { Button, Drawer, Radio, Space } from 'antd';
+import { Button, Drawer, Space } from 'antd';
 import { useState } from 'react';
 const App = () => {
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState('left');
+  const [placement] = useState('left');
   const showDrawer = () => {
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
-  };
-  const onChange = (e) => {
-    setPlacement(e.target.value);
   };
   return (
     <>

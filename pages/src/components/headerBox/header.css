@@ -15,6 +15,11 @@
     padding: 8px;
     background-color: #30323C;
     border-radius: 6px;
+
+}
+.headerRight div a{
+    color: white;
+    text-decoration: none;
 }
 .headerRight img{
     height: 24px;

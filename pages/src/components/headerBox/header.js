@@ -1,7 +1,9 @@
 import './header.css'
-import { Button, Drawer, Radio, Space, Menu, Image } from 'antd';
-import { PlusCircleFilled, MessageOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Drawer, Menu } from 'antd';
+import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+
+import { Link } from 'react-router-dom'
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -27,7 +29,7 @@ const items = [
 
 const App = () => {
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = useState('left');
+  const [placement] = useState('left');
   const showDrawer = () => {
     setOpen(true);
   };
@@ -37,6 +39,9 @@ const App = () => {
   const menuClick = (e) => {
     console.log('click ', e);
   };
+  const LoginFunc = () => {
+
+  }
 
   return (
     <div>
@@ -44,9 +49,9 @@ const App = () => {
         <div className="headerLeft" onClick={showDrawer}>
           <img src={require("../../assets/leftMenu.png")} alt=""/>
         </div>
-        <div className="headerRight">
+        <div className="headerRight" onClick={LoginFunc}>
           <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-          <div>登录</div>
+          <div><Link to='/Login'>登录</Link></div>
         </div>
       </div>
       <>

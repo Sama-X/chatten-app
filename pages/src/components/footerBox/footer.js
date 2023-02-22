@@ -1,12 +1,11 @@
 import './footer.css'
 
-import { Button, Drawer, Radio, Space, Input } from 'antd';
+import { Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 
 const App = () => {
   const [isToken, setToken] = useState(false);
-  const { Search } = Input;
   const fetchData = () => {
     setToken(true)
   }
@@ -21,7 +20,7 @@ const App = () => {
       {/* noToken */}
       <div className="footerTokenBox">
         {
-          isToken == true ?
+          isToken === true ?
           <Input.Group className="tokenInputBox">
             <Input onPressEnter={onSearchFunc} className="tokenInput"/>
             <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>

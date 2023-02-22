@@ -50,13 +50,13 @@ const App = () => {
   return (
     <div>
       <div className="contentBox">
-        <img src={require("../../assets/logo.png")} className="contentLogo"/>
+        <img src={require("../../assets/logo.png")} className="contentLogo" alt=''/>
           <div className="contentItemBox">
             {
                 dataList.map((item, index) =>{
                   return <div key={index} className="contentTitleItem">
                     <div className="contentTitleBox">
-                      <img src={ item.url }/>
+                      <img src={ item.url } alt=''/>
                       <div>{ item.title }</div>
                     </div>
                     {

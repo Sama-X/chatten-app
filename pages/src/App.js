@@ -1,13 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
-import IndexBox from './components/index/index.js'
 import 'antd/dist/reset.css';
+
+import Router from './router/index'
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <IndexBox></IndexBox>
+        {/* <IndexBox></IndexBox> */}
+        <Router></Router>
       </header>
     </div>
   );
