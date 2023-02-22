@@ -1,0 +1,108 @@
+/* mobile */
+.mobileAndCode{
+    width: 100%;
+}
+.quickLogin{
+    height: 48px;
+    font-size: 32px;
+    font-family: PingFangSC-Semibold, PingFang SC;
+    font-weight: 600;
+    color: #FFFFFF;
+    line-height: 48px;
+    text-align: center;
+    margin: 70px auto 24px;
+}
+.loginHeader{
+    width: 95%;
+    margin: 16px;
+    display: flex;
+    justify-content:space-between;
+}
+.leftLogo{
+    width: 125px;
+    height:34px;
+}
+.rightClose{
+    width: 40px;
+    height: 40px;
+}
+.mobileInput{
+    background: rgba(48, 50, 60, 1);
+    border: none;
+    width: 88%;
+    margin: 0 auto;
+    height: 52px;
+    line-height: 52px;
+    border-radius: 8px;
+    color: #fff;
+}
+.ant-input-number-input{
+    height: 52px !important;
+    line-height: 52px;
+    color: #fff !important;
+}
+
+.mobileInput .ant-input-number-input::placeholder {
+    color: #FFFFFF;
+}
+
+.sendCode{
+    width: 64px;
+    height: 64px;
+    margin: 24px auto;
+}
+
+
+/* code */
+.inputBox {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  .field-list {
+    padding: 0 31px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .field-item {
+    box-sizing: border-box;
+    width: 44px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+    background: #30323C;
+  }
+
+  .field-item-focus::before {
+    content: "";
+    display: block;
+    /* width: 4px;
+    height: 65px; */
+    margin:32px auto;
+    background: #428ffc;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  .field-input {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    /* height: 130px; */
+    padding: 0;
+    border: none;
+    outline: none;
+    opacity: 0;
+    background: transparent;
+  }
+
