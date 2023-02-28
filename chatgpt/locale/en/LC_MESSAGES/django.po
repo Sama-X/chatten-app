@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 12:01+0800\n"
+"POT-Creation-Date: 2023-02-27 17:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,42 +17,183 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: apps/base/exception.py:26
 msgid "success"
-msgstr ""
+msgstr "success"
 
 #: apps/base/exception.py:27
 msgid "bad request"
-msgstr ""
+msgstr "bad request"
 
 #: apps/base/exception.py:28
 msgid "internal server error"
-msgstr ""
+msgstr "internal server error"
 
 #: apps/base/exception.py:29
 msgid "unauthorized"
-msgstr ""
+msgstr "unauthorized"
 
 #: apps/base/exception.py:30
 msgid "forbidden"
-msgstr ""
+msgstr "forbidden"
 
 #: apps/base/exception.py:31
 msgid "not found"
-msgstr ""
+msgstr "not found"
 
 #: apps/base/exception.py:32
 msgid "method not allowed"
-msgstr ""
+msgstr "method not allowed"
 
 #: apps/base/exception.py:33
 msgid "header acceptable"
-msgstr ""
+msgstr "header acceptable"
 
 #: apps/base/exception.py:34
 msgid "unsupport media type"
-msgstr ""
+msgstr "unsupport media type"
 
 #: apps/base/exception.py:35
 msgid "too many requests"
-msgstr ""
+msgstr "too many requests"
+
+#: apps/base/exception.py:48
+msgid "invalid code"
+msgstr "invalid code"
+
+#: apps/base/exception.py:61
+msgid "chat robot no resp"
+msgstr "chat robot no resp"
+
+#: apps/chat/models.py:17
+msgid "db:chatrecord: msg type text"
+msgstr "text"
+
+#: apps/chat/models.py:22
+msgid "db:chatrecord: user foreign key"
+msgstr "chat user id"
+
+#: apps/chat/models.py:24
+msgid "db:chatrecord: message type"
+msgstr "chat message type"
+
+#: apps/chat/models.py:26
+msgid "db:chatrecord: question"
+msgstr "question"
+
+#: apps/chat/models.py:28
+msgid "db:chatrecord: approval number"
+msgstr "approval number"
+
+#: apps/chat/models.py:29
+msgid "db:chatrecord: chatgpt response result"
+msgstr "chatgpt response result"
+
+#: apps/chat/models.py:30
+msgid "db:chatrecord: QA success"
+msgstr "QA success status"
+
+#: apps/chat/models.py:31
+msgid "db:chatrecord: question time"
+msgstr "question request time"
+
+#: apps/chat/models.py:32
+msgid "db:chatrecord: chatgpt response time"
+msgstr "chatgpt response time"
+
+#: apps/chat/models.py:38
+msgid "db:chatrecord:ChatRecord"
+msgstr "ChatRecord Table"
+
+#: apps/chat/serializer.py:14
+msgid "serializer: page"
+msgstr "page"
+
+#: apps/chat/serializer.py:15
+msgid "serializer: offset"
+msgstr "offset"
+
+#: apps/chat/serializer.py:16
+msgid "serializer: order"
+msgstr "order field"
+
+#: apps/chat/serializer.py:23
+msgid "serializer: question"
+msgstr "question"
+
+#: apps/users/models.py:13
+msgid "db:account:user mobile"
+msgstr "user mobile"
+
+#: apps/users/models.py:14
+msgid "db:account:user password"
+msgstr "user password"
+
+#: apps/users/models.py:15
+msgid "db:account:user nickname"
+msgstr "user nickname"
+
+#: apps/users/models.py:16
+msgid "db:account:user avatar"
+msgstr "user avatar"
+
+#: apps/users/models.py:17
+msgid "db:account:user experience time"
+msgstr "user experience time"
+
+#: apps/users/models.py:18
+msgid "db:account:user is vip"
+msgstr "user is vip"
+
+#: apps/users/models.py:19
+msgid "db:account:user last login time"
+msgstr "user last login time"
+
+#: apps/users/models.py:20
+msgid "db:account:user last login ip"
+msgstr "user last login ip"
+
+#: apps/users/models.py:26
+msgid "db:account:Account"
+msgstr "Account"
+
+#: apps/users/models.py:38
+msgid "db:MessageLog: category notify"
+msgstr "notice"
+
+#: apps/users/models.py:43
+msgid "db:MessageLog:message mobile"
+msgstr "message mobile"
+
+#: apps/users/models.py:45
+msgid "db:MessageLog:message content"
+msgstr "message content"
+
+#: apps/users/models.py:46
+msgid "db:MessageLog:message category"
+msgstr "message category"
+
+#: apps/users/models.py:47
+msgid "db:MessageLog: send message response"
+msgstr "send message response"
+
+#: apps/users/models.py:48
+msgid "db:MessageLog: message send status"
+msgstr "message send status"
+
+#: apps/users/models.py:49
+msgid "db:MessageLog: request time"
+msgstr "request time"
+
+#: apps/users/models.py:50
+msgid "db:MessageLog: response time"
+msgstr "response time"
+
+#: apps/users/serializer.py:14 apps/users/serializer.py:24
+msgid "mobile phone number"
+msgstr "mobile phone number"
+
+#: apps/users/serializer.py:16
+msgid "verification code"
+msgstr "verification code"

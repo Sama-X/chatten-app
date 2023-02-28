@@ -14,7 +14,7 @@ from base.constants import (
 )
 from base.response import APIResponse
 from users.models import AccountModel
-from users.serializer import LoginSerializer
+from users.serializer import LoginSerializer, SendSmsMessageSerializer
 
 
 class LoginViewSet(viewsets.GenericViewSet):
@@ -24,7 +24,7 @@ class LoginViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'])
     def token(self, request, *args, **kwargs):
         """
-        url: /api/v1/login
+        url: /api/v1/users/token
         """
         form = LoginSerializer(data=request.json)
         form.is_valid(raise_exception=True)
@@ -52,3 +52,20 @@ class LoginViewSet(viewsets.GenericViewSet):
             'nickname': account.nickname,
             'token': token
         })
+
+
+class SmsMessageViewSet(viewsets.GenericViewSet):
+    """
+    Send sms message api.
+    """
+
+    @action(methods=['POST'], url_path="sms-code")
+    def sms_code(self, request, *args, **kwargs):
+        """
+        send sms code api.
+        url: /api/v1/users/sms-code
+        """
+        form = SendSmsMessageSerializer(data=request.json)
+        form.is_valid(raise_exception=True)
+
+        mobile = form.validated_data['mobile']  # type: ignore

@@ -50,5 +50,20 @@ class UserErrorCode:
 
     ERRORS_DICT = dict(ERRORS)
 
+
+class ChatErrorCode:
+    """
+    chat error code
+    """
+    CHAT_ROBOT_NO_RESP = 200100
+
+    ERRORS = (
+        (CHAT_ROBOT_NO_RESP, _('chat robot no resp')),
+    )
+
+    ERRORS_DICT = dict(ERRORS)
+
 ALL_ERROR_DICT = {}
 ALL_ERROR_DICT.update(SystemErrorCode.ERRORS_DICT)
+ALL_ERROR_DICT.update(UserErrorCode.ERRORS_DICT)
+ALL_ERROR_DICT.update(ChatErrorCode.ERRORS_DICT)
