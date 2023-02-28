@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 17:10+0800\n"
+"POT-Creation-Date: 2023-02-28 17:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,10 +194,16 @@ msgstr "response time"
 msgid "db:account:MessageLog"
 msgstr "message log"
 
-#: apps/users/serializer.py:14 apps/users/serializer.py:24
+#: apps/users/serializer.py:16 apps/users/serializer.py:26
 msgid "mobile phone number"
 msgstr "mobile phone number"
 
-#: apps/users/serializer.py:16
+#: apps/users/serializer.py:18
 msgid "verification code"
 msgstr "verification code"
+
+#: apps/users/serializer.py:36
+#, fuzzy
+#| msgid "mobile phone number"
+msgid "Incorrect format of mobile phone number"
+msgstr "Incorrect format of mobile phone number"
