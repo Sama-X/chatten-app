@@ -30,7 +30,7 @@ class SystemErrorCode:
         (HTTP_403_FORBIDDEN, _('forbidden')),
         (HTTP_404_NOT_FOUND, _('not found')),
         (HTTP_405_METHOD_NOT_ALLOWED, _('method not allowed')),
-        (HTTP_406_NOT_ACCEPTABLE, _('header acceptable')),
+        (HTTP_406_NOT_ACCEPTABLE, _('not acceptable')),
         (HTTP_415_UNSUPPORTED_MEDIA_TYPE, _('unsupport media type')),
         (HTTP_429_TOO_MANY_REQUESTS, _('too many requests')),
     )

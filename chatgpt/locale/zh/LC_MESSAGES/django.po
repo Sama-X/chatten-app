@@ -16,196 +16,193 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: apps/base/exception.py:26
 msgid "success"
-msgstr "success"
+msgstr "成功"
 
 #: apps/base/exception.py:27
 msgid "bad request"
-msgstr "bad request"
+msgstr "错误请求"
 
 #: apps/base/exception.py:28
 msgid "internal server error"
-msgstr "internal server error"
+msgstr "服务器内部错误"
 
 #: apps/base/exception.py:29
 msgid "unauthorized"
-msgstr "unauthorized"
+msgstr "未授权"
 
 #: apps/base/exception.py:30
 msgid "forbidden"
-msgstr "forbidden"
+msgstr "没有权限"
 
 #: apps/base/exception.py:31
 msgid "not found"
-msgstr "not found"
+msgstr "未找到"
 
 #: apps/base/exception.py:32
 msgid "method not allowed"
-msgstr "method not allowed"
+msgstr "当前方法不被允许"
 
 #: apps/base/exception.py:33
 #, fuzzy
 #| msgid "header acceptable"
 msgid "not acceptable"
-msgstr "not acceptable"
+msgstr "服务器无法根据客户端请求的内容特性完成请求"
 
 #: apps/base/exception.py:34
 msgid "unsupport media type"
-msgstr "unsupport media type"
+msgstr "服务器无法处理请求附带的媒体格式"
 
 #: apps/base/exception.py:35
 msgid "too many requests"
-msgstr "too many requests"
+msgstr "请求过于频繁"
 
 #: apps/base/exception.py:48
 msgid "invalid code"
-msgstr "invalid code"
+msgstr "无效的验证码"
 
 #: apps/base/exception.py:61
 msgid "chat robot no resp"
-msgstr "chat robot no resp"
+msgstr "chapght未响应"
 
 #: apps/chat/models.py:17
 msgid "db:chatrecord: msg type text"
-msgstr "text"
+msgstr "文本类型"
 
 #: apps/chat/models.py:22
 msgid "db:chatrecord: user foreign key"
-msgstr "chat user id"
+msgstr "用户id"
 
 #: apps/chat/models.py:24
 msgid "db:chatrecord: message type"
-msgstr "chat message type"
+msgstr "消息类型"
 
 #: apps/chat/models.py:26
 msgid "db:chatrecord: question"
-msgstr "question"
+msgstr "问题"
 
 #: apps/chat/models.py:27
 msgid "db:chatrecord: question time"
-msgstr "question request time"
+msgstr "提问时间"
 
 #: apps/chat/models.py:29
 msgid "db:chatrecord: approval number"
-msgstr "approval number"
+msgstr "点赞数"
 
 #: apps/chat/models.py:30
 msgid "db:chatrecord: chatgpt response result"
-msgstr "chatgpt response result"
+msgstr "gpt响应数据"
 
 #: apps/chat/models.py:31
 msgid "db:chatrecord: QA success"
-msgstr "QA success status"
+msgstr "是否响应"
 
 #: apps/chat/models.py:32
 msgid "db:chatrecord: chatgpt response time"
-msgstr "chatgpt response time"
+msgstr "响应时间"
 
 #: apps/chat/models.py:38
 msgid "db:chatrecord:ChatRecord"
-msgstr "ChatRecord Table"
+msgstr "聊天记录"
 
 #: apps/chat/serializer.py:14
 msgid "serializer: page"
-msgstr "page"
+msgstr "页码"
 
 #: apps/chat/serializer.py:15
 msgid "serializer: offset"
-msgstr "offset"
+msgstr "页大小"
 
 #: apps/chat/serializer.py:16
 msgid "serializer: order"
-msgstr "order field"
+msgstr "排序字段"
 
 #: apps/chat/serializer.py:23
 msgid "serializer: question"
-msgstr "question"
+msgstr "问题"
 
 #: apps/users/models.py:13
 msgid "db:account:user mobile"
-msgstr "user mobile"
+msgstr "手机号"
 
 #: apps/users/models.py:14
 msgid "db:account:user password"
-msgstr "user password"
+msgstr "密码"
 
 #: apps/users/models.py:15
 msgid "db:account:user nickname"
-msgstr "user nickname"
+msgstr "昵称"
 
 #: apps/users/models.py:16
 msgid "db:account:user avatar"
-msgstr "user avatar"
+msgstr "头像"
 
 #: apps/users/models.py:17
 msgid "db:account:user experience time"
-msgstr "user experience time"
+msgstr "体验次数"
 
 #: apps/users/models.py:18
 msgid "db:account:user is vip"
-msgstr "user is vip"
+msgstr "是否vip"
 
 #: apps/users/models.py:19
 msgid "db:account:user last login time"
-msgstr "user last login time"
+msgstr "最近登录时间"
 
 #: apps/users/models.py:20
 msgid "db:account:user last login ip"
-msgstr "user last login ip"
+msgstr "最近登录ip"
 
 #: apps/users/models.py:26
 msgid "db:account:Account"
-msgstr "Account"
+msgstr "账户"
 
 #: apps/users/models.py:38
 msgid "db:MessageLog: category notify"
-msgstr "notice"
+msgstr "通知"
 
 #: apps/users/models.py:43
 msgid "db:MessageLog:message mobile"
-msgstr "message mobile"
+msgstr "手机号"
 
 #: apps/users/models.py:45
 msgid "db:MessageLog:message content"
-msgstr "message content"
+msgstr "短信内容"
 
 #: apps/users/models.py:46
 msgid "db:MessageLog:message category"
-msgstr "message category"
+msgstr "短信类型"
 
 #: apps/users/models.py:47
 msgid "db:MessageLog: message send status"
-msgstr "message send status"
+msgstr "短信发送状态"
 
 #: apps/users/models.py:48
 msgid "db:MessageLog: request time"
-msgstr "request time"
+msgstr "发送时间"
 
 #: apps/users/models.py:49
 msgid "db:MessageLog: send message response"
-msgstr "send message response"
+msgstr "响应内容"
 
 #: apps/users/models.py:50
 msgid "db:MessageLog: response time"
-msgstr "response time"
+msgstr "响应时间"
 
 #: apps/users/models.py:56
 msgid "db:account:MessageLog"
-msgstr "message log"
+msgstr "短信记录"
 
 #: apps/users/serializer.py:16 apps/users/serializer.py:26
 msgid "mobile phone number"
-msgstr "mobile phone number"
+msgstr "手机号"
 
 #: apps/users/serializer.py:18
 msgid "verification code"
-msgstr "verification code"
+msgstr "验证码"
 
 #: apps/users/serializer.py:36
-#, fuzzy
-#| msgid "mobile phone number"
 msgid "Incorrect format of mobile phone number"
-msgstr "Incorrect format of mobile phone number"
+msgstr "无效的手机号码"
