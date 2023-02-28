@@ -48,3 +48,11 @@ class MessageLogModel(BaseModel):
     success = models.BooleanField(default=False, verbose_name=_("db:MessageLog: message send status"))
     request_time = models.DateTimeField(verbose_name=_("db:MessageLog: request time"))
     response_time = models.DateTimeField(verbose_name=_("db:MessageLog: response time"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("db:account:MessageLog")
+        verbose_name_plural = verbose_name
+        db_table = "message_log"

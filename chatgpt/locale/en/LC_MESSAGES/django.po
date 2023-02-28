@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-27 17:30+0800\n"
+"POT-Creation-Date: 2023-02-28 03:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,6 +189,10 @@ msgstr "request time"
 #: apps/users/models.py:50
 msgid "db:MessageLog: response time"
 msgstr "response time"
+
+#: apps/users/models.py:56
+msgid "db:account:MessageLog"
+msgstr "message log"
 
 #: apps/users/serializer.py:14 apps/users/serializer.py:24
 msgid "mobile phone number"

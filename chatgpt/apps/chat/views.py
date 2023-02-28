@@ -19,7 +19,7 @@ class ChatViewset(viewsets.GenericViewSet):
     create chat api.
     """
 
-    @action(methods=["POST"])
+    @action(methods=["POST"], detail=False)
     def question(self, request, *args, **kwargs):
         """
         send question api.
@@ -51,7 +51,7 @@ class ChatViewset(viewsets.GenericViewSet):
             return APIResponse(msg=obj.answer)
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
-    @action(methods=["GET"])
+    @action(methods=["GET"], detail=False)
     def records(self, request, *args, **kwargs):
         """
         get chat records

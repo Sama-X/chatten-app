@@ -21,7 +21,7 @@ class LoginViewSet(viewsets.GenericViewSet):
 
     SMS_CODE_KEY = 'mobile:login:{}:code'
 
-    @action(methods=['POST'])
+    @action(methods=['POST'], detail=False)
     def token(self, request, *args, **kwargs):
         """
         url: /api/v1/users/token
@@ -59,7 +59,7 @@ class SmsMessageViewSet(viewsets.GenericViewSet):
     Send sms message api.
     """
 
-    @action(methods=['POST'], url_path="sms-code")
+    @action(methods=['POST'], url_path="sms-code", detail=False)
     def sms_code(self, request, *args, **kwargs):
         """
         send sms code api.
