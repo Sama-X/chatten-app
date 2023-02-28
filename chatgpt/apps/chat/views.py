@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 
 from base.ai import AIHelper
 from base.exception import ChatErrorCode
+from base.middleware import AnonymousAuthentication
 from base.response import APIResponse
 from chat.models import ChatRecordModel
 
@@ -19,19 +20,21 @@ class ChatViewset(viewsets.GenericViewSet):
     create chat api.
     """
 
+    authentication_classes = [AnonymousAuthentication,]
+
     @action(methods=["POST"], detail=False)
     def question(self, request, *args, **kwargs):
         """
         send question api.
         url: /api/v1/chat/question
         """
-        serializer = CreateQuestionForm(data=request.json)
+        serializer = CreateQuestionForm(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         question = serializer.validated_data["question"] # type: ignore
 
         obj = ChatRecordModel.objects.create(
-            user_id=1,
+            user_id=request.user.id or -1,
             msg_type=ChatRecordModel.MSG_TYPE_TEXT,
             question=question,
             answer=None,
@@ -43,12 +46,15 @@ class ChatViewset(viewsets.GenericViewSet):
         choices = resp.get('choices', [])
         if len(choices) > 0:
             obj.answer = choices[0].get('text')
+            obj.success = True
         obj.response = resp
         obj.response_time = datetime.now()
         obj.save()
 
         if obj.answer:
-            return APIResponse(msg=obj.answer)
+            return APIResponse(result={
+                "answer": obj.answer
+            })
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
     @action(methods=["GET"], detail=False)
@@ -63,7 +69,7 @@ class ChatViewset(viewsets.GenericViewSet):
         page = query.validated_data.get('page') or 1  # type: ignore
         offset = query.validated_data.get('offset') or 20  # type: ignore
         order = query.validated_data.get('order') or '-id'  # type: ignore
-        user_id = 1
+        user_id = request.user.id
 
         order_fields = []
         support_fields = [i.name for i in ChatRecordModel._meta.fields]

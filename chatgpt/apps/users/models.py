@@ -44,10 +44,10 @@ class MessageLogModel(BaseModel):
     )
     content = models.TextField(null=False, verbose_name=_("db:MessageLog:message content"))
     category = models.SmallIntegerField(default=0, verbose_name=_("db:MessageLog:message category"))
-    response = models.TextField(verbose_name=_("db:MessageLog: send message response"))
     success = models.BooleanField(default=False, verbose_name=_("db:MessageLog: message send status"))
     request_time = models.DateTimeField(verbose_name=_("db:MessageLog: request time"))
-    response_time = models.DateTimeField(verbose_name=_("db:MessageLog: response time"))
+    response = models.TextField(null=True, verbose_name=_("db:MessageLog: send message response"))
+    response_time = models.DateTimeField(null=True, verbose_name=_("db:MessageLog: response time"))
 
     class Meta:
         """

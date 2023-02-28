@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 03:23+0000\n"
+"POT-Creation-Date: 2023-02-28 17:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,21 +82,21 @@ msgstr "chat message type"
 msgid "db:chatrecord: question"
 msgstr "question"
 
-#: apps/chat/models.py:28
+#: apps/chat/models.py:27
+msgid "db:chatrecord: question time"
+msgstr "question request time"
+
+#: apps/chat/models.py:29
 msgid "db:chatrecord: approval number"
 msgstr "approval number"
 
-#: apps/chat/models.py:29
+#: apps/chat/models.py:30
 msgid "db:chatrecord: chatgpt response result"
 msgstr "chatgpt response result"
 
-#: apps/chat/models.py:30
+#: apps/chat/models.py:31
 msgid "db:chatrecord: QA success"
 msgstr "QA success status"
-
-#: apps/chat/models.py:31
-msgid "db:chatrecord: question time"
-msgstr "question request time"
 
 #: apps/chat/models.py:32
 msgid "db:chatrecord: chatgpt response time"
@@ -175,16 +175,16 @@ msgid "db:MessageLog:message category"
 msgstr "message category"
 
 #: apps/users/models.py:47
-msgid "db:MessageLog: send message response"
-msgstr "send message response"
-
-#: apps/users/models.py:48
 msgid "db:MessageLog: message send status"
 msgstr "message send status"
 
-#: apps/users/models.py:49
+#: apps/users/models.py:48
 msgid "db:MessageLog: request time"
 msgstr "request time"
+
+#: apps/users/models.py:49
+msgid "db:MessageLog: send message response"
+msgstr "send message response"
 
 #: apps/users/models.py:50
 msgid "db:MessageLog: response time"

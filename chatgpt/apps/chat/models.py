@@ -24,12 +24,12 @@ class ChatRecordModel(BaseModel):
         default=MSG_TYPE_TEXT, db_index=True, verbose_name=_("db:chatrecord: message type")
     )
     question = models.TextField(null=False, verbose_name=_("db:chatrecord: question"))
-    answer = models.TextField(verbose_name="db:chatrecord: answer")
-    approval = models.IntegerField(default=0, verbose_name=_("db:chatrecord: approval number"))
-    response = models.TextField(verbose_name=_("db:chatrecord: chatgpt response result"))
-    success = models.BooleanField(default=False, verbose_name=_("db:chatrecord: QA success"))
     question_time = models.DateTimeField(verbose_name=_("db:chatrecord: question time"))
-    response_time = models.DateTimeField(verbose_name=_("db:chatrecord: chatgpt response time"))
+    answer = models.TextField(null=True, verbose_name="db:chatrecord: answer")
+    approval = models.IntegerField(default=0, verbose_name=_("db:chatrecord: approval number"))
+    response = models.TextField(null=True, verbose_name=_("db:chatrecord: chatgpt response result"))
+    success = models.BooleanField(default=False, verbose_name=_("db:chatrecord: QA success"))
+    response_time = models.DateTimeField(null=True, verbose_name=_("db:chatrecord: chatgpt response time"))
 
     class Meta:
         """

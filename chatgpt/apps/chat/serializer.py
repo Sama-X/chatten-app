@@ -28,11 +28,12 @@ class ChatRecordSerializer(serializers.ModelSerializer):
     Chat record serializer.
     """
 
-    question_time = serializers.CharField()
-    response_time = serializers.CharField()
+    question_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
+    response_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
+    add_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
     msg_type_name = serializers.SerializerMethodField()
 
-    def get_msg_type(self, obj):
+    def get_msg_type_name(self, obj):
         """
         get msg type name.
         """
@@ -44,6 +45,6 @@ class ChatRecordSerializer(serializers.ModelSerializer):
         """
         model = ChatRecordModel
         fields = (
-            'msg_type', 'msg_type_name', 'question', 'answer', 'approval', 'response', 'success',
+            'msg_type', 'msg_type_name', 'question', 'answer', 'approval',
             'question_time', 'response_time', 'add_time'
         )
