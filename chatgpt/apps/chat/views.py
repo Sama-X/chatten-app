@@ -34,8 +34,10 @@ class ChatViewset(viewsets.GenericViewSet):
 
         question = serializer.validated_data["question"] # type: ignore
 
+        messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, 0)
+
         obj = ChatRecordModel.objects.create(
-            user_id=request.user.id or -1,
+            user_id=request.user.id,
             msg_type=ChatRecordModel.MSG_TYPE_TEXT,
             question=question,
             answer=None,
@@ -43,13 +45,16 @@ class ChatViewset(viewsets.GenericViewSet):
         )
         obj.save()
 
-        resp = AIHelper.send_msg(question)
+        resp = AIHelper.send_msg(question, histories=messages)
         choices = resp.get('choices', [])
         if len(choices) > 0:
             obj.answer = choices[0].get('message', {}).get('content')
             obj.success = True
         obj.response = resp
         obj.response_time = datetime.now()
+        obj.prompt_tokens = resp.get('usage', {}).get('prompt_tokens', 0)
+        obj.resp_tokens = resp.get('usage', {}).get('completion_tokens', 0)
+        obj.total_tokens = resp.get('usage', {}).get('total_tokens', 0)
         obj.save()
 
         if obj.answer:

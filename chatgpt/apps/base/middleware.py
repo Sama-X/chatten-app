@@ -4,6 +4,7 @@ middleware modules.
 import traceback
 from django.conf import settings
 from django.core.cache import cache
+from django.utils.translation import gettext as _
 
 from rest_framework import authentication
 from rest_framework.exceptions import (
@@ -26,7 +27,8 @@ class AnonymousAuthentication(authentication.BaseAuthentication):
         """
         token = request.headers.get('Authorization')
         if not token:
-            return None
+            msg = _('auth: user need login')
+            raise AuthenticationFailed(msg)
 
         account_id = cache.get(LOGIN_TOKEN_ACCOUNT_KEY.format(token))
         # multiple login check
@@ -35,7 +37,8 @@ class AnonymousAuthentication(authentication.BaseAuthentication):
         #     return None
         user = AccountModel.objects.filter(id=account_id).first()
         if not user:
-            return None
+            msg = _('auth: user need login')
+            raise AuthenticationFailed(msg)
 
         return (user, None)
 

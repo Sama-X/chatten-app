@@ -40,7 +40,7 @@ class AccountModel(BaseModel):
         """
         generate password.
         """
-        self.password_hash = make_password(value)
+        self._password_hash = make_password(value)
 
     def check_password(self, value) -> bool:
         """

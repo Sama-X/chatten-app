@@ -41,3 +41,37 @@ class ChatRecordModel(BaseModel):
         verbose_name = _("db:chatrecord:ChatRecord")
         verbose_name_plural = verbose_name
         db_table = "chat_record"
+
+    @classmethod
+    def get_gpt_chat_logs(cls, user_id, max_tokens):
+        """
+        get chat logs
+        """
+        if not max_tokens:
+            return []
+
+        histories = cls.objects.filter(
+            user_id=user_id,
+            success=True
+        ).order_by('-id').all()
+
+        total_tokens = 0
+        messages = []
+        for item in histories:
+            if not item.answer:
+                continue
+
+            if total_tokens >= max_tokens:
+                break
+
+            messages.append({
+                "role": "assistant",
+                "content": item.answer.replace('\n', '')
+            })
+            messages.append({
+                "role": "user",
+                "content": item.question
+            })
+            total_tokens += item.total_tokens
+
+        return messages[::-1]
