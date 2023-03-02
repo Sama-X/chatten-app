@@ -43,9 +43,9 @@ class LoginViewSet(viewsets.GenericViewSet):
         if not form.is_valid():
             return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
-        mobile = form.validated_data['mobile']  # type: ignore
-        code = form.validated_data['code']  # type: ignore
-        password = form.validated_data['password']  # type: ignore
+        mobile = form.validated_data.get('mobile')  # type: ignore
+        code = form.validated_data.get('code')  # type: ignore
+        password = form.validated_data.get('password')  # type: ignore
 
         if not code and not password:
             return APIResponse(code=UserErrorCode.USER_OAUTH_REQUIRED)
@@ -70,6 +70,8 @@ class LoginViewSet(viewsets.GenericViewSet):
                 username=mobile,
                 mobile=mobile
             )
+            CommonUtil.generate_avax_wallet(account.id)
+
         ip_addr = request.META.get('REMOTE_ADDR')
         try:
             ip_addr = request.headers['X-Forwarded-For']
@@ -119,7 +121,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         account register api
         url: /api/v1/users/register
         """
-        form = CreateAccountSerializer(data=request.json)
+        form = CreateAccountSerializer(data=request.data)
         if not form.is_valid():
             return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
@@ -132,25 +134,40 @@ class LoginViewSet(viewsets.GenericViewSet):
         if exists:
             return APIResponse(code=UserErrorCode.USER_EXISTS)
 
-        account = AccountModel.objects.create(
-            username=username,
-            password=password
+        account = AccountModel(
+            username=username
         )
+        account.password = password
+        account.save()
 
-        try:
-            p = Popen([settings.AVAX_CLIENT, 'create'], stdout=PIPE)
-            values = p.communicate()
-            if values:
-                data = json.loads(values[0])
-                WalletModel.objects.create(
-                    user_id=account.id,
-                    category=WalletModel.CATEGORY_AVAX,
-                    address=data['address'],
-                    private_key=data['privateKey']
-                )
-        except OSError as error:
-            logger.warning('【user register】 generate wallet error reason: %s', error)
+        CommonUtil.generate_avax_wallet(account.id)
+        token = CommonUtil.generate_user_token(account.id)
 
+        return APIResponse(result={
+            'id': account.id,
+            'nickname': account.nickname,
+            'token': token
+        })
+
+    @action(methods=['POST'], detail=False)
+    def anonymous(self, request, *args, **kwargs):
+        """
+        create anonymous account
+        url: /api/v1/users/anonymous
+        """
+        username = uuid4().hex
+        exists = AccountModel.objects.filter(
+            username=username
+        ).count() > 0
+        if exists:
+            return APIResponse(code=UserErrorCode.USER_EXISTS)
+
+        account = AccountModel(
+            username=username
+        )
+        account.password = 'Aa12345678'
+        account.save()
+        CommonUtil.generate_avax_wallet(account.id)
         token = CommonUtil.generate_user_token(account.id)
 
         return APIResponse(result={
