@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 14:29+0800\n"
+"POT-Creation-Date: 2023-03-02 15:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,8 +46,6 @@ msgid "method not allowed"
 msgstr "method not allowed"
 
 #: apps/base/exception.py:33
-#, fuzzy
-#| msgid "header acceptable"
 msgid "not acceptable"
 msgstr "not acceptable"
 
@@ -116,7 +113,19 @@ msgstr "QA success status"
 msgid "db:chatrecord: chatgpt response time"
 msgstr "chatgpt response time"
 
-#: apps/chat/models.py:38
+#: apps/chat/models.py:33
+msgid "db.chatrecord: question token usage"
+msgstr "question tokens usage"
+
+#: apps/chat/models.py:34
+msgid "db.chatrecord: resp token usage"
+msgstr "resp tokens usage"
+
+#: apps/chat/models.py:35
+msgid "db.chatrecord: total token usage"
+msgstr "total tokens usage"
+
+#: apps/chat/models.py:41
 msgid "db:chatrecord:ChatRecord"
 msgstr "ChatRecord Table"
 
@@ -137,8 +146,6 @@ msgid "serializer: question"
 msgstr "question"
 
 #: apps/users/models.py:14
-#, fuzzy
-#| msgid "db:account:user nickname"
 msgid "db:account:username"
 msgstr "username"
 
@@ -251,7 +258,5 @@ msgid "username"
 msgstr "username"
 
 #: apps/users/serializer.py:49
-#, fuzzy
-#| msgid "mobile phone number"
 msgid "Incorrect format of mobile phone number"
 msgstr "Incorrect format of mobile phone number"

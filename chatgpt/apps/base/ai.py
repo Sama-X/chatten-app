@@ -1,10 +1,13 @@
 """
 AI module.
 """
+import logging
 import openai
 from django.conf import settings
 
 openai.api_key = settings.CHATGPT_KEY
+
+logger = logging.getLogger(__name__)
 
 
 class AIHelper:
@@ -13,9 +16,17 @@ class AIHelper:
     """
 
     @classmethod
-    def send_msg(cls, question: str, msg_type: str ='text'):
+    def send_msg(cls, question: str, msg_type: str ='text', histories=None):
         """
         send message.
         """
-        resp = openai.Completion.create(model="text-davinci-003", prompt=question, temperature=0.7,  max_tokens=2048)
-        return resp.to_dict_recursive() # type: ignore
+        histories = histories or []
+        histories.append({
+            "role": "user",
+            "content": question
+        })
+        logger.info("【chatgpt send】 payload: %s", histories)
+        resp = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=histories)
+        result = resp.to_dict_recursive()  # type: ignore
+        logger.info("【chatgpt send】 resp: %s", result)
+        return result

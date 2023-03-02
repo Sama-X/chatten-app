@@ -46,7 +46,7 @@ class ChatViewset(viewsets.GenericViewSet):
         resp = AIHelper.send_msg(question)
         choices = resp.get('choices', [])
         if len(choices) > 0:
-            obj.answer = choices[0].get('text')
+            obj.answer = choices[0].get('message', {}).get('content')
             obj.success = True
         obj.response = resp
         obj.response_time = datetime.now()

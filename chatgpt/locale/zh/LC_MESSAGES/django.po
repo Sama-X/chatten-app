@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 14:29+0800\n"
+"POT-Creation-Date: 2023-03-02 15:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,8 +45,6 @@ msgid "method not allowed"
 msgstr "当前方法不被允许"
 
 #: apps/base/exception.py:33
-#, fuzzy
-#| msgid "header acceptable"
 msgid "not acceptable"
 msgstr "服务器无法根据客户端请求的内容特性完成请求"
 
@@ -115,7 +112,19 @@ msgstr "是否响应"
 msgid "db:chatrecord: chatgpt response time"
 msgstr "响应时间"
 
-#: apps/chat/models.py:38
+#: apps/chat/models.py:33
+msgid "db.chatrecord: question token usage"
+msgstr "提问token消耗"
+
+#: apps/chat/models.py:34
+msgid "db.chatrecord: resp token usage"
+msgstr "回答token消耗"
+
+#: apps/chat/models.py:35
+msgid "db.chatrecord: total token usage"
+msgstr "总token消耗"
+
+#: apps/chat/models.py:41
 msgid "db:chatrecord:ChatRecord"
 msgstr "聊天记录"
 
@@ -136,8 +145,6 @@ msgid "serializer: question"
 msgstr "问题"
 
 #: apps/users/models.py:14
-#, fuzzy
-#| msgid "db:account:user nickname"
 msgid "db:account:username"
 msgstr "用户名"
 

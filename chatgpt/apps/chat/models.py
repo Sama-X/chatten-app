@@ -30,6 +30,9 @@ class ChatRecordModel(BaseModel):
     response = models.TextField(null=True, verbose_name=_("db:chatrecord: chatgpt response result"))
     success = models.BooleanField(default=False, verbose_name=_("db:chatrecord: QA success"))
     response_time = models.DateTimeField(null=True, verbose_name=_("db:chatrecord: chatgpt response time"))
+    prompt_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: question token usage"))
+    resp_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: resp token usage"))
+    total_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: total token usage"))
 
     class Meta:
         """
