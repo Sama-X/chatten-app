@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 17:44+0800\n"
+"POT-Creation-Date: 2023-03-02 14:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,11 +59,23 @@ msgstr "服务器无法处理请求附带的媒体格式"
 msgid "too many requests"
 msgstr "请求过于频繁"
 
-#: apps/base/exception.py:48
+#: apps/base/exception.py:51
 msgid "invalid code"
 msgstr "无效的验证码"
 
-#: apps/base/exception.py:61
+#: apps/base/exception.py:52
+msgid "user exists"
+msgstr "用户已存在"
+
+#: apps/base/exception.py:53
+msgid "wrong user name or password"
+msgstr "错误的用户名或密码"
+
+#: apps/base/exception.py:54
+msgid "code or password required"
+msgstr "验证码或密码必填"
+
+#: apps/base/exception.py:67
 msgid "chat robot no resp"
 msgstr "chapght未响应"
 
@@ -123,79 +135,105 @@ msgstr "排序字段"
 msgid "serializer: question"
 msgstr "问题"
 
-#: apps/users/models.py:13
+#: apps/users/models.py:14
+#, fuzzy
+#| msgid "db:account:user nickname"
+msgid "db:account:username"
+msgstr "用户名"
+
+#: apps/users/models.py:15
 msgid "db:account:user mobile"
 msgstr "手机号"
 
-#: apps/users/models.py:14
+#: apps/users/models.py:16
 msgid "db:account:user password"
 msgstr "密码"
 
-#: apps/users/models.py:15
+#: apps/users/models.py:17
 msgid "db:account:user nickname"
 msgstr "昵称"
 
-#: apps/users/models.py:16
+#: apps/users/models.py:18
 msgid "db:account:user avatar"
 msgstr "头像"
 
-#: apps/users/models.py:17
+#: apps/users/models.py:19
 msgid "db:account:user experience time"
 msgstr "体验次数"
 
-#: apps/users/models.py:18
+#: apps/users/models.py:20
 msgid "db:account:user is vip"
 msgstr "是否vip"
 
-#: apps/users/models.py:19
+#: apps/users/models.py:21
 msgid "db:account:user last login time"
 msgstr "最近登录时间"
 
-#: apps/users/models.py:20
+#: apps/users/models.py:22
 msgid "db:account:user last login ip"
 msgstr "最近登录ip"
 
-#: apps/users/models.py:26
+#: apps/users/models.py:28
 msgid "db:account:Account"
 msgstr "账户"
 
-#: apps/users/models.py:38
+#: apps/users/models.py:59
 msgid "db:MessageLog: category notify"
 msgstr "通知"
 
-#: apps/users/models.py:43
+#: apps/users/models.py:64
 msgid "db:MessageLog:message mobile"
 msgstr "手机号"
 
-#: apps/users/models.py:45
+#: apps/users/models.py:66
 msgid "db:MessageLog:message content"
 msgstr "短信内容"
 
-#: apps/users/models.py:46
+#: apps/users/models.py:67
 msgid "db:MessageLog:message category"
 msgstr "短信类型"
 
-#: apps/users/models.py:47
+#: apps/users/models.py:68
 msgid "db:MessageLog: message send status"
 msgstr "短信发送状态"
 
-#: apps/users/models.py:48
+#: apps/users/models.py:69
 msgid "db:MessageLog: request time"
 msgstr "发送时间"
 
-#: apps/users/models.py:49
+#: apps/users/models.py:70
 msgid "db:MessageLog: send message response"
 msgstr "响应内容"
 
-#: apps/users/models.py:50
+#: apps/users/models.py:71
 msgid "db:MessageLog: response time"
 msgstr "响应时间"
 
-#: apps/users/models.py:56
+#: apps/users/models.py:77
 msgid "db:account:MessageLog"
 msgstr "短信记录"
 
-#: apps/users/serializer.py:16 apps/users/serializer.py:26
+#: apps/users/models.py:89
+msgid "db:Wallet:user account id"
+msgstr "用户id"
+
+#: apps/users/models.py:90
+msgid "db:Wallet:category"
+msgstr "钱包类型"
+
+#: apps/users/models.py:91
+msgid "db:Wallet:address"
+msgstr "钱包地址"
+
+#: apps/users/models.py:92
+msgid "db:Wallet:private key"
+msgstr "钱包私钥"
+
+#: apps/users/models.py:98
+msgid "db:Wallet"
+msgstr "钱包"
+
+#: apps/users/serializer.py:16 apps/users/serializer.py:39
 msgid "mobile phone number"
 msgstr "手机号"
 
@@ -203,6 +241,14 @@ msgstr "手机号"
 msgid "verification code"
 msgstr "验证码"
 
-#: apps/users/serializer.py:36
+#: apps/users/serializer.py:19 apps/users/serializer.py:30
+msgid "password"
+msgstr "密码"
+
+#: apps/users/serializer.py:27
+msgid "username"
+msgstr "用户名"
+
+#: apps/users/serializer.py:49
 msgid "Incorrect format of mobile phone number"
 msgstr "无效的手机号码"

@@ -7,9 +7,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from base.ai import AIHelper
-from base.exception import ChatErrorCode
+from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
-from base.response import APIResponse
+from base.response import APIResponse, SerializerErrorResponse
 from chat.models import ChatRecordModel
 
 from chat.serializer import BaseQuery, ChatRecordSerializer, CreateQuestionForm
@@ -29,7 +29,8 @@ class ChatViewset(viewsets.GenericViewSet):
         url: /api/v1/chat/question
         """
         serializer = CreateQuestionForm(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
         question = serializer.validated_data["question"] # type: ignore
 
@@ -64,7 +65,7 @@ class ChatViewset(viewsets.GenericViewSet):
         url: /api/v1/chat/records
         """
         query = BaseQuery(data=request.GET)
-        query.is_valid(raise_exception=False)
+        query.is_valid()
 
         page = query.validated_data.get('page') or 1  # type: ignore
         offset = query.validated_data.get('offset') or 20  # type: ignore

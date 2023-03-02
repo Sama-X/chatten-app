@@ -141,7 +141,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        THROTTLE_SEND_SMS: '1/minute',
+        THROTTLE_SEND_SMS: '100/day',
     },
     'EXCEPTION_HANDLER': "base.middleware.exception_catch"
 }
@@ -171,6 +171,12 @@ CHATGPT configurate
 """
 
 CHATGPT_KEY = "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"
+
+# AVAX CONFIG
+
+AVAX_CLIENT = os.path.join(BASE_DIR, 'bin', 'sama-cli')
+AVAX_WALLET_ADDRESS = ''
+AVAX_WALLET_PRIVATE = ''
 
 # local config
 try:
