@@ -3,9 +3,7 @@ account api module.
 """
 
 from datetime import datetime
-import json
 import logging
-from subprocess import PIPE, Popen
 from uuid import uuid4
 from django.conf import settings
 from django.core.cache import cache
@@ -18,10 +16,10 @@ from base.common import CommonUtil
 
 from base.exception import SystemErrorCode, UserErrorCode
 from base.constants import (
-    LOGIN_SMS_CODE_KEY, LOGIN_SMS_CODE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY, LOGIN_ACCOUNT_TOKEN_KEY,
-    LOGIN_LIFE_TIME_LENGTH
+    LOGIN_SMS_CODE_KEY, LOGIN_SMS_CODE_TIME_LENGTH
 )
 from base.response import APIResponse, SerializerErrorResponse
+from base.sama import SamaClient
 from users.models import AccountModel, MessageLogModel, WalletModel
 from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
 
@@ -70,7 +68,14 @@ class LoginViewSet(viewsets.GenericViewSet):
                 username=mobile,
                 mobile=mobile
             )
-            CommonUtil.generate_avax_wallet(account.id)
+            wallet_data = SamaClient.create_wallet()
+            if wallet_data:
+                WalletModel.objects.create(
+                    user_id=account.id,
+                    chain=WalletModel.CHAIN_SAMA,
+                    address=wallet_data['address'],
+                    private_key=wallet_data['privateKey']
+                )
 
         ip_addr = request.META.get('REMOTE_ADDR')
         try:
@@ -140,7 +145,14 @@ class LoginViewSet(viewsets.GenericViewSet):
         account.password = password
         account.save()
 
-        CommonUtil.generate_avax_wallet(account.id)
+        wallet_data = SamaClient.create_wallet()
+        if wallet_data:
+            WalletModel.objects.create(
+                user_id=account.id,
+                chain=WalletModel.CHAIN_SAMA,
+                address=wallet_data['address'],
+                private_key=wallet_data['privateKey']
+            )
         token = CommonUtil.generate_user_token(account.id)
 
         return APIResponse(result={
@@ -167,7 +179,14 @@ class LoginViewSet(viewsets.GenericViewSet):
         )
         account.password = 'Aa12345678'
         account.save()
-        CommonUtil.generate_avax_wallet(account.id)
+        wallet_data = SamaClient.create_wallet()
+        if wallet_data:
+            WalletModel.objects.create(
+                user_id=account.id,
+                chain=WalletModel.CHAIN_SAMA,
+                address=wallet_data['address'],
+                private_key=wallet_data['privateKey']
+            )
         token = CommonUtil.generate_user_token(account.id)
 
         return APIResponse(result={

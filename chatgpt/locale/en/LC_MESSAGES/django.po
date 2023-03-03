@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-02 15:26+0800\n"
+"POT-Creation-Date: 2023-03-03 13:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -76,6 +76,10 @@ msgstr "Verification code or password is required"
 #: apps/base/exception.py:67
 msgid "chat robot no resp"
 msgstr "chat robot no resp"
+
+#: apps/base/middleware.py:30 apps/base/middleware.py:40
+msgid "auth: user need login"
+msgstr "user need login"
 
 #: apps/chat/models.py:17
 msgid "db:chatrecord: msg type text"
@@ -221,13 +225,13 @@ msgstr "response time"
 msgid "db:account:MessageLog"
 msgstr "message log"
 
-#: apps/users/models.py:89
-msgid "db:Wallet:user account id"
+#: apps/users/models.py:89 apps/users/models.py:110 apps/users/models.py:129
+msgid "db:user account id"
 msgstr "user id"
 
 #: apps/users/models.py:90
-msgid "db:Wallet:category"
-msgstr "wallet category"
+msgid "db:Wallet:belong to the chain"
+msgstr "belong to the chain"
 
 #: apps/users/models.py:91
 msgid "db:Wallet:address"
@@ -240,6 +244,42 @@ msgstr "wallet private key"
 #: apps/users/models.py:98
 msgid "db:Wallet"
 msgstr "Wallet"
+
+#: apps/users/models.py:111
+msgid "db:Score:score balance"
+msgstr "score balance"
+
+#: apps/users/models.py:112
+msgid "db:Score:belong to the chain"
+msgstr "belong to the chain"
+
+#: apps/users/models.py:118
+msgid "db:Score"
+msgstr "score"
+
+#: apps/users/models.py:130
+msgid "db:ScoreLog:score id"
+msgstr "score foreign key"
+
+#: apps/users/models.py:131
+msgid "db:ScoreLog:score category"
+msgstr "score operate category"
+
+#: apps/users/models.py:132
+msgid "db:ScoreLog:score"
+msgstr "score"
+
+#: apps/users/models.py:133
+msgid "db:ScoreLog:chain transaction id"
+msgstr "chain transaction id"
+
+#: apps/users/models.py:134
+msgid "db:ScoreLog:chain response"
+msgstr "chain response"
+
+#: apps/users/models.py:140
+msgid "db:ScoreLog"
+msgstr "ScoreLog"
 
 #: apps/users/serializer.py:16 apps/users/serializer.py:39
 msgid "mobile phone number"
@@ -260,3 +300,6 @@ msgstr "username"
 #: apps/users/serializer.py:49
 msgid "Incorrect format of mobile phone number"
 msgstr "Incorrect format of mobile phone number"
+
+#~ msgid "db:Wallet:category"
+#~ msgstr "wallet category"

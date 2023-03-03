@@ -236,11 +236,13 @@ CHATGPT configurate
 
 CHATGPT_KEY = ""
 
-# AVAX CONFIG
+# SAMA CONFIG
 
-AVAX_CLIENT = os.path.join(BASE_DIR, 'bin', 'sama-cli')
-AVAX_WALLET_ADDRESS = ''
-AVAX_WALLET_PRIVATE = ''
+SAMA_CLIENT = os.path.join(BASE_DIR, 'bin', 'sama-cli')
+SAMA_WALLET_ADDRESS = ''
+SAMA_WALLET_PRIVATE = ''
+SAMA_NODE_ENDPOINT = ''
+SAMA_UNIT = 1000
 
 # local config
 try:

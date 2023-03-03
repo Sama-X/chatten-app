@@ -84,10 +84,10 @@ class WalletModel(BaseModel):
     wallet table.
     """
 
-    CATEGORY_AVAX = "avax"
+    CHAIN_SAMA = "sama"
 
-    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:Wallet:user account id"))
-    category = models.CharField(max_length=32, null=False, db_index=True, verbose_name=_("db:Wallet:category"))
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
+    chain = models.CharField(max_length=32, null=False, db_index=True, verbose_name=_("db:Wallet:belong to the chain"))
     address = models.CharField(max_length=64, null=False, db_index=True, verbose_name=_("db:Wallet:address"))
     private_key = models.CharField(max_length=512, null=False, verbose_name=_("db:Wallet:private key"))
 
@@ -98,3 +98,45 @@ class WalletModel(BaseModel):
         verbose_name = _("db:Wallet")
         verbose_name_plural = verbose_name
         db_table = "wallet"
+
+
+class ScoreModel(BaseModel):
+    """
+    score table.
+    """
+
+    CHAIN_SAMA = "sama"
+
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
+    balance = models.BigIntegerField(default=0, verbose_name=_("db:Score:score balance"))
+    chain = models.CharField(max_length=32, null=False, db_index=True, verbose_name=_("db:Score:belong to the chain"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("db:Score")
+        verbose_name_plural = verbose_name
+        db_table = "account_score"
+
+class ScoreLogModel(BaseModel):
+    """
+    score log table.
+    """
+    CATEGORY_ADD = 1
+    CATEGORY_SUB = -1
+
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
+    score_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:ScoreLog:score id"))
+    category = models.SmallIntegerField(default=CATEGORY_ADD, verbose_name=_("db:ScoreLog:score category"))
+    amount = models.BigIntegerField(default=0, verbose_name=_("db:ScoreLog:score"))
+    txid = models.CharField(max_length=128, null=True, verbose_name=_("db:ScoreLog:chain transaction id"))
+    result = models.TextField(null=True, verbose_name=_("db:ScoreLog:chain response"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("db:ScoreLog")
+        verbose_name_plural = verbose_name
+        db_table = "account_score_log"
