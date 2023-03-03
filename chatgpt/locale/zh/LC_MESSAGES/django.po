@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 13:39+0800\n"
+"POT-Creation-Date: 2023-03-03 15:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,89 +148,93 @@ msgstr "排序字段"
 msgid "serializer: question"
 msgstr "问题"
 
-#: apps/users/models.py:14
+#: apps/users/models.py:15
 msgid "db:account:username"
 msgstr "用户名"
 
-#: apps/users/models.py:15
+#: apps/users/models.py:16
 msgid "db:account:user mobile"
 msgstr "手机号"
 
-#: apps/users/models.py:16
+#: apps/users/models.py:17
 msgid "db:account:user password"
 msgstr "密码"
 
-#: apps/users/models.py:17
+#: apps/users/models.py:18
 msgid "db:account:user nickname"
 msgstr "昵称"
 
-#: apps/users/models.py:18
+#: apps/users/models.py:19
 msgid "db:account:user avatar"
 msgstr "头像"
 
-#: apps/users/models.py:19
+#: apps/users/models.py:20
 msgid "db:account:user experience time"
 msgstr "体验次数"
 
-#: apps/users/models.py:20
+#: apps/users/models.py:21
 msgid "db:account:user is vip"
 msgstr "是否vip"
 
-#: apps/users/models.py:21
+#: apps/users/models.py:22
 msgid "db:account:user last login time"
 msgstr "最近登录时间"
 
-#: apps/users/models.py:22
+#: apps/users/models.py:23
 msgid "db:account:user last login ip"
 msgstr "最近登录ip"
 
-#: apps/users/models.py:28
+#: apps/users/models.py:29
 msgid "db:account:Account"
 msgstr "账户"
 
-#: apps/users/models.py:59
+#: apps/users/models.py:60
 msgid "db:MessageLog: category notify"
 msgstr "通知"
 
-#: apps/users/models.py:64
+#: apps/users/models.py:65
 msgid "db:MessageLog:message mobile"
 msgstr "手机号"
 
-#: apps/users/models.py:66
+#: apps/users/models.py:67
 msgid "db:MessageLog:message content"
 msgstr "短信内容"
 
-#: apps/users/models.py:67
+#: apps/users/models.py:68
 msgid "db:MessageLog:message category"
 msgstr "短信类型"
 
-#: apps/users/models.py:68
+#: apps/users/models.py:69
 msgid "db:MessageLog: message send status"
 msgstr "短信发送状态"
 
-#: apps/users/models.py:69
+#: apps/users/models.py:70
 msgid "db:MessageLog: request time"
 msgstr "发送时间"
 
-#: apps/users/models.py:70
+#: apps/users/models.py:71
 msgid "db:MessageLog: send message response"
 msgstr "响应内容"
 
-#: apps/users/models.py:71
+#: apps/users/models.py:72
 msgid "db:MessageLog: response time"
 msgstr "响应时间"
 
-#: apps/users/models.py:77
+#: apps/users/models.py:78
 msgid "db:account:MessageLog"
 msgstr "短信记录"
 
-#: apps/users/models.py:89 apps/users/models.py:110 apps/users/models.py:129
+#: apps/users/models.py:88 apps/users/models.py:108 apps/users/models.py:127
 msgid "db:user account id"
 msgstr "用户id"
 
-#: apps/users/models.py:90
+#: apps/users/models.py:89
 msgid "db:Wallet:belong to the chain"
 msgstr "所属链"
+
+#: apps/users/models.py:90
+msgid "db:Wallet:balance"
+msgstr "余额"
 
 #: apps/users/models.py:91
 msgid "db:Wallet:address"
@@ -244,39 +248,35 @@ msgstr "钱包私钥"
 msgid "db:Wallet"
 msgstr "钱包"
 
-#: apps/users/models.py:111
+#: apps/users/models.py:109
 msgid "db:Score:score balance"
 msgstr "积分余额"
 
-#: apps/users/models.py:112
-msgid "db:Score:belong to the chain"
-msgstr "所属链"
-
-#: apps/users/models.py:118
+#: apps/users/models.py:115
 msgid "db:Score"
 msgstr "积分"
 
-#: apps/users/models.py:130
+#: apps/users/models.py:128
 msgid "db:ScoreLog:score id"
 msgstr "积分外键id"
 
-#: apps/users/models.py:131
+#: apps/users/models.py:129
 msgid "db:ScoreLog:score category"
 msgstr "积分操作类别"
 
-#: apps/users/models.py:132
+#: apps/users/models.py:130
 msgid "db:ScoreLog:score"
 msgstr "积分"
 
-#: apps/users/models.py:133
+#: apps/users/models.py:131
 msgid "db:ScoreLog:chain transaction id"
 msgstr "链交易id"
 
-#: apps/users/models.py:134
+#: apps/users/models.py:132
 msgid "db:ScoreLog:chain response"
 msgstr "链响应结果"
 
-#: apps/users/models.py:140
+#: apps/users/models.py:138
 msgid "db:ScoreLog"
 msgstr "积分日志"
 
@@ -299,6 +299,9 @@ msgstr "用户名"
 #: apps/users/serializer.py:49
 msgid "Incorrect format of mobile phone number"
 msgstr "无效的手机号码"
+
+#~ msgid "db:Score:belong to the chain"
+#~ msgstr "所属链"
 
 #~ msgid "db:Wallet:category"
 #~ msgstr "钱包类型"

@@ -22,6 +22,7 @@ from base.response import APIResponse, SerializerErrorResponse
 from base.sama import SamaClient
 from users.models import AccountModel, MessageLogModel, WalletModel
 from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
+from users.service import UserService
 
 logger = logging.getLogger(__name__)
 
@@ -68,14 +69,7 @@ class LoginViewSet(viewsets.GenericViewSet):
                 username=mobile,
                 mobile=mobile
             )
-            wallet_data = SamaClient.create_wallet()
-            if wallet_data:
-                WalletModel.objects.create(
-                    user_id=account.id,
-                    chain=WalletModel.CHAIN_SAMA,
-                    address=wallet_data['address'],
-                    private_key=wallet_data['privateKey']
-                )
+            UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
 
         ip_addr = request.META.get('REMOTE_ADDR')
         try:
@@ -145,14 +139,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         account.password = password
         account.save()
 
-        wallet_data = SamaClient.create_wallet()
-        if wallet_data:
-            WalletModel.objects.create(
-                user_id=account.id,
-                chain=WalletModel.CHAIN_SAMA,
-                address=wallet_data['address'],
-                private_key=wallet_data['privateKey']
-            )
+        UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
         token = CommonUtil.generate_user_token(account.id)
 
         return APIResponse(result={
@@ -179,14 +166,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         )
         account.password = 'Aa12345678'
         account.save()
-        wallet_data = SamaClient.create_wallet()
-        if wallet_data:
-            WalletModel.objects.create(
-                user_id=account.id,
-                chain=WalletModel.CHAIN_SAMA,
-                address=wallet_data['address'],
-                private_key=wallet_data['privateKey']
-            )
+        UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
         token = CommonUtil.generate_user_token(account.id)
 
         return APIResponse(result={

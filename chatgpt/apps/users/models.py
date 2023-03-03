@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.utils.translation import gettext as _
 from base.models import BaseModel
+from base.sama import SamaClient
 
 
 class AccountModel(BaseModel):
@@ -84,10 +85,9 @@ class WalletModel(BaseModel):
     wallet table.
     """
 
-    CHAIN_SAMA = "sama"
-
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
     chain = models.CharField(max_length=32, null=False, db_index=True, verbose_name=_("db:Wallet:belong to the chain"))
+    balance = models.BigIntegerField(default=0, verbose_name=_("db:Wallet:balance"))
     address = models.CharField(max_length=64, null=False, db_index=True, verbose_name=_("db:Wallet:address"))
     private_key = models.CharField(max_length=512, null=False, verbose_name=_("db:Wallet:private key"))
 
@@ -105,11 +105,8 @@ class ScoreModel(BaseModel):
     score table.
     """
 
-    CHAIN_SAMA = "sama"
-
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
     balance = models.BigIntegerField(default=0, verbose_name=_("db:Score:score balance"))
-    chain = models.CharField(max_length=32, null=False, db_index=True, verbose_name=_("db:Score:belong to the chain"))
 
     class Meta:
         """
@@ -118,6 +115,7 @@ class ScoreModel(BaseModel):
         verbose_name = _("db:Score")
         verbose_name_plural = verbose_name
         db_table = "account_score"
+
 
 class ScoreLogModel(BaseModel):
     """

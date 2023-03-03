@@ -244,6 +244,8 @@ SAMA_WALLET_PRIVATE = ''
 SAMA_NODE_ENDPOINT = ''
 SAMA_UNIT = 1000
 
+CHAIN_SAMA = "sama"
+
 # local config
 try:
     from chatgpt.local_settings import *
