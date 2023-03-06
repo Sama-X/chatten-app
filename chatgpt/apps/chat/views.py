@@ -87,10 +87,11 @@ class ChatViewset(viewsets.GenericViewSet):
             is_delete=False,
             success=True
         )
+        total = base.count()
         if order_fields:
             base = base.order_by(*order_fields)
         base = base[(page - 1) * offset: page * offset]
 
         data = ChatRecordSerializer(base, many=True).data
 
-        return APIResponse(result=data)
+        return APIResponse(result=data, total=total)
