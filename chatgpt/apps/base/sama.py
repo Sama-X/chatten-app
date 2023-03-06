@@ -63,7 +63,7 @@ class SamaClient:
         """
         create avax transaction.
         """
-        logger.error('【sama transaction】 create transaction start to_address: %s amount: %s', to_address, amount)
+        logger.info('【sama transaction】 create transaction start to_address: %s amount: %s', to_address, amount)
         try:
             with Popen([settings.SAMA_CLIENT, '--endpoint', settings.SAMA_NODE_ENDPOINT, 'transfer',
                         to_address, str(amount), private_key], stdout=PIPE) as pro:

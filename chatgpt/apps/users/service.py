@@ -1,6 +1,7 @@
 """
 api service.
 """
+from django.conf import settings
 from django.db import transaction
 
 from base.sama import SamaClient
@@ -42,9 +43,10 @@ class UserService:
 
             txid, resp = '', ''
             if wallet_obj:
-                result = SamaClient.create_transaction(wallet_obj.address, amount, wallet_obj.private_key)
+                result = SamaClient.create_transaction(wallet_obj.address, amount, settings.SAMA_WALLET_PRIVATE)
+                resp = result.json()
                 if result.result:
-                    txid, resp = result.txID, result.json()
+                    txid = result.txID
 
             ScoreLogModel.objects.create(
                 user_id=user_id, score_id=obj.id,
