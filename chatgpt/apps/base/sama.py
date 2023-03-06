@@ -65,7 +65,7 @@ class SamaClient:
         """
         try:
             with Popen([settings.SAMA_CLIENT, '--endpoint', settings.SAMA_NODE_ENDPOINT, 'transfer',
-                        to_address, amount, private_key], stdout=PIPE) as pro:
+                        to_address, str(amount), private_key], stdout=PIPE) as pro:
                 values = pro.communicate()
                 logger.info('【sama transaction】create transfer transaction result: %s', values)
                 if values:
