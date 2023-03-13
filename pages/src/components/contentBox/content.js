@@ -1,4 +1,5 @@
 import './content.css'
+import { getCategoriesAsync } from '../../api/index.js';
 
 import { useEffect, useState } from 'react';
 const App = () => {
@@ -22,30 +23,30 @@ const App = () => {
           "允许用户修正对话内容",
           "chatGPT会拒绝不合理的请求"
         ]
-      },
-      {
-        title:'SAMAGPT能做什么？',
-        url:require("../../assets/icon2.png"),
-        questionList:[
-          "记住用户在先前对话中说过的内容",
-          "允许用户修正对话内容",
-          "chatGPT会拒绝不合理的请求"
-        ]
-      },
-      {
-        title:'SAMAGPT能做什么？',
-        url:require("../../assets/icon2.png"),
-        questionList:[
-          "记住用户在先前对话中说过的内容",
-          "允许用户修正对话内容",
-          "chatGPT会拒绝不合理的请求"
-        ]
       }
     ]
     setDataList(copyList)
   }
+  const getCategories = async () => {
+  //   const res = await ceshi({
+  //     "jsonrpc": "2.0",
+  //     "method": "platform.getHeight",
+  //     "params": {},
+  //     "id": 1,
+  // });
+  // console.log(res,'hjk111')
+    // const res = await getCategoriesAsync({ parentId: 0 });
+
+    // if(res.code === 0){
+      fetchData()
+    //   console.log(res,'hjk')
+    // }else{
+    //   console.log(res,'hjk')
+    // }
+  }
   useEffect(()=>{
-    fetchData()
+    // fetchData()
+    getCategories()
   }, [])
   return (
     <div>

@@ -46,3 +46,15 @@
     color: #ECECF1;
     line-height: 20px;
 }
+
+
+.noTokenBtn a{
+    color: white;
+    text-decoration: none;
+}
+.fixEdBox{
+    width: 95%;
+    height: 32px;
+    position: fixed;
+    z-index: 1;
+}

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 // 导入所需组件
 import Login from '../components/login/index.js'
+import SignIn from '../components/signIn/index.js'
+import ChatPage from '../components/chatPage/index.js'
 import Index from '../components/index'
 // 导入路由依赖
-import { Route,BrowserRouter } from 'react-router-dom'
+import {  Route,BrowserRouter } from 'react-router-dom'
 
 export default class index extends Component {
   render() {
@@ -15,6 +17,8 @@ export default class index extends Component {
         {/* <Route component={Login} path='/Login'></Route> */}
         <Route component={Index} path='/Index'></Route>
         <Route component={Login} path='/Login'></Route>
+        <Route component={SignIn} path='/SignIn'></Route>
+        <Route component={ChatPage} path='/ChatPage'></Route>
         {/* <Route component={Index} path='/Index'></Route> */}
       </BrowserRouter>
     )

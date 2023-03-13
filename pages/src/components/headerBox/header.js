@@ -1,9 +1,12 @@
 import './header.css'
-import { Drawer, Menu } from 'antd';
+import { Drawer, Menu, message } from 'antd';
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import Request from '../../request.ts';
 import { Link } from 'react-router-dom'
+import cookie from 'react-cookies'
+import { useHistory } from 'react-router-dom';
+
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -15,20 +18,24 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
-const items = [
-  getItem('SamaGPT', 'sub1', '', [
-    getItem('创建新对话…', '5',<PlusCircleFilled />),
-    getItem('解释量子力学', '6',<MessageOutlined />),
-    getItem('人工智能的发展前景', '7',<MessageOutlined />),
-    getItem('解释量子力学', '8',<MessageOutlined />),
-  ]),
-  {
-    type: 'divider',
-  },
-];
+// const items = [
+//   getItem('SamaGPT', 'sub1', '', [
+//     getItem('创建新对话…', '5',<PlusCircleFilled />),
+//     getItem('解释量子力学', '6',<MessageOutlined />),
+//     getItem('人工智能的发展前景', '7',<MessageOutlined />),
+//     getItem('解释量子力学', '8',<MessageOutlined />),
+//   ]),
+//   {
+//     type: 'divider',
+//   },
+// ];
 
 const App = () => {
+  const isToken = cookie.load('token')
+  const history = useHistory()
+  const [userName, setUserName] = useState('');
   const [open, setOpen] = useState(false);
+  const [items, setItem] = useState([]);
   const [placement] = useState('left');
   const showDrawer = () => {
     setOpen(true);
@@ -37,11 +44,54 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    console.log('click ', e);
+    if(e.key == '1' && e.domEvent.target.textContent == '创建新对话…'){
+      console.log(e,'click')
+      linkSkip()
+    }
   };
-  const LoginFunc = () => {
-
+  const linkSkip =  () => {
+    const isTokenStatus = cookie.load('token') ? true : false
+    if(isTokenStatus) {
+      history.push({pathname: '/ChatPage', state: { test: 'login' }})
+    }else{
+      console.log('12')
+      let request = new Request({});
+      request.post('/api/v1/users/anonymous/').then(function(resData){
+        cookie.save('userName', resData.data.nickname, { path: '/' })
+        cookie.save('userId', resData.data.id, { path: '/' })
+        cookie.save('token', resData.data.token, { path: '/' })
+        history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+      })
+    }
   }
+  const getHistory = () => {
+
+      let request = new Request({});
+      request.get('/api/v1/chat/records/', {
+        page: 1,
+        offset: 20,
+        order:'-id,-msg_type'
+      }).then(function(resData){
+        let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
+        for(let i in resData.data){
+          menuSetitemList.push(getItem(resData.data[i].question, (i+2),<MessageOutlined />),)
+        }
+        setItem([getItem('SamaGPT', 'sub1', '', menuSetitemList)])
+      })
+  }
+  const noFunction = () => {
+    message.info('Not yet open, please look forward to...')
+  }
+  useEffect(()=>{
+    if(isToken){
+      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '未命名'
+      setUserName(authName)
+      getHistory()
+    }else{
+      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
+      setItem([getItem('SamaGPT', 'sub1', '', menuSetitemList)])
+    }
+  }, [])
 
   return (
     <div>
@@ -49,10 +99,20 @@ const App = () => {
         <div className="headerLeft" onClick={showDrawer}>
           <img src={require("../../assets/leftMenu.png")} alt=""/>
         </div>
-        <div className="headerRight" onClick={LoginFunc}>
-          <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-          <div><Link to='/Login'>登录</Link></div>
-        </div>
+        {
+          isToken ?
+            <div className="headerRight">
+              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+              <div>{ userName }</div>
+            </div>
+            :
+            <div className="headerRight">
+              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+              <div><Link to='/Login'>登录</Link></div>
+              <span>/</span>
+              <div><Link to='/SignIn'>注册</Link></div>
+            </div>
+        }
       </div>
       <>
         {/* <Space>
@@ -67,9 +127,9 @@ const App = () => {
           onClose={onClose}
           open={open}
           key={placement}
-          rootStyle={{background:'rgba(48, 50, 60, 0.4)'}}
           style={{background:'#202123',color:'white'}}
         >
+          {/* rootStyle={{background:'rgba(48, 50, 60, 0.4)'}} */}
           <div className="drawHeaderBox">
             <img src={require("../../assets/leftLogo.png")} alt=""/>
             <div>BETA</div>
@@ -92,7 +152,7 @@ const App = () => {
 
             <div className="otherMenuBox">
               <div className="otherMenuItem">
-                <div className="otherMenuLeft">
+                <div className="otherMenuLeft" onClick={noFunction}>
                   <img src={require("../../assets/delete.png")} alt=""/>
                   <div>
                     清除聊天记录
@@ -105,7 +165,7 @@ const App = () => {
                   <div>
                     <div className='otherMenuRight'>
                       <div className='otherMenuRightDiv'>剩余体验次数<span className='leftNumber'>3/10</span></div>
-                      <div className='otherMenuRightItem'>
+                      <div className='otherMenuRightItem' onClick={noFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>
                           分享
@@ -118,7 +178,7 @@ const App = () => {
 
               </div>
             </div>
-            <div className='memberBox'>
+            <div className='memberBox' onClick={noFunction}>
               <img src={require("../../assets/huiyuan.png")} alt=""/>
               {/* <Image
                 width={'100%'}

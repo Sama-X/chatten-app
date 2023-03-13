@@ -8,14 +8,17 @@ import React, {
 } from "react";
 
 import { Input, message, InputNumber, Spin } from 'antd';
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
-import styles from "./login.css";
+import styles from "./signIn.css";
 import { loginAccount } from '../../api/index.js';
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+
+
 
 export default memo(
   forwardRef(({ onChange }, ref) => {
@@ -119,9 +122,11 @@ export default memo(
         }
     }
     const passWordOneChange = (e) => {
+      console.log(e.target.value,'diyici')
       setPasswordOne(e.target.value)
     }
     const passWordTwoChange = (e) => {
+      console.log(e.target.value,'dierci')
       setPasswordTwo(e.target.value)
     }
     const signInFunc = () => {
@@ -132,23 +137,28 @@ export default memo(
           return false;
       }
       if(!passwordOne){
-        message.error('Please input a password')
+        message.error('Please set the password')
+        return false;
+      }else if(passwordOne.length < 6){
+        message.error('Password cannot be less than 6 digits')
+        return false;
+      }else if(passwordOne !== passwordTwo){
+        message.error('The two passwords are inconsistent')
         return false;
       }
       setSpinStatus(true)
       let request = new Request({});
-      request.post('/api/v1/users/token/', {
-        mobile: mobileVal,
-        password: passwordOne
+      request.post('/api/v1/users/register/', {
+        username: mobileVal,
+        password: passwordTwo
       }).then(function(resData){
         if(resData.code == 0){
           cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
-          message.success(resData.msg)
           setTimeout(function(){
             setSpinStatus(false)
-            history.push({pathname: '/', state: { test: 'login' }})
+            history.push({pathname: '/', state: { test: 'signin' }})
           },1000)
         }else{
           setSpinStatus(false)
@@ -201,7 +211,7 @@ export default memo(
                 <div className="mobileCode">
                     {/* mobile */}
                     <div className="quickLogin">
-                        快速登录
+                        快速注册
                     </div>
                     <div>
                       <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/>
@@ -210,7 +220,7 @@ export default memo(
                       <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder="请输入密码"/>
                     {/* </div>
                     <div> */}
-                      {/* <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder="请再次输入密码"/> */}
+                      <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder="请再次输入密码"/>
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}
