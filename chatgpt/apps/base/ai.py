@@ -6,6 +6,7 @@ import openai
 from django.conf import settings
 
 openai.api_key = settings.CHATGPT_KEY
+openai.proxy = settings.CHATGPT_PROXY or None
 
 logger = logging.getLogger(__name__)
 

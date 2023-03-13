@@ -267,6 +267,7 @@ CHATGPT configurate
 """
 
 CHATGPT_KEY = ""
+CHATGPT_PROXY = None
 
 # SAMA CONFIG
 
