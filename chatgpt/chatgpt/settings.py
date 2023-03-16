@@ -266,7 +266,7 @@ CACHES = {
 CHATGPT configurate
 """
 
-CHATGPT_KEY = ""
+CHATGPT_KEYS = []
 CHATGPT_PROXY = None
 
 # SAMA CONFIG
