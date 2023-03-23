@@ -134,7 +134,8 @@ class LoginViewSet(viewsets.GenericViewSet):
             return APIResponse(code=UserErrorCode.USER_EXISTS)
 
         account = AccountModel(
-            username=username
+            username=username,
+            user_tye=AccountModel.USER_TYPE_NORMAL
         )
         account.password = password
         account.save()
@@ -165,6 +166,7 @@ class LoginViewSet(viewsets.GenericViewSet):
             username=username
         )
         account.password = 'Aa12345678'
+        account.user_type = AccountModel.USER_TYPE_ANONY
         account.save()
         UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
         token = CommonUtil.generate_user_token(account.id)

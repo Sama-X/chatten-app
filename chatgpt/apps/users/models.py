@@ -5,13 +5,15 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.utils.translation import gettext as _
 from base.models import BaseModel
-from base.sama import SamaClient
 
 
 class AccountModel(BaseModel):
     """
     Account table.
     """
+    USER_TYPE_ANONY = 1
+    USER_TYPE_NORMAL = 2
+
     username = models.CharField(max_length=32, null=False, unique=True, verbose_name=_("db:account:username"))
     mobile = models.CharField(max_length=16, null=True, verbose_name=_("db:account:user mobile"))
     _password_hash = models.CharField(max_length=512, null=True, verbose_name=_("db:account:user password"))
@@ -21,6 +23,7 @@ class AccountModel(BaseModel):
     is_vip = models.BooleanField(default=False, verbose_name=_("db:account:user is vip"))
     login_time = models.DateTimeField(null=True, verbose_name=_("db:account:user last login time"))
     login_ip = models.CharField(max_length=32, null=True, verbose_name=_("db:account:user last login ip"))
+    user_type = models.SmallIntegerField(default=USER_TYPE_ANONY, verbose_name=_("db:account:user type"))
 
     class Meta:
         """
