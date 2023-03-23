@@ -34,7 +34,7 @@ class ChatRecordModel(BaseModel):
     prompt_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: question token usage"))
     resp_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: resp token usage"))
     total_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: total token usage"))
-    chatgpt_key_id = models.BigIntegerField(db_index=True, verbose_name=_("db:chatgpt key foreign key"))
+    chatgpt_key_id = models.BigIntegerField(db_index=True, null=True, verbose_name=_("db:chatgpt key foreign key"))
 
     class Meta:
         """

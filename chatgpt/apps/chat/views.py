@@ -55,6 +55,7 @@ class ChatViewset(viewsets.GenericViewSet):
         if len(choices) > 0:
             obj.answer = choices[0].get('message', {}).get('content')
             obj.success = True
+        obj.chatgpt_key_id = resp['key_id']
         obj.response = json.dumps(resp, ensure_ascii=False)
         obj.response_time = datetime.now()
         obj.prompt_tokens = resp.get('usage', {}).get('prompt_tokens', 0)
