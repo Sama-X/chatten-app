@@ -3,6 +3,10 @@ chat api module.
 """
 
 from datetime import datetime
+import json
+
+from asgiref.sync import async_to_sync
+
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
@@ -22,8 +26,9 @@ class ChatViewset(viewsets.GenericViewSet):
 
     authentication_classes = [AnonymousAuthentication,]
 
+    @async_to_sync
     @action(methods=["POST"], detail=False)
-    def question(self, request, *args, **kwargs):
+    async def question(self, request, *args, **kwargs):
         """
         send question api.
         url: /api/v1/chat/question
@@ -34,7 +39,7 @@ class ChatViewset(viewsets.GenericViewSet):
 
         question = serializer.validated_data["question"] # type: ignore
 
-        messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, 0)
+        messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, 1000)
 
         obj = ChatRecordModel.objects.create(
             user_id=request.user.id,
@@ -43,14 +48,13 @@ class ChatViewset(viewsets.GenericViewSet):
             answer=None,
             question_time=datetime.now()
         )
-        obj.save()
 
-        resp = AIHelper.send_msg(question, histories=messages)
+        resp = await AIHelper.send_msg(question, histories=messages)
         choices = resp.get('choices', [])
         if len(choices) > 0:
             obj.answer = choices[0].get('message', {}).get('content')
             obj.success = True
-        obj.response = resp
+        obj.response = json.dumps(resp, ensure_ascii=False)
         obj.response_time = datetime.now()
         obj.prompt_tokens = resp.get('usage', {}).get('prompt_tokens', 0)
         obj.resp_tokens = resp.get('usage', {}).get('completion_tokens', 0)

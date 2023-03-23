@@ -1,6 +1,7 @@
 """
 chat model module.
 """
+from datetime import datetime, timedelta
 from django.db import models
 from django.utils.translation import gettext as _
 
@@ -50,9 +51,11 @@ class ChatRecordModel(BaseModel):
         if not max_tokens:
             return []
 
+        now = datetime.now() - timedelta(hours=1)
         histories = cls.objects.filter(
             user_id=user_id,
-            success=True
+            success=True,
+            question_time__gt=now
         ).order_by('-id').all()
 
         total_tokens = 0
@@ -72,6 +75,6 @@ class ChatRecordModel(BaseModel):
                 "role": "user",
                 "content": item.question
             })
-            total_tokens += item.total_tokens
+            total_tokens += item.resp_tokens
 
         return messages[::-1]
