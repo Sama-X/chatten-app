@@ -48,3 +48,10 @@ class ChatRecordSerializer(serializers.ModelSerializer):
             'msg_type', 'msg_type_name', 'question', 'answer', 'approval',
             'question_time', 'response_time', 'add_time'
         )
+
+
+class CreateChatgptKeySerializer(serializers.Serializer):
+    """
+    create chatgpt key.
+    """
+    key = serializers.CharField(allow_null=False, required=True, help_text=(_("serializer:chatgpt key")))

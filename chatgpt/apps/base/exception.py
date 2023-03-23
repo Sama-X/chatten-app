@@ -62,9 +62,15 @@ class ChatErrorCode:
     chat error code
     """
     CHAT_ROBOT_NO_RESP = 200100
+    CHATGPT_KEY_INVALID = 200200
+    CHATGPT_KEY_UNSUPPORT_ANONY_USER = 200201
+    CHATGPT_KEY_EXISTS = 200202
 
     ERRORS = (
         (CHAT_ROBOT_NO_RESP, _('chat robot no resp')),
+        (CHATGPT_KEY_INVALID, _('chatgpt key invalid')),
+        (CHATGPT_KEY_UNSUPPORT_ANONY_USER, _('chatgpt key unsupport anony user')),
+        (CHATGPT_KEY_EXISTS, _('chatgpt key already exists'))
     )
 
     ERRORS_DICT = dict(ERRORS)

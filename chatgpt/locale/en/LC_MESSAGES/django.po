@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-03 15:15+0800\n"
+"POT-Creation-Date: 2023-03-23 17:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,65 +73,93 @@ msgstr "Wrong user name or password"
 msgid "code or password required"
 msgstr "Verification code or password is required"
 
-#: apps/base/exception.py:67
+#: apps/base/exception.py:69
 msgid "chat robot no resp"
-msgstr "chat robot no resp"
+msgstr "Chatgpt is not responding, please try again"
+
+#: apps/base/exception.py:70
+msgid "chatgpt key invalid"
+msgstr "Invalid chatgpt key"
+
+#: apps/base/exception.py:71
+msgid "chatgpt key unsupport anony user"
+msgstr "Anonymous users are note supported to add chatgpt key"
 
 #: apps/base/middleware.py:30 apps/base/middleware.py:40
 msgid "auth: user need login"
-msgstr "user need login"
+msgstr "Login required"
 
-#: apps/chat/models.py:17
+#: apps/chat/models.py:18
 msgid "db:chatrecord: msg type text"
 msgstr "text"
 
-#: apps/chat/models.py:22
+#: apps/chat/models.py:23
 msgid "db:chatrecord: user foreign key"
 msgstr "chat user id"
 
-#: apps/chat/models.py:24
+#: apps/chat/models.py:25
 msgid "db:chatrecord: message type"
 msgstr "chat message type"
 
-#: apps/chat/models.py:26
+#: apps/chat/models.py:27
 msgid "db:chatrecord: question"
 msgstr "question"
 
-#: apps/chat/models.py:27
+#: apps/chat/models.py:28
 msgid "db:chatrecord: question time"
 msgstr "question request time"
 
-#: apps/chat/models.py:29
+#: apps/chat/models.py:30
 msgid "db:chatrecord: approval number"
 msgstr "approval number"
 
-#: apps/chat/models.py:30
+#: apps/chat/models.py:31
 msgid "db:chatrecord: chatgpt response result"
 msgstr "chatgpt response result"
 
-#: apps/chat/models.py:31
+#: apps/chat/models.py:32
 msgid "db:chatrecord: QA success"
 msgstr "QA success status"
 
-#: apps/chat/models.py:32
+#: apps/chat/models.py:33
 msgid "db:chatrecord: chatgpt response time"
 msgstr "chatgpt response time"
 
-#: apps/chat/models.py:33
+#: apps/chat/models.py:34
 msgid "db.chatrecord: question token usage"
 msgstr "question tokens usage"
 
-#: apps/chat/models.py:34
+#: apps/chat/models.py:35
 msgid "db.chatrecord: resp token usage"
 msgstr "resp tokens usage"
 
-#: apps/chat/models.py:35
+#: apps/chat/models.py:36
 msgid "db.chatrecord: total token usage"
 msgstr "total tokens usage"
 
-#: apps/chat/models.py:41
+#: apps/chat/models.py:37
+msgid "db:chatgpt key foreign key"
+msgstr "chatgpt key foreign key"
+
+#: apps/chat/models.py:43
 msgid "db:chatrecord:ChatRecord"
 msgstr "ChatRecord Table"
+
+#: apps/chat/models.py:88
+msgid "db:user foreign key"
+msgstr "user foreign key"
+
+#: apps/chat/models.py:89
+msgid "db:chatgpt key"
+msgstr "chatgpt key"
+
+#: apps/chat/models.py:90
+msgid "db:enable"
+msgstr "enable"
+
+#: apps/chat/models.py:96
+msgid "db:chatgpt table"
+msgstr "chatgpt table"
 
 #: apps/chat/serializer.py:14
 msgid "serializer: page"
@@ -149,135 +177,143 @@ msgstr "order field"
 msgid "serializer: question"
 msgstr "question"
 
-#: apps/users/models.py:15
+#: apps/chat/serializer.py:57
+msgid "serializer:chatgpt key"
+msgstr "chatgpt key"
+
+#: apps/users/models.py:17
 msgid "db:account:username"
 msgstr "username"
 
-#: apps/users/models.py:16
+#: apps/users/models.py:18
 msgid "db:account:user mobile"
 msgstr "user mobile"
 
-#: apps/users/models.py:17
+#: apps/users/models.py:19
 msgid "db:account:user password"
 msgstr "user password"
 
-#: apps/users/models.py:18
+#: apps/users/models.py:20
 msgid "db:account:user nickname"
 msgstr "user nickname"
 
-#: apps/users/models.py:19
+#: apps/users/models.py:21
 msgid "db:account:user avatar"
 msgstr "user avatar"
 
-#: apps/users/models.py:20
+#: apps/users/models.py:22
 msgid "db:account:user experience time"
 msgstr "user experience time"
 
-#: apps/users/models.py:21
+#: apps/users/models.py:23
 msgid "db:account:user is vip"
 msgstr "user is vip"
 
-#: apps/users/models.py:22
+#: apps/users/models.py:24
 msgid "db:account:user last login time"
 msgstr "user last login time"
 
-#: apps/users/models.py:23
+#: apps/users/models.py:25
 msgid "db:account:user last login ip"
 msgstr "user last login ip"
 
-#: apps/users/models.py:29
+#: apps/users/models.py:26
+msgid "db:account:user type"
+msgstr "user type"
+
+#: apps/users/models.py:32
 msgid "db:account:Account"
 msgstr "Account"
 
-#: apps/users/models.py:60
+#: apps/users/models.py:63
 msgid "db:MessageLog: category notify"
 msgstr "notice"
 
-#: apps/users/models.py:65
+#: apps/users/models.py:68
 msgid "db:MessageLog:message mobile"
 msgstr "message mobile"
 
-#: apps/users/models.py:67
+#: apps/users/models.py:70
 msgid "db:MessageLog:message content"
 msgstr "message content"
 
-#: apps/users/models.py:68
+#: apps/users/models.py:71
 msgid "db:MessageLog:message category"
 msgstr "message category"
 
-#: apps/users/models.py:69
+#: apps/users/models.py:72
 msgid "db:MessageLog: message send status"
 msgstr "message send status"
 
-#: apps/users/models.py:70
+#: apps/users/models.py:73
 msgid "db:MessageLog: request time"
 msgstr "request time"
 
-#: apps/users/models.py:71
+#: apps/users/models.py:74
 msgid "db:MessageLog: send message response"
 msgstr "send message response"
 
-#: apps/users/models.py:72
+#: apps/users/models.py:75
 msgid "db:MessageLog: response time"
 msgstr "response time"
 
-#: apps/users/models.py:78
+#: apps/users/models.py:81
 msgid "db:account:MessageLog"
 msgstr "message log"
 
-#: apps/users/models.py:88 apps/users/models.py:108 apps/users/models.py:127
+#: apps/users/models.py:91 apps/users/models.py:111 apps/users/models.py:130
 msgid "db:user account id"
 msgstr "user id"
 
-#: apps/users/models.py:89
+#: apps/users/models.py:92
 msgid "db:Wallet:belong to the chain"
 msgstr "belong to the chain"
 
-#: apps/users/models.py:90
+#: apps/users/models.py:93
 msgid "db:Wallet:balance"
 msgstr "balance"
 
-#: apps/users/models.py:91
+#: apps/users/models.py:94
 msgid "db:Wallet:address"
 msgstr "wallet address"
 
-#: apps/users/models.py:92
+#: apps/users/models.py:95
 msgid "db:Wallet:private key"
 msgstr "wallet private key"
 
-#: apps/users/models.py:98
+#: apps/users/models.py:101
 msgid "db:Wallet"
 msgstr "Wallet"
 
-#: apps/users/models.py:109
+#: apps/users/models.py:112
 msgid "db:Score:score balance"
 msgstr "score balance"
 
-#: apps/users/models.py:115
+#: apps/users/models.py:118
 msgid "db:Score"
 msgstr "score"
 
-#: apps/users/models.py:128
+#: apps/users/models.py:131
 msgid "db:ScoreLog:score id"
 msgstr "score foreign key"
 
-#: apps/users/models.py:129
+#: apps/users/models.py:132
 msgid "db:ScoreLog:score category"
 msgstr "score operate category"
 
-#: apps/users/models.py:130
+#: apps/users/models.py:133
 msgid "db:ScoreLog:score"
 msgstr "score"
 
-#: apps/users/models.py:131
+#: apps/users/models.py:134
 msgid "db:ScoreLog:chain transaction id"
 msgstr "chain transaction id"
 
-#: apps/users/models.py:132
+#: apps/users/models.py:135
 msgid "db:ScoreLog:chain response"
 msgstr "chain response"
 
-#: apps/users/models.py:138
+#: apps/users/models.py:141
 msgid "db:ScoreLog"
 msgstr "ScoreLog"
 

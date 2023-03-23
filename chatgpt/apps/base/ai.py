@@ -5,7 +5,7 @@ import heapq
 import logging
 import time
 import openai
-from openai.error import RateLimitError, APIConnectionError, Timeout
+from openai.error import RateLimitError, APIConnectionError, Timeout, AuthenticationError
 from django.conf import settings
 
 openai.proxy = settings.CHATGPT_PROXY or None
@@ -58,6 +58,23 @@ class AIHelper:
             result["error"] = f"exception {err}"
         logger.info("【chatgpt send】 resp: %s", result)
         return result
+
+    @classmethod
+    def check_api_key(cls, key) -> bool:
+        """
+        check api key is valid.
+        """
+        try:
+            resp = openai.Model.list(api_key=key)
+            if resp and resp.__sizeof__() > 0:
+                return True
+        except AuthenticationError as err:
+            logger.info("【chatgpt check key】error: %s", err)
+            return False
+        except Exception as err:
+            logger.info("【chatgpt check key】error: %s", err)
+            return False
+        return True
 
     @classmethod
     def get_api_key(cls):

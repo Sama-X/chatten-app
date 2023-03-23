@@ -14,9 +14,10 @@ from base.ai import AIHelper
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
-from chat.models import ChatRecordModel
+from chat.models import ChatRecordModel, ChatgptKeyModel
 
-from chat.serializer import BaseQuery, ChatRecordSerializer, CreateQuestionForm
+from chat.serializer import BaseQuery, ChatRecordSerializer, CreateChatgptKeySerializer, CreateQuestionForm
+from users.models import AccountModel
 
 
 class ChatViewset(viewsets.GenericViewSet):
@@ -99,3 +100,45 @@ class ChatViewset(viewsets.GenericViewSet):
         data = ChatRecordSerializer(base, many=True).data
 
         return APIResponse(result=data, total=total)
+
+
+class ChatgptKeyViewSet(viewsets.GenericViewSet):
+    """
+    chatgpt register.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    @action(methods=['POST'], detail=False)
+    def keys(self, request, *args, **kwargs):
+        """
+        register chatgpt key.
+        url: /api/v1/chatgpt/keys
+        """
+        serializer = CreateChatgptKeySerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, SystemErrorCode.HTTP_400_BAD_REQUEST)
+
+        if request.user.user_type != AccountModel.USER_TYPE_NORMAL:
+            return APIResponse(ChatErrorCode.CHATGPT_KEY_UNSUPPORT_ANONY_USER)
+
+        key = serializer.validated_data["key"]  # type: ignore
+        success = AIHelper.check_api_key(key)
+
+
+        if success:
+            obj = ChatgptKeyModel.objects.filter(key=key).first()
+            if obj and obj.enable:
+                return APIResponse(code=ChatErrorCode.CHATGPT_KEY_EXISTS)
+
+            if obj:
+                obj.enable = True
+                obj.save()
+            else:
+                ChatgptKeyModel.objects.create(
+                    user_id=request.user.id,
+                    key=key,
+                )
+            return APIResponse()
+
+        return APIResponse(code=ChatErrorCode.CHATGPT_KEY_INVALID)
