@@ -6,7 +6,7 @@ import heapq
 from random import shuffle
 import random
 from django.conf import settings
-from chat.models import ChatgptKeyModel
+
 
 class StrategyError(Exception):
     """
@@ -29,10 +29,11 @@ class BaseStrategy:
         """
         init.
         """
+        from chat.models import ChatgptKeyModel
         items = ChatgptKeyModel.objects.filter(
             enable=True, is_delete=False
         ).only('id', 'key').all()
-        
+
         key_map = {}
         for item in items:
             key_map[item.key] = item.id
