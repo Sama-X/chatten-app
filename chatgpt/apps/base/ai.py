@@ -19,13 +19,16 @@ class AIHelper:
     AI help class.
     """
 
-    strategy = PriorityStrategy()
+    strategy = None
 
     @classmethod
     async def send_msg(cls, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None):
         """
         send message.
         """
+        if cls.strategy is None:
+            cls.strategy = PriorityStrategy()
+
         histories = histories or []
         if retry_count <= 0:
             histories.append({
