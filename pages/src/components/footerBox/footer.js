@@ -1,6 +1,6 @@
 import './footer.css'
 
-import { Input } from 'antd';
+import { Input, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
@@ -10,6 +10,8 @@ import { useHistory } from 'react-router-dom';
 
 const App = () => {
   const isToken = cookie.load('token') ? true : false
+  const [spinStatus, setSpinStatus] = useState(false);
+
   const history = useHistory()
   const fetchData = () => {
     console.log(isToken,'isToken')
@@ -22,7 +24,9 @@ const App = () => {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }else{
       let request = new Request({});
+      setSpinStatus(true)
       request.post('/api/v1/users/anonymous/').then(function(resData){
+        setSpinStatus(false)
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
@@ -35,6 +39,13 @@ const App = () => {
   }, [])
   return (
     <div className="footerBox">
+      {
+        spinStatus ?
+        <div className="example">
+          <Spin />
+        </div>
+        : ''
+      }
       {/* noToken */}
       <div className="footerTokenBox">
         {/* {
