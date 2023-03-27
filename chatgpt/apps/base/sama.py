@@ -101,7 +101,6 @@ class SamaClient:
         resp = RequestClient.post(rpc_url, json=payload, headers={
             'Content-type': 'application/json'
         })
-        logger.info('【sama transaction unconfirmed】 create transaction end result: %s', resp)
 
         if isinstance(resp, dict):
             result = SamaTranasctionResult(
@@ -112,4 +111,5 @@ class SamaClient:
         else:
             result = SamaTranasctionResult(result=False, txID="", error=resp.text)
 
+        logger.info('【sama transaction unconfirmed】 create transaction end resp: %s result: %s', resp, result)
         return result
