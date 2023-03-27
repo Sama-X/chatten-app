@@ -135,7 +135,7 @@ class LoginViewSet(viewsets.GenericViewSet):
 
         account = AccountModel(
             username=username,
-            user_tye=AccountModel.USER_TYPE_NORMAL
+            user_type=AccountModel.USER_TYPE_NORMAL
         )
         account.password = password
         account.save()

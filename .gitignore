@@ -156,3 +156,5 @@ yarn-error.log*
 
 chatgpt/docker-compose-test.yaml
 chatgpt/*.sh
+prod_local_settings.py
+docker-compose-prod.yaml
