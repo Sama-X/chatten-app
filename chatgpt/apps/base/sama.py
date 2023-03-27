@@ -12,6 +12,8 @@ from pydantic import BaseModel, Field
 
 from django.conf import settings
 
+from base.common import RequestClient
+
 logger = logging.getLogger(__name__)
 
 
@@ -78,3 +80,36 @@ class SamaClient:
             logger.error('【sama transaction】 create transaction error reason: %s', error)
 
         return SamaTranasctionResult(result=False, txID="", error=traceback.format_exc())
+
+    @classmethod
+    def create_transaction_unconfirmed(cls, to_address, amount, private_key) -> SamaTranasctionResult:
+        """
+        create sama transaction was not confirmed.
+        """
+        logger.info('【sama transaction unconfirmed】 create transaction start to_address: %s amount: %s', to_address, amount)
+        rpc_url = settings.SAMA_NODE_ENDPOINT_API
+        payload = {
+            'jsonrpc': '2.0',
+            'method': 'samavm.transfer',
+            'params': {
+                'to': to_address,
+                'units': amount,
+                'privKey': private_key
+            },
+            'id': 1
+        }
+        resp = RequestClient.post(rpc_url, json=payload, headers={
+            'Content-type': 'application/json'
+        })
+        logger.info('【sama transaction unconfirmed】 create transaction end result: %s', resp)
+
+        if isinstance(resp, dict):
+            result = SamaTranasctionResult(
+                result=resp.get('code') == 200,
+                txID=resp.get('result', {}).get('txId') or '',  # type: ignore
+                error=resp.get('msg') or resp.get('error', {}).get('message')
+            )
+        else:
+            result = SamaTranasctionResult(result=False, txID="", error=resp.text)
+
+        return result

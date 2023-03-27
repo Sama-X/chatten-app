@@ -40,6 +40,14 @@ class ChatViewset(viewsets.GenericViewSet):
 
         question = serializer.validated_data["question"] # type: ignore
 
+        current_total = ChatRecordModel.objects.filter(
+            success=True,
+            user_id=request.user.id
+        ).count()
+
+        if current_total >= request.user.experience:
+            return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_EXPERIENCES)
+
         messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, 1000)
 
         obj = ChatRecordModel.objects.create(

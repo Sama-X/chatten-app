@@ -43,7 +43,7 @@ class UserService:
 
             txid, resp = '', ''
             if wallet_obj:
-                result = SamaClient.create_transaction(wallet_obj.address, amount, settings.SAMA_WALLET_PRIVATE)
+                result = SamaClient.create_transaction_unconfirmed(wallet_obj.address, amount, settings.SAMA_WALLET_PRIVATE)
                 resp = result.json()
                 if result.result:
                     txid = result.txID
