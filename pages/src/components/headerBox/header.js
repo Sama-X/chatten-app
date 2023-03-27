@@ -32,7 +32,7 @@ function getItem(label, key, icon, children, type) {
 
 const App = () => {
   const isToken = cookie.load('token')
-  const experience = cookie.load('experience')
+  const experience = cookie.load('experience') ? cookie.load('experience') : 10
   const history = useHistory()
   const [userName, setUserName] = useState('');
   const [totalNumber, setTotalNumber] = useState('');
