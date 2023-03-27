@@ -38,6 +38,7 @@ class UserService:
                         user_id=user_id,
                         address=wallet.address,
                         private_key=wallet.private_key,
+                        chain=chain
                     )
                     wallet_obj.save()
 
