@@ -1,5 +1,5 @@
 import './header.css'
-import { Drawer, Menu, message, Spin } from 'antd';
+import { Drawer, Menu, message, Spin, Popconfirm } from 'antd';
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
@@ -32,8 +32,10 @@ function getItem(label, key, icon, children, type) {
 
 const App = () => {
   const isToken = cookie.load('token')
+  const experience = cookie.load('experience')
   const history = useHistory()
   const [userName, setUserName] = useState('');
+  const [totalNumber, setTotalNumber] = useState('');
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
@@ -63,6 +65,7 @@ const App = () => {
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
+        cookie.save('experience', resData.data.experience, { path: '/' })
         setTimeout(function(){
           setSpinStatus(false)
           history.push({pathname: '/ChatPage', state: { test: 'signin' }})
@@ -78,6 +81,7 @@ const App = () => {
         offset: 20,
         order:'-id,-msg_type'
       }).then(function(resData){
+        setTotalNumber(resData.total)
         let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
         for(let i in resData.data){
           menuSetitemList.push(getItem(resData.data[i].question, (i+2),<MessageOutlined />),)
@@ -87,6 +91,17 @@ const App = () => {
   }
   const noFunction = () => {
     message.info('Not yet open, please look forward to...')
+  }
+  const signOut = () => {
+    setSpinStatus(true)
+    cookie.save('userName', '', { path: '/' })
+    cookie.save('userId', '', { path: '/' })
+    cookie.save('token', '', { path: '/' })
+    cookie.save('experience', '', { path: '/' })
+    message.success('Exit succeeded')
+    setTimeout(function(){
+      setSpinStatus(false)
+    },1000)
   }
   useEffect(()=>{
     if(isToken){
@@ -114,10 +129,20 @@ const App = () => {
         </div>
         {
           isToken ?
-            <div className="headerRight">
+            // <div className="headerRight" onClick={signOut}>
+              <Popconfirm
+              placement="leftTop"
+              className="headerRight"
+              title='Do you want to log out'
+              description=''
+              onConfirm={signOut}
+              okText="Yes"
+              cancelText="No"
+            >
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
               <div>{ userName }</div>
-            </div>
+            </Popconfirm>
+            // </div>
             :
             <div className="headerRight">
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
@@ -177,7 +202,7 @@ const App = () => {
                   <img src={require("../../assets/mian.png")} alt=""/>
                   <div>
                     <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>剩余体验次数<span className='leftNumber'>3/10</span></div>
+                      <div className='otherMenuRightDiv'>剩余体验次数<span className='leftNumber'>{totalNumber}/{experience}</span></div>
                       <div className='otherMenuRightItem' onClick={noFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>

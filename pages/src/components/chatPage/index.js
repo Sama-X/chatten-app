@@ -2,7 +2,7 @@ import './chatPage.css'
 import '../headerBox/header.css'
 
 
-import { Input, Spin } from 'antd';
+import { Input, Spin, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom'
@@ -12,10 +12,12 @@ import Request from '../../request.ts';
 
 const App = () => {
   const isToken = cookie.load('token')
+  const experience = cookie.load('experience')
   const [userName, setUserName] = useState('');
   const [questionValue, setQuestionValue] = useState('');
   const [chatList, setChatList] = useState([]);
   const [spinStatus, setSpinStatus] = useState(false);
+  const [totalNumber, setTotalNumber] = useState('');
   const history = useHistory()
 
   const fetchData = () => {
@@ -49,6 +51,7 @@ const App = () => {
         if(resData.code != 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
+        setTotalNumber(resData.total)
         setChatList(resData.data ? resData.data : [])
       })
       // setTimeout(function(){
@@ -58,19 +61,22 @@ const App = () => {
   }
   const onSearchFunc = (value) => {
     console.log(value,'value');
-    setSpinStatus(true)
-    setQuestionValue(value.target.value)
-    let request = new Request({});
-    request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
-      console.log(resData,'rrrr')
-      setTimeout(function(){
-        value.target.value = ''
-        setQuestionValue('')
-        fetchData()
-        setSpinStatus(false)
-      },100)
-    })
-
+    if(totalNumber >= experience){
+      message.info('Questioning more than ten times, reaching the upper limit')
+    }else{
+      setSpinStatus(true)
+      setQuestionValue(value.target.value)
+      let request = new Request({});
+      request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
+        console.log(resData,'rrrr')
+        setTimeout(function(){
+          value.target.value = ''
+          setQuestionValue('')
+          fetchData()
+          setSpinStatus(false)
+        },100)
+      })
+    }
   }
   const onChangeInput = (value) => {
     console.log(value,'value');

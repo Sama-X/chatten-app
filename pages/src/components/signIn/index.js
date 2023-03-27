@@ -156,6 +156,7 @@ export default memo(
           cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
+          cookie.save('experience', resData.data.experience, { path: '/' })
           setTimeout(function(){
             setSpinStatus(false)
             history.push({pathname: '/', state: { test: 'signin' }})
