@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 17:04+0800\n"
+"POT-Creation-Date: 2023-03-27 17:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,17 +73,25 @@ msgstr "Wrong user name or password"
 msgid "code or password required"
 msgstr "Verification code or password is required"
 
-#: apps/base/exception.py:69
+#: apps/base/exception.py:71
+msgid "no more experiences"
+msgstr "There are no more experiences"
+
+#: apps/base/exception.py:72
 msgid "chat robot no resp"
 msgstr "Chatgpt is not responding, please try again"
 
-#: apps/base/exception.py:70
+#: apps/base/exception.py:73
 msgid "chatgpt key invalid"
 msgstr "Invalid chatgpt key"
 
-#: apps/base/exception.py:71
+#: apps/base/exception.py:74
 msgid "chatgpt key unsupport anony user"
 msgstr "Anonymous users are note supported to add chatgpt key"
+
+#: apps/base/exception.py:75
+msgid "chatgpt key already exists"
+msgstr "Chatgpt key already exists"
 
 #: apps/base/middleware.py:30 apps/base/middleware.py:40
 msgid "auth: user need login"

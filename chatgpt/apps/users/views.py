@@ -19,8 +19,7 @@ from base.constants import (
     LOGIN_SMS_CODE_KEY, LOGIN_SMS_CODE_TIME_LENGTH
 )
 from base.response import APIResponse, SerializerErrorResponse
-from base.sama import SamaClient
-from users.models import AccountModel, MessageLogModel, WalletModel
+from users.models import AccountModel, MessageLogModel
 from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
 from users.service import UserService
 
@@ -86,7 +85,8 @@ class LoginViewSet(viewsets.GenericViewSet):
         return APIResponse(result={
             'id': account.id,
             'nickname': account.nickname,
-            'token': token
+            'token': token,
+            'experience': account.experience
         })
 
     def _handle_password_login(self, request, mobile, password):
@@ -111,7 +111,8 @@ class LoginViewSet(viewsets.GenericViewSet):
         return APIResponse(result={
             'id': account.id,
             'nickname': account.nickname,
-            'token': token
+            'token': token,
+            'experience': account.experience
         })
 
     @action(methods=['POST'], detail=False)
@@ -146,7 +147,8 @@ class LoginViewSet(viewsets.GenericViewSet):
         return APIResponse(result={
             'id': account.id,
             'nickname': account.nickname,
-            'token': token
+            'token': token,
+            'experience': account.experience
         })
 
     @action(methods=['POST'], detail=False)
@@ -174,7 +176,8 @@ class LoginViewSet(viewsets.GenericViewSet):
         return APIResponse(result={
             'id': account.id,
             'nickname': account.nickname,
-            'token': token
+            'token': token,
+            'experience': account.experience
         })
 
 
