@@ -1,5 +1,5 @@
 import './header.css'
-import { Drawer, Menu, message } from 'antd';
+import { Drawer, Menu, message, Spin } from 'antd';
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
@@ -37,6 +37,8 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
+  const [spinStatus, setSpinStatus] = useState(false);
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -55,12 +57,16 @@ const App = () => {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }else{
       console.log('12')
+      setSpinStatus(true)
       let request = new Request({});
       request.post('/api/v1/users/anonymous/').then(function(resData){
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
-        history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+        setTimeout(function(){
+          setSpinStatus(false)
+          history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+        },1000)
       })
     }
   }
@@ -95,6 +101,13 @@ const App = () => {
 
   return (
     <div>
+      {
+        spinStatus ?
+        <div className="exampleSpin">
+          <Spin />
+        </div>
+        : ''
+      }
       <div className="headerBox">
         <div className="headerLeft" onClick={showDrawer}>
           <img src={require("../../assets/leftMenu.png")} alt=""/>

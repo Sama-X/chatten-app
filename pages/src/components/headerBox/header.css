@@ -132,3 +132,14 @@
 .memberBox img{
     width: 100%;
 }
+
+.exampleSpin {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 99999;
+    padding: 60% 50px;
+  }
