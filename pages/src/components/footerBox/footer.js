@@ -14,10 +14,10 @@ const App = () => {
 
   const history = useHistory()
   const fetchData = () => {
-    console.log(isToken,'isToken')
+    // console.log(isToken,'isToken')
   }
   const onSearchFunc = (value) => {
-    console.log(value,'value');
+    // console.log(value,'value');
   }
   const linkSkip =  () => {
     if(isToken) {

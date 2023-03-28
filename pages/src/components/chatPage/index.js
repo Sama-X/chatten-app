@@ -60,7 +60,7 @@ const App = () => {
 
   }
   const onSearchFunc = (value) => {
-    console.log(value,'value');
+    // console.log(value,'value');
     if(totalNumber >= experience){
       message.info('Questioning more than ten times, reaching the upper limit')
     }else{
@@ -68,7 +68,7 @@ const App = () => {
       setQuestionValue(value.target.value)
       let request = new Request({});
       request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
-        console.log(resData,'rrrr')
+        // console.log(resData,'rrrr')
         setTimeout(function(){
           value.target.value = ''
           setQuestionValue('')
@@ -79,7 +79,7 @@ const App = () => {
     }
   }
   const onChangeInput = (value) => {
-    console.log(value,'value');
+    // console.log(value,'value');
     setQuestionValue(value.target.value)
   }
 

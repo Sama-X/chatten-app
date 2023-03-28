@@ -49,7 +49,7 @@ const App = () => {
   };
   const menuClick = (e) => {
     if(e.key == '1' && e.domEvent.target.textContent == '创建新对话…'){
-      console.log(e,'click')
+      // console.log(e,'click')
       linkSkip()
     }
   };
@@ -58,7 +58,7 @@ const App = () => {
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }else{
-      console.log('12')
+      // console.log('12')
       setSpinStatus(true)
       let request = new Request({});
       request.post('/api/v1/users/anonymous/').then(function(resData){

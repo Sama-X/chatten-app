@@ -109,7 +109,7 @@ export default memo(
         }
     }
     const sendCodeFunc = () => {
-        console.log(mobileVal,'mobileVal')
+        // console.log(mobileVal,'mobileVal')
         const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(mobileVal)) {
             // error
@@ -122,11 +122,11 @@ export default memo(
         }
     }
     const passWordOneChange = (e) => {
-      console.log(e.target.value,'diyici')
+      // console.log(e.target.value,'diyici')
       setPasswordOne(e.target.value)
     }
     const passWordTwoChange = (e) => {
-      console.log(e.target.value,'dierci')
+      // console.log(e.target.value,'dierci')
       setPasswordTwo(e.target.value)
     }
     const signInFunc = () => {
