@@ -42,7 +42,8 @@ class AIHelper:
             result['error'] = 'The system is busy, please try again later'
         try:
             resp = await openai.ChatCompletion.acreate(
-                model="gpt-3.5-turbo", messages=histories, api_key=key, timeout=30
+                model="gpt-3.5-turbo", messages=histories, api_key=key, timeout=30,
+                request_timeout=(10, 20)
             )
             result = resp.to_dict_recursive()  # type: ignore
         except RateLimitError as err:
