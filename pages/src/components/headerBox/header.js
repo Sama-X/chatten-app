@@ -35,7 +35,7 @@ const App = () => {
   const experience = cookie.load('experience') ? cookie.load('experience') : 10
   const history = useHistory()
   const [userName, setUserName] = useState('');
-  const [totalNumber, setTotalNumber] = useState('');
+  const [totalNumber, setTotalNumber] = useState('0');
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
