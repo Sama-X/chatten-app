@@ -7,16 +7,16 @@ import json
 
 from asgiref.sync import async_to_sync
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 
 from base.ai import AIHelper
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
-from chat.models import ChatRecordModel, ChatgptKeyModel
+from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
-from chat.serializer import BaseQuery, ChatRecordSerializer, CreateChatgptKeySerializer, CreateQuestionForm
+from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
 from users.models import AccountModel
 
 
@@ -39,6 +39,7 @@ class ChatViewset(viewsets.GenericViewSet):
             return SerializerErrorResponse(serializer, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
         question = serializer.validated_data["question"] # type: ignore
+        topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         current_total = ChatRecordModel.objects.filter(
             success=True,
@@ -48,7 +49,9 @@ class ChatViewset(viewsets.GenericViewSet):
         if current_total >= request.user.experience:
             return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_EXPERIENCES)
 
-        messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, 1000)
+        messages = []
+        if topic_id:
+            messages = ChatRecordModel.get_gpt_chat_logs(request.user.id, topic_id)
 
         obj = ChatRecordModel.objects.create(
             user_id=request.user.id,
@@ -61,8 +64,17 @@ class ChatViewset(viewsets.GenericViewSet):
         resp = await AIHelper.send_msg(question, histories=messages)
         choices = resp.get('choices', [])
         if len(choices) > 0:
+            if not topic_id:
+                topic = ChatTopicModel.objects.create(
+                    title=question[:125],
+                    user_id=request.user.id
+                )
+                topic_id = topic.id
+
+            obj.chat_topic_id = topic_id
             obj.answer = choices[0].get('message', {}).get('content')
             obj.success = True
+
         obj.chatgpt_key_id = resp['key_id']
         obj.response = json.dumps(resp, ensure_ascii=False)
         obj.response_time = datetime.now()
@@ -73,42 +85,10 @@ class ChatViewset(viewsets.GenericViewSet):
 
         if obj.answer:
             return APIResponse(result={
-                "answer": obj.answer
+                "answer": obj.answer,
+                "topic_id": topic_id
             })
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
-
-    @action(methods=["GET"], detail=False)
-    def records(self, request, *args, **kwargs):
-        """
-        get chat records
-        url: /api/v1/chat/records
-        """
-        query = BaseQuery(data=request.GET)
-        query.is_valid()
-
-        page = query.validated_data.get('page') or 1  # type: ignore
-        offset = query.validated_data.get('offset') or 20  # type: ignore
-        order = query.validated_data.get('order') or '-id'  # type: ignore
-        user_id = request.user.id
-
-        order_fields = []
-        support_fields = [i.name for i in ChatRecordModel._meta.fields]
-        for field in order.split(','):
-            if field.replace('-', '') in support_fields:
-                order_fields.append(field)
-        base = ChatRecordModel.objects.filter(
-            user_id=user_id,
-            is_delete=False,
-            success=True
-        )
-        total = base.count()
-        if order_fields:
-            base = base.order_by(*order_fields)
-        base = base[(page - 1) * offset: page * offset]
-
-        data = ChatRecordSerializer(base, many=True).data
-
-        return APIResponse(result=data, total=total)
 
 
 class ChatgptKeyViewSet(viewsets.GenericViewSet):
@@ -151,3 +131,86 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
             return APIResponse()
 
         return APIResponse(code=ChatErrorCode.CHATGPT_KEY_INVALID)
+
+
+class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    chat topic api.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def list(self, request, *args, **kwargs):
+        """
+        get chat topic list
+        url: /api/v1/chat/topics/
+        """
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+        user_id = request.user.id
+
+        order_fields = []
+        support_fields = [i.name for i in ChatTopicModel._meta.fields]
+        for field in order.split(','):
+            if field.replace('-', '') in support_fields:
+                order_fields.append(field)
+        base = ChatTopicModel.objects.filter(
+            user_id=user_id,
+            is_delete=False
+        )
+        total = base.count()
+        if order_fields:
+            base = base.order_by(*order_fields)
+
+        base = base[(page - 1) * offset: page * offset]
+
+        data = ChatTopicSerializer(base, many=True).data
+
+        total_experience = ChatRecordModel.objects.filter(
+            user_id=request.user.id,
+            is_delete=False,
+            success=True
+        ).count()
+
+        return APIResponse(result=data, total=total, total_experience=total_experience)
+
+    @action(methods=["GET"], detail=True)
+    def records(self, request, *args, **kwargs):
+        """
+        get chat topic records
+        url: /api/v1/chat/topics/<topic_id>/records/
+        """
+        topic_id = kwargs.get('pk')
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+        user_id = request.user.id
+
+        order_fields = []
+        support_fields = [i.name for i in ChatRecordModel._meta.fields]
+        for field in order.split(','):
+            if field.replace('-', '') in support_fields:
+                order_fields.append(field)
+
+        base = ChatRecordModel.objects.filter(
+            user_id=user_id,
+            is_delete=False,
+            success=True,
+            chat_topic_id=topic_id
+        )
+        total = base.count()
+        if order_fields:
+            base = base.order_by(*order_fields)
+
+        base = base[(page - 1) * offset: page * offset]
+
+        data = ChatRecordSerializer(base, many=True).data
+
+        return APIResponse(result=data, total=total)

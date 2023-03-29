@@ -35,6 +35,7 @@ class ChatRecordModel(BaseModel):
     resp_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: resp token usage"))
     total_tokens = models.IntegerField(default=0, verbose_name=_("db.chatrecord: total token usage"))
     chatgpt_key_id = models.BigIntegerField(db_index=True, null=True, verbose_name=_("db:chatgpt key foreign key"))
+    chat_topic_id = models.BigIntegerField(db_index=True, null=True, verbose_name=_("db:chat topic id"))
 
     class Meta:
         """
@@ -45,18 +46,14 @@ class ChatRecordModel(BaseModel):
         db_table = "chat_record"
 
     @classmethod
-    def get_gpt_chat_logs(cls, user_id, max_tokens):
+    def get_gpt_chat_logs(cls, user_id, topic_id):
         """
         get chat logs
         """
-        if not max_tokens:
-            return []
-
-        now = datetime.now() - timedelta(hours=1)
         histories = cls.objects.filter(
             user_id=user_id,
             success=True,
-            question_time__gt=now
+            chat_topic_id=topic_id
         ).order_by('-id').all()
 
         total_tokens = 0
@@ -64,9 +61,6 @@ class ChatRecordModel(BaseModel):
         for item in histories:
             if not item.answer:
                 continue
-
-            if total_tokens >= max_tokens:
-                break
 
             messages.append({
                 "role": "assistant",
@@ -96,3 +90,12 @@ class ChatgptKeyModel(BaseModel):
         verbose_name = _("db:chatgpt table")
         verbose_name_plural = verbose_name
         db_table = "chatgpt_key"
+
+
+class ChatTopicModel(BaseModel):
+    """
+    chat topic model.
+    """
+
+    title = models.CharField(max_length=128, verbose_name=_("db:chat topic"))
+    user_id = models.BigIntegerField(db_index=True, verbose_name=_("db:user foreign key"))

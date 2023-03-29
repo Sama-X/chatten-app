@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-27 17:52+0800\n"
+"POT-Creation-Date: 2023-03-29 17:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,7 +93,7 @@ msgstr "Anonymous users are note supported to add chatgpt key"
 msgid "chatgpt key already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/middleware.py:30 apps/base/middleware.py:40
+#: apps/base/middleware.py:33 apps/base/middleware.py:43
 msgid "auth: user need login"
 msgstr "Login required"
 
@@ -149,25 +149,33 @@ msgstr "total tokens usage"
 msgid "db:chatgpt key foreign key"
 msgstr "chatgpt key foreign key"
 
-#: apps/chat/models.py:43
+#: apps/chat/models.py:38
+msgid "db:chat topic id"
+msgstr "chat topic id"
+
+#: apps/chat/models.py:44
 msgid "db:chatrecord:ChatRecord"
 msgstr "ChatRecord Table"
 
-#: apps/chat/models.py:88
+#: apps/chat/models.py:82 apps/chat/models.py:101
 msgid "db:user foreign key"
 msgstr "user foreign key"
 
-#: apps/chat/models.py:89
+#: apps/chat/models.py:83
 msgid "db:chatgpt key"
 msgstr "chatgpt key"
 
-#: apps/chat/models.py:90
+#: apps/chat/models.py:84
 msgid "db:enable"
 msgstr "enable"
 
-#: apps/chat/models.py:96
+#: apps/chat/models.py:90
 msgid "db:chatgpt table"
 msgstr "chatgpt table"
+
+#: apps/chat/models.py:100
+msgid "db:chat topic"
+msgstr "chat topic"
 
 #: apps/chat/serializer.py:14
 msgid "serializer: page"
@@ -185,7 +193,11 @@ msgstr "order field"
 msgid "serializer: question"
 msgstr "question"
 
-#: apps/chat/serializer.py:57
+#: apps/chat/serializer.py:24
+msgid "serializer: chat topic id"
+msgstr "chat topic id"
+
+#: apps/chat/serializer.py:58
 msgid "serializer:chatgpt key"
 msgstr "chatgpt key"
 

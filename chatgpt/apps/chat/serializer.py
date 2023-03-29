@@ -4,7 +4,7 @@ chat serializer.
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 
-from chat.models import ChatRecordModel
+from chat.models import ChatRecordModel, ChatTopicModel
 
 
 class BaseQuery(serializers.Serializer):
@@ -21,6 +21,7 @@ class CreateQuestionForm(serializers.Serializer):
     question form.
     """
     question = serializers.CharField(required=True, allow_null=False, help_text=_("serializer: question"))
+    topic_id = serializers.IntegerField(allow_null=False, required=False, help_text=_("serializer: chat topic id"))
 
 
 class ChatRecordSerializer(serializers.ModelSerializer):
@@ -55,3 +56,20 @@ class CreateChatgptKeySerializer(serializers.Serializer):
     create chatgpt key.
     """
     key = serializers.CharField(allow_null=False, required=True, help_text=(_("serializer:chatgpt key")))
+
+
+class ChatTopicSerializer(serializers.ModelSerializer):
+    """
+    Chat topic serializer.
+    """
+
+    add_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
+
+    class Meta:
+        """
+        Meta class.
+        """
+        model = ChatTopicModel
+        fields = (
+            'id', 'title', 'add_time'
+        )
