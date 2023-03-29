@@ -1,6 +1,7 @@
 """
 middleware modules.
 """
+import logging
 import traceback
 from django.conf import settings
 from django.core.cache import cache
@@ -15,6 +16,8 @@ from base.constants import LOGIN_TOKEN_ACCOUNT_KEY
 from base.exception import SystemErrorCode
 from base.response import APIResponse
 from users.models import AccountModel
+
+logger = logging.getLogger(__name__)
 
 
 class AnonymousAuthentication(authentication.BaseAuthentication):
@@ -61,7 +64,7 @@ def exception_catch(exception, ctx):
         errors = ';'.join(errors)
         return APIResponse(code=SystemErrorCode.HTTP_400_BAD_REQUEST, msg=errors)
 
-    print(traceback.format_exc())
+    logger.error("System error: %s", traceback.format_exc())
     if hasattr(exception, '__module__') and exception.__module__ == 'rest_framework.exceptions':
         return APIResponse(code=exception.status_code, msg=exception.detail)
 
