@@ -177,12 +177,13 @@ class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         total_experience = ChatRecordModel.objects.filter(
             user_id=request.user.id,
             is_delete=False,
-            success=True
+            success=True,
+            question_time__gte=datetime.now().date()
         ).count()
 
         return APIResponse(
             result=data, total=total, total_experience=total_experience,
-            experience=request.user.experience
+            experience=request.user.experience, is_vip=request.user.is_vip
         )
 
     @action(methods=["GET"], detail=True)
