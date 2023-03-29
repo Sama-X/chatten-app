@@ -32,8 +32,8 @@ function getItem(label, key, icon, children, type) {
 
 const App = () => {
   const isToken = cookie.load('token')
-  const experience = cookie.load('experience') ? cookie.load('experience') : 10
-  const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
+  const experience = cookie.load('experience')
+  const totalExeNumber = cookie.load('totalExeNumber')
   const history = useHistory()
   const [userName, setUserName] = useState('');
   const [open, setOpen] = useState(false);
@@ -86,7 +86,7 @@ const App = () => {
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
         cookie.save('experience', resData.experience, { path: '/' })
-        cookie.save('totalExeNumber', resData.total_experience, { path: '/' })
+        cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
         let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
@@ -236,7 +236,7 @@ const App = () => {
                   <img src={require("../../assets/reply.png")} alt=""/>
                   <div>
                     <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber}/{experience}</span></div>
+                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
                       <div className='otherMenuRightItem' onClick={noFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>

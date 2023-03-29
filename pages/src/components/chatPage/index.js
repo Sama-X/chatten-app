@@ -13,8 +13,8 @@ import Request from '../../request.ts';
 const App = () => {
   const isToken = cookie.load('token')
   const topicId = cookie.load('topicId')
-  const experience = cookie.load('experience') ? cookie.load('experience') : 10
-  const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
+  const experience = cookie.load('experience')
+  const totalExeNumber = cookie.load('totalExeNumber')
   const [userName, setUserName] = useState('');
   const [questionValue, setQuestionValue] = useState('');
   const [chatList, setChatList] = useState([]);
@@ -39,8 +39,7 @@ const App = () => {
       })
   }
   const onSearchFunc = (value) => {
-    // console.log(value,'value');
-    if(totalExeNumber >= experience){
+    if(Number(totalExeNumber) >= Number(experience)){
       message.info('Questioning more than ten times, reaching the upper limit')
     }else{
       // setSpinStatus(true)
@@ -82,6 +81,8 @@ const App = () => {
             message.error(resData.msg)
             setInputDisabled(false)
           }else{
+            // cookie.save('experience', resData.experience, { path: '/' })
+            cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
             cookie.save('topicId', resData.data.topic_id, { path: '/' })
             setTimeout(function(){
               value.target.value = ''
@@ -187,7 +188,7 @@ const App = () => {
           <div className="footerBottomBox">
             <div className="footerLeftBox">
               <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-              <div><span>免费提问{totalExeNumber ? totalExeNumber : 0}</span>/{experience ? experience : 10}</div>
+              <div><span>免费提问</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
             </div>
             {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
           </div>

@@ -143,3 +143,6 @@
     line-height: 1.2rem;
     margin-left: 5px;
 }
+.footerLeftBox div{
+    color: red;
+}
