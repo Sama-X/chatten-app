@@ -180,7 +180,10 @@ class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
             success=True
         ).count()
 
-        return APIResponse(result=data, total=total, total_experience=total_experience)
+        return APIResponse(
+            result=data, total=total, total_experience=total_experience,
+            experience=request.user.experience
+        )
 
     @action(methods=["GET"], detail=True)
     def records(self, request, *args, **kwargs):
