@@ -97,13 +97,13 @@ class UnusedStrategy(BaseStrategy):
         self.USING_KEYS.add(key)
 
         return key
-    
+
     def release_key(self, key):
         """
         release key.
         """
         if key in self.USING_KEYS:
-            self.USING_KEYS.remove(key)
+            self.USING_KEYS.discard(key)
             self.UNUSED_KEYS.add(key)
 
 
@@ -149,7 +149,7 @@ class PriorityStrategy(BaseStrategy):
         """
         priority = self.TASK_MAP.pop(key, 0)
         heapq.heappush(self.TASKS, (priority + 1, key))
-        self.USING_KEYS.remove(key)
+        self.USING_KEYS.discard(key)
         self.UNUSED_KEYS.add(key)
 
     def drop_key(self, key):
@@ -219,7 +219,7 @@ class DurationWeightedStrategy(BaseStrategy):
         """
         now = datetime.now()
         self.KEY_LAST_USED_MAP[key] = now
-        self.USING_KEYS.remove(key)
+        self.USING_KEYS.discard(key)
         self.UNUSED_KEYS.add(key)
 
     def drop_key(self, key):

@@ -128,6 +128,10 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
                     user_id=request.user.id,
                     key=key,
                 )
+            # dynamic update key
+            if AIHelper.strategy:
+                AIHelper.strategy.release_key(key)
+
             return APIResponse()
 
         return APIResponse(code=ChatErrorCode.CHATGPT_KEY_INVALID)
