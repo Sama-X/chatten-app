@@ -43,7 +43,8 @@ class ChatViewset(viewsets.GenericViewSet):
 
         current_total = ChatRecordModel.objects.filter(
             success=True,
-            user_id=request.user.id
+            user_id=request.user.id,
+            question_time__gte=datetime.now().date()
         ).count()
 
         if current_total >= request.user.experience:
