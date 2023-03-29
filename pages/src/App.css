@@ -50,6 +50,9 @@
 .ant-popconfirm .ant-popconfirm-message{
   color: white;
 }
+.ant-input-number-handler-wrap {
+  display: none !important;
+}
 .element::-webkit-scrollbar { width: 0!important }
 .element { -ms-overflow-style: none; }
 .element { overflow: -moz-scrollbars-none; }

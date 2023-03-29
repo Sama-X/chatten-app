@@ -179,7 +179,7 @@ export default memo(
             }
             <div className="loginHeader">
                 <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
-                <Link to='/'>
+                <Link to='/Login'>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>
             </div>

@@ -159,7 +159,7 @@ export default memo(
       })
     }
     return (
-        <div className="mobileAndCode">
+        <div className="mobileAndCode mobileLogin">
             {
               spinStatus ?
               <div className="example">
@@ -216,6 +216,7 @@ export default memo(
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}
+                    <div className="signBtnBox">没有账号？去<span><Link to='/SignIn'>注册</Link></span></div>
                     <div><img className="sendCode" onClick={signInFunc} src={require("../../assets/rightBtn.png")} alt=""/></div>
                 </div>
             }

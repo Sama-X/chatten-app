@@ -10,7 +10,7 @@ const App = () => {
         title:'问题示例',
         url:require("../../assets/icon1.png"),
         questionList:[
-          "“用简单的属于解释量子力学” →",
+          "“用简单的术语解释量子力学” →",
           "“给孩子过10岁生日的好创意”→",
           "“如何在JavaScript中创建一个HTTP请求？”→"
         ]

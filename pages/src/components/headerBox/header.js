@@ -19,7 +19,7 @@ function getItem(label, key, icon, children, type) {
 }
 
 // const items = [
-//   getItem('SamaGPT', 'sub1', '', [
+//   getItem('chatGPT', 'sub1', '', [
 //     getItem('创建新对话…', '5',<PlusCircleFilled />),
 //     getItem('解释量子力学', '6',<MessageOutlined />),
 //     getItem('人工智能的发展前景', '7',<MessageOutlined />),
@@ -33,9 +33,9 @@ function getItem(label, key, icon, children, type) {
 const App = () => {
   const isToken = cookie.load('token')
   const experience = cookie.load('experience') ? cookie.load('experience') : 10
+  const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const history = useHistory()
   const [userName, setUserName] = useState('');
-  const [totalNumber, setTotalNumber] = useState('0');
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
@@ -53,9 +53,13 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    if(e.key == '1' && e.domEvent.target.textContent == '创建新对话…'){
+    console.log(e,'click')
+    if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
       // console.log(e,'click')
       linkSkip()
+    }else{
+      cookie.save('topicId', e.keyPath[1], { path: '/' })
+      history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }
   };
   const linkSkip =  () => {
@@ -70,7 +74,6 @@ const App = () => {
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
-        cookie.save('experience', resData.data.experience, { path: '/' })
         setTimeout(function(){
           setSpinStatus(false)
           history.push({pathname: '/ChatPage', state: { test: 'signin' }})
@@ -79,19 +82,23 @@ const App = () => {
     }
   }
   const getHistory = () => {
-      let obj = {
-        page: 1,
-        offset: 20,
-        order:'-id,-msg_type,add_time'
-      }
       let request = new Request({});
-      request.get('/api/v1/chat/records/?page=1&offset=20&order=-id').then(function(resData){
-        setTotalNumber(resData.total)
-        let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
+      request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
+
+        cookie.save('experience', resData.experience, { path: '/' })
+        cookie.save('totalExeNumber', resData.total_experience, { path: '/' })
+
+        let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
-          menuSetitemList.push(getItem(resData.data[i].question, (i+2),<MessageOutlined />),)
+          let subItem = []
+          request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+            for(let j in resItemData.data){
+              subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
+            }
+          })
+          menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
         }
-        setItem([getItem('SamaGPT', 'sub1', '', menuSetitemList)])
+        setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
       })
   }
   const noFunction = () => {
@@ -103,6 +110,7 @@ const App = () => {
     cookie.save('userId', '', { path: '/' })
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
+    cookie.save('totalExeNumber', '', { path: '/' })
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
@@ -119,6 +127,9 @@ const App = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const menuItemClick = (e) => {
+    console.log(e,'hgjkl')
+  }
   useEffect(()=>{
     if(isPhone){
       setWidthNumber('77%')
@@ -126,12 +137,12 @@ const App = () => {
       setWidthNumber('400px')
     }
     if(isToken){
-      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '未命名'
+      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
       getHistory()
     }else{
-      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
-      setItem([getItem('GPT', 'sub1', '', menuSetitemList)])
+      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />,[])]
+      setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
     }
   }, [])
 
@@ -165,18 +176,13 @@ const App = () => {
             </Popconfirm>
             // </div>
             :
-            <div className="headerRight" onClick={showModal}>
+            <div className="headerRight">
+            {/* <div className="headerRight" onClick={showModal}> */}
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-              <div>登录</div>
-              <span>/</span>
-              <div>注册</div>
+              <div><Link to='/Login'>登录</Link></div>
+              {/* <span>/</span>
+              <div>注册</div> */}
             </div>
-            // <div className="headerRight" onClick={showModal}>
-            //   <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-            //   <div><Link to='/Login'>登录</Link></div>
-            //   <span>/</span>
-            //   <div><Link to='/SignIn'>注册</Link></div>
-            // </div>
         }
       </div>
       <>
@@ -213,6 +219,7 @@ const App = () => {
               mode="inline"
               items={items}
               theme="#202123"
+
             />
 
             <div className="otherMenuBox">
@@ -229,7 +236,7 @@ const App = () => {
                   <img src={require("../../assets/reply.png")} alt=""/>
                   <div>
                     <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>剩余体验次数<span className='leftNumber'>{totalNumber}/{experience}</span></div>
+                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber}/{experience}</span></div>
                       <div className='otherMenuRightItem' onClick={noFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>

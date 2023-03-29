@@ -178,6 +178,9 @@
     color: #FFBC72;
     line-height: 17px;
 }
+.ant-menu-sub:has(.ant-menu-title-content) .ant-menu-title-content{
+    padding-left: 10px;
+}
 .exampleSpin {
     text-align: center;
     background: rgba(255, 255, 255, 0.3);

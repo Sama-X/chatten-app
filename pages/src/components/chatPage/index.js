@@ -12,44 +12,24 @@ import Request from '../../request.ts';
 
 const App = () => {
   const isToken = cookie.load('token')
-  const experience = cookie.load('experience')
+  const topicId = cookie.load('topicId')
+  const experience = cookie.load('experience') ? cookie.load('experience') : 10
+  const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const [userName, setUserName] = useState('');
   const [questionValue, setQuestionValue] = useState('');
   const [chatList, setChatList] = useState([]);
   const [spinStatus, setSpinStatus] = useState(false);
-  const [totalNumber, setTotalNumber] = useState('');
+  const [inputDisabled, setInputDisabled] = useState(false);
   const history = useHistory()
 
-  const fetchData = () => {
+  const fetchData = (topicId) => {
       let request = new Request({});
       setSpinStatus(true)
-      request.get('/api/v1/chat/records/?page=1&offset=20&order=id').then(function(resData){
-        // console.log(resData)
-        // resData.data.push({
-        //     "msg_type": 1, //消息类型
-        //     "msg_type_name": "text", //消息类型描述
-        //     "question": "写一篇200字的童话故事", //问题内容
-        //     "answer": "\n\n从前，在一个大山的深处，有一个小村庄，里面住着一对可爱的姐妹花。姐姐名叫小茉莉，妹妹名叫小玫瑰。\n\n小茉莉和小玫瑰非常喜欢玩耍。每天黄昏，她们都会来到小溪边，听着流水哗哗地流淌，看着鸟儿飞来飞去，许下自己的愿望。\n\n小茉莉想成为一朵美丽的白色茉莉花，小玫瑰则想成为一朵红色的玫瑰花。\n\n一天，她们在小溪边玩耍时，突然出现了一只小仙女。小仙女对着姐妹俩微笑道：“你们有什么愿望，我可以帮你们实现。”\n\n小茉莉和小玫瑰两人高兴地跳了起来，把自己的愿望告诉了小仙女。小仙女听了之后，神奇地摆动了手中的魔杖，让小茉莉变成了美丽的白色茉莉花，小玫瑰也变成了红色的玫瑰花。\n\n从此，小溪边上多了两朵美丽的花，吸引了很多小动物来玩耍。姐妹俩每天都能听到小动物们在那里玩耍的声音。\n\n故事告诉我们通过努力可以实现自己的梦想，也会得到周围人们的认可和喜爱。", //回复内容
-        //     "approval": 0, //点赞数
-        //     "question_time": "2023-03-02 16:49:46", //提问时间
-        //     "response_time": "2023-03-02 16:49:54", //回答时间
-        //     "add_time": "2023-03-02 16:49:46" //创建时间
-        //     },{
-        //       "msg_type": 1, //消息类型
-        //       "msg_type_name": "text", //消息类型描述
-        //       "question": "写一篇200字的童话故事", //问题内容
-        //       "answer": "\n\n从前，在一个大山的深处，有一个小村庄，里面住着一对可爱的姐妹花。姐姐名叫小茉莉，妹妹名叫小玫瑰。\n\n小茉莉和小玫瑰非常喜欢玩耍。每天黄昏，她们都会来到小溪边，听着流水哗哗地流淌，看着鸟儿飞来飞去，许下自己的愿望。\n\n小茉莉想成为一朵美丽的白色茉莉花，小玫瑰则想成为一朵红色的玫瑰花。\n\n一天，她们在小溪边玩耍时，突然出现了一只小仙女。小仙女对着姐妹俩微笑道：“你们有什么愿望，我可以帮你们实现。”\n\n小茉莉和小玫瑰两人高兴地跳了起来，把自己的愿望告诉了小仙女。小仙女听了之后，神奇地摆动了手中的魔杖，让小茉莉变成了美丽的白色茉莉花，小玫瑰也变成了红色的玫瑰花。\n\n从此，小溪边上多了两朵美丽的花，吸引了很多小动物来玩耍。姐妹俩每天都能听到小动物们在那里玩耍的声音。\n\n故事告诉我们通过努力可以实现自己的梦想，也会得到周围人们的认可和喜爱。", //回复内容
-        //       "approval": 0, //点赞数
-        //       "question_time": "2023-03-02 16:49:46", //提问时间
-        //       "response_time": "2023-03-02 16:49:54", //回答时间
-        //       "add_time": "2023-03-02 16:49:46" //创建时间
-        //       })
-        //       console.log(resData)
+      request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
         if(resData.code != 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
         setSpinStatus(false)
-        setTotalNumber(resData.total)
         setChatList(resData.data ? resData.data : [])
         if(resData.code == 0){
           setTimeout(function(){
@@ -60,28 +40,60 @@ const App = () => {
   }
   const onSearchFunc = (value) => {
     // console.log(value,'value');
-    if(totalNumber >= experience){
+    if(totalExeNumber >= experience){
       message.info('Questioning more than ten times, reaching the upper limit')
     }else{
-      setSpinStatus(true)
+      // setSpinStatus(true)
+      console.log(chatList,'chatList')
       if(!questionValue){
         message.error('The question cannot be empty')
         setSpinStatus(false)
         return
       }else{
         setQuestionValue(value.target.value)
+        const questionObj = [...chatList]
+        questionObj.push({
+          "msg_type": 1, //消息类型
+          "msg_type_name": "text", //消息类型描述
+          "question": questionValue, //问题内容
+          "answer": '', //回复内容
+          "approval": 0, //点赞数
+          "question_time": "2023-03-02 16:49:46", //提问时间
+          "response_time": "2023-03-02 16:49:54", //回答时间
+          "add_time": "2023-03-02 16:49:46" //创建时间
+        })
+        setChatList(questionObj)
+        setTimeout(function(){
+          document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+        },10)
         let request = new Request({});
-        request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
-          // console.log(resData,'rrrr')
-          setTimeout(function(){
-            value.target.value = ''
-            setQuestionValue('')
-            fetchData()
-            setSpinStatus(false)
-          },100)
+        let obj = {}
+        const topicId = cookie.load('topicId')
+        if(!topicId){
+          obj = {question:questionValue}
+        }else{
+          obj = {question:questionValue,topic_id:topicId}
+        }
+        setQuestionValue('')
+        setInputDisabled(true)
+        request.post('/api/v1/chat/question/',obj).then(function(resData){
+          console.log(resData,'rrrr')
+          if(resData.code == '200100'){
+            message.error(resData.msg)
+            setInputDisabled(false)
+          }else{
+            cookie.save('topicId', resData.data.topic_id, { path: '/' })
+            setTimeout(function(){
+              value.target.value = ''
+              setQuestionValue('')
+              fetchData(resData.data.topic_id)
+              setSpinStatus(false)
+              setInputDisabled(false)
+            },100)
+          }
+
         })
       }
-
     }
   }
   const onChangeInput = (value) => {
@@ -89,12 +101,20 @@ const App = () => {
     setQuestionValue(value.target.value)
   }
 
+  const returnIndex = () =>{
+    cookie.save('topicId', '', { path: '/' })
+    history.push({pathname: '/', state: { test: 'noToken' }})
+  }
   useEffect(()=>{
     if(isToken){
-      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '未命名'
+      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
     }
-    fetchData()
+    if(cookie.load('topicId')){
+
+      fetchData(cookie.load('topicId'))
+    }
+
   }, [])
   return (
     <div className="indexBox">
@@ -106,8 +126,9 @@ const App = () => {
         : ''
       }
       <div className="headerBox">
-        <div className="headerLeft">
-        <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link>
+        <div className="headerLeft" onClick={returnIndex}>
+        <img src={require("../../assets/close.png")} alt=""/>
+        {/* <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link> */}
         </div>
         <div className="headerRight">
           <img src={require("../../assets/noLoginIcon.png")} alt=""/>
@@ -128,16 +149,20 @@ const App = () => {
                   <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                   <div className="question">{item.question}</div>
                 </div>
-                <div className='answerBox'>
-                  <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
-                  <div className="answerContent">
-                    <div className="answer">{item.answer}</div>
-                    <div className="answerZanBox">
-                      <img src={require("../../assets/zan.png")} className="zan" alt=""/>
-                      <img src={require("../../assets/cai.png")} className="noZan" alt=""/>
+                {
+                  item.answer ?
+                  <div className='answerBox'>
+                    <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
+                    <div className="answerContent">
+                      <div className="answer">{item.answer}</div>
+                      <div className="answerZanBox">
+                        <img src={require("../../assets/zan.png")} className="zan" alt=""/>
+                        <img src={require("../../assets/cai.png")} className="noZan" alt=""/>
+                      </div>
                     </div>
                   </div>
-                </div>
+                  : ''
+                }
               </div>
           })
         }
@@ -148,7 +173,7 @@ const App = () => {
           {/* {
             isToken ? */}
             <Input.Group className="tokenInputBox">
-                <Input onPressEnter={onSearchFunc} onChange={onChangeInput} value={questionValue} className="tokenInput"/>
+                <Input disabled={inputDisabled} onPressEnter={onSearchFunc} onChange={onChangeInput} value={questionValue} className="tokenInput"/>
                 <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
             </Input.Group>
             {/* :
@@ -162,7 +187,7 @@ const App = () => {
           <div className="footerBottomBox">
             <div className="footerLeftBox">
               <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-              <div><span>免费提问{totalNumber ? totalNumber : 0}</span>/{experience ? experience : 10}</div>
+              <div><span>免费提问{totalExeNumber ? totalExeNumber : 0}</span>/{experience ? experience : 10}</div>
             </div>
             {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
           </div>
