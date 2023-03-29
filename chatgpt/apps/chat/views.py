@@ -176,7 +176,7 @@ class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
 
         data = ChatTopicSerializer(base, many=True).data
 
-        total_experience = ChatRecordModel.objects.filter(
+        used_experience = ChatRecordModel.objects.filter(
             user_id=request.user.id,
             is_delete=False,
             success=True,
@@ -184,7 +184,7 @@ class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         ).count()
 
         return APIResponse(
-            result=data, total=total, total_experience=total_experience,
+            result=data, total=total, used_experience=used_experience,
             experience=request.user.experience, is_vip=request.user.is_vip
         )
 
