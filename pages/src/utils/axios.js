@@ -13,8 +13,8 @@
 //     err => Promise.reject(err)
 // )
 // const devBaseURL = 'http://localhost:3000';
-// const proBaseURL = 'http://chattop.club';//online
-const proBaseURL = 'http://192.168.0.117:9003';//tan-bendi
+const proBaseURL = 'http://chattop.club';//online
+// const proBaseURL = 'http://192.168.0.117:9003';//tan-bendi
 // const proBaseURL = 'http://192.168.0.115:8000';//zhengshi
 
 // const ENV = 'prod'    // dev或者prod
