@@ -244,7 +244,7 @@ const App = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='leftBottom'>每分享给1个好友，可增加1次</div>
+                    <div className='leftBottom'>每分享给1个好友，可增加10次</div>
                   </div>
                 </div>
 
