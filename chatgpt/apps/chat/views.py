@@ -87,7 +87,8 @@ class ChatViewset(viewsets.GenericViewSet):
         if obj.answer:
             return APIResponse(result={
                 "answer": obj.answer,
-                "topic_id": topic_id
+                "topic_id": topic_id,
+                "experience": current_total + 1
             })
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
