@@ -21,7 +21,7 @@ class CreateQuestionForm(serializers.Serializer):
     question form.
     """
     question = serializers.CharField(required=True, allow_null=False, help_text=_("serializer: question"))
-    topic_id = serializers.IntegerField(allow_null=False, required=False, help_text=_("serializer: chat topic id"))
+    topic_id = serializers.IntegerField(allow_null=True, required=False, help_text=_("serializer: chat topic id"))
 
 
 class ChatRecordSerializer(serializers.ModelSerializer):
