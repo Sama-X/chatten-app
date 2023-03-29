@@ -153,7 +153,8 @@ export default memo(
         password: passwordTwo
       }).then(function(resData){
         if(resData.code == 0){
-          cookie.save('userName', resData.data.nickname, { path: '/' })
+          cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })
+          // cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
           cookie.save('experience', resData.data.experience, { path: '/' })
@@ -177,7 +178,7 @@ export default memo(
               : ''
             }
             <div className="loginHeader">
-                <img className="leftLogo" src={require("../../assets/loginLogo.png")} alt=""/>
+                <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
                 <Link to='/'>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>

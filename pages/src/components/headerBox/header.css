@@ -15,7 +15,8 @@
     padding: 8px;
     background-color: #30323C;
     border-radius: 6px;
-
+    font-size: 16px;
+    line-height: 22px;
 }
 .headerRight div a{
     color: white;
@@ -35,7 +36,7 @@
     margin-bottom: 18px;
 }
 .drawHeaderBox img{
-    width:125px;
+    /* width:125px; */
     height: 30px;
     display: inline-block;
 }
@@ -126,13 +127,57 @@
 
 
 /* huiyuan */
-.memberBox{
+.memberBox {
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.memberHeaderBg{
+    width: 100%;
+    padding: 10px 20px;
+    background: url("../../assets/vipHeaderBg.png");
+}
+.memberHeader {
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+}
+.memberHeader img{
+    height:20px;
+}
+.memberHeader div{
+    font-size: 0.75rem;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #573B1D;
+    line-height: 20px;
+}
+.memberBottomBox{
+    width: 100%;
+    padding: 10px 20px;
+    background: #30323C;
+}
+.memberBottom{
+    display: flex;
     width: 100%;
 }
-.memberBox img{
-    width: 100%;
+.memberBoItem{
+    width: 33%;
+    text-align: center;
 }
-
+.memberBoItem img{
+    height: 32px;
+}
+.memberBoItem div{
+    width: 100%;
+    height: 17px;
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: #FFBC72;
+    line-height: 17px;
+}
 .exampleSpin {
     text-align: center;
     background: rgba(255, 255, 255, 0.3);

@@ -23,6 +23,8 @@
 /* token */
 .tokenInputBox{
     position: relative;
+    border-radius: 5px;
+    overflow: hidden;
 }
 .tokenInput{
     width: 100%;
@@ -38,9 +40,9 @@
     display: inline-block;
 }
 /* fengexian */
-.footerTokenContent{
+.footerBottomBox .footerTokenContent{
     font-size: 14px;
-    margin-top: 14px;
+    margin-top: 0;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #ECECF1;
@@ -90,15 +92,16 @@
 .answerBox .answerAvator{
     width: 40px;
     height: 40px;
-    padding: 8px;
+    /* padding: 8px;
     background:#E84142;
-    border-radius: 3px;
+    border-radius: 3px; */
     margin-right: 10px;
 }
 .answer{
     width: 100%;
-    padding: 10px 0;
-    line-height: 20px;
+    /* padding: 10px 0; */
+    line-height: 30px;
+    font-size: 18px;
     text-align: left;
 }
 .answerZanBox{
@@ -120,3 +123,23 @@
     z-index: 1;
     padding: 60% 50px;
   }
+.footerBottomBox {
+    margin-top: 14px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.footerLeftBox{
+    display: flex;
+}
+.footerQuestion{
+    height: 20px;
+}
+.footerLeftBox div span{
+    color: #EAB763;
+}
+.footerLeftBox div{
+    font-size: 0.75rem;
+    line-height: 1.2rem;
+    margin-left: 5px;
+}

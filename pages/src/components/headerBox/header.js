@@ -1,5 +1,5 @@
 import './header.css'
-import { Drawer, Menu, message, Spin, Popconfirm } from 'antd';
+import { Drawer, Menu, message, Spin, Popconfirm, Modal, Button } from 'antd';
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
@@ -40,6 +40,11 @@ const App = () => {
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
   const [spinStatus, setSpinStatus] = useState(false);
+  const [widthNumber, setWidthNumber] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  let info = navigator.userAgent;
+  let isPhone = /mobile/i.test(info);
+
 
   const showDrawer = () => {
     setOpen(true);
@@ -74,13 +79,13 @@ const App = () => {
     }
   }
   const getHistory = () => {
-
-      let request = new Request({});
-      request.get('/api/v1/chat/records/', {
+      let obj = {
         page: 1,
         offset: 20,
-        order:'-id,-msg_type'
-      }).then(function(resData){
+        order:'-id,-msg_type,add_time'
+      }
+      let request = new Request({});
+      request.get('/api/v1/chat/records/?page=1&offset=20&order=-id').then(function(resData){
         setTotalNumber(resData.total)
         let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
         for(let i in resData.data){
@@ -103,14 +108,30 @@ const App = () => {
       setSpinStatus(false)
     },1000)
   }
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   useEffect(()=>{
+    if(isPhone){
+      setWidthNumber('77%')
+    }else{
+      setWidthNumber('400px')
+    }
     if(isToken){
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '未命名'
       setUserName(authName)
       getHistory()
     }else{
       let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
-      setItem([getItem('SamaGPT', 'sub1', '', menuSetitemList)])
+      setItem([getItem('GPT', 'sub1', '', menuSetitemList)])
     }
   }, [])
 
@@ -144,12 +165,18 @@ const App = () => {
             </Popconfirm>
             // </div>
             :
-            <div className="headerRight">
+            <div className="headerRight" onClick={showModal}>
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-              <div><Link to='/Login'>登录</Link></div>
+              <div>登录</div>
               <span>/</span>
-              <div><Link to='/SignIn'>注册</Link></div>
+              <div>注册</div>
             </div>
+            // <div className="headerRight" onClick={showModal}>
+            //   <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+            //   <div><Link to='/Login'>登录</Link></div>
+            //   <span>/</span>
+            //   <div><Link to='/SignIn'>注册</Link></div>
+            // </div>
         }
       </div>
       <>
@@ -159,7 +186,7 @@ const App = () => {
           </Button>
         </Space> */}
         <Drawer
-          width={'77%'}
+          width={'300px'}
           placement={placement}
           closable={false}
           onClose={onClose}
@@ -169,7 +196,7 @@ const App = () => {
         >
           {/* rootStyle={{background:'rgba(48, 50, 60, 0.4)'}} */}
           <div className="drawHeaderBox">
-            <img src={require("../../assets/leftLogo.png")} alt=""/>
+            <img src={require("../../assets/logo.png")} alt=""/>
             <div>BETA</div>
           </div>
 
@@ -199,7 +226,7 @@ const App = () => {
               </div>
               <div className="otherMenuItem">
                 <div className="otherMenuLeft">
-                  <img src={require("../../assets/mian.png")} alt=""/>
+                  <img src={require("../../assets/reply.png")} alt=""/>
                   <div>
                     <div className='otherMenuRight'>
                       <div className='otherMenuRightDiv'>剩余体验次数<span className='leftNumber'>{totalNumber}/{experience}</span></div>
@@ -217,15 +244,45 @@ const App = () => {
               </div>
             </div>
             <div className='memberBox' onClick={noFunction}>
-              <img src={require("../../assets/huiyuan.png")} alt=""/>
-              {/* <Image
-                width={'100%'}
-                src={require("../../assets/huiyuan.png")}
-              /> */}
+              <div className='memberHeaderBg'>
+                <div className='memberHeader'>
+                  <img src={require("../../assets/vipHeader.png")} alt=""/>
+                  <div>成为会员</div>
+                </div>
+              </div>
+              <div className='memberBottomBox'>
+                <div className='memberBottom'>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/infinite.png")} alt=""/>
+                    <div>无限次数</div>
+                  </div>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/faster.png")} alt=""/>
+                    <div>更快响应</div>
+                  </div>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/stabilize.png")} alt=""/>
+                    <div>更稳定</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </Drawer>
       </>
+      <Modal
+        title="登录/注册"
+        open={isModalOpen}
+        footer={null}
+        style={{top: "30%"}}
+        onCancel={handleCancel}
+        closable
+      >
+        <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
+          <Button type="primary"><Link to='/Login'>登录</Link></Button>
+          <Button type="default"><Link to='/SignIn'>注册</Link></Button>
+        </div>
+      </Modal>
     </div>
   );
 };

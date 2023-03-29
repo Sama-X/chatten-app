@@ -16,7 +16,7 @@ const App = () => {
         ]
       },
       {
-        title:'SAMAGPT能做什么？',
+        title:'能做什么？',
         url:require("../../assets/icon2.png"),
         questionList:[
           "记住用户在先前对话中说过的内容",

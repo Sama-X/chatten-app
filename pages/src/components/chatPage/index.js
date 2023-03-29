@@ -22,11 +22,8 @@ const App = () => {
 
   const fetchData = () => {
       let request = new Request({});
-      request.get('/api/v1/chat/records/', {
-        page: 1,
-        offset: 20,
-        order:'-id,-msg_type'
-      }).then(function(resData){
+      setSpinStatus(true)
+      request.get('/api/v1/chat/records/?page=1&offset=20&order=id').then(function(resData){
         // console.log(resData)
         // resData.data.push({
         //     "msg_type": 1, //消息类型
@@ -51,13 +48,15 @@ const App = () => {
         if(resData.code != 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
+        setSpinStatus(false)
         setTotalNumber(resData.total)
         setChatList(resData.data ? resData.data : [])
+        if(resData.code == 0){
+          setTimeout(function(){
+            document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+          },100)
+        }
       })
-      // setTimeout(function(){
-      //   document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-      // },100)
-
   }
   const onSearchFunc = (value) => {
     // console.log(value,'value');
@@ -65,17 +64,24 @@ const App = () => {
       message.info('Questioning more than ten times, reaching the upper limit')
     }else{
       setSpinStatus(true)
-      setQuestionValue(value.target.value)
-      let request = new Request({});
-      request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
-        // console.log(resData,'rrrr')
-        setTimeout(function(){
-          value.target.value = ''
-          setQuestionValue('')
-          fetchData()
-          setSpinStatus(false)
-        },100)
-      })
+      if(!questionValue){
+        message.error('The question cannot be empty')
+        setSpinStatus(false)
+        return
+      }else{
+        setQuestionValue(value.target.value)
+        let request = new Request({});
+        request.post('/api/v1/chat/question/',{question:questionValue}).then(function(resData){
+          // console.log(resData,'rrrr')
+          setTimeout(function(){
+            value.target.value = ''
+            setQuestionValue('')
+            fetchData()
+            setSpinStatus(false)
+          },100)
+        })
+      }
+
     }
   }
   const onChangeInput = (value) => {
@@ -112,7 +118,10 @@ const App = () => {
         {/* question */}
         {/* chatList */}
         {
-          chatList.length == 0 ? "" : chatList.map((item, index)=>{
+          chatList.length == 0 ?
+          <div>暂无数据</div>
+          :
+          chatList.map((item, index)=>{
 
             return  <div key={index}>
                 <div className='questionBox'>
@@ -140,7 +149,7 @@ const App = () => {
             isToken ? */}
             <Input.Group className="tokenInputBox">
                 <Input onPressEnter={onSearchFunc} onChange={onChangeInput} value={questionValue} className="tokenInput"/>
-                <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
+                <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
             </Input.Group>
             {/* :
             <div className="noTokenBtn">
@@ -150,7 +159,13 @@ const App = () => {
               以开始聊天
             </div>
           } */}
-          <div  className="footerTokenContent">服务由 SAMA network 提供</div>
+          <div className="footerBottomBox">
+            <div className="footerLeftBox">
+              <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
+              <div><span>免费提问{totalNumber ? totalNumber : 0}</span>/{experience ? experience : 10}</div>
+            </div>
+            {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
+          </div>
         </div>
       </div>
     </div>

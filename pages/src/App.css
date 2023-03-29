@@ -38,3 +38,18 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-modal .ant-modal-content,.ant-modal .ant-modal-title, .anticon-close{
+  background: rgb(32, 33, 35);
+  color: white;
+  text-align: center;
+}
+.ant-popover .ant-popover-inner,.ant-popover .ant-popover-arrow::before{
+  background: rgb(32, 33, 35);
+}
+.ant-popconfirm .ant-popconfirm-message{
+  color: white;
+}
+.element::-webkit-scrollbar { width: 0!important }
+.element { -ms-overflow-style: none; }
+.element { overflow: -moz-scrollbars-none; }
