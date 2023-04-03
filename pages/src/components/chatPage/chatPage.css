@@ -1,3 +1,7 @@
+.chatBigBox{
+    width: 100%;
+    overflow: hidden;
+}
 .footerBox{
     width: 100%;
     border-top: 1px solid #5D5D67;

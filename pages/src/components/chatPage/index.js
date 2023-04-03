@@ -118,7 +118,7 @@ const App = () => {
 
   }, [])
   return (
-    <div className="indexBox">
+    <div className="chatBigBox">
       {
         spinStatus ?
         <div className="example">
@@ -174,7 +174,20 @@ const App = () => {
           {/* {
             isToken ? */}
             <Input.Group className="tokenInputBox">
-                <Input disabled={inputDisabled} onPressEnter={onSearchFunc} onChange={onChangeInput} value={questionValue} className="tokenInput"/>
+                <Input textProps={{
+                      style: {
+                          color: '#000000'
+                      }
+                  }}
+                  style={{
+                    color: '#000000'
+                  }}
+                  disabled={inputDisabled}
+                  onPressEnter={onSearchFunc}
+                  onChange={onChangeInput}
+                  value={questionValue}
+                  className="tokenInput"
+                />
                 <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
             </Input.Group>
             {/* :
