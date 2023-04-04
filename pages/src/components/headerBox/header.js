@@ -99,6 +99,7 @@ const App = () => {
           menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
         }
         setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+        console.log(items,'j')
       })
   }
   const noFunction = () => {
@@ -148,6 +149,9 @@ const App = () => {
 
   return (
     <div>
+    {
+      isPhone ?
+      <div>
       {
         spinStatus ?
         <div className="exampleSpin">
@@ -186,11 +190,6 @@ const App = () => {
         }
       </div>
       <>
-        {/* <Space>
-          <Button type="primary" onClick={showDrawer}>
-            Open
-          </Button>
-        </Space> */}
         <Drawer
           width={'300px'}
           placement={placement}
@@ -200,7 +199,6 @@ const App = () => {
           key={placement}
           style={{background:'#202123',color:'white'}}
         >
-          {/* rootStyle={{background:'rgba(48, 50, 60, 0.4)'}} */}
           <div className="drawHeaderBox">
             <img src={require("../../assets/logo.png")} alt=""/>
             <div>BETA</div>
@@ -290,6 +288,147 @@ const App = () => {
           <Button type="default"><Link to='/SignIn'>注册</Link></Button>
         </div>
       </Modal>
+    </div>
+    :
+    <div>
+      {
+        spinStatus ?
+        <div className="exampleSpin">
+          <Spin />
+        </div>
+        : ''
+      }
+      <div className="headerBox">
+        <div className="headerLeft" onClick={showDrawer}>
+          <img src={require("../../assets/leftMenu.png")} alt=""/>
+        </div>
+        {
+          isToken ?
+            // <div className="headerRight" onClick={signOut}>
+              <Popconfirm
+              placement="leftTop"
+              className="headerRight"
+              title='Do you want to log out'
+              description=''
+              onConfirm={signOut}
+              okText="Yes"
+              cancelText="No"
+            >
+              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+              <div>{ userName }</div>
+            </Popconfirm>
+            // </div>
+            :
+            <div className="headerRight">
+            {/* <div className="headerRight" onClick={showModal}> */}
+              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+              <div><Link to='/Login'>登录</Link></div>
+              {/* <span>/</span>
+              <div>注册</div> */}
+            </div>
+        }
+      </div>
+      <>
+        <Drawer
+          width={'300px'}
+          placement={placement}
+          closable={false}
+          onClose={onClose}
+          open={open}
+          key={placement}
+          style={{background:'#202123',color:'white'}}
+        >
+          <div className="drawHeaderBox">
+            <img src={require("../../assets/logo.png")} alt=""/>
+            <div>BETA</div>
+          </div>
+
+          <div>
+            <Menu
+              onClick={menuClick}
+              style={{
+                width: '100%',
+                background:'#202123',
+                color:'white',
+              }}
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1']}
+              mode="inline"
+              items={items}
+              theme="#202123"
+
+            />
+
+            <div className="otherMenuBox">
+              <div className="otherMenuItem">
+                <div className="otherMenuLeft" onClick={noFunction}>
+                  <img src={require("../../assets/delete.png")} alt=""/>
+                  <div>
+                    清除聊天记录
+                  </div>
+                </div>
+              </div>
+              <div className="otherMenuItem">
+                <div className="otherMenuLeft">
+                  <img src={require("../../assets/reply.png")} alt=""/>
+                  <div>
+                    <div className='otherMenuRight'>
+                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                      <div className='otherMenuRightItem' onClick={noFunction}>
+                        <img src={require("../../assets/share.png")} alt=""/>
+                        <div>
+                          分享
+                        </div>
+                      </div>
+                    </div>
+                    <div className='leftBottom'>每分享给1个好友，可增加10次</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div className='memberBox' onClick={noFunction}>
+              <div className='memberHeaderBg'>
+                <div className='memberHeader'>
+                  <img src={require("../../assets/vipHeader.png")} alt=""/>
+                  <div>成为会员</div>
+                </div>
+              </div>
+              <div className='memberBottomBox'>
+                <div className='memberBottom'>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/infinite.png")} alt=""/>
+                    <div>无限次数</div>
+                  </div>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/faster.png")} alt=""/>
+                    <div>更快响应</div>
+                  </div>
+                  <div className='memberBoItem'>
+                    <img src={require("../../assets/stabilize.png")} alt=""/>
+                    <div>更稳定</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Drawer>
+      </>
+      <Modal
+        title="登录/注册"
+        open={isModalOpen}
+        footer={null}
+        style={{top: "30%"}}
+        onCancel={handleCancel}
+        closable
+      >
+        <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
+          <Button type="primary"><Link to='/Login'>登录</Link></Button>
+          <Button type="default"><Link to='/SignIn'>注册</Link></Button>
+        </div>
+      </Modal>
+    </div>
+    }
     </div>
   );
 };

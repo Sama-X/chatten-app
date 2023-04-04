@@ -8,6 +8,8 @@ import { UpCircleFilled } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom'
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
+import {BASE_URL} from '../../utils/axios.js'
+
 
 
 const App = () => {
@@ -20,8 +22,8 @@ const App = () => {
   const [chatList, setChatList] = useState([]);
   const [spinStatus, setSpinStatus] = useState(false);
   const [inputDisabled, setInputDisabled] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const history = useHistory()
-
   const fetchData = (topicId) => {
       let request = new Request({});
       setSpinStatus(true)
@@ -62,9 +64,6 @@ const App = () => {
           "add_time": "2023-03-02 16:49:46" //创建时间
         })
         setChatList(questionObj)
-        setTimeout(function(){
-          document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-        },10)
         let request = new Request({});
         let obj = {}
         const topicId = cookie.load('topicId')
@@ -75,6 +74,22 @@ const App = () => {
         }
         setQuestionValue('')
         setInputDisabled(true)
+
+        const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
+        const eventList = document.createElement("ul")
+        setTimeout(function(){
+          const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
+          console.log (divBox,'jk')
+          evtSource.addEventListener("message", function(e) {
+            const newElement = document.createElement("li");
+            newElement.textContent = JSON.parse(e.data).text
+            eventList.appendChild(newElement);
+            divBox.append(eventList)
+          })
+        },1000)
+        setTimeout(function(){
+          document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+        },10)
         request.post('/api/v1/chat/question/',obj).then(function(resData){
           console.log(resData,'rrrr')
           if(resData.code == '200100'){
@@ -106,13 +121,21 @@ const App = () => {
     cookie.save('topicId', '', { path: '/' })
     history.push({pathname: '/', state: { test: 'noToken' }})
   }
+
   useEffect(()=>{
     if(isToken){
+      // var evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
+      // var eventList = document.querySelector('ul');
+      // evtSource.onmessage = function(e) {
+      //   // var newElement = document.createElement("li");
+      //   // newElement.textContent = "message: " + e.data;
+      //   // eventList.appendChild(newElement);
+      //   console.log(e,'e')
+      // }
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
     }
     if(cookie.load('topicId')){
-
       fetchData(cookie.load('topicId'))
     }
 
@@ -145,14 +168,13 @@ const App = () => {
           :
           chatList.map((item, index)=>{
 
-            return  <div key={index}>
+            return  <div key={index} className="queAndans">
                 <div className='questionBox'>
                   <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                   <div className="question">{item.question}</div>
                 </div>
-                {
-                  item.answer ?
-                  <div className='answerBox'>
+
+                <div className='answerBox'>
                     <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
                     <div className="answerContent">
                       <div className="answer">{item.answer}</div>
@@ -162,23 +184,19 @@ const App = () => {
                       </div>
                     </div>
                   </div>
-                  : ''
-                }
               </div>
           })
         }
+
       </div>
+      <ul className="isMessage"></ul>
       <div className="footerBox">
         {/* noToken */}
         <div className="footerTokenBox">
           {/* {
             isToken ? */}
             <Input.Group className="tokenInputBox">
-                <Input textProps={{
-                      style: {
-                          color: '#000000'
-                      }
-                  }}
+                <Input
                   style={{
                     color: '#000000'
                   }}

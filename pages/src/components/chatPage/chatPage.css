@@ -84,7 +84,8 @@
     padding: 10px 0;
     line-height: 20px;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    /* white-space: nowrap; */
     text-overflow: ellipsis;
 }
 .answerBox{
@@ -149,4 +150,13 @@
 }
 .footerLeftBox div{
     color: red;
+}
+.chatBox ul {
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    padding: 0;
+}
+.chatBox ul li {
+    margin-right: 6px;
 }
