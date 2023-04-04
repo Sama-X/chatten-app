@@ -1,6 +1,8 @@
 """
 AI module.
 """
+import json
+import tiktoken
 import logging
 import time
 from base.ai_strategy import PriorityStrategy
@@ -8,6 +10,7 @@ from base.ai_strategy import PriorityStrategy
 import openai
 from openai.error import RateLimitError, APIConnectionError, Timeout, AuthenticationError
 from django.conf import settings
+from django_eventstream import send_event
 
 openai.proxy = settings.CHATGPT_PROXY or None
 
@@ -22,7 +25,7 @@ class AIHelper:
     strategy = None
 
     @classmethod
-    async def send_msg(cls, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None):
+    async def send_msg(cls, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None):
         """
         send message.
         """
@@ -41,11 +44,47 @@ class AIHelper:
         if not key:
             result['error'] = 'The system is busy, please try again later'
         try:
-            resp = await openai.ChatCompletion.acreate(
+            encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
+            prompt_tokens = len(encoding.encode(json.dumps(histories)))
+            resp = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo", messages=histories, api_key=key, timeout=30,
-                request_timeout=(10, 60)
+                request_timeout=(10, 60), stream=True
             )
-            result = resp.to_dict_recursive()  # type: ignore
+            report = []
+            index = 0
+            for item in resp:
+                if item.choices: # type: ignore
+                    cont = item.choices[0].delta.get('content', '')  # type: ignore
+                    if cont:
+                        report.append(cont)
+                        send_event(auth_token, 'message', {
+                            'id': item.id, # type: ignore
+                            'text': cont, 'index': index, 'channel': auth_token
+                        })
+                        index += 1
+
+            content = ''.join(report)
+            completion_tokens = len(encoding.encode(content))
+            result = {
+                "id": item.id, # type: ignore
+                "object": item.model, # type: ignore
+                "created": item.created, # type: ignore
+                "model": item.model, # type: ignore
+                "usage": {
+                    "prompt_tokens": prompt_tokens,
+                    "completion_tokens": completion_tokens,
+                    "total_tokens": prompt_tokens + completion_tokens
+                },
+                "choices": [{
+                    "message": {
+                        "role": "assistant",
+                        "content": content
+                    },
+                    "finish_reason": "stop",
+                    "index": 0
+                }],
+                "key_id": 1
+            }
         except RateLimitError as err:
             # rate limit exception
             logger.error("【chatgpt send】reason: rate limit desc: %s", err)
@@ -53,7 +92,8 @@ class AIHelper:
                 time.sleep(5)
                 logger.error("【chatgpt send】RateLimit exceed, repeat retry %s times".format(retry_count+1))
                 return cls.send_msg(
-                    question, msg_type=msg_type, histories=histories, retry_count=retry_count+1, key=key
+                    question, msg_type=msg_type, histories=histories, retry_count=retry_count+1, key=key,
+                    auth_token=auth_token
                 )
             result["error"] = "rate limit error"
         except APIConnectionError as err:
