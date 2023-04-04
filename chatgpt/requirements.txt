@@ -9,3 +9,6 @@ supervisor==4.2.4
 gunicorn[gevent]
 django-cors-headers==3.14.0
 uvicorn==0.21.1
+channels==4.0.0
+django-eventstream==4.5.1
+tiktoken==0.3.3

@@ -62,7 +62,7 @@ class ChatViewset(viewsets.GenericViewSet):
             question_time=datetime.now()
         )
 
-        resp = await AIHelper.send_msg(question, histories=messages)
+        resp = await AIHelper.send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
         choices = resp.get('choices', [])
         if len(choices) > 0:
             if not topic_id:

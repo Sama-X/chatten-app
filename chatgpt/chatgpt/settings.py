@@ -75,12 +75,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'channels',
+    'django_eventstream',
+
     'users',
     'chat',
     'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'django_grip.GripMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -111,6 +115,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chatgpt.wsgi.application'
+ASGI_APPLICATION = 'chatgpt.asgi.application'
 
 
 # Database
