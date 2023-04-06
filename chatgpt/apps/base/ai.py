@@ -1,6 +1,7 @@
 """
 AI module.
 """
+from datetime import datetime
 import json
 import tiktoken
 import logging
@@ -60,7 +61,8 @@ class AIHelper:
                         report.append(cont)
                         send_event(auth_token, 'message', {
                             'id': item.id, # type: ignore
-                            'text': cont, 'index': index, 'channel': auth_token
+                            'text': cont, 'index': index, 'channel': auth_token,
+                            'now': datetime.now()
                         })
                         index += 1
                         logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
