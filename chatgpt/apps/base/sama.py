@@ -145,18 +145,25 @@ class SamaClient:
             },
             'id': 1
         }
-        resp = RequestClient.post(rpc_url, json=payload, headers={
-            'Content-type': 'application/json'
-        })
 
-        if isinstance(resp, dict):
-            result = SamaTranasctionResult(
-                result=resp.get('code') == 200,
-                txID=resp.get('result', {}).get('txId') or '',  # type: ignore
-                error=resp.get('msg') or resp.get('error', {}).get('message')
-            )
-        else:
-            result = SamaTranasctionResult(result=False, txID="", error=resp.text)
+        result = SamaTranasctionResult(result=False, txID="", error="")
+        try:
+            resp = RequestClient.post(rpc_url, json=payload, headers={
+                'Content-type': 'application/json'
+            })
 
-        logger.info('【sama transaction unconfirmed】 create transaction end resp: %s result: %s', resp, result)
+            if isinstance(resp, dict):
+                result = SamaTranasctionResult(
+                    result=resp.get('code') == 200,
+                    txID=resp.get('result', {}).get('txId') or '',  # type: ignore
+                    error=resp.get('msg') or resp.get('error', {}).get('message')
+                )
+            logger.info('【sama transaction unconfirmed】 create transaction end resp: %s result: %s', resp, result)
+        except ConnectionError as error:
+            result.error = str(error)
+            logger.error('【sama transaction unconfirmed】 create transaction connect error error: %s', error)
+        except Exception as error:
+            result.error = str(error)
+            logger.error('【sama transaction unconfirmed】 create transaction error error: %s', error)
+
         return result
