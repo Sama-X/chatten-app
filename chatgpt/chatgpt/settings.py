@@ -68,6 +68,7 @@ CORS_ALLOW_HEADERS = (
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,12 +76,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'channels',
+    'django_eventstream',
+
     'users',
     'chat',
     'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'django_grip.GripMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -111,6 +116,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'chatgpt.wsgi.application'
+ASGI_APPLICATION = 'chatgpt.asgi.application'
 
 
 # Database
@@ -270,17 +276,34 @@ CHATGPT configurate
 
 CHATGPT_KEYS = []
 CHATGPT_PROXY = None
+CHATGPT_WALLET = '0x132E92D4E87dfc1602349869a27e51C5C3455c7C'
 
 # SAMA CONFIG
 
 SAMA_CLIENT = os.path.join(BASE_DIR, 'bin', 'sama-cli')
 SAMA_WALLET_ADDRESS = ''
 SAMA_WALLET_PRIVATE = ''
-SAMA_NODE_ENDPOINT = ''
-SAMA_NODE_ENDPOINT_API = ''
+SAMA_NODE_SERVER = ''
 SAMA_UNIT = 1000
 
 CHAIN_SAMA = "sama"
+
+# Server-Sent-Events
+EVENTSTREAM_ALLOW_ORIGIN = '*'
+EVENTSTREAM_ALLOW_CREDENTIALS = True
+EVENTSTREAM_ALLOW_HEADERS = 'Authorization'
+
+"""
+CHANNEL LAYERS
+"""
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+    },
+}
 
 # local config
 try:
