@@ -40,7 +40,7 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
-  const [spinStatus, setSpinStatus] = useState(false);
+  const [spinStatus, setSpinStatus] = useState(true);
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   let info = navigator.userAgent;
@@ -54,12 +54,13 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    console.log(e,'click')
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
       // console.log(e,'click')
       linkSkip()
     }else{
-      cookie.save('topicId', e.keyPath[1], { path: '/' })
+      cookie.save('topicId', e.keyPath[1])
+      cookie.load('topicId')
+      // return
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }
   };
@@ -75,6 +76,7 @@ const App = () => {
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
+        cookie.save('topicId', '')
         setTimeout(function(){
           setSpinStatus(false)
           history.push({pathname: '/ChatPage', state: { test: 'signin' }})
@@ -99,8 +101,10 @@ const App = () => {
           })
           menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
         }
-        setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
-        console.log(items,'j')
+        setTimeout(function(){
+          setSpinStatus(false)
+          setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+        },500)
       })
   }
   const noFunction = () => {
@@ -129,13 +133,12 @@ const App = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const menuItemClick = (e) => {
-    console.log(e,'hgjkl')
-  }
   useEffect(()=>{
     if(isPhone){
       setWidthNumber('77%')
+      setSpinStatus(false)
     }else{
+      setSpinStatus(true)
       setWidthNumber('400px')
     }
     if(isToken){
@@ -143,7 +146,8 @@ const App = () => {
       setUserName(authName)
       getHistory()
     }else{
-      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />,[])]
+      setSpinStatus(false)
+      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
       setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
@@ -214,6 +218,8 @@ const App = () => {
                 width: '100%',
                 background:'#202123',
                 color:'white',
+                maxHeight: '400px',
+                overflow: 'scroll'
               }}
               defaultSelectedKeys={['1']}
               defaultOpenKeys={['sub1']}
@@ -307,6 +313,8 @@ const App = () => {
                   width: '100%',
                   background:'#202123',
                   color:'white',
+                  maxHeight: '400px',
+                  overflow: 'scroll'
                 }}
                 defaultSelectedKeys={['1']}
                 defaultOpenKeys={['sub1']}

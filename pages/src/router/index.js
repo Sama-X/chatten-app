@@ -18,7 +18,7 @@ export default class index extends Component {
         <Route component={Index} path='/Index'></Route>
         <Route component={Login} path='/Login'></Route>
         <Route component={SignIn} path='/SignIn'></Route>
-        <Route component={ChatPage} path='/ChatPage'></Route>
+        <Route component={ChatPage} path='/ChatPage' exact></Route>
         {/* <Route component={Index} path='/Index'></Route> */}
       </BrowserRouter>
     )

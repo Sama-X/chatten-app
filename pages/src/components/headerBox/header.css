@@ -17,6 +17,7 @@
     border-radius: 6px;
     font-size: 16px;
     line-height: 22px;
+    cursor: pointer;
 }
 .headerRight div a{
     color: white;
@@ -194,4 +195,8 @@
   .headerFooter .footerBox{
     width:70%;
     left:30%;
+  }
+  .drawHeaderBox .ant-menu{
+    max-height: 400px;
+    overflow: scroll;
   }

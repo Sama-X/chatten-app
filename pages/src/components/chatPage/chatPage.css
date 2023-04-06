@@ -163,3 +163,8 @@
 .headerLeft{
     cursor: pointer;
 }
+
+.drawHeaderBox .ant-menu{
+    max-height: 400px;
+    overflow: scroll;
+  }
