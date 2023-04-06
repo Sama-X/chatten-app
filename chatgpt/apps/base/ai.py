@@ -43,6 +43,7 @@ class AIHelper:
         result = {}
         if not key:
             result['error'] = 'The system is busy, please try again later'
+        start = time.time()
         try:
             encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
             prompt_tokens = len(encoding.encode(json.dumps(histories)))
@@ -62,6 +63,7 @@ class AIHelper:
                             'text': cont, 'index': index, 'channel': auth_token
                         })
                         index += 1
+                        logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
 
             content = ''.join(report)
             completion_tokens = len(encoding.encode(content))
@@ -107,7 +109,7 @@ class AIHelper:
             result["error"] = f"exception {err}"
 
         result['key_id'] = cls.strategy.get_api_key_id(key)
-        logger.info("【chatgpt send】 resp: %s", result)
+        logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
         cls.strategy.release_key(key)
         return result
 
