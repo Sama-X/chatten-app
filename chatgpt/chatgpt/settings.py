@@ -292,6 +292,18 @@ EVENTSTREAM_ALLOW_ORIGIN = '*'
 EVENTSTREAM_ALLOW_CREDENTIALS = True
 EVENTSTREAM_ALLOW_HEADERS = 'Authorization'
 
+"""
+CHANNEL LAYERS
+"""
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis-server-name", 6379)],
+        },
+    },
+}
+
 # local config
 try:
     from chatgpt.local_settings import *
