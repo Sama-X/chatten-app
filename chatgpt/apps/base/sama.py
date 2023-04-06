@@ -70,7 +70,7 @@ class SamaClient:
             blockchains = resp.get('result', {}).get('blockchains', [])
             samachains = list(filter(lambda x: x.get("name") == settings.CHAIN_SAMA, blockchains))
             if samachains:
-                cls.SAMA_NODE_ENDPOINT = f'{settings.SAMA_NODE_SERVER}/ext/bc/{samachains[0].get("subnetID")}'
+                cls.SAMA_NODE_ENDPOINT = f'{settings.SAMA_NODE_SERVER}/ext/bc/{samachains[0].get("id")}'
                 cls.RPC_URL = f'{cls.SAMA_NODE_ENDPOINT}/public'
         return cls.RPC_URL
 
