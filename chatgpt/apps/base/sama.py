@@ -44,6 +44,36 @@ class SamaClient:
     sama client.
     """
 
+    SAMA_NODE_ENDPOINT = None
+    RPC_URL = ''
+    SUBNET_CONFIG_URL = f'{settings.SAMA_NODE_SERVER}/ext/bc/P'
+
+    @classmethod
+    def get_sama_rpc_url(cls) -> str:
+        """
+        Get sama rpc server url.
+        """
+        if cls.RPC_URL:
+            return cls.RPC_URL
+
+        payload = {
+            'jsonrpc': '2.0',
+            'method': 'platform.getBlockchains',
+            'params': {},
+            'id': 1
+        }
+        resp = RequestClient.post(cls.SUBNET_CONFIG_URL, json=payload, headers={
+            'Content-type': 'application/json'
+        })
+
+        if isinstance(resp, dict):
+            blockchains = resp.get('result', {}).get('blockchains', [])
+            samachains = list(filter(lambda x: x.name == settings.CHAIN_SAMA, blockchains))
+            if samachains:
+                cls.SAMA_NODE_ENDPOINT = f'{settings.SAMA_NODE_SERVER}/ext/bc/{samachains[0].subnetID}'
+                cls.RPC_URL = f'{cls.SAMA_NODE_ENDPOINT}/public'
+        return cls.RPC_URL
+
     @classmethod
     def _convert_key_eth_to_ava(cls, private_key: str) -> str:
         """
@@ -84,7 +114,7 @@ class SamaClient:
         """
         logger.info('【sama transaction】 create transaction start to_address: %s amount: %s', to_address, amount)
         try:
-            with Popen([settings.SAMA_CLIENT, '--endpoint', settings.SAMA_NODE_ENDPOINT, 'transfer',
+            with Popen([settings.SAMA_CLIENT, '--endpoint', cls.get_sama_rpc_url(), 'transfer',
                         to_address, str(amount), private_key], stdout=PIPE) as pro:
                 values = pro.communicate()
                 logger.info('【sama transaction】create transfer transaction result: %s', values)
@@ -104,7 +134,7 @@ class SamaClient:
         create sama transaction was not confirmed.
         """
         logger.info('【sama transaction unconfirmed】 create transaction start to_address: %s amount: %s', to_address, amount)
-        rpc_url = settings.SAMA_NODE_ENDPOINT_API
+        rpc_url = cls.get_sama_rpc_url()
         payload = {
             'jsonrpc': '2.0',
             'method': 'samavm.transfer',
