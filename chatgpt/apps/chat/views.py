@@ -87,22 +87,23 @@ class ChatViewset(viewsets.GenericViewSet):
         obj.save()
 
         if obj.answer:
+            try:
+                wallet = WalletModel.objects.filter(
+                    user_id=request.user.id, chain=settings.CHAIN_SAMA
+                ).first()
+                if wallet and wallet.balance > 1:
+                    SamaClient.create_transaction_unconfirmed(
+                        settings.CHATGPT_WALLET, 1, wallet.private_key
+                    )
+            except Exception as e:
+                pass
+
             return APIResponse(result={
                 "answer": obj.answer,
                 "topic_id": topic_id,
                 "experience": current_total + 1
             })
 
-        try:
-            wallet = WalletModel.objects.filter(
-                user_id=request.user.id, chain=settings.CHAIN_SAMA
-            ).first()
-            if wallet and wallet.balance > 1:
-                SamaClient.create_transaction_unconfirmed(
-                    settings.CHATGPT_WALLET, 1, wallet.private_key
-                )
-        except Exception as e:
-            pass
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
 
