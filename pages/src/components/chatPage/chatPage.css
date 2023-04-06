@@ -160,3 +160,6 @@
 .chatBox ul li {
     margin-right: 6px;
 }
+.headerLeft{
+    cursor: pointer;
+}

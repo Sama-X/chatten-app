@@ -191,3 +191,7 @@
     z-index: 99999;
     padding: 60% 50px;
   }
+  .headerFooter .footerBox{
+    width:70%;
+    left:30%;
+  }

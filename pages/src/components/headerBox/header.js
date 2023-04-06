@@ -6,7 +6,8 @@ import Request from '../../request.ts';
 import { Link } from 'react-router-dom'
 import cookie from 'react-cookies'
 import { useHistory } from 'react-router-dom';
-
+import Content from '../contentBox/content.js'
+import Footer from '../footerBox/footer.js'
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -290,7 +291,83 @@ const App = () => {
       </Modal>
     </div>
     :
-    <div>
+    <div style={{display: 'flex',width: '100%'}}>
+      <div style={{width: '30%', paddingTop: '15px',}}>
+          <div className="drawHeaderBox" style={{marginBottom: '12px'}}>
+              <img src={require("../../assets/logo.png")} alt=""/>
+              <div>BETA</div>
+            </div>
+
+            <div>
+              <Menu
+                onClick={menuClick}
+                style={{
+                  width: '100%',
+                  background:'#202123',
+                  color:'white',
+                }}
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                mode="inline"
+                items={items}
+                theme="#202123"
+
+              />
+
+              <div className="otherMenuBox">
+                <div className="otherMenuItem">
+                  <div className="otherMenuLeft" onClick={noFunction}>
+                    <img src={require("../../assets/delete.png")} alt=""/>
+                    <div>
+                      清除聊天记录
+                    </div>
+                  </div>
+                </div>
+                <div className="otherMenuItem">
+                  <div className="otherMenuLeft">
+                    <img src={require("../../assets/reply.png")} alt=""/>
+                    <div>
+                      <div className='otherMenuRight'>
+                        <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                        <div className='otherMenuRightItem' onClick={noFunction}>
+                          <img src={require("../../assets/share.png")} alt=""/>
+                          <div>
+                            分享
+                          </div>
+                        </div>
+                      </div>
+                      <div className='leftBottom'>每分享给1个好友，可增加10次</div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div className='memberBox' onClick={noFunction}>
+                <div className='memberHeaderBg'>
+                  <div className='memberHeader'>
+                    <img src={require("../../assets/vipHeader.png")} alt=""/>
+                    <div>成为会员</div>
+                  </div>
+                </div>
+                <div className='memberBottomBox'>
+                  <div className='memberBottom'>
+                    <div className='memberBoItem'>
+                      <img src={require("../../assets/infinite.png")} alt=""/>
+                      <div>无限次数</div>
+                    </div>
+                    <div className='memberBoItem'>
+                      <img src={require("../../assets/faster.png")} alt=""/>
+                      <div>更快响应</div>
+                    </div>
+                    <div className='memberBoItem'>
+                      <img src={require("../../assets/stabilize.png")} alt=""/>
+                      <div>更稳定</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
       {
         spinStatus ?
         <div className="exampleSpin">
@@ -298,121 +375,47 @@ const App = () => {
         </div>
         : ''
       }
-      <div className="headerBox">
-        <div className="headerLeft" onClick={showDrawer}>
-          <img src={require("../../assets/leftMenu.png")} alt=""/>
+
+      <div className="headerFooter"  style={{width: '70%'}}>
+        <div className="headerBox" style={{height:'60px'}}>
+          <div className="headerLeft" onClick={showDrawer}>
+            {/* <img src={require("../../assets/leftMenu.png")} alt=""/> */}
+          </div>
+          {
+            isToken ?
+              // <div className="headerRight" onClick={signOut}>
+                <Popconfirm
+                placement="leftTop"
+                className="headerRight"
+                title='Do you want to log out'
+                description=''
+                onConfirm={signOut}
+                okText="Yes"
+                cancelText="No"
+              >
+                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                <div>{ userName }</div>
+              </Popconfirm>
+              // </div>
+              :
+              <div className="headerRight">
+              {/* <div className="headerRight" onClick={showModal}> */}
+                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                <div><Link to='/Login'>登录</Link></div>
+                {/* <span>/</span>
+                <div>注册</div> */}
+              </div>
+          }
         </div>
-        {
-          isToken ?
-            // <div className="headerRight" onClick={signOut}>
-              <Popconfirm
-              placement="leftTop"
-              className="headerRight"
-              title='Do you want to log out'
-              description=''
-              onConfirm={signOut}
-              okText="Yes"
-              cancelText="No"
-            >
-              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-              <div>{ userName }</div>
-            </Popconfirm>
-            // </div>
-            :
-            <div className="headerRight">
-            {/* <div className="headerRight" onClick={showModal}> */}
-              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-              <div><Link to='/Login'>登录</Link></div>
-              {/* <span>/</span>
-              <div>注册</div> */}
-            </div>
-        }
+        <Content></Content>
+        {/* chouti */}
+        {/* <LeftBox></LeftBox> */}
+        {/* footer */}
+        <Footer style={{width:'70%',left:'30%'}}></Footer>
       </div>
+
       <>
-        <Drawer
-          width={'300px'}
-          placement={placement}
-          closable={false}
-          onClose={onClose}
-          open={open}
-          key={placement}
-          style={{background:'#202123',color:'white'}}
-        >
-          <div className="drawHeaderBox">
-            <img src={require("../../assets/logo.png")} alt=""/>
-            <div>BETA</div>
-          </div>
 
-          <div>
-            <Menu
-              onClick={menuClick}
-              style={{
-                width: '100%',
-                background:'#202123',
-                color:'white',
-              }}
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"
-              items={items}
-              theme="#202123"
-
-            />
-
-            <div className="otherMenuBox">
-              <div className="otherMenuItem">
-                <div className="otherMenuLeft" onClick={noFunction}>
-                  <img src={require("../../assets/delete.png")} alt=""/>
-                  <div>
-                    清除聊天记录
-                  </div>
-                </div>
-              </div>
-              <div className="otherMenuItem">
-                <div className="otherMenuLeft">
-                  <img src={require("../../assets/reply.png")} alt=""/>
-                  <div>
-                    <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
-                      <div className='otherMenuRightItem' onClick={noFunction}>
-                        <img src={require("../../assets/share.png")} alt=""/>
-                        <div>
-                          分享
-                        </div>
-                      </div>
-                    </div>
-                    <div className='leftBottom'>每分享给1个好友，可增加10次</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <div className='memberBox' onClick={noFunction}>
-              <div className='memberHeaderBg'>
-                <div className='memberHeader'>
-                  <img src={require("../../assets/vipHeader.png")} alt=""/>
-                  <div>成为会员</div>
-                </div>
-              </div>
-              <div className='memberBottomBox'>
-                <div className='memberBottom'>
-                  <div className='memberBoItem'>
-                    <img src={require("../../assets/infinite.png")} alt=""/>
-                    <div>无限次数</div>
-                  </div>
-                  <div className='memberBoItem'>
-                    <img src={require("../../assets/faster.png")} alt=""/>
-                    <div>更快响应</div>
-                  </div>
-                  <div className='memberBoItem'>
-                    <img src={require("../../assets/stabilize.png")} alt=""/>
-                    <div>更稳定</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Drawer>
       </>
       <Modal
         title="登录/注册"
