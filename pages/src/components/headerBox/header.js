@@ -33,8 +33,8 @@ function getItem(label, key, icon, children, type) {
 
 const App = () => {
   const isToken = cookie.load('token')
-  const experience = cookie.load('experience')
-  const totalExeNumber = cookie.load('totalExeNumber')
+  const experience = cookie.load('experience') ? cookie.load('experience') : 10
+  const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const history = useHistory()
   const [userName, setUserName] = useState('');
   const [open, setOpen] = useState(false);
@@ -145,6 +145,8 @@ const App = () => {
     }else{
       let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />,[])]
       setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+      cookie.save('experience', '10', { path: '/' })
+      cookie.save('totalExeNumber', '0', { path: '/' })
     }
   }, [])
 

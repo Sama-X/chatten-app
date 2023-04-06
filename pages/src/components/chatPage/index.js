@@ -115,8 +115,9 @@ const App = () => {
         const eventList = document.createElement("ul")
         setTimeout(function(){
           const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-          console.log (divBox,'jk')
+          // console.log (divBox,'jk')
           evtSource.addEventListener("message", function(e) {
+            // console.log(JSON.parse(e.data).text,'j')
             const newElement = document.createElement("li");
             newElement.textContent = JSON.parse(e.data).text
             eventList.appendChild(newElement);
