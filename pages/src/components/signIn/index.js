@@ -109,7 +109,7 @@ export default memo(
         }
     }
     const sendCodeFunc = () => {
-        console.log(mobileVal,'mobileVal')
+        // console.log(mobileVal,'mobileVal')
         const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(mobileVal)) {
             // error
@@ -122,11 +122,11 @@ export default memo(
         }
     }
     const passWordOneChange = (e) => {
-      console.log(e.target.value,'diyici')
+      // console.log(e.target.value,'diyici')
       setPasswordOne(e.target.value)
     }
     const passWordTwoChange = (e) => {
-      console.log(e.target.value,'dierci')
+      // console.log(e.target.value,'dierci')
       setPasswordTwo(e.target.value)
     }
     const signInFunc = () => {
@@ -153,7 +153,8 @@ export default memo(
         password: passwordTwo
       }).then(function(resData){
         if(resData.code == 0){
-          cookie.save('userName', resData.data.nickname, { path: '/' })
+          cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })
+          // cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
           cookie.save('experience', resData.data.experience, { path: '/' })
@@ -177,8 +178,8 @@ export default memo(
               : ''
             }
             <div className="loginHeader">
-                <img className="leftLogo" src={require("../../assets/loginLogo.png")} alt=""/>
-                <Link to='/'>
+                <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
+                <Link to='/Login'>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>
             </div>

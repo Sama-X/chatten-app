@@ -19,8 +19,9 @@
     justify-content:space-between;
 }
 .leftLogo{
-    width: 125px;
-    height:34px;
+    /* width: 125px; */
+    height:40px;
+    margin-top: 2px;
 }
 .rightClose{
     width: 40px;
@@ -56,10 +57,11 @@
 .mobileInputPassword .anticon{
   color: white !important;
 }
-.sendCode{
+.mobileLogin .sendCode{
     width: 64px;
     height: 64px;
-    margin: 24px auto;
+    margin: 12px auto;
+    cursor: pointer;
 }
 
 
@@ -114,6 +116,21 @@
     outline: none;
     opacity: 0;
     background: transparent;
+  }
+  .signBtnBox{
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 40px;
+  }
+  .signBtnBox span{
+    cursor: pointer;
+    line-height: 40px;
+    /* border-bottom: 1px solid white; */
+    text-decoration:underline;
+    margin-left: 10px;
+  }
+  .signBtnBox span a{
+    color: white;
   }
 
   .example {

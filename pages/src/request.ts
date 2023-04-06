@@ -68,7 +68,7 @@ class Request {
     url: string,
     config?: AxiosRequestConfig
   ): Promise<any> {
-    console.log('get', url, config);
+    // console.log('get', url, config);
     let response = await this.instance.get(BASE_URL+url, config);
     if(response['code'] === 401){
       cookie.remove("token")

@@ -11,6 +11,8 @@
     width: 95%;
     margin: 0 auto;
     text-align: center;
+    border-radius: 5px;
+    overflow: hidden;
 }
 /* fengexian */
 /* no token */
@@ -53,10 +55,13 @@
     text-decoration: none;
 }
 .fixEdBox{
-    width: 95%;
-    height: 32px;
-    position: fixed;
-    z-index: 1;
+    /* width: 95%;
+    height: 32px; */
+    width: 100%;
+    height: 100%;
+    top: -0;
+    position: absolute;
+    z-index: 2;
 }
 .example {
     text-align: center;

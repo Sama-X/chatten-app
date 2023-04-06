@@ -14,10 +14,10 @@ const App = () => {
 
   const history = useHistory()
   const fetchData = () => {
-    console.log(isToken,'isToken')
+    // console.log(isToken,'isToken')
   }
   const onSearchFunc = (value) => {
-    console.log(value,'value');
+    // console.log(value,'value');
   }
   const linkSkip =  () => {
     if(isToken) {
@@ -47,12 +47,13 @@ const App = () => {
         </div>
         : ''
       }
+      <div className="fixEdBox" onClick={linkSkip}>
+      </div>
       {/* noToken */}
       <div className="footerTokenBox">
         {/* {
           isToken ? */}
-          <div className="fixEdBox" onClick={linkSkip}>
-          </div>
+
           <Input.Group className="tokenInputBox">
               <Input onPressEnter={onSearchFunc} className="tokenInput"/>
               <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
@@ -65,7 +66,7 @@ const App = () => {
             以开始聊天
           </div>
         } */}
-        <div  className="footerTokenContent">服务由 SAMA network 提供</div>
+        {/* <div  className="footerTokenContent">服务由 SAMA network 提供</div> */}
       </div>
     </div>
   );

@@ -106,7 +106,7 @@ export default memo(
         }
     }
     const sendCodeFunc = () => {
-        console.log(mobileVal,'mobileVal')
+        // console.log(mobileVal,'mobileVal')
         const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
         if (!myreg.test(mobileVal)) {
             // error
@@ -142,7 +142,8 @@ export default memo(
         password: passwordOne
       }).then(function(resData){
         if(resData.code == 0){
-          cookie.save('userName', resData.data.nickname, { path: '/' })
+          cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })
+          // cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
           cookie.save('experience', resData.data.experience, { path: '/' })
@@ -158,7 +159,7 @@ export default memo(
       })
     }
     return (
-        <div className="mobileAndCode">
+        <div className="mobileAndCode mobileLogin">
             {
               spinStatus ?
               <div className="example">
@@ -167,7 +168,7 @@ export default memo(
               : ''
             }
             <div className="loginHeader">
-                <img className="leftLogo" src={require("../../assets/loginLogo.png")} alt=""/>
+                <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
                 <Link to='/'>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>
@@ -215,6 +216,7 @@ export default memo(
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}
+                    <div className="signBtnBox">没有账号？去<span><Link to='/SignIn'>注册</Link></span></div>
                     <div><img className="sendCode" onClick={signInFunc} src={require("../../assets/rightBtn.png")} alt=""/></div>
                 </div>
             }

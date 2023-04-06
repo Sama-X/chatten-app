@@ -5,16 +5,24 @@ import Footer from '../footerBox/footer.js'
 
 
 function App() {
+  let info = navigator.userAgent;
+  let isPhone = /mobile/i.test(info);
   return (
     <div className="indexBox">
         {/* header */}
         <Header></Header>
         {/* content */}
-        <Content></Content>
+        {
+          isPhone ? <Content></Content> : ''
+        }
+
         {/* chouti */}
         {/* <LeftBox></LeftBox> */}
         {/* footer */}
-        <Footer></Footer>
+        {
+          isPhone ? <Footer></Footer> : ''
+        }
+        {/* <Footer></Footer> */}
 
     </div>
   );
