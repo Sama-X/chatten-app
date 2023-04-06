@@ -42,7 +42,7 @@ const App = () => {
   const history = useHistory()
 
 
-  const fetchData = (topicId) => {
+  const fetchData = (topicId,type) => {
       let request = new Request({});
       setSpinStatus(true)
       request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
@@ -55,7 +55,11 @@ const App = () => {
           setTimeout(function(){
             setSpinStatus(false)
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+            if(type == 1){
+              document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
+            }
           },500)
+
         }
       })
   }
@@ -122,9 +126,9 @@ const App = () => {
         const eventList = document.createElement("ul")
         setTimeout(function(){
           const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-          // console.log (divBox,'jk')
+
           evtSource.addEventListener("message", function(e) {
-            // console.log(JSON.parse(e.data).text,'j')
+            console.log (e,'jk')
             const newElement = document.createElement("li");
             newElement.textContent = JSON.parse(e.data).text
             eventList.appendChild(newElement);
@@ -134,6 +138,7 @@ const App = () => {
         setTimeout(function(){
           document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
         },10)
+        cookie.save('topicId', '')
         request.post('/api/v1/chat/question/',obj).then(function(resData){
           if(resData.code == '200100'){
             message.error(resData.msg)
@@ -143,6 +148,7 @@ const App = () => {
           }else{
             // cookie.save('experience', resData.experience, { path: '/' })
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
+
             cookie.save('topicId', resData.data.topic_id)
             if(isFirst){
               getHistory()
@@ -151,9 +157,12 @@ const App = () => {
             setTimeout(function(){
               value.target.value = ''
               setQuestionValue('')
-              fetchData(resData.data.topic_id)
+              history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+              console.log('jieshu')
+              fetchData(resData.data.topic_id,1)
               setSpinStatus(false)
               setInputDisabled(false)
+              // evtSource.close();
             },500)
           }
 
@@ -178,7 +187,7 @@ const App = () => {
       linkSkip()
     }else{
       cookie.save('topicId', e.keyPath[1])
-      fetchData(cookie.load('topicId'))
+      fetchData(cookie.load('topicId'),2)
       // history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }
   };
@@ -248,7 +257,7 @@ const App = () => {
       getHistory()
     }
     if(cookie.load('topicId')){
-      fetchData(cookie.load('topicId'))
+      fetchData(cookie.load('topicId'),2)
       isFirst(false)
     }else{
       isFirst(true)
@@ -268,7 +277,7 @@ const App = () => {
             : ''
           }
           <div className="headerBox">
-            <div className="headerLeft" onClick={returnIndex}>
+            <div className="headerLeft">
             <img src={require("../../assets/close.png")} alt=""/>
             {/* <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link> */}
             </div>
