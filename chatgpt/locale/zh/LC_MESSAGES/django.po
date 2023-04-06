@@ -1,0 +1,363 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-29 17:23+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: apps/base/exception.py:26
+msgid "success"
+msgstr "成功"
+
+#: apps/base/exception.py:27
+msgid "bad request"
+msgstr "错误请求"
+
+#: apps/base/exception.py:28
+msgid "internal server error"
+msgstr "服务器内部错误"
+
+#: apps/base/exception.py:29
+msgid "unauthorized"
+msgstr "未授权"
+
+#: apps/base/exception.py:30
+msgid "forbidden"
+msgstr "没有权限"
+
+#: apps/base/exception.py:31
+msgid "not found"
+msgstr "未找到"
+
+#: apps/base/exception.py:32
+msgid "method not allowed"
+msgstr "当前方法不被允许"
+
+#: apps/base/exception.py:33
+msgid "not acceptable"
+msgstr "服务器无法根据客户端请求的内容特性完成请求"
+
+#: apps/base/exception.py:34
+msgid "unsupport media type"
+msgstr "服务器无法处理请求附带的媒体格式"
+
+#: apps/base/exception.py:35
+msgid "too many requests"
+msgstr "请求过于频繁"
+
+#: apps/base/exception.py:51
+msgid "invalid code"
+msgstr "无效的验证码"
+
+#: apps/base/exception.py:52
+msgid "user exists"
+msgstr "用户已存在"
+
+#: apps/base/exception.py:53
+msgid "wrong user name or password"
+msgstr "错误的用户名或密码"
+
+#: apps/base/exception.py:54
+msgid "code or password required"
+msgstr "验证码或密码必填"
+
+#: apps/base/exception.py:71
+msgid "no more experiences"
+msgstr "体验次数已用尽"
+
+#: apps/base/exception.py:72
+msgid "chat robot no resp"
+msgstr "chapght未响应"
+
+#: apps/base/exception.py:73
+msgid "chatgpt key invalid"
+msgstr "无效的chatgpt键"
+
+#: apps/base/exception.py:74
+msgid "chatgpt key unsupport anony user"
+msgstr "不支持匿名用户"
+
+#: apps/base/exception.py:75
+msgid "chatgpt key already exists"
+msgstr "chatgpt键已存在"
+
+#: apps/base/middleware.py:33 apps/base/middleware.py:43
+msgid "auth: user need login"
+msgstr "需要登录"
+
+#: apps/chat/models.py:18
+msgid "db:chatrecord: msg type text"
+msgstr "文本类型"
+
+#: apps/chat/models.py:23
+msgid "db:chatrecord: user foreign key"
+msgstr "用户id"
+
+#: apps/chat/models.py:25
+msgid "db:chatrecord: message type"
+msgstr "消息类型"
+
+#: apps/chat/models.py:27
+msgid "db:chatrecord: question"
+msgstr "问题"
+
+#: apps/chat/models.py:28
+msgid "db:chatrecord: question time"
+msgstr "提问时间"
+
+#: apps/chat/models.py:30
+msgid "db:chatrecord: approval number"
+msgstr "点赞数"
+
+#: apps/chat/models.py:31
+msgid "db:chatrecord: chatgpt response result"
+msgstr "gpt响应数据"
+
+#: apps/chat/models.py:32
+msgid "db:chatrecord: QA success"
+msgstr "是否响应"
+
+#: apps/chat/models.py:33
+msgid "db:chatrecord: chatgpt response time"
+msgstr "响应时间"
+
+#: apps/chat/models.py:34
+msgid "db.chatrecord: question token usage"
+msgstr "提问token消耗"
+
+#: apps/chat/models.py:35
+msgid "db.chatrecord: resp token usage"
+msgstr "回答token消耗"
+
+#: apps/chat/models.py:36
+msgid "db.chatrecord: total token usage"
+msgstr "总token消耗"
+
+#: apps/chat/models.py:37
+msgid "db:chatgpt key foreign key"
+msgstr "chatgpt外键"
+
+#: apps/chat/models.py:38
+msgid "db:chat topic id"
+msgstr "聊天话题id"
+
+#: apps/chat/models.py:44
+msgid "db:chatrecord:ChatRecord"
+msgstr "聊天记录"
+
+#: apps/chat/models.py:82 apps/chat/models.py:101
+msgid "db:user foreign key"
+msgstr "用户id"
+
+#: apps/chat/models.py:83
+msgid "db:chatgpt key"
+msgstr "chatgpt键"
+
+#: apps/chat/models.py:84
+msgid "db:enable"
+msgstr "启用"
+
+#: apps/chat/models.py:90
+msgid "db:chatgpt table"
+msgstr "chatgpt密钥表"
+
+#: apps/chat/models.py:100
+msgid "db:chat topic"
+msgstr "聊天话题"
+
+#: apps/chat/serializer.py:14
+msgid "serializer: page"
+msgstr "页码"
+
+#: apps/chat/serializer.py:15
+msgid "serializer: offset"
+msgstr "页大小"
+
+#: apps/chat/serializer.py:16
+msgid "serializer: order"
+msgstr "排序字段"
+
+#: apps/chat/serializer.py:23
+msgid "serializer: question"
+msgstr "问题"
+
+#: apps/chat/serializer.py:24
+msgid "serializer: chat topic id"
+msgstr "聊天话题id"
+
+#: apps/chat/serializer.py:58
+msgid "serializer:chatgpt key"
+msgstr "chatgpt键"
+
+#: apps/users/models.py:17
+msgid "db:account:username"
+msgstr "用户名"
+
+#: apps/users/models.py:18
+msgid "db:account:user mobile"
+msgstr "手机号"
+
+#: apps/users/models.py:19
+msgid "db:account:user password"
+msgstr "密码"
+
+#: apps/users/models.py:20
+msgid "db:account:user nickname"
+msgstr "昵称"
+
+#: apps/users/models.py:21
+msgid "db:account:user avatar"
+msgstr "头像"
+
+#: apps/users/models.py:22
+msgid "db:account:user experience time"
+msgstr "体验次数"
+
+#: apps/users/models.py:23
+msgid "db:account:user is vip"
+msgstr "是否vip"
+
+#: apps/users/models.py:24
+msgid "db:account:user last login time"
+msgstr "最近登录时间"
+
+#: apps/users/models.py:25
+msgid "db:account:user last login ip"
+msgstr "最近登录ip"
+
+#: apps/users/models.py:26
+msgid "db:account:user type"
+msgstr "用户类型"
+
+#: apps/users/models.py:32
+msgid "db:account:Account"
+msgstr "账户"
+
+#: apps/users/models.py:63
+msgid "db:MessageLog: category notify"
+msgstr "通知"
+
+#: apps/users/models.py:68
+msgid "db:MessageLog:message mobile"
+msgstr "手机号"
+
+#: apps/users/models.py:70
+msgid "db:MessageLog:message content"
+msgstr "短信内容"
+
+#: apps/users/models.py:71
+msgid "db:MessageLog:message category"
+msgstr "短信类型"
+
+#: apps/users/models.py:72
+msgid "db:MessageLog: message send status"
+msgstr "短信发送状态"
+
+#: apps/users/models.py:73
+msgid "db:MessageLog: request time"
+msgstr "发送时间"
+
+#: apps/users/models.py:74
+msgid "db:MessageLog: send message response"
+msgstr "响应内容"
+
+#: apps/users/models.py:75
+msgid "db:MessageLog: response time"
+msgstr "响应时间"
+
+#: apps/users/models.py:81
+msgid "db:account:MessageLog"
+msgstr "短信记录"
+
+#: apps/users/models.py:91 apps/users/models.py:111 apps/users/models.py:130
+msgid "db:user account id"
+msgstr "用户id"
+
+#: apps/users/models.py:92
+msgid "db:Wallet:belong to the chain"
+msgstr "所属链"
+
+#: apps/users/models.py:93
+msgid "db:Wallet:balance"
+msgstr "余额"
+
+#: apps/users/models.py:94
+msgid "db:Wallet:address"
+msgstr "钱包地址"
+
+#: apps/users/models.py:95
+msgid "db:Wallet:private key"
+msgstr "钱包私钥"
+
+#: apps/users/models.py:101
+msgid "db:Wallet"
+msgstr "钱包"
+
+#: apps/users/models.py:112
+msgid "db:Score:score balance"
+msgstr "积分余额"
+
+#: apps/users/models.py:118
+msgid "db:Score"
+msgstr "积分"
+
+#: apps/users/models.py:131
+msgid "db:ScoreLog:score id"
+msgstr "积分外键id"
+
+#: apps/users/models.py:132
+msgid "db:ScoreLog:score category"
+msgstr "积分操作类别"
+
+#: apps/users/models.py:133
+msgid "db:ScoreLog:score"
+msgstr "积分"
+
+#: apps/users/models.py:134
+msgid "db:ScoreLog:chain transaction id"
+msgstr "链交易id"
+
+#: apps/users/models.py:135
+msgid "db:ScoreLog:chain response"
+msgstr "链响应结果"
+
+#: apps/users/models.py:141
+msgid "db:ScoreLog"
+msgstr "积分日志"
+
+#: apps/users/serializer.py:16 apps/users/serializer.py:39
+msgid "mobile phone number"
+msgstr "手机号"
+
+#: apps/users/serializer.py:18
+msgid "verification code"
+msgstr "验证码"
+
+#: apps/users/serializer.py:19 apps/users/serializer.py:30
+msgid "password"
+msgstr "密码"
+
+#: apps/users/serializer.py:27
+msgid "username"
+msgstr "用户名"
+
+#: apps/users/serializer.py:49
+msgid "Incorrect format of mobile phone number"
+msgstr "无效的手机号码"
+
+#~ msgid "db:Score:belong to the chain"
+#~ msgstr "所属链"
+
+#~ msgid "db:Wallet:category"
+#~ msgstr "钱包类型"
