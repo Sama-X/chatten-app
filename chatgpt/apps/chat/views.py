@@ -6,6 +6,7 @@ from datetime import datetime
 import json
 
 from asgiref.sync import async_to_sync
+from django.conf import settings
 
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
@@ -14,10 +15,11 @@ from base.ai import AIHelper
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
+from base.sama import SamaClient
 from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
 from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
-from users.models import AccountModel
+from users.models import AccountModel, WalletModel
 
 
 class ChatViewset(viewsets.GenericViewSet):
@@ -90,6 +92,17 @@ class ChatViewset(viewsets.GenericViewSet):
                 "topic_id": topic_id,
                 "experience": current_total + 1
             })
+
+        try:
+            wallet = WalletModel.objects.filter(
+                user_id=request.user.id, chain=settings.CHAIN_SAMA
+            ).first()
+            if wallet and wallet.balance > 1:
+                SamaClient.create_transaction_unconfirmed(
+                    settings.CHATGPT_WALLET, 1, wallet.private_key
+                )
+        except Exception as e:
+            pass
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
 

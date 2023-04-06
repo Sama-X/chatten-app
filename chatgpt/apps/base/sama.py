@@ -2,12 +2,15 @@
 sama sdk.
 """
 
+import binascii
+from hashlib import sha256
 import json
 import logging
 from subprocess import PIPE, Popen
 import traceback
 
 from typing import Optional
+import base58
 from pydantic import BaseModel, Field
 
 from django.conf import settings
@@ -40,6 +43,20 @@ class SamaClient:
     """
     sama client.
     """
+
+    @classmethod
+    def _convert_key_eth_to_ava(cls, private_key: str) -> str:
+        """
+        convert eth private key to avalance key.
+        """
+        if private_key.startswith("PrivateKey"):
+            return private_key
+
+        bkey = binascii.unhexlify(private_key)
+        salt = binascii.unhexlify(sha256(bkey).hexdigest())[-4:]
+        bkey += salt
+        result = base58.b58encode(bkey)
+        return f'PrivateKey-{result.decode()}'
 
     @classmethod
     def create_wallet(cls) -> SamaWalletResult:
@@ -94,7 +111,7 @@ class SamaClient:
             'params': {
                 'to': to_address,
                 'units': amount,
-                'privKey': private_key
+                'privKey': cls._convert_key_eth_to_ava(private_key)
             },
             'id': 1
         }
