@@ -8,10 +8,12 @@ import logging
 import time
 from base.ai_strategy import PriorityStrategy
 
+import channels.layers
 import openai
 from openai.error import RateLimitError, APIConnectionError, Timeout, AuthenticationError
 from django.conf import settings
-from django_eventstream import send_event
+
+from asgiref.sync import async_to_sync
 
 openai.proxy = settings.CHATGPT_PROXY or None
 
@@ -59,7 +61,8 @@ class AIHelper:
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
                     if cont:
                         report.append(cont)
-                        send_event(auth_token, 'message', {
+                        channel_layer = channels.layers.get_channel_layer()
+                        async_to_sync(channel_layer.send)(auth_token, {  # type: ignore
                             'id': item.id, # type: ignore
                             'text': cont, 'index': index, 'channel': auth_token,
                             'now': datetime.now()
