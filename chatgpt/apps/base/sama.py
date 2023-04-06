@@ -134,20 +134,20 @@ class SamaClient:
         create sama transaction was not confirmed.
         """
         logger.info('【sama transaction unconfirmed】 create transaction start to_address: %s amount: %s', to_address, amount)
-        rpc_url = cls.get_sama_rpc_url()
-        payload = {
-            'jsonrpc': '2.0',
-            'method': 'samavm.transfer',
-            'params': {
-                'to': to_address,
-                'units': amount,
-                'privKey': cls._convert_key_eth_to_ava(private_key)
-            },
-            'id': 1
-        }
-
         result = SamaTranasctionResult(result=False, txID="", error="")
         try:
+            rpc_url = cls.get_sama_rpc_url()
+            payload = {
+                'jsonrpc': '2.0',
+                'method': 'samavm.transfer',
+                'params': {
+                    'to': to_address,
+                    'units': amount,
+                    'privKey': cls._convert_key_eth_to_ava(private_key)
+                },
+                'id': 1
+            }
+
             resp = RequestClient.post(rpc_url, json=payload, headers={
                 'Content-type': 'application/json'
             })
