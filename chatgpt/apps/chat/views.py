@@ -91,7 +91,7 @@ class ChatViewset(viewsets.GenericViewSet):
                 wallet = WalletModel.objects.filter(
                     user_id=request.user.id, chain=settings.CHAIN_SAMA
                 ).first()
-                if wallet and wallet.balance > 1:
+                if wallet:
                     SamaClient.create_transaction_unconfirmed(
                         settings.CHATGPT_WALLET, 1, wallet.private_key
                     )
