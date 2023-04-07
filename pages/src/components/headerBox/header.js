@@ -148,7 +148,7 @@ const App = () => {
 
         let request = new Request({});
         request.get('/api/v1/users/profile/').then(function(resData){
-          copy('http://hi.chattop.club/?invite_code='+resData.data.invite_code)
+          copy('http://192.168.0.107:3001/?invite_code='+resData.data.invite_code)
           message.success('Successfully copied, please share with friends')
         })
       }
@@ -162,9 +162,9 @@ const App = () => {
     if(history.location.search){
       let str = history.location.search.split('=')[1]
       cookie.save('invite_code', str)
-      cookie.save('userName', '', { path: '/' })
-      cookie.save('userId', '', { path: '/' })
-      cookie.save('token', '', { path: '/' })
+      // cookie.save('userName', '', { path: '/' })
+      // cookie.save('userId', '', { path: '/' })
+      // cookie.save('token', '', { path: '/' })
     }else{
       cookie.save('invite_code', '')
     }
