@@ -29,6 +29,9 @@ class CreateAccountSerializer(serializers.Serializer):
     password = serializers.CharField(
         required=True, allow_null=False, max_length=32, help_text=_("password")
     )
+    invite_code = serializers.CharField(
+        required=False, allow_null=True, max_length=32, help_text=_("invite code")
+    )
 
 
 class SendSmsMessageSerializer(serializers.Serializer):

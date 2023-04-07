@@ -20,6 +20,7 @@ from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
 from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
 from users.models import AccountModel, WalletModel
+from users.service import UserService, UserServiceHelper
 
 
 class ChatViewset(viewsets.GenericViewSet):
@@ -43,13 +44,11 @@ class ChatViewset(viewsets.GenericViewSet):
         question = serializer.validated_data["question"] # type: ignore
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
-        current_total = ChatRecordModel.objects.filter(
-            success=True,
-            user_id=request.user.id,
-            question_time__gte=datetime.now().date()
-        ).count()
+        user_id = request.user.id
+        current_total = UserService.get_used_experience(user_id)
+        reward_experience = UserService.get_reward_experience(user_id)
 
-        if current_total >= request.user.experience:
+        if current_total >= request.user.experience + reward_experience:
             return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_EXPERIENCES)
 
         messages = []
@@ -87,6 +86,7 @@ class ChatViewset(viewsets.GenericViewSet):
         obj.save()
 
         if obj.answer:
+            UserServiceHelper.update_used_experience_cache(user_id, current_total + 1)
             try:
                 wallet = WalletModel.objects.filter(
                     user_id=request.user.id, chain=settings.CHAIN_SAMA
