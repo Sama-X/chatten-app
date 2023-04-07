@@ -274,6 +274,11 @@ const App = () => {
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
       getHistory()
+      let request = new Request({});
+      request.get('/api/v1/users/profile/').then(function(resData){
+        cookie.save('totalExeNumber', resData.data.used_experience)
+        cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+      })
     }
     if(cookie.load('topicId')){
       fetchData(cookie.load('topicId'),2)
