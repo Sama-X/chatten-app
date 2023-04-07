@@ -30,7 +30,6 @@ const App = () => {
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
-        // cookie.save('experience', resData.data.experience, { path: '/' })
         history.push({pathname: '/ChatPage', state: { test: 'signin' }})
       })
     }

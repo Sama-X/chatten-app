@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 17:23+0800\n"
+"POT-Creation-Date: 2023-04-07 16:23+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,6 +281,7 @@ msgid "db:account:MessageLog"
 msgstr "短信记录"
 
 #: apps/users/models.py:91 apps/users/models.py:111 apps/users/models.py:130
+#: apps/users/models.py:151
 msgid "db:user account id"
 msgstr "用户id"
 
@@ -336,7 +337,23 @@ msgstr "链响应结果"
 msgid "db:ScoreLog"
 msgstr "积分日志"
 
-#: apps/users/serializer.py:16 apps/users/serializer.py:39
+#: apps/users/models.py:152
+msgid "db:invited user"
+msgstr "被邀请人"
+
+#: apps/users/models.py:153
+msgid "db: chat experience times"
+msgstr "体验次数"
+
+#: apps/users/models.py:154
+msgid "db:invite expired time"
+msgstr "邀请过期时间"
+
+#: apps/users/models.py:160
+msgid "db:InviteLogs"
+msgstr "邀请记录表"
+
+#: apps/users/serializer.py:16 apps/users/serializer.py:42
 msgid "mobile phone number"
 msgstr "手机号"
 
@@ -352,7 +369,11 @@ msgstr "密码"
 msgid "username"
 msgstr "用户名"
 
-#: apps/users/serializer.py:49
+#: apps/users/serializer.py:33
+msgid "invite code"
+msgstr "邀请码"
+
+#: apps/users/serializer.py:52
 msgid "Incorrect format of mobile phone number"
 msgstr "无效的手机号码"
 

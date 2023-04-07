@@ -141,3 +141,22 @@ class ScoreLogModel(BaseModel):
         verbose_name = _("db:ScoreLog")
         verbose_name_plural = verbose_name
         db_table = "account_score_log"
+
+
+class InviteLogModel(BaseModel):
+    """
+    invite logs.
+    """
+
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
+    invited_user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:invited user"))
+    experience = models.IntegerField(default=1, verbose_name=_("db: chat experience times"))
+    expired_time = models.DateField(null=False, db_index=True, verbose_name=_("db:invite expired time"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("db:InviteLogs")
+        verbose_name_plural = verbose_name
+        db_table = "invite_log"

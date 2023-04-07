@@ -49,13 +49,12 @@ class AIHelper:
         try:
             encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
             prompt_tokens = len(encoding.encode(json.dumps(histories)))
-            resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=histories, api_key=key, timeout=30,
-                request_timeout=(10, 60), stream=True
+            resp = await openai.ChatCompletion.acreate(
+                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120), stream=True
             )
             report = []
             index = 0
-            for item in resp:
+            async for item in resp:
                 if item.choices: # type: ignore
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
                     if cont:
@@ -67,7 +66,7 @@ class AIHelper:
                         })
                         index += 1
                         logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
-                        await asyncio.sleep(0.01)
+                await asyncio.sleep(0.1)
 
             content = ''.join(report)
             completion_tokens = len(encoding.encode(content))
