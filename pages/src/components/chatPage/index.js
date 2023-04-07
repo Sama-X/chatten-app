@@ -56,7 +56,7 @@ const App = () => {
             setSpinStatus(false)
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
             if(type == 1){
-              document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
+              // document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
             }
           },500)
 
@@ -126,9 +126,10 @@ const App = () => {
         const eventList = document.createElement("ul")
         setTimeout(function(){
           const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-
           evtSource.addEventListener("message", function(e) {
             console.log (e,'jk')
+            // questionObj[questionObj.length-1].answer += JSON.parse(e.data).text
+            // setChatList(questionObj)
             const newElement = document.createElement("li");
             newElement.textContent = JSON.parse(e.data).text
             eventList.appendChild(newElement);
