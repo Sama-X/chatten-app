@@ -148,7 +148,7 @@ const App = () => {
 
         let request = new Request({});
         request.get('/api/v1/users/profile/').then(function(resData){
-          copy('http://192.168.0.107:3001/?invite_code='+resData.data.invite_code)
+          copy('http://hi.chattop.club/?invite_code='+resData.data.invite_code)
           message.success('Successfully copied, please share with friends')
         })
       }
