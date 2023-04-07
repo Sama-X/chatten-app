@@ -150,6 +150,7 @@ const App = () => {
             questionObj.pop()
             setChatList(questionObj)
             setInputDisabled(false)
+            evtSource.close();
           }else{
             // cookie.save('experience', resData.experience, { path: '/' })
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
