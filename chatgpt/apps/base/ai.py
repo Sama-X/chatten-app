@@ -1,6 +1,7 @@
 """
 AI module.
 """
+import asyncio
 from datetime import datetime
 import json
 import tiktoken
@@ -8,12 +9,10 @@ import logging
 import time
 from base.ai_strategy import PriorityStrategy
 
-import channels.layers
 import openai
 from openai.error import RateLimitError, APIConnectionError, Timeout, AuthenticationError
 from django.conf import settings
-
-from asgiref.sync import async_to_sync
+from django_eventstream import send_event
 
 openai.proxy = settings.CHATGPT_PROXY or None
 
@@ -61,14 +60,14 @@ class AIHelper:
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
                     if cont:
                         report.append(cont)
-                        channel_layer = channels.layers.get_channel_layer()
-                        async_to_sync(channel_layer.send)(auth_token, {  # type: ignore
+                        send_event(auth_token, 'message', {
                             'id': item.id, # type: ignore
                             'text': cont, 'index': index, 'channel': auth_token,
                             'now': datetime.now()
                         })
                         index += 1
                         logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
+                        await asyncio.sleep(0.01)
 
             content = ''.join(report)
             completion_tokens = len(encoding.encode(content))

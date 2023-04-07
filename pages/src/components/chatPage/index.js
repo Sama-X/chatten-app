@@ -32,26 +32,34 @@ const App = () => {
   const [userName, setUserName] = useState('');
   const [questionValue, setQuestionValue] = useState('');
   const [chatList, setChatList] = useState([]);
-  const [spinStatus, setSpinStatus] = useState(false);
+  const [spinStatus, setSpinStatus] = useState(true);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [items, setItem] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isFirstStatus, isFirst] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
   const history = useHistory()
-  const fetchData = (topicId) => {
+
+
+  const fetchData = (topicId,type) => {
       let request = new Request({});
       setSpinStatus(true)
       request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
         if(resData.code != 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
-        setSpinStatus(false)
+
         setChatList(resData.data ? resData.data : [])
         if(resData.code == 0){
           setTimeout(function(){
+            setSpinStatus(false)
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-          },100)
+            if(type == 1){
+              // document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
+            }
+          },500)
+
         }
       })
   }
@@ -72,8 +80,12 @@ const App = () => {
         })
         menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
       }
-      setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
-      console.log(items,'j')
+      setTimeout(function(){
+        setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+        setSpinStatus(false)
+      },500)
+      // setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+      // console.log(items,'j')
     })
   }
   const onSearchFunc = (value) => {
@@ -81,7 +93,6 @@ const App = () => {
       message.info('Questioning more than ten times, reaching the upper limit')
     }else{
       // setSpinStatus(true)
-      console.log(chatList,'chatList')
       if(!questionValue){
         message.error('The question cannot be empty')
         setSpinStatus(false)
@@ -115,9 +126,10 @@ const App = () => {
         const eventList = document.createElement("ul")
         setTimeout(function(){
           const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-          // console.log (divBox,'jk')
           evtSource.addEventListener("message", function(e) {
-            // console.log(JSON.parse(e.data).text,'j')
+            console.log (e,'jk')
+            // questionObj[questionObj.length-1].answer += JSON.parse(e.data).text
+            // setChatList(questionObj)
             const newElement = document.createElement("li");
             newElement.textContent = JSON.parse(e.data).text
             eventList.appendChild(newElement);
@@ -127,22 +139,32 @@ const App = () => {
         setTimeout(function(){
           document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
         },10)
+        cookie.save('topicId', '')
         request.post('/api/v1/chat/question/',obj).then(function(resData){
-          console.log(resData,'rrrr')
           if(resData.code == '200100'){
             message.error(resData.msg)
+            questionObj.pop()
+            setChatList(questionObj)
             setInputDisabled(false)
           }else{
             // cookie.save('experience', resData.experience, { path: '/' })
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
-            cookie.save('topicId', resData.data.topic_id, { path: '/' })
+
+            cookie.save('topicId', resData.data.topic_id)
+            if(isFirst){
+              getHistory()
+              isFirst(false)
+            }
             setTimeout(function(){
               value.target.value = ''
               setQuestionValue('')
-              fetchData(resData.data.topic_id)
+              history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+              console.log('jieshu')
+              fetchData(resData.data.topic_id,1)
               setSpinStatus(false)
               setInputDisabled(false)
-            },100)
+              // evtSource.close();
+            },500)
           }
 
         })
@@ -155,38 +177,35 @@ const App = () => {
   }
 
   const returnIndex = () =>{
-    cookie.save('topicId', '', { path: '/' })
+    cookie.save('topicId', '')
     history.push({pathname: '/', state: { test: 'noToken' }})
   }
 
   const menuClick = (e) => {
-    console.log(e,'click')
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
       // console.log(e,'click')
+      cookie.save('topicId', '')
       linkSkip()
     }else{
-      cookie.save('topicId', e.keyPath[1], { path: '/' })
-      history.push({pathname: '/ChatPage', state: { test: 'login' }})
+      cookie.save('topicId', e.keyPath[1])
+      fetchData(cookie.load('topicId'),2)
+      // history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }
   };
 
   const linkSkip =  () => {
     const isTokenStatus = cookie.load('token') ? true : false
+    setChatList([])
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
+      // fetchData(cookie.load('topicId'))
     }else{
-      // console.log('12')
       setSpinStatus(true)
-      let request = new Request({});
-      request.post('/api/v1/users/anonymous/').then(function(resData){
-        cookie.save('userName', resData.data.nickname, { path: '/' })
-        cookie.save('userId', resData.data.id, { path: '/' })
-        cookie.save('token', resData.data.token, { path: '/' })
-        setTimeout(function(){
-          setSpinStatus(false)
-          history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-        },1000)
-      })
+      setTimeout(function(){
+        setSpinStatus(false)
+        history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+        // fetchData(cookie.load('topicId'))
+      },1000)
     }
   }
   const noFunction = () => {
@@ -212,26 +231,37 @@ const App = () => {
   }
 
   useEffect(()=>{
+    // const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
+    // const eventList = document.createElement("ul")
+    // setTimeout(function(){
+    //   const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
+    //   // console.log (divBox,'jk')
+    //   evtSource.addEventListener("message", function(e) {
+    //     // console.log(JSON.parse(e.data).text,'j')
+    //     const newElement = document.createElement("li");
+    //     newElement.textContent = JSON.parse(e.data).text
+    //     eventList.appendChild(newElement);
+    //     divBox.append(eventList)
+    //   })
+    // },1000)
+    setTimeout(function(){
+      document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+    },10)
     if(isPhone){
       setWidthNumber('77%')
     }else{
       setWidthNumber('400px')
     }
     if(isToken){
-      // var evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
-      // var eventList = document.querySelector('ul');
-      // evtSource.onmessage = function(e) {
-      //   // var newElement = document.createElement("li");
-      //   // newElement.textContent = "message: " + e.data;
-      //   // eventList.appendChild(newElement);
-      //   console.log(e,'e')
-      // }
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
       getHistory()
     }
     if(cookie.load('topicId')){
-      fetchData(cookie.load('topicId'))
+      fetchData(cookie.load('topicId'),2)
+      isFirst(false)
+    }else{
+      isFirst(true)
     }
 
   }, [])
@@ -248,7 +278,7 @@ const App = () => {
             : ''
           }
           <div className="headerBox">
-            <div className="headerLeft" onClick={returnIndex}>
+            <div className="headerLeft">
             <img src={require("../../assets/close.png")} alt=""/>
             {/* <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link> */}
             </div>
@@ -341,12 +371,15 @@ const App = () => {
                       width: '100%',
                       background:'#202123',
                       color:'white',
+                      maxHeight: '400px',
+                      overflow: 'scroll'
                     }}
                     defaultSelectedKeys={['1']}
                     defaultOpenKeys={['sub1']}
                     mode="inline"
                     items={items}
                     theme="#202123"
+
 
                   />
 
