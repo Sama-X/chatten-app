@@ -130,6 +130,10 @@ const App = () => {
             const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
             // questionObj[questionObj.length-1].answer += JSON.parse(e.data).text
             // setChatList(questionObj)
+            // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
+            if(JSON.parse(e.data).status == '-1'){
+              evtSource.close();
+            }
             const newElement = document.createElement("li");
             newElement.textContent = JSON.parse(e.data).text
             eventList.appendChild(newElement);
