@@ -3,12 +3,14 @@ Common util module.
 """
 import logging
 import random
+from hashids import Hashids
 from uuid import uuid4
 
 from django.core.cache import cache
 import requests
 
 from base.constants import LOGIN_ACCOUNT_TOKEN_KEY, LOGIN_LIFE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY
+from users.models import AccountModel
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +19,8 @@ class CommonUtil:
     """
     common util class.
     """
+
+    HASH = Hashids(salt='61dc562deeca4689b12bffccb7456a27', min_length=8)
 
     @classmethod
     def generate_sms_code(cls, length=6):
@@ -35,6 +39,35 @@ class CommonUtil:
         cache.set(LOGIN_ACCOUNT_TOKEN_KEY.format(user_id), token, LOGIN_LIFE_TIME_LENGTH)
 
         return token
+
+    @classmethod
+    def generate_login_result(cls, token, user: AccountModel) -> dict:
+        """
+        generate login user result.
+        """
+        return {
+            'id': user.id,
+            'nickname': user.nickname,
+            'token': token,
+            'experience': user.experience
+        }
+
+    @classmethod
+    def encode_hashids(cls, value: int) -> str:
+        """
+        encode hash ids.
+        """
+        result = cls.HASH.encode(value)
+        return result
+
+    @classmethod
+    def decode_hashids(cls, value: str) -> int:
+        """
+        decode hash ids. return 0 if not found.
+        """
+        result = cls.HASH.decode(value)
+
+        return result[0] if result else 0
 
 
 class RequestClient:

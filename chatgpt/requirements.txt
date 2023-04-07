@@ -12,3 +12,4 @@ tiktoken==0.3.3
 base58==2.1.1
 daphne==3.0.2
 channels_redis==4.1.0
+hashids==1.3.1

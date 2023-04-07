@@ -18,6 +18,7 @@ from base.exception import SystemErrorCode, UserErrorCode
 from base.constants import (
     LOGIN_SMS_CODE_KEY, LOGIN_SMS_CODE_TIME_LENGTH
 )
+from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
 from users.models import AccountModel, MessageLogModel
 from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
@@ -108,12 +109,7 @@ class LoginViewSet(viewsets.GenericViewSet):
 
         token = CommonUtil.generate_user_token(account.id)
 
-        return APIResponse(result={
-            'id': account.id,
-            'nickname': account.nickname,
-            'token': token,
-            'experience': account.experience
-        })
+        return APIResponse(result=CommonUtil.generate_login_result(token, account))
 
     @action(methods=['POST'], detail=False)
     def register(self, request, *args, **kwargs):
@@ -127,29 +123,9 @@ class LoginViewSet(viewsets.GenericViewSet):
 
         username = form.validated_data['username']  # type: ignore
         password = form.validated_data['password']  # type: ignore
+        invite_code = form.validated_data.get('invite_code') # type: ignore
 
-        exists = AccountModel.objects.filter(
-            username=username
-        ).count() > 0
-        if exists:
-            return APIResponse(code=UserErrorCode.USER_EXISTS)
-
-        account = AccountModel(
-            username=username,
-            user_type=AccountModel.USER_TYPE_NORMAL
-        )
-        account.password = password
-        account.save()
-
-        UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
-        token = CommonUtil.generate_user_token(account.id)
-
-        return APIResponse(result={
-            'id': account.id,
-            'nickname': account.nickname,
-            'token': token,
-            'experience': account.experience
-        })
+        return UserService.register(username, password, invite_code)
 
     @action(methods=['POST'], detail=False)
     def anonymous(self, request, *args, **kwargs):
@@ -157,6 +133,8 @@ class LoginViewSet(viewsets.GenericViewSet):
         create anonymous account
         url: /api/v1/users/anonymous
         """
+        invite_code = request.data.get('invite_code')
+
         username = uuid4().hex
         exists = AccountModel.objects.filter(
             username=username
@@ -164,21 +142,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         if exists:
             return APIResponse(code=UserErrorCode.USER_EXISTS)
 
-        account = AccountModel(
-            username=username
-        )
-        account.password = 'Aa12345678'
-        account.user_type = AccountModel.USER_TYPE_ANONY
-        account.save()
-        UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
-        token = CommonUtil.generate_user_token(account.id)
-
-        return APIResponse(result={
-            'id': account.id,
-            'nickname': account.nickname,
-            'token': token,
-            'experience': account.experience
-        })
+        return UserService.register(username, 'Aa12345678', invite_code, user_type=AccountModel.USER_TYPE_ANONY)
 
 
 class SmsMessageViewSet(viewsets.GenericViewSet):
@@ -218,3 +182,31 @@ class SmsMessageViewSet(viewsets.GenericViewSet):
             })
 
         return APIResponse()
+
+
+class UserProfileViewSet(viewsets.GenericViewSet):
+    """
+    user profile api.
+    """
+    authentication_classes = [AnonymousAuthentication,]
+
+    @action(methods=['GET'], detail=False)
+    def profile(self, request, *args, **kwargs):
+        """
+        get user profile.
+        url: /api/v1/users/sms-code
+        """
+        user = request.user
+
+        result = {
+            'id': user.id,
+            'nickname': user.nickname,
+            'experience': user.experience,
+            'reward_experience': UserService.get_reward_experience(user.id),
+            'used_experience': UserService.get_used_experience(user.id, start_time=datetime.now().date()),
+            'invite_code': None
+        }
+        if request.user.user_type == AccountModel.USER_TYPE_NORMAL:
+            result['invite_code'] = CommonUtil.encode_hashids(user.id)
+
+        return APIResponse(result=result)

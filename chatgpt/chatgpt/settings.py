@@ -304,6 +304,11 @@ CHANNEL_LAYERS = {
     },
 }
 
+# share config
+
+SHARE_REWARD_EXPERIENCE = 10
+
+
 # local config
 try:
     from chatgpt.local_settings import *
