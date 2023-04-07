@@ -62,11 +62,14 @@ class AIHelper:
                         send_event(auth_token, 'message', {
                             'id': item.id, # type: ignore
                             'text': cont, 'index': index, 'channel': auth_token,
-                            'now': datetime.now()
+                            'now': datetime.now(), 'status': 1
                         })
                         index += 1
                         logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
-                await asyncio.sleep(0.1)
+
+            send_event(auth_token, 'message', {
+                'status': -1
+            })
 
             content = ''.join(report)
             completion_tokens = len(encoding.encode(content))
