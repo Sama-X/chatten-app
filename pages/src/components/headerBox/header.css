@@ -103,6 +103,9 @@
     width: 60px;
     justify-content: center;
 }
+.shareCursor{
+    cursor: pointer;
+}
 .otherMenuRight img{
     display: inline-block;
     width: 18px;

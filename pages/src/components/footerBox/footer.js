@@ -25,12 +25,12 @@ const App = () => {
     }else{
       let request = new Request({});
       setSpinStatus(true)
-      request.post('/api/v1/users/anonymous/').then(function(resData){
+      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code')}).then(function(resData){
         setSpinStatus(false)
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
-        cookie.save('experience', resData.data.experience, { path: '/' })
+        // cookie.save('experience', resData.data.experience, { path: '/' })
         history.push({pathname: '/ChatPage', state: { test: 'signin' }})
       })
     }

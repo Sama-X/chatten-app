@@ -150,14 +150,15 @@ export default memo(
       let request = new Request({});
       request.post('/api/v1/users/register/', {
         username: mobileVal,
-        password: passwordTwo
+        password: passwordTwo,
+        invite_code: cookie.load('invite_code')
       }).then(function(resData){
         if(resData.code == 0){
           cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })
           // cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
-          cookie.save('experience', resData.data.experience, { path: '/' })
+          // cookie.save('experience', resData.data.experience, { path: '/' })
           setTimeout(function(){
             setSpinStatus(false)
             history.push({pathname: '/', state: { test: 'signin' }})

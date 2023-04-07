@@ -8,6 +8,7 @@ import cookie from 'react-cookies'
 import { useHistory } from 'react-router-dom';
 import Content from '../contentBox/content.js'
 import Footer from '../footerBox/footer.js'
+import copy from 'copy-to-clipboard';
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -75,7 +76,9 @@ const App = () => {
       // console.log('12')
       setSpinStatus(true)
       let request = new Request({});
-      request.post('/api/v1/users/anonymous/').then(function(resData){
+      request.post('/api/v1/users/anonymous/',{
+        invite_code: cookie.load('invite_code')
+      }).then(function(resData){
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
         cookie.save('token', resData.data.token, { path: '/' })
@@ -91,8 +94,8 @@ const App = () => {
       let request = new Request({});
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
-        cookie.save('experience', resData.experience, { path: '/' })
-        cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
+        // cookie.save('experience', resData.experience, { path: '/' })
+        // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
         let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
@@ -136,7 +139,35 @@ const App = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const shareFunction = () => {
+    if(isToken){
+      if(userName == '访客'){
+        message.info('Anonymous users cannot share')
+        return
+      }else{
+
+        let request = new Request({});
+        request.get('/api/v1/users/profile/').then(function(resData){
+          copy('http://192.168.0.107:3001/index?invite_code='+resData.data.invite_code)
+          message.success('Successfully copied, please share with friends')
+        })
+      }
+    }else{
+      message.info('Please log in first and proceed with the sharing operation')
+      return
+    }
+  }
   useEffect(()=>{
+    console.log(history,'ghjk')
+    if(history.location.search){
+      let str = history.location.search.split('=')[1]
+      cookie.save('invite_code', str)
+      cookie.save('userName', '', { path: '/' })
+      cookie.save('userId', '', { path: '/' })
+      cookie.save('token', '', { path: '/' })
+    }else{
+      cookie.save('invite_code', '')
+    }
     if(isPhone){
       setWidthNumber('77%')
       setSpinStatus(false)
@@ -148,6 +179,11 @@ const App = () => {
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
       getHistory()
+      let request = new Request({});
+      request.get('/api/v1/users/profile/').then(function(resData){
+        cookie.save('totalExeNumber', resData.data.used_experience)
+        cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+      })
     }else{
       setSpinStatus(false)
       let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
@@ -244,10 +280,10 @@ const App = () => {
               <div className="otherMenuItem">
                 <div className="otherMenuLeft">
                   <img src={require("../../assets/reply.png")} alt=""/>
-                  <div>
+                  <div style={{width:'90%'}}>
                     <div className='otherMenuRight'>
                       <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
-                      <div className='otherMenuRightItem' onClick={noFunction}>
+                      <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>
                           分享
@@ -339,10 +375,10 @@ const App = () => {
                 <div className="otherMenuItem">
                   <div className="otherMenuLeft">
                     <img src={require("../../assets/reply.png")} alt=""/>
-                    <div>
+                    <div style={{width:'90%'}}>
                       <div className='otherMenuRight'>
                         <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
-                        <div className='otherMenuRightItem' onClick={noFunction}>
+                        <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                           <img src={require("../../assets/share.png")} alt=""/>
                           <div>
                             分享

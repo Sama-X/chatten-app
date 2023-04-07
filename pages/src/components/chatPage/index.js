@@ -10,6 +10,7 @@ import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import {BASE_URL} from '../../utils/axios.js'
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
+import copy from 'copy-to-clipboard';
 
 
 function getItem(label, key, icon, children, type) {
@@ -67,8 +68,8 @@ const App = () => {
     let request = new Request({});
     request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
-      cookie.save('experience', resData.experience, { path: '/' })
-      cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
+      // cookie.save('experience', resData.experience, { path: '/' })
+      // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
       let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
       for(let i in resData.data){
@@ -228,6 +229,24 @@ const App = () => {
       setSpinStatus(false)
     },1000)
   }
+  const shareFunction = () => {
+    if(isToken){
+      if(userName == '访客'){
+        message.info('Anonymous users cannot share')
+        return
+      }else{
+
+        let request = new Request({});
+        request.get('/api/v1/users/profile/').then(function(resData){
+          copy('http://192.168.0.107:3001/index?invite_code='+resData.data.invite_code)
+          message.success('Successfully copied, please share with friends')
+        })
+      }
+    }else{
+      message.info('Please log in first and proceed with the sharing operation')
+      return
+    }
+  }
 
   useEffect(()=>{
     // const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
@@ -278,7 +297,7 @@ const App = () => {
             : ''
           }
           <div className="headerBox">
-            <div className="headerLeft">
+            <div className="headerLeft" onClick={returnIndex}>
             <img src={require("../../assets/close.png")} alt=""/>
             {/* <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link> */}
             </div>
@@ -395,10 +414,10 @@ const App = () => {
                     <div className="otherMenuItem">
                       <div className="otherMenuLeft">
                         <img src={require("../../assets/reply.png")} alt=""/>
-                        <div>
+                        <div style={{width:'90%'}}>
                           <div className='otherMenuRight'>
                             <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
-                            <div className='otherMenuRightItem' onClick={noFunction}>
+                            <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                               <img src={require("../../assets/share.png")} alt=""/>
                               <div>
                                 分享
