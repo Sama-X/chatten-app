@@ -41,9 +41,9 @@ const App = () => {
   const [widthNumber, setWidthNumber] = useState('');
   const history = useHistory()
 
-
   const fetchData = (topicId,type) => {
       let request = new Request({});
+      let _this = this
       setSpinStatus(true)
       request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
         if(resData.code != 0){
@@ -125,9 +125,8 @@ const App = () => {
         const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
         const eventList = document.createElement("ul")
         setTimeout(function(){
-          const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
           evtSource.addEventListener("message", function(e) {
-            console.log (e,'jk')
+            const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
             // questionObj[questionObj.length-1].answer += JSON.parse(e.data).text
             // setChatList(questionObj)
             const newElement = document.createElement("li");
@@ -159,7 +158,7 @@ const App = () => {
               value.target.value = ''
               setQuestionValue('')
               history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-              console.log('jieshu')
+              evtSource.close();
               fetchData(resData.data.topic_id,1)
               setSpinStatus(false)
               setInputDisabled(false)
@@ -265,6 +264,7 @@ const App = () => {
     }
 
   }, [])
+
   return (
     <div  style={{width:'100%'}}>
       {
@@ -452,8 +452,8 @@ const App = () => {
               </div>
               {
                 isToken ?
-                  // <div className="headerRight" onClick={signOut}>
-                    <Popconfirm
+                  <div className="headerRight">
+                    {/* <Popconfirm
                     placement="leftTop"
                     className="headerRight"
                     title='Do you want to log out'
@@ -461,11 +461,11 @@ const App = () => {
                     onConfirm={signOut}
                     okText="Yes"
                     cancelText="No"
-                  >
+                  > */}
                     <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                     <div>{ userName }</div>
-                  </Popconfirm>
-                  // </div>
+                  {/* </Popconfirm> */}
+                  </div>
                   :
                   <div className="headerRight">
                   {/* <div className="headerRight" onClick={showModal}> */}

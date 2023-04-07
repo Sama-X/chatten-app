@@ -54,8 +54,9 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
+    console.log(e,'click')
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
-      // console.log(e,'click')
+
       linkSkip()
     }else{
       cookie.save('topicId', e.keyPath[1])
@@ -65,6 +66,8 @@ const App = () => {
     }
   };
   const linkSkip =  () => {
+    console.log(cookie.load('token'),"cookie.load('token')")
+    // return
     const isTokenStatus = cookie.load('token') ? true : false
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
@@ -147,7 +150,7 @@ const App = () => {
       getHistory()
     }else{
       setSpinStatus(false)
-      let menuSetitemList = [getItem('创建新对话…', 1,<PlusCircleFilled />)]
+      let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
       setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
