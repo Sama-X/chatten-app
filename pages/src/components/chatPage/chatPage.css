@@ -158,7 +158,7 @@
     padding: 0;
 }
 .chatBox ul li {
-    margin-right: 6px;
+    /* margin-right: 6px; */
 }
 .headerLeft{
     cursor: pointer;

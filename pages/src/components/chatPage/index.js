@@ -34,6 +34,7 @@ const App = () => {
   const [questionValue, setQuestionValue] = useState('');
   const [chatList, setChatList] = useState([]);
   const [spinStatus, setSpinStatus] = useState(true);
+  // const [spinStatus, setSpinStatus] = useState(true);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [items, setItem] = useState([]);
@@ -132,6 +133,8 @@ const App = () => {
             // setChatList(questionObj)
             // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
             if(JSON.parse(e.data).status == '-1'){
+              setSpinStatus(false)
+              setInputDisabled(false)
               evtSource.close();
             }
             const newElement = document.createElement("li");
@@ -149,6 +152,7 @@ const App = () => {
             message.error(resData.msg)
             questionObj.pop()
             setChatList(questionObj)
+            setSpinStatus(false)
             setInputDisabled(false)
             evtSource.close();
           }else{
@@ -172,6 +176,18 @@ const App = () => {
             },500)
           }
 
+        }).catch(function(err) {
+            value.target.value = ''
+            setQuestionValue('')
+            evtSource.close();
+            if(cookie.load('topicId')){
+              fetchData(cookie.load('topicId'),2)
+              isFirst(false)
+            }else{
+              isFirst(true)
+            }
+            setSpinStatus(false)
+            setInputDisabled(false)
         })
       }
     }
