@@ -29,6 +29,7 @@ class ChatViewset(viewsets.GenericViewSet):
     """
 
     authentication_classes = [AnonymousAuthentication,]
+    serializer_class = []
 
     @async_to_sync
     @action(methods=["POST"], detail=False)
