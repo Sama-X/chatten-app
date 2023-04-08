@@ -99,18 +99,20 @@ const App = () => {
 
         let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
-          let subItem = []
-          request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-            for(let j in resItemData.data){
-              subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-            }
-          })
-          menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+          if(i < 9){
+            let subItem = []
+            request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+              for(let j in resItemData.data){
+                subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
+              }
+            })
+            menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+          }
         }
         setTimeout(function(){
           setSpinStatus(false)
           setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
-        },500)
+        },700)
       })
   }
   const noFunction = () => {

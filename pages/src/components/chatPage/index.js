@@ -60,7 +60,7 @@ const App = () => {
             if(type == 1){
               // document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
             }
-          },500)
+          },700)
 
         }
       })
@@ -74,18 +74,20 @@ const App = () => {
 
       let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
       for(let i in resData.data){
-        let subItem = []
-        request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-          for(let j in resItemData.data){
-            subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-          }
-        })
-        menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+        if(i < 9){
+          let subItem = []
+          request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+            for(let j in resItemData.data){
+              subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
+            }
+          })
+          menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+        }
       }
       setTimeout(function(){
         setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
-      },500)
+      },700)
       // setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
       // console.log(items,'j')
     })
@@ -173,7 +175,7 @@ const App = () => {
               setSpinStatus(false)
               setInputDisabled(false)
               // evtSource.close();
-            },500)
+            },700)
           }
 
         }).catch(function(err) {
