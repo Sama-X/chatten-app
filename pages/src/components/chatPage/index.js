@@ -376,7 +376,8 @@ const App = () => {
             <div className="footerTokenBox">
               {/* {
                 isToken ? */}
-                <Input.Group className="tokenInputBox">
+                <div className="tokenInputBox">
+                  <Input.Group>
                     {
                       isLoadingStatus ?
                       <div className="inputLoading">
@@ -384,31 +385,38 @@ const App = () => {
                       </div>
                       : ''
                     }
-                    {/* <Input
-                      style={{
-                        color: '#000000'
-                      }}
-                      disabled={inputDisabled}
-                      onPressEnter={onSearchFunc}
-                      onChange={onChangeInput}
-                      value={questionValue}
-                      className="tokenInput"
-                    /> */}
-                    <TextArea rows={1}
-                      style={{
-                        color: '#000000',
-                        lineHeight: '30px',
-                        paddingRight: "50px"
-                      }}
-                      loading={isLoading}
-                      disabled={inputDisabled}
-                      onPressEnter={onSearchFunc}
-                      onChange={onChangeInput}
-                      value={questionValue}
-                      className="tokenInput"
-                    />
-                    <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
-                </Input.Group>
+                      {/* <Input
+                        style={{
+                          color: '#000000'
+                        }}
+                        disabled={inputDisabled}
+                        onPressEnter={onSearchFunc}
+                        onChange={onChangeInput}
+                        value={questionValue}
+                        className="tokenInput"
+                      /> */}
+                      <TextArea rows={1}
+                        style={{
+                          color: '#000000',
+                          paddingRight: "50px",
+                          width: "90%",
+                          borderRadius: '10px',
+                          textAlign: 'left',
+                        }}
+                        autoSize={{
+                          minRows: 1,
+                          maxRows: 3,
+                        }}
+                        loading={isLoading}
+                        disabled={inputDisabled}
+                        onPressEnter={onSearchFunc}
+                        onChange={onChangeInput}
+                        value={questionValue}
+                        className="tokenInput"
+                      />
+                  </Input.Group>
+                  <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
+                </div>
                 {/* :
                 <div className="noTokenBtn">
                   <Link to='/Login'>登录</Link>
@@ -586,39 +594,47 @@ const App = () => {
                 <div className="footerTokenBox">
                   {/* {
                     isToken ? */}
-                    <Input.Group className="tokenInputBox">
-                      {
-                        isLoadingStatus ?
-                        <div className="inputLoading">
-                          <Spin />
-                        </div>
-                        : ''
-                      }
-                        {/* <Input
-                          style={{
-                            color: '#000000'
-                          }}
-                          disabled={inputDisabled}
-                          onPressEnter={onSearchFunc}
-                          onChange={onChangeInput}
-                          value={questionValue}
-                          className="tokenInput"
-                        /> */}
-                        <TextArea rows={1}
-                          style={{
-                            color: '#000000',
-                            lineHeight: '30px',
-                            paddingRight: "50px"
-                          }}
-                          loading={isLoading}
-                          disabled={inputDisabled}
-                          onPressEnter={onSearchFunc}
-                          onChange={onChangeInput}
-                          value={questionValue}
-                          className="tokenInput"
-                        />
-                        <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
-                    </Input.Group>
+                    <div className="tokenInputBox">
+                      <Input.Group>
+                        {
+                          isLoadingStatus ?
+                          <div className="inputLoading">
+                            <Spin />
+                          </div>
+                          : ''
+                        }
+                          {/* <Input
+                            style={{
+                              color: '#000000'
+                            }}
+                            disabled={inputDisabled}
+                            onPressEnter={onSearchFunc}
+                            onChange={onChangeInput}
+                            value={questionValue}
+                            className="tokenInput"
+                          /> */}
+                          <TextArea rows={1}
+                            style={{
+                              color: '#000000',
+                              paddingRight: "50px",
+                              width: "90%",
+                              borderRadius: '10px',
+                              textAlign: 'left',
+                            }}
+                            autoSize={{
+                              minRows: 1,
+                              maxRows: 3,
+                            }}
+                            loading={isLoading}
+                            disabled={inputDisabled}
+                            onPressEnter={onSearchFunc}
+                            onChange={onChangeInput}
+                            value={questionValue}
+                            className="tokenInput"
+                          />
+                      </Input.Group>
+                      <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
+                    </div>
                     {/* :
                     <div className="noTokenBtn">
                       <Link to='/Login'>登录</Link>
