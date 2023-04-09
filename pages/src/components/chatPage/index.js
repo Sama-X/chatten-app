@@ -24,7 +24,7 @@ function getItem(label, key, icon, children, type) {
 }
 let info = navigator.userAgent;
 let isPhone = /mobile/i.test(info);
-
+const { TextArea } = Input;
 const App = () => {
   const isToken = cookie.load('token')
   const topicId = cookie.load('topicId')
@@ -40,7 +40,9 @@ const App = () => {
   const [items, setItem] = useState([]);
   const [open, setOpen] = useState(false);
   const [isFirstStatus, isFirst] = useState(false);
+  const [isLoadingStatus, isLoading] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
+
   const history = useHistory()
 
   const fetchData = (topicId,type) => {
@@ -102,6 +104,7 @@ const App = () => {
         setSpinStatus(false)
         return
       }else{
+        isLoading(true)
         setQuestionValue(value.target.value)
         const questionObj = [...chatList]
         questionObj.push({
@@ -124,8 +127,7 @@ const App = () => {
           obj = {question:questionValue,topic_id:topicId}
         }
         setQuestionValue('')
-        setInputDisabled(true)
-
+        // setInputDisabled(true)
         const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
         const eventList = document.createElement("ul")
         setTimeout(function(){
@@ -136,7 +138,8 @@ const App = () => {
             // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
             if(JSON.parse(e.data).status == '-1'){
               setSpinStatus(false)
-              setInputDisabled(false)
+              // setInputDisabled(false)
+              isLoading(false)
               evtSource.close();
             }
             const newElement = document.createElement("li");
@@ -155,7 +158,8 @@ const App = () => {
             questionObj.pop()
             setChatList(questionObj)
             setSpinStatus(false)
-            setInputDisabled(false)
+            // setInputDisabled(false)
+            isLoading(false)
             evtSource.close();
           }else{
             // cookie.save('experience', resData.experience, { path: '/' })
@@ -173,7 +177,8 @@ const App = () => {
               evtSource.close();
               fetchData(resData.data.topic_id,1)
               setSpinStatus(false)
-              setInputDisabled(false)
+              // setInputDisabled(false)
+              isLoading(false)
               // evtSource.close();
             },700)
           }
@@ -189,7 +194,8 @@ const App = () => {
               isFirst(true)
             }
             setSpinStatus(false)
-            setInputDisabled(false)
+            // setInputDisabled(false)
+            isLoading(false)
         })
       }
     }
@@ -371,10 +377,30 @@ const App = () => {
               {/* {
                 isToken ? */}
                 <Input.Group className="tokenInputBox">
-                    <Input
+                    {
+                      isLoadingStatus ?
+                      <div className="inputLoading">
+                        <Spin />
+                      </div>
+                      : ''
+                    }
+                    {/* <Input
                       style={{
                         color: '#000000'
                       }}
+                      disabled={inputDisabled}
+                      onPressEnter={onSearchFunc}
+                      onChange={onChangeInput}
+                      value={questionValue}
+                      className="tokenInput"
+                    /> */}
+                    <TextArea rows={1}
+                      style={{
+                        color: '#000000',
+                        lineHeight: '30px',
+                        paddingRight: "50px"
+                      }}
+                      loading={isLoading}
                       disabled={inputDisabled}
                       onPressEnter={onSearchFunc}
                       onChange={onChangeInput}
@@ -561,10 +587,30 @@ const App = () => {
                   {/* {
                     isToken ? */}
                     <Input.Group className="tokenInputBox">
-                        <Input
+                      {
+                        isLoadingStatus ?
+                        <div className="inputLoading">
+                          <Spin />
+                        </div>
+                        : ''
+                      }
+                        {/* <Input
                           style={{
                             color: '#000000'
                           }}
+                          disabled={inputDisabled}
+                          onPressEnter={onSearchFunc}
+                          onChange={onChangeInput}
+                          value={questionValue}
+                          className="tokenInput"
+                        /> */}
+                        <TextArea rows={1}
+                          style={{
+                            color: '#000000',
+                            lineHeight: '30px',
+                            paddingRight: "50px"
+                          }}
+                          loading={isLoading}
                           disabled={inputDisabled}
                           onPressEnter={onSearchFunc}
                           onChange={onChangeInput}
