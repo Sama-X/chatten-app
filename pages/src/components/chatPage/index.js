@@ -189,6 +189,7 @@ const App = () => {
               }
               divBox.append(eventList)
             }
+            document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
 
             // newElement.textContent = JSON.parse(e.data).text
 
