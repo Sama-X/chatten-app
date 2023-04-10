@@ -146,12 +146,12 @@ const App = () => {
               const newElement = document.createElement("li");
               newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
               eventList.appendChild(newElement);
-              if(JSON.parse(e.data).text.indexOf('\n') > -1){
+              if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1){
                 const newElementSpan = document.createElement("div");
                 newElementSpan.innerHTML ="<br/><br/>"
                 // console.log(newElement.innerHTML,'newElement.innerHTML')
                 // console.log(JSON.parse(e.data).text,'JSON.parse(e.data).text')
-                // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
+                console.log(JSON.parse(e.data),'JSON.parse(e.data)')
                 eventList.appendChild(newElementSpan);
                 // divBox.append(eventList)
               }
