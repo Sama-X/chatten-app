@@ -59,6 +59,9 @@ const App = () => {
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
 
       linkSkip()
+    }else if(e.domEvent.target.textContent == '  正在加载... ...'){
+      message.info('Loading, please do not click')
+      return
     }else{
       cookie.save('topicId', e.keyPath[1])
       cookie.load('topicId')
@@ -92,6 +95,28 @@ const App = () => {
       })
     }
   }
+  const historyMenu = async (e) => {
+    // console.log(e,'ghjk')
+    let request = new Request({});
+    let itemsCopy = [...items]
+    await request.get('/api/v1/topics/'+e[1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+      let subItem = []
+      for(let j in resItemData.data){
+        subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
+      }
+      for(let i in itemsCopy[0].children){
+        if(itemsCopy[0].children[i].key == e[1]){
+          // console.log(111)
+          itemsCopy[0].children[i].children = subItem
+        }
+      }
+      setTimeout(function(){
+        // console.log(itemsCopy,'itemsCopy')
+        setItem(itemsCopy)
+      },700)
+      return items
+    })
+  }
   const getHistory = () => {
       let request = new Request({});
       setSpinStatus(true)
@@ -104,11 +129,13 @@ const App = () => {
         for(let i in resData.data){
           if(i < 9){
             let subItem = []
-            request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-              for(let j in resItemData.data){
-                subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-              }
-            })
+            // request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+            //   for(let j in resItemData.data){
+                  subItem.push(getItem("  正在加载... ...", new Date()))
+            //     subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
+            //   }
+            // })
+            // menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,[]))
             menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
           }
         }
@@ -268,6 +295,7 @@ const App = () => {
               items ?
               <Menu
                 onClick={menuClick}
+                onOpenChange={historyMenu}
                 style={{
                   width: '100%',
                   background:'#202123',
@@ -367,6 +395,7 @@ const App = () => {
                 items ?
                 <Menu
                   onClick={menuClick}
+                  onOpenChange={historyMenu}
                   style={{
                     width: '100%',
                     background:'#202123',
