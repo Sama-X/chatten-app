@@ -146,7 +146,7 @@ const App = () => {
               const newElement = document.createElement("li");
               newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
               eventList.appendChild(newElement);
-              if(JSON.parse(e.data).text.indexOf('\n\n') > -1){
+              if(JSON.parse(e.data).text.indexOf('\n') > -1){
                 const newElementSpan = document.createElement("div");
                 newElementSpan.innerHTML ="<br/><br/>"
                 // console.log(newElement.innerHTML,'newElement.innerHTML')
