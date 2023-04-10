@@ -95,9 +95,21 @@ const App = () => {
         setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
       },1000)
-      // setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
-      // console.log(items,'j')
     })
+  }
+  const addMenu = (id,value) => {
+    let itemsCopy = [...items]
+    console.log(items,'items')
+    for(let i in itemsCopy[0].children){
+      if(itemsCopy[0].children[i].key == id){
+        console.log(111)
+        itemsCopy[0].children[i].children.push(getItem("  "+value, new Date()))
+      }
+    }
+    setTimeout(function(){
+      console.log(itemsCopy,'itemsCopy')
+      setItem(itemsCopy)
+    },700)
   }
   const onSearchFunc = (value) => {
     if(Number(totalExeNumber) >= Number(experience)){
@@ -192,9 +204,24 @@ const App = () => {
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
 
             cookie.save('topicId', resData.data.topic_id)
-            if(isFirst){
+
+            if(isFirstStatus){
               getHistory()
               isFirst(false)
+            }else{
+              addMenu(resData.data.topic_id,questionValue)
+              // let itemsCopy = [...items]
+              // console.log(items,'items')
+              // for(let i in itemsCopy[0].children){
+              //   if(resData.data.topic_id == itemsCopy[0].children[i].key){
+              //     console.log(111)
+              //     itemsCopy[0].children[i].children.push(getItem("  "+questionValue, new Date()))
+              //   }
+              // }
+              // setTimeout(function(){
+              //   console.log(itemsCopy,'itemsCopy')
+              //   setItem(itemsCopy)
+              // },700)
             }
             setTimeout(function(){
               value.target.value = ''
@@ -349,7 +376,6 @@ const App = () => {
     }else{
       isFirst(true)
     }
-
   }, [])
 
   return (
@@ -488,7 +514,9 @@ const App = () => {
                 </div>
 
                 <div>
-                  <Menu
+                  {
+                    items ?
+                    <Menu
                     onClick={menuClick}
                     style={{
                       width: '100%',
@@ -505,6 +533,8 @@ const App = () => {
 
 
                   />
+                  :''
+                  }
 
                   <div className="otherMenuBox">
                     <div className="otherMenuItem">

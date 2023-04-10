@@ -264,22 +264,26 @@ const App = () => {
           </div>
 
           <div>
-            <Menu
-              onClick={menuClick}
-              style={{
-                width: '100%',
-                background:'#202123',
-                color:'white',
-                maxHeight: '400px',
-                overflow: 'scroll'
-              }}
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              mode="inline"
-              items={items}
-              theme="#202123"
+            {
+              items ?
+              <Menu
+                onClick={menuClick}
+                style={{
+                  width: '100%',
+                  background:'#202123',
+                  color:'white',
+                  maxHeight: '400px',
+                  overflow: 'scroll'
+                }}
+                defaultSelectedKeys={['1']}
+                defaultOpenKeys={['sub1']}
+                mode="inline"
+                items={items}
+                theme="#202123"
 
-            />
+              />
+              :''
+            }
 
             <div className="otherMenuBox">
               <div className="otherMenuItem">
@@ -359,22 +363,26 @@ const App = () => {
             </div>
 
             <div>
-              <Menu
-                onClick={menuClick}
-                style={{
-                  width: '100%',
-                  background:'#202123',
-                  color:'white',
-                  maxHeight: '400px',
-                  overflow: 'scroll'
-                }}
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
-                mode="inline"
-                items={items}
-                theme="#202123"
+              {
+                items ?
+                <Menu
+                  onClick={menuClick}
+                  style={{
+                    width: '100%',
+                    background:'#202123',
+                    color:'white',
+                    maxHeight: '400px',
+                    overflow: 'scroll'
+                  }}
+                  defaultSelectedKeys={['1']}
+                  defaultOpenKeys={['sub1']}
+                  mode="inline"
+                  items={items}
+                  theme="#202123"
 
-              />
+                />
+                :''
+              }
 
               <div className="otherMenuBox">
                 <div className="otherMenuItem">
