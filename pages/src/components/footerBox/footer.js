@@ -13,9 +13,6 @@ const App = () => {
   const [spinStatus, setSpinStatus] = useState(false);
 
   const history = useHistory()
-  const fetchData = () => {
-    // console.log(isToken,'isToken')
-  }
   const onSearchFunc = (value) => {
     // console.log(value,'value');
   }
@@ -35,7 +32,7 @@ const App = () => {
     }
   }
   useEffect(()=>{
-    fetchData()
+
   }, [])
   return (
     <div className="footerBox">

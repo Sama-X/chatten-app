@@ -28,24 +28,9 @@ const App = () => {
     setDataList(copyList)
   }
   const getCategories = async () => {
-  //   const res = await ceshi({
-  //     "jsonrpc": "2.0",
-  //     "method": "platform.getHeight",
-  //     "params": {},
-  //     "id": 1,
-  // });
-  // console.log(res,'hjk111')
-    // const res = await getCategoriesAsync({ parentId: 0 });
-
-    // if(res.code === 0){
       fetchData()
-    //   console.log(res,'hjk')
-    // }else{
-    //   console.log(res,'hjk')
-    // }
   }
   useEffect(()=>{
-    // fetchData()
     getCategories()
   }, [])
   return (

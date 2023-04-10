@@ -70,9 +70,12 @@ const App = () => {
         }
       })
   }
+  const maxNumber = 100000000
+  const minNumber = 0
   const getHistory = () => {
     let request = new Request({});
     setSpinStatus(true)
+
     request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
       // cookie.save('experience', resData.experience, { path: '/' })
@@ -84,7 +87,7 @@ const App = () => {
           let subItem = []
           // request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
           //   for(let j in resItemData.data){
-              subItem.push(getItem("  正在加载... ...", new Date()))
+              subItem.push(getItem("  正在加载... ...", Math.random()*(maxNumber-minNumber+1)+minNumber))
               // subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
           //   }
           // })
@@ -100,38 +103,35 @@ const App = () => {
   }
   const addMenu = (id,value) => {
     let itemsCopy = [...items]
-    // console.log(items,'items')
     for(let i in itemsCopy[0].children){
       if(itemsCopy[0].children[i].key == id){
-        // console.log(111)
-        itemsCopy[0].children[i].children.push(getItem("  "+value, new Date()))
+        itemsCopy[0].children[i].children.push(getItem("  "+value, Math.random()*(maxNumber-minNumber+1)+minNumber))
       }
     }
     setTimeout(function(){
-      // console.log(itemsCopy,'itemsCopy')
       setItem(itemsCopy)
     },700)
   }
   const historyMenu = async (e) => {
-    let request = new Request({});
-    let itemsCopy = [...items]
-    await request.get('/api/v1/topics/'+e[1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-      let subItem = []
-      for(let j in resItemData.data){
-        subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-      }
-      for(let i in itemsCopy[0].children){
-        if(itemsCopy[0].children[i].key == e[1]){
-          // console.log(111)
-          itemsCopy[0].children[i].children = subItem
+    if(e.length > 1){
+      let request = new Request({});
+      let itemsCopy = [...items]
+      await request.get('/api/v1/topics/'+e[e.length-1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+        let subItem = []
+        for(let j in resItemData.data){
+          subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
         }
-      }
-      setTimeout(function(){
-        // console.log(itemsCopy,'itemsCopy')
-        setItem(itemsCopy)
-      },700)
-      return items
-    })
+        for(let i in itemsCopy[0].children){
+          if(itemsCopy[0].children[i].key == e[e.length-1]){
+            itemsCopy[0].children[i].children = subItem
+          }
+        }
+        setTimeout(function(){
+          setItem(itemsCopy)
+        },700)
+        return items
+      })
+    }
   }
   const onSearchFunc = (value) => {
     if(Number(totalExeNumber) >= Number(experience)){
@@ -184,9 +184,6 @@ const App = () => {
               if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1){
                 const newElementSpan = document.createElement("div");
                 newElementSpan.innerHTML ="<br/><br/>"
-                // console.log(newElement.innerHTML,'newElement.innerHTML')
-                // console.log(JSON.parse(e.data).text,'JSON.parse(e.data).text')
-                // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
                 eventList.appendChild(newElementSpan);
                 // divBox.append(eventList)
               }
@@ -202,7 +199,6 @@ const App = () => {
         },10)
         cookie.save('topicId', '')
         request.post('/api/v1/chat/question/',obj).then(function(resData){
-          // console.log(resData,'resData')
           if(resData.code == '200100'){
             questionObj.pop()
             setChatList(questionObj)
@@ -232,18 +228,6 @@ const App = () => {
               isFirst(false)
             }else{
               addMenu(resData.data.topic_id,questionValue)
-              // let itemsCopy = [...items]
-              // console.log(items,'items')
-              // for(let i in itemsCopy[0].children){
-              //   if(resData.data.topic_id == itemsCopy[0].children[i].key){
-              //     console.log(111)
-              //     itemsCopy[0].children[i].children.push(getItem("  "+questionValue, new Date()))
-              //   }
-              // }
-              // setTimeout(function(){
-              //   console.log(itemsCopy,'itemsCopy')
-              //   setItem(itemsCopy)
-              // },700)
             }
             setTimeout(function(){
               value.target.value = ''
@@ -259,7 +243,6 @@ const App = () => {
           }
 
         }).catch(function(err) {
-            // console.log(err,'err')
             value.target.value = ''
             setQuestionValue('')
             evtSource.close();
@@ -277,7 +260,6 @@ const App = () => {
     }
   }
   const onChangeInput = (value) => {
-    // console.log(value,'value');
     setQuestionValue(value.target.value)
   }
 
@@ -288,13 +270,13 @@ const App = () => {
 
   const menuClick = (e) => {
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
-      // console.log(e,'click')
       cookie.save('topicId', '')
+      isFirst(true)
       linkSkip()
     }else if(e.domEvent.target.textContent == '  正在加载... ...'){
       message.info('Loading, please do not click')
       return
-    }else{
+    }else if(e.keyPath[1] != cookie.load('topicId')){
       cookie.save('topicId', e.keyPath[1])
       fetchData(cookie.load('topicId'),2)
       // history.push({pathname: '/ChatPage', state: { test: 'login' }})
@@ -364,19 +346,6 @@ const App = () => {
   }
 
   useEffect(()=>{
-    // const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
-    // const eventList = document.createElement("ul")
-    // setTimeout(function(){
-    //   const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-    //   // console.log (divBox,'jk')
-    //   evtSource.addEventListener("message", function(e) {
-    //     // console.log(JSON.parse(e.data).text,'j')
-    //     const newElement = document.createElement("li");
-    //     newElement.textContent = JSON.parse(e.data).text
-    //     eventList.appendChild(newElement);
-    //     divBox.append(eventList)
-    //   })
-    // },1000)
     setTimeout(function(){
       document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
     },10)

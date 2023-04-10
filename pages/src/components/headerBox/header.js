@@ -55,7 +55,6 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    // console.log(e,'click')
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
 
       linkSkip()
@@ -70,17 +69,12 @@ const App = () => {
     }
   };
   const linkSkip =  () => {
-    // console.log(cookie.load('token'),"cookie.load('token')")
-    // return
     const isTokenStatus = cookie.load('token') ? true : false
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }else{
-      // console.log('12')
       setSpinStatus(true)
       let request = new Request({});
-      // console.log(cookie.load('invite_code'))
-      // return
       request.post('/api/v1/users/anonymous/',{
         invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,
       }).then(function(resData){
@@ -96,30 +90,32 @@ const App = () => {
     }
   }
   const historyMenu = async (e) => {
-    // console.log(e,'ghjk')
-    let request = new Request({});
-    let itemsCopy = [...items]
-    await request.get('/api/v1/topics/'+e[1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-      let subItem = []
-      for(let j in resItemData.data){
-        subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-      }
-      for(let i in itemsCopy[0].children){
-        if(itemsCopy[0].children[i].key == e[1]){
-          // console.log(111)
-          itemsCopy[0].children[i].children = subItem
+
+    if(e.length > 1){
+      let request = new Request({});
+      let itemsCopy = [...items]
+      await request.get('/api/v1/topics/'+e[e.length-1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
+        let subItem = []
+        for(let j in resItemData.data){
+          subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
         }
-      }
-      setTimeout(function(){
-        // console.log(itemsCopy,'itemsCopy')
-        setItem(itemsCopy)
-      },700)
-      return items
-    })
+        for(let i in itemsCopy[0].children){
+          if(itemsCopy[0].children[i].key == e[e.length-1]){
+            itemsCopy[0].children[i].children = subItem
+          }
+        }
+        setTimeout(function(){
+          setItem(itemsCopy)
+        },700)
+        return items
+      })
+    }
   }
   const getHistory = () => {
       let request = new Request({});
       setSpinStatus(true)
+      let maxNumber = 100000000
+      let minNumber = 0
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
         // cookie.save('experience', resData.experience, { path: '/' })
@@ -131,7 +127,7 @@ const App = () => {
             let subItem = []
             // request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
             //   for(let j in resItemData.data){
-                  subItem.push(getItem("  正在加载... ...", new Date()))
+                  subItem.push(getItem("  正在加载... ...", Math.random()*(maxNumber-minNumber+1)+minNumber))
             //     subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
             //   }
             // })
@@ -198,7 +194,6 @@ const App = () => {
     }
   }
   useEffect(()=>{
-    // console.log(history,'ghjk')
     if(history.location.search){
       let str = history.location.search.split('=')[1]
       cookie.save('invite_code', str)
