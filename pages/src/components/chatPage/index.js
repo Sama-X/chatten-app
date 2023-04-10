@@ -11,6 +11,7 @@ import Request from '../../request.ts';
 import {BASE_URL} from '../../utils/axios.js'
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import copy from 'copy-to-clipboard';
+import showdown from 'showdown'
 
 
 function getItem(label, key, icon, children, type) {
@@ -42,7 +43,7 @@ const App = () => {
   const [isFirstStatus, isFirst] = useState(false);
   const [isLoadingStatus, isLoading] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
-
+  const converter = new showdown.Converter()
   const history = useHistory()
 
   const fetchData = (topicId,type) => {
@@ -52,6 +53,9 @@ const App = () => {
       request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
         if(resData.code != 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
+        }
+        for(let i in resData.data){
+            resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
 
         setChatList(resData.data ? resData.data : [])
@@ -133,19 +137,29 @@ const App = () => {
         setTimeout(function(){
           evtSource.addEventListener("message", function(e) {
             const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-            // questionObj[questionObj.length-1].answer += JSON.parse(e.data).text
-            // setChatList(questionObj)
-            // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
             if(JSON.parse(e.data).status == '-1'){
               setSpinStatus(false)
               // setInputDisabled(false)
               isLoading(false)
               evtSource.close();
+            }else{
+              const newElement = document.createElement("li");
+              newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
+              eventList.appendChild(newElement);
+              if(JSON.parse(e.data).text.indexOf('\n\n') > -1){
+                const newElementSpan = document.createElement("div");
+                newElementSpan.innerHTML ="<br/><br/>"
+                // console.log(newElement.innerHTML,'newElement.innerHTML')
+                // console.log(JSON.parse(e.data).text,'JSON.parse(e.data).text')
+                // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
+                eventList.appendChild(newElementSpan);
+                // divBox.append(eventList)
+              }
+              divBox.append(eventList)
             }
-            const newElement = document.createElement("li");
-            newElement.textContent = JSON.parse(e.data).text
-            eventList.appendChild(newElement);
-            divBox.append(eventList)
+
+            // newElement.textContent = JSON.parse(e.data).text
+
           })
         },1000)
         setTimeout(function(){
@@ -253,18 +267,22 @@ const App = () => {
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
+    cookie.save('topicId', '')
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
+      history.push({pathname: '/'})
     },1000)
   }
   const shareFunction = () => {
     if(isToken){
       if(userName == '访客'){
         message.info('Anonymous users cannot share')
+        setTimeout(function(){
+          history.push({pathname: '/SignIn'})
+        },1000)
         return
       }else{
-
         let request = new Request({});
         request.get('/api/v1/users/profile/').then(function(resData){
           copy('http://hi.chattop.club/?invite_code='+resData.data.invite_code)
@@ -273,6 +291,9 @@ const App = () => {
       }
     }else{
       message.info('Please log in first and proceed with the sharing operation')
+      setTimeout(function(){
+        history.push({pathname: '/SignIn'})
+      },1000)
       return
     }
   }
@@ -335,10 +356,18 @@ const App = () => {
             <img src={require("../../assets/close.png")} alt=""/>
             {/* <Link to='/'><img src={require("../../assets/close.png")} alt=""/></Link> */}
             </div>
-            <div className="headerRight">
+            <Popconfirm
+              placement="leftTop"
+              className="headerRight"
+              title='Do you want to log out'
+              description=''
+              onConfirm={signOut}
+              okText="Yes"
+              cancelText="No"
+            >
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
               <div>{ userName }</div>
-            </div>
+            </Popconfirm>
           </div>
           <div className="chatBox">
             {/* question */}
@@ -358,7 +387,8 @@ const App = () => {
                     <div className='answerBox'>
                         <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
                         <div className="answerContent">
-                          <div className="answer">{item.answer}</div>
+                          {/* <div className="answer">{item.answer}</div> */}
+                          <div className="answer" dangerouslySetInnerHTML={{__html: item.answer}}></div>
                           <div className="answerZanBox">
                             <img src={require("../../assets/zan.png")} className="zan" alt=""/>
                             <img src={require("../../assets/cai.png")} className="noZan" alt=""/>
@@ -377,7 +407,7 @@ const App = () => {
               {/* {
                 isToken ? */}
                 <div className="tokenInputBox">
-                  <Input.Group>
+                  {/* <div> */}
                     {
                       isLoadingStatus ?
                       <div className="inputLoading">
@@ -407,14 +437,13 @@ const App = () => {
                           minRows: 1,
                           maxRows: 3,
                         }}
-                        loading={isLoading}
                         disabled={inputDisabled}
                         onPressEnter={onSearchFunc}
                         onChange={onChangeInput}
                         value={questionValue}
                         className="tokenInput"
                       />
-                  </Input.Group>
+                  {/* </div> */}
                   <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
                 </div>
                 {/* :
@@ -533,8 +562,8 @@ const App = () => {
               </div>
               {
                 isToken ?
-                  <div className="headerRight">
-                    {/* <Popconfirm
+                  // <div className="headerRight">
+                  <Popconfirm
                     placement="leftTop"
                     className="headerRight"
                     title='Do you want to log out'
@@ -542,11 +571,11 @@ const App = () => {
                     onConfirm={signOut}
                     okText="Yes"
                     cancelText="No"
-                  > */}
+                  >
                     <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                     <div>{ userName }</div>
-                  {/* </Popconfirm> */}
-                  </div>
+                  </Popconfirm>
+                  // {/* </div> */}
                   :
                   <div className="headerRight">
                   {/* <div className="headerRight" onClick={showModal}> */}
@@ -576,7 +605,8 @@ const App = () => {
                         <div className='answerBox'>
                             <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
                             <div className="answerContent">
-                              <div className="answer">{item.answer}</div>
+                              {/* <div className="answer">{item.answer}</div> */}
+                              <div className="answer" dangerouslySetInnerHTML={{__html: item.answer}}></div>
                               <div className="answerZanBox">
                                 <img src={require("../../assets/zan.png")} className="zan" alt=""/>
                                 <img src={require("../../assets/cai.png")} className="noZan" alt=""/>
@@ -595,7 +625,7 @@ const App = () => {
                   {/* {
                     isToken ? */}
                     <div className="tokenInputBox">
-                      <Input.Group>
+                      {/* <div> */}
                         {
                           isLoadingStatus ?
                           <div className="inputLoading">
@@ -625,14 +655,13 @@ const App = () => {
                               minRows: 1,
                               maxRows: 3,
                             }}
-                            loading={isLoading}
                             disabled={inputDisabled}
                             onPressEnter={onSearchFunc}
                             onChange={onChangeInput}
                             value={questionValue}
                             className="tokenInput"
                           />
-                      </Input.Group>
+                      {/* </div> */}
                       <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
                     </div>
                     {/* :

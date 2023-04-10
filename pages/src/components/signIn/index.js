@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
   useCallback,
+  useEffect,
 } from "react";
 
 import { Input, message, InputNumber, Spin } from 'antd';
@@ -30,6 +31,7 @@ export default memo(
     const [passwordTwo, setPasswordTwo] = useState("");
     const [codeBoxStatus, setCodeBoxStatus] = useState(false);
     const [spinStatus, setSpinStatus] = useState(false);
+    const [shareStatus, setShareStatus] = useState(false);
     const history = useHistory()
     useImperativeHandle(ref, () => {
       return {
@@ -151,7 +153,7 @@ export default memo(
       request.post('/api/v1/users/register/', {
         username: mobileVal,
         password: passwordTwo,
-        invite_code: cookie.load('invite_code')
+        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',
       }).then(function(resData){
         if(resData.code == 0){
           cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })
@@ -169,6 +171,13 @@ export default memo(
         }
       })
     }
+    useEffect(()=>{
+      if(history.location.pathname.indexOf("=") > -1 || history.location.search.indexOf("=") > -1 ){
+        setShareStatus(true)
+      }else{
+        setShareStatus(false)
+      }
+    })
     return (
         <div className="mobileAndCode">
             {
@@ -180,7 +189,7 @@ export default memo(
             }
             <div className="loginHeader">
                 <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
-                <Link to='/Login'>
+                <Link to={ shareStatus ? '/' : '/Login'}>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>
             </div>

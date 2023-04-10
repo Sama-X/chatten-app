@@ -55,7 +55,7 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    console.log(e,'click')
+    // console.log(e,'click')
     if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
 
       linkSkip()
@@ -67,7 +67,7 @@ const App = () => {
     }
   };
   const linkSkip =  () => {
-    console.log(cookie.load('token'),"cookie.load('token')")
+    // console.log(cookie.load('token'),"cookie.load('token')")
     // return
     const isTokenStatus = cookie.load('token') ? true : false
     if(isTokenStatus) {
@@ -76,8 +76,10 @@ const App = () => {
       // console.log('12')
       setSpinStatus(true)
       let request = new Request({});
+      // console.log(cookie.load('invite_code'))
+      // return
       request.post('/api/v1/users/anonymous/',{
-        invite_code: cookie.load('invite_code')
+        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',
       }).then(function(resData){
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
@@ -125,6 +127,8 @@ const App = () => {
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
+    let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
+    setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
@@ -145,6 +149,9 @@ const App = () => {
     if(isToken){
       if(userName == '访客'){
         message.info('Anonymous users cannot share')
+        setTimeout(function(){
+          history.push({pathname: '/SignIn/?type=1'})
+        },1000)
         return
       }else{
 
@@ -156,11 +163,14 @@ const App = () => {
       }
     }else{
       message.info('Please log in first and proceed with the sharing operation')
+      setTimeout(function(){
+        history.push({pathname: '/SignIn/?type=1'})
+      },1000)
       return
     }
   }
   useEffect(()=>{
-    console.log(history,'ghjk')
+    // console.log(history,'ghjk')
     if(history.location.search){
       let str = history.location.search.split('=')[1]
       cookie.save('invite_code', str)

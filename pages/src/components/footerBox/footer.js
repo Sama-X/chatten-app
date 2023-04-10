@@ -25,7 +25,7 @@ const App = () => {
     }else{
       let request = new Request({});
       setSpinStatus(true)
-      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code')}).then(function(resData){
+      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',}).then(function(resData){
         setSpinStatus(false)
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
@@ -52,11 +52,23 @@ const App = () => {
       <div className="footerTokenBox">
         {/* {
           isToken ? */}
+          <div className="tokenInputBox">
+            {/* <Input.Group className="tokenInputBox"> */}
+            <Input
+                onPressEnter={onSearchFunc}
+                className="tokenInput"
+                style={{
+                  color: '#000000',
+                  paddingRight: "50px",
+                  width: "90%",
+                  borderRadius: '10px',
+                  textAlign: 'left',
+                }}
+              />
+            {/* </Input.Group> */}
+            <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
+          </div>
 
-          <Input.Group className="tokenInputBox">
-              <Input onPressEnter={onSearchFunc} className="tokenInput"/>
-              <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
-          </Input.Group>
           {/* :
           <div className="noTokenBtn">
             <Link to='/Login'>登录</Link>
