@@ -57,7 +57,6 @@ const App = () => {
         for(let i in resData.data){
             resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
-
         setChatList(resData.data ? resData.data : [])
         if(resData.code == 0){
           setTimeout(function(){
@@ -73,6 +72,7 @@ const App = () => {
   }
   const getHistory = () => {
     let request = new Request({});
+    setSpinStatus(true)
     request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
       // cookie.save('experience', resData.experience, { path: '/' })
@@ -88,12 +88,13 @@ const App = () => {
             }
           })
           menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+          // menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />))
         }
       }
       setTimeout(function(){
         setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
-      },700)
+      },1000)
       // setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
       // console.log(items,'j')
     })
@@ -167,14 +168,25 @@ const App = () => {
         },10)
         cookie.save('topicId', '')
         request.post('/api/v1/chat/question/',obj).then(function(resData){
+          console.log(resData,'resData')
           if(resData.code == '200100'){
-            message.error(resData.msg)
             questionObj.pop()
             setChatList(questionObj)
             setSpinStatus(false)
-            // setInputDisabled(false)
             isLoading(false)
             evtSource.close();
+            if(Number(totalExeNumber) >= Number(experience)){
+              message.error(resData.msg)
+              // setInputDisabled(false)
+            }else{
+              message.info('The capacity of this topic is full. Please open a new topic to continue asking questions')
+              cookie.save('topicId', '')
+              setTimeout(function(){
+                setChatList([])
+                return
+              },1000)
+            }
+
           }else{
             // cookie.save('experience', resData.experience, { path: '/' })
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
@@ -198,6 +210,7 @@ const App = () => {
           }
 
         }).catch(function(err) {
+            console.log(err,'err')
             value.target.value = ''
             setQuestionValue('')
             evtSource.close();

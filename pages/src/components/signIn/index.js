@@ -153,7 +153,7 @@ export default memo(
       request.post('/api/v1/users/register/', {
         username: mobileVal,
         password: passwordTwo,
-        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',
+        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,
       }).then(function(resData){
         if(resData.code == 0){
           cookie.save('userName', '*'+mobileVal.slice(-4), { path: '/' })

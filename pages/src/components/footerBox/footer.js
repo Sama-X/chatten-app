@@ -25,7 +25,7 @@ const App = () => {
     }else{
       let request = new Request({});
       setSpinStatus(true)
-      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',}).then(function(resData){
+      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,}).then(function(resData){
         setSpinStatus(false)
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })

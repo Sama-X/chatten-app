@@ -79,7 +79,7 @@ const App = () => {
       // console.log(cookie.load('invite_code'))
       // return
       request.post('/api/v1/users/anonymous/',{
-        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : 'null',
+        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,
       }).then(function(resData){
         cookie.save('userName', resData.data.nickname, { path: '/' })
         cookie.save('userId', resData.data.id, { path: '/' })
@@ -94,6 +94,7 @@ const App = () => {
   }
   const getHistory = () => {
       let request = new Request({});
+      setSpinStatus(true)
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
 
         // cookie.save('experience', resData.experience, { path: '/' })
@@ -114,7 +115,7 @@ const App = () => {
         setTimeout(function(){
           setSpinStatus(false)
           setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
-        },700)
+        },1000)
       })
   }
   const noFunction = () => {
