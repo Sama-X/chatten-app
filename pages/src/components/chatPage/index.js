@@ -151,7 +151,7 @@ const App = () => {
                 newElementSpan.innerHTML ="<br/><br/>"
                 // console.log(newElement.innerHTML,'newElement.innerHTML')
                 // console.log(JSON.parse(e.data).text,'JSON.parse(e.data).text')
-                console.log(JSON.parse(e.data),'JSON.parse(e.data)')
+                // console.log(JSON.parse(e.data),'JSON.parse(e.data)')
                 eventList.appendChild(newElementSpan);
                 // divBox.append(eventList)
               }
