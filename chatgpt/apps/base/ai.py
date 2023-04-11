@@ -158,8 +158,6 @@ class AIHelper:
             result["error"] = err._message
             result["error_code"] = err.code
         except Exception as err:
-            import ipdb
-            ipdb.set_trace()
             logger.error("【chatgpt send】Exception, reason: %s", err)
             result["error"] = f"exception {err}"
 
