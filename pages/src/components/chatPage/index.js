@@ -203,7 +203,7 @@ const App = () => {
         setTimeout(function(){
           document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
         },10)
-        cookie.save('topicId', '')
+        // cookie.save('topicId', '')
         request.post('/api/v1/chat/question/',obj).then(function(resData){
           if(resData.code == '200100'){
             questionObj.pop()
@@ -211,19 +211,24 @@ const App = () => {
             setSpinStatus(false)
             isLoading(false)
             evtSource.close();
-            if(Number(totalExeNumber) >= Number(experience)){
-              message.error(resData.msg)
-              // setInputDisabled(false)
-            }else{
-              setIsModalOpen(true)
-              // message.info('The capacity of this topic is full. Please open a new topic to continue asking questions')
-              // cookie.save('topicId', '')
-              // setTimeout(function(){
-              //   setChatList([])
-              //   return
-              // },1000)
-            }
+            value.target.value = ''
+            setQuestionValue('')
+            message.error(resData.msg)
+            // if(Number(totalExeNumber) >= Number(experience)){
+              // message.error(resData.msg)
+            // }else{
+            //   setIsModalOpen(true)
+            // }
 
+          }else if(resData.code == '200102'){
+            questionObj.pop()
+            setChatList(questionObj)
+            setSpinStatus(false)
+            isLoading(false)
+            evtSource.close();
+            value.target.value = ''
+            setQuestionValue('')
+            setIsModalOpen(true)
           }else{
             // setIsModalOpen(true)
             // cookie.save('experience', resData.experience, { path: '/' })
