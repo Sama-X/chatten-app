@@ -11,7 +11,7 @@ from django.conf import settings
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 
-from base.ai import AIHelper
+from base.ai import AIErrorCode, get_ai_instance
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
@@ -64,7 +64,7 @@ class ChatViewset(viewsets.GenericViewSet):
             question_time=datetime.now()
         )
 
-        resp = await AIHelper.send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
+        resp = await get_ai_instance().send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
         choices = resp.get('choices', [])
         if len(choices) > 0:
             if not topic_id:
@@ -105,6 +105,9 @@ class ChatViewset(viewsets.GenericViewSet):
                 "experience": current_total + 1
             })
 
+        if resp.get('error_code') == AIErrorCode.CONTEXT_LENGTH_EXCEEDED:
+            return APIResponse(code=ChatErrorCode.CHAT_ROBOT_CONTEXT_LENGTH_EXCEEDED)
+
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
 
@@ -129,7 +132,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
             return APIResponse(ChatErrorCode.CHATGPT_KEY_UNSUPPORT_ANONY_USER)
 
         key = serializer.validated_data["key"]  # type: ignore
-        success = AIHelper.check_api_key(key)
+        success = get_ai_instance().check_api_key(key)
 
 
         if success:
@@ -146,8 +149,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
                     key=key,
                 )
             # dynamic update key
-            if AIHelper.strategy:
-                AIHelper.strategy.release_key(key)
+            get_ai_instance().strategy.release_key(key)
 
             return APIResponse()
 
