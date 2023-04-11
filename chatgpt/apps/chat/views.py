@@ -4,6 +4,8 @@ chat api module.
 
 from datetime import datetime
 import json
+import logging
+import traceback
 
 from asgiref.sync import async_to_sync
 from django.conf import settings
@@ -21,6 +23,8 @@ from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
 from users.models import AccountModel, WalletModel
 from users.service import UserService, UserServiceHelper
+
+logger = logging.getLogger(__name__)
 
 
 class ChatViewset(viewsets.GenericViewSet):
@@ -97,7 +101,7 @@ class ChatViewset(viewsets.GenericViewSet):
                         settings.CHATGPT_WALLET, 1, wallet.private_key
                     )
             except Exception as e:
-                pass
+                logger.error('[chat sama transaction] error: %s', traceback.format_exc())
 
             return APIResponse(result={
                 "answer": obj.answer,
