@@ -1,13 +1,16 @@
 """
 AI module.
 """
-import asyncio
 from datetime import datetime
 import json
+import multiprocessing
+import os
+import threading
+from typing import Dict, Optional, Type
 import tiktoken
 import logging
 import time
-from base.ai_strategy import PriorityStrategy
+from base.ai_strategy import BaseStrategy, PriorityStrategy
 
 import openai
 from openai.error import RateLimitError, APIConnectionError, Timeout, AuthenticationError
@@ -19,20 +22,60 @@ openai.proxy = settings.CHATGPT_PROXY or None
 logger = logging.getLogger(__name__)
 
 
+instance = None
+
+def get_ai_instance():
+    """
+    get singtance
+    """
+    global instance
+    if instance is None:
+        helper = AIHelper()
+        singleton = multiprocessing.Manager().Value(AIHelper, helper)
+        instance = singleton.value
+
+    logger.info(
+        "[chat instance] current process: %s thread: %s instance: %s",
+        os.getpid(), threading.currentThread(), id(instance)
+    )
+    return instance
+
+
+class AIErrorCode:
+    """
+    ai error code consts.
+    """
+    CONTEXT_LENGTH_EXCEEDED = 'context_length_exceeded'
+
+
 class AIHelper:
     """
     AI help class.
     """
+    strategy: BaseStrategy
 
-    strategy = None
+    def __init__(self) -> None:
+        """
+        init.
+        """
+        self.set_strategy()
 
-    @classmethod
-    async def send_msg(cls, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None):
+    def set_strategy(self, strategry_cls: Optional[Type[BaseStrategy]] = None):
+        """
+        set strategry.
+        """
+        if not strategry_cls:
+            self.strategy = PriorityStrategy()
+        else:
+            self.strategy = strategry_cls()
+
+    async def send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None) -> Dict:
         """
         send message.
         """
-        if cls.strategy is None:
-            cls.strategy = PriorityStrategy()
+        print("send message.....")
+        if self.strategy is None:
+            self.set_strategy()
 
         histories = histories or []
         if retry_count <= 0:
@@ -40,7 +83,7 @@ class AIHelper:
                 "role": "user",
                 "content": question
             })
-        key = key or cls.strategy.get_api_key()
+        key = key or self.strategy.get_api_key()
         logger.info("【chatgpt send】 payload: %s api key: %s", histories, key[:6] if key else None)
         result = {}
         if not key:
@@ -54,7 +97,7 @@ class AIHelper:
             )
             report = []
             index = 0
-            async for item in resp:
+            async for item in resp:  # type: ignore
                 if item.choices: # type: ignore
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
                     if cont:
@@ -99,7 +142,7 @@ class AIHelper:
             if retry_count < 1:
                 time.sleep(5)
                 logger.error("【chatgpt send】RateLimit exceed, repeat retry %s times".format(retry_count+1))
-                return cls.send_msg(
+                return await self.send_msg(
                     question, msg_type=msg_type, histories=histories, retry_count=retry_count+1, key=key,
                     auth_token=auth_token
                 )
@@ -110,17 +153,22 @@ class AIHelper:
         except Timeout as err:
             logger.error("【chatgpt send】Timeout, reason: %s", err)
             result["error"] = "timeout"
+        except openai.InvalidRequestError as err:
+            logger.error("【chatgpt send】InvalidRequestError, reason: %s", err)
+            result["error"] = err._message
+            result["error_code"] = err.code
         except Exception as err:
+            import ipdb
+            ipdb.set_trace()
             logger.error("【chatgpt send】Exception, reason: %s", err)
             result["error"] = f"exception {err}"
 
-        result['key_id'] = cls.strategy.get_api_key_id(key)
+        result['key_id'] = self.strategy.get_api_key_id(key)
         logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
-        cls.strategy.release_key(key)
+        self.strategy.release_key(key)
         return result
 
-    @classmethod
-    def check_api_key(cls, key) -> bool:
+    def check_api_key(self, key) -> bool:
         """
         check api key is valid.
         """
