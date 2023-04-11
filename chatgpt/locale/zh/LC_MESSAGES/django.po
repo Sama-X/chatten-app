@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-07 16:23+0800\n"
+"POT-Creation-Date: 2023-04-11 14:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,23 +72,27 @@ msgstr "错误的用户名或密码"
 msgid "code or password required"
 msgstr "验证码或密码必填"
 
-#: apps/base/exception.py:71
+#: apps/base/exception.py:72
 msgid "no more experiences"
 msgstr "体验次数已用尽"
 
-#: apps/base/exception.py:72
-msgid "chat robot no resp"
-msgstr "chapght未响应"
-
 #: apps/base/exception.py:73
+msgid "chat robot no resp"
+msgstr "chat机器人未响应"
+
+#: apps/base/exception.py:74
+msgid "chat robot context length exceeded"
+msgstr "chat机器人上下文超过最大限制"
+
+#: apps/base/exception.py:75
 msgid "chatgpt key invalid"
 msgstr "无效的chatgpt键"
 
-#: apps/base/exception.py:74
+#: apps/base/exception.py:76
 msgid "chatgpt key unsupport anony user"
 msgstr "不支持匿名用户"
 
-#: apps/base/exception.py:75
+#: apps/base/exception.py:77
 msgid "chatgpt key already exists"
 msgstr "chatgpt键已存在"
 
