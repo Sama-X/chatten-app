@@ -2,7 +2,7 @@ import './chatPage.css'
 import '../headerBox/header.css'
 
 
-import { Input, Spin, message, Menu, Popconfirm } from 'antd';
+import { Input, Spin, message, Menu, Popconfirm, Modal, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom'
@@ -43,9 +43,11 @@ const App = () => {
   const [isFirstStatus, isFirst] = useState(false);
   const [isLoadingStatus, isLoading] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const converter = new showdown.Converter()
   const history = useHistory()
-
+  let str = '```import multiprocessing class MySingleton:    def __init__(self):        self.value = 0    def reset(self):        self.value = 0my_singleton = Nonedef get_singleton():    global my_singleton    if my_singleton is None:        my_singleton = multiprocessing.Manager().Value(MySingleton())    return my_singleton.value```'
+  let strCopy = converter.makeHtml(str)
   const fetchData = (topicId,type) => {
       let request = new Request({});
       let _this = this
@@ -55,6 +57,9 @@ const App = () => {
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
         for(let i in resData.data){
+          // if(resData.data[i].answer.indexOf('```') > -1){
+          //   resData.data[i].answer = resData.data[i].answer.replace(/```/g,'```')
+          // }
             resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
         setChatList(resData.data ? resData.data : [])
@@ -181,7 +186,7 @@ const App = () => {
               const newElement = document.createElement("li");
               newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
               eventList.appendChild(newElement);
-              if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1){
+              if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1 || JSON.parse(e.data).text.indexOf('···') > -1){
                 const newElementSpan = document.createElement("div");
                 newElementSpan.innerHTML ="<br/><br/>"
                 eventList.appendChild(newElementSpan);
@@ -210,15 +215,17 @@ const App = () => {
               message.error(resData.msg)
               // setInputDisabled(false)
             }else{
-              message.info('The capacity of this topic is full. Please open a new topic to continue asking questions')
-              cookie.save('topicId', '')
-              setTimeout(function(){
-                setChatList([])
-                return
-              },1000)
+              setIsModalOpen(true)
+              // message.info('The capacity of this topic is full. Please open a new topic to continue asking questions')
+              // cookie.save('topicId', '')
+              // setTimeout(function(){
+              //   setChatList([])
+              //   return
+              // },1000)
             }
 
           }else{
+            // setIsModalOpen(true)
             // cookie.save('experience', resData.experience, { path: '/' })
             cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
 
@@ -345,6 +352,22 @@ const App = () => {
       return
     }
   }
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+    cookie.save('topicId', '')
+    isFirst(true)
+    setTimeout(function(){
+      setChatList([])
+    },1000)
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(()=>{
     setTimeout(function(){
@@ -625,6 +648,7 @@ const App = () => {
                   </div>
               }
             </div>
+            {/* <div  className="answer" style={{marginTop: '100px'}} dangerouslySetInnerHTML={{__html: strCopy}}></div> */}
             <div>
                 <div className="chatBox">
                 {/* question */}
@@ -726,6 +750,22 @@ const App = () => {
 
 
       }
+      <Modal
+        title="Do you want to start a new topic"
+        open={isModalOpen}
+        footer={null}
+        style={{top: "30%"}}
+        onCancel={handleCancel}
+        closable
+      >
+        <div>
+          The capacity of this topic is full. Please open a new topic to continue asking questions
+        </div>
+        <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
+          <Button type="primary" onClick={handleOk}>ok</Button>
+          <Button type="default" onClick={handleCancel}>cancel</Button>
+        </div>
+      </Modal>
     </div>
   );
 };
