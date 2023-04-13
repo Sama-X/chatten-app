@@ -50,7 +50,7 @@ class ChatViewset(viewsets.GenericViewSet):
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         user_id = request.user.id
-        current_total = UserService.get_used_experience(user_id)
+        current_total = UserService.get_used_experience(user_id, start_time=datetime.now().date())
         reward_experience = UserService.get_reward_experience(user_id)
 
         if current_total >= request.user.experience + reward_experience:
