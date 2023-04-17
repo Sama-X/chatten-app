@@ -4,6 +4,8 @@ chat api module.
 
 from datetime import datetime
 import json
+import logging
+import traceback
 
 from asgiref.sync import async_to_sync
 from django.conf import settings
@@ -11,7 +13,7 @@ from django.conf import settings
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 
-from base.ai import AIHelper
+from base.ai import AIErrorCode, get_ai_instance
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
@@ -21,6 +23,8 @@ from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
 from users.models import AccountModel, WalletModel
 from users.service import UserService, UserServiceHelper
+
+logger = logging.getLogger(__name__)
 
 
 class ChatViewset(viewsets.GenericViewSet):
@@ -46,7 +50,7 @@ class ChatViewset(viewsets.GenericViewSet):
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         user_id = request.user.id
-        current_total = UserService.get_used_experience(user_id)
+        current_total = UserService.get_used_experience(user_id, start_time=datetime.now().date())
         reward_experience = UserService.get_reward_experience(user_id)
 
         if current_total >= request.user.experience + reward_experience:
@@ -64,7 +68,7 @@ class ChatViewset(viewsets.GenericViewSet):
             question_time=datetime.now()
         )
 
-        resp = await AIHelper.send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
+        resp = await get_ai_instance().send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
         choices = resp.get('choices', [])
         if len(choices) > 0:
             if not topic_id:
@@ -97,13 +101,16 @@ class ChatViewset(viewsets.GenericViewSet):
                         settings.CHATGPT_WALLET, 1, wallet.private_key
                     )
             except Exception as e:
-                pass
+                logger.error('[chat sama transaction] error: %s', traceback.format_exc())
 
             return APIResponse(result={
                 "answer": obj.answer,
                 "topic_id": topic_id,
                 "experience": current_total + 1
             })
+
+        if resp.get('error_code') == AIErrorCode.CONTEXT_LENGTH_EXCEEDED:
+            return APIResponse(code=ChatErrorCode.CHAT_ROBOT_CONTEXT_LENGTH_EXCEEDED)
 
         return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_RESP)
 
@@ -129,7 +136,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
             return APIResponse(ChatErrorCode.CHATGPT_KEY_UNSUPPORT_ANONY_USER)
 
         key = serializer.validated_data["key"]  # type: ignore
-        success = AIHelper.check_api_key(key)
+        success = get_ai_instance().check_api_key(key)
 
 
         if success:
@@ -146,8 +153,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
                     key=key,
                 )
             # dynamic update key
-            if AIHelper.strategy:
-                AIHelper.strategy.release_key(key)
+            get_ai_instance().strategy.release_key(key)
 
             return APIResponse()
 
