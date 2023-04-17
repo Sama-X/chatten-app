@@ -392,6 +392,9 @@ const App = () => {
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
       })
+    }else{
+      cookie.save('topicId', '')
+      history.push({pathname: '/', state: { test: 'noToken' }})
     }
     if(cookie.load('topicId')){
       fetchData(cookie.load('topicId'),2)
