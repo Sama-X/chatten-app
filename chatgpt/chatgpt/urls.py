@@ -23,4 +23,5 @@ urlpatterns = [
 # 增加统一v1 api
 urlpatterns = [
     path(r'api/v1/', include(urlpatterns)),
+    path('', include('django_prometheus.urls')),
 ]

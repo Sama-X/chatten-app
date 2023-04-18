@@ -9,9 +9,9 @@ import logging
 from subprocess import PIPE, Popen
 import traceback
 
-from typing import Optional
+from typing import Any, Optional
 import base58
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, parse_obj_as
 
 from django.conf import settings
 
@@ -20,6 +20,23 @@ from base.common import RequestClient
 logger = logging.getLogger(__name__)
 
 
+class SamaError(BaseModel):
+    """
+    sama error.
+    """
+    code: int
+    message: str
+    data: Any
+
+class SamaResult(BaseModel):
+    """
+    sama base result.
+    """
+    jsonrpc: str
+    id: int
+    result: Any
+    error: Optional[SamaError]
+
 
 class SamaTranasctionResult(BaseModel):
     """
@@ -27,6 +44,15 @@ class SamaTranasctionResult(BaseModel):
     """
     result: bool
     txID: str
+    error: Optional[str]
+
+
+class SamaBalanceResult(BaseModel):
+    """
+    sama balance result.
+    """
+    result: bool
+    balance: int
     error: Optional[str]
 
 
@@ -49,6 +75,36 @@ class SamaClient:
     SUBNET_CONFIG_URL = f'{settings.SAMA_NODE_SERVER}/ext/bc/P'
 
     @classmethod
+    def _sama_request(cls, method, params) -> SamaResult:
+        """
+        sama request.
+        """
+        result = SamaResult(id=0, jsonrpc='', result=None, error=None)
+        try:
+            rpc_url = cls.get_sama_rpc_url()
+            payload = {
+                'jsonrpc': '2.0',
+                'method': method,
+                'params': params,
+                'id': 1
+            }
+
+            resp = RequestClient.post(rpc_url, json=payload, headers={
+                'Content-type': 'application/json'
+            })
+
+            result = parse_obj_as(SamaResult, resp)
+            logger.info('【sama request】method: %s params: %s end resp: %s result: %s', method, params, resp, result)
+        except ConnectionError as error:
+            result.error = SamaError(code=-1, message=str(error), data=None)
+            logger.error('【sama request】connect error error: %s', error)
+        except Exception as error:
+            result.error = SamaError(code=-1, message=str(error), data=None)
+            logger.error('【sama request】error error: %s', error)
+
+        return result
+
+    @classmethod
     def get_sama_rpc_url(cls) -> str:
         """
         Get sama rpc server url.
@@ -64,6 +120,9 @@ class SamaClient:
         }
         resp = RequestClient.post(cls.SUBNET_CONFIG_URL, json=payload, headers={
             'Content-type': 'application/json'
+        }, proxies={
+            'http': 'http://192.168.0.117:8888',
+            'https': 'http://192.168.0.117:8888',
         })
 
         if isinstance(resp, dict):
@@ -165,5 +224,20 @@ class SamaClient:
         except Exception as error:
             result.error = str(error)
             logger.error('【sama transaction unconfirmed】 create transaction error error: %s', error)
+
+        return result
+
+    @classmethod
+    def get_balance(cls, address) -> SamaBalanceResult:
+        """
+        get wallet balance.
+        """
+        logger.info('【sama balance】get balance start address: %s', address)
+        resp = cls._sama_request('samavm.balance', {'address': address})
+        result = SamaBalanceResult(
+            result=resp.error is None,
+            balance=resp.result.get('balance', 0),
+            error=resp.error.message if resp.error else None
+        )
 
         return result
