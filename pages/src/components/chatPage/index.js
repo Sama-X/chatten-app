@@ -44,6 +44,7 @@ const App = () => {
   const [isLoadingStatus, isLoading] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInputEnterStatus, setIsInputEnterStatus] = useState(true);
   const converter = new showdown.Converter()
   const history = useHistory()
   let str = '```import multiprocessing class MySingleton:    def __init__(self):        self.value = 0    def reset(self):        self.value = 0my_singleton = Nonedef get_singleton():    global my_singleton    if my_singleton is None:        my_singleton = multiprocessing.Manager().Value(MySingleton())    return my_singleton.value```'
@@ -139,137 +140,153 @@ const App = () => {
     }
   }
   const onSearchFunc = (value) => {
-    if(Number(totalExeNumber) >= Number(experience)){
-      message.info('Questioning more than ten times, reaching the upper limit')
-    }else{
-      // setSpinStatus(true)
-      if(!questionValue){
-        message.error('The question cannot be empty')
-        setSpinStatus(false)
+    if(isInputEnterStatus){
+      if(Number(totalExeNumber) >= Number(experience)){
+        setQuestionValue('')
+        value.target.value = ''
+        message.info('Questioning more than ten times, reaching the upper limit')
         return
       }else{
-        isLoading(true)
-        setQuestionValue(value.target.value)
-        const questionObj = [...chatList]
-        questionObj.push({
-          "msg_type": 1, //消息类型
-          "msg_type_name": "text", //消息类型描述
-          "question": questionValue, //问题内容
-          "answer": '', //回复内容
-          "approval": 0, //点赞数
-          "question_time": "2023-03-02 16:49:46", //提问时间
-          "response_time": "2023-03-02 16:49:54", //回答时间
-          "add_time": "2023-03-02 16:49:46" //创建时间
-        })
-        setChatList(questionObj)
-        let request = new Request({});
-        let obj = {}
-        const topicId = cookie.load('topicId')
-        if(!topicId){
-          obj = {question:questionValue}
+        // setSpinStatus(true)
+        if(!questionValue || !value.target.value || value.target.value.trim() == ''){
+          message.error('The question cannot be empty')
+          setQuestionValue(value.target.value.trim())
+          value.target.value = value.target.value.trim()
+          setSpinStatus(false)
+          return
         }else{
-          obj = {question:questionValue,topic_id:topicId}
-        }
-        setQuestionValue('')
-        // setInputDisabled(true)
-        const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
-        const eventList = document.createElement("ul")
-        setTimeout(function(){
-          evtSource.addEventListener("message", function(e) {
-            const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
-            if(JSON.parse(e.data).status == '-1'){
+          isLoading(true)
+          setIsInputEnterStatus(false)
+          setQuestionValue(value.target.value)
+          const questionObj = [...chatList]
+          questionObj.push({
+            "msg_type": 1, //消息类型
+            "msg_type_name": "text", //消息类型描述
+            "question": questionValue, //问题内容
+            "answer": '', //回复内容
+            "approval": 0, //点赞数
+            "question_time": "2023-03-02 16:49:46", //提问时间
+            "response_time": "2023-03-02 16:49:54", //回答时间
+            "add_time": "2023-03-02 16:49:46" //创建时间
+          })
+          setChatList(questionObj)
+          let request = new Request({});
+          let obj = {}
+          const topicId = cookie.load('topicId')
+          if(!topicId){
+            obj = {question:questionValue}
+          }else{
+            obj = {question:questionValue,topic_id:topicId}
+          }
+          setQuestionValue('')
+          // setInputDisabled(true)
+          const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
+          const eventList = document.createElement("ul")
+          setTimeout(function(){
+            evtSource.addEventListener("message", function(e) {
+              const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
+              if(JSON.parse(e.data).status == '-1'){
+                setSpinStatus(false)
+                // setInputDisabled(false)
+                isLoading(false)
+                setIsInputEnterStatus(true)
+                evtSource.close();
+              }else{
+                const newElement = document.createElement("li");
+                newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
+                eventList.appendChild(newElement);
+                if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1 || JSON.parse(e.data).text.indexOf('···') > -1){
+                  const newElementSpan = document.createElement("div");
+                  newElementSpan.innerHTML ="<br/><br/>"
+                  eventList.appendChild(newElementSpan);
+                  // divBox.append(eventList)
+                }
+                divBox.append(eventList)
+              }
+              document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+
+              // newElement.textContent = JSON.parse(e.data).text
+
+            })
+          },1000)
+          setTimeout(function(){
+            document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+          },10)
+          // cookie.save('topicId', '')
+          request.post('/api/v1/chat/question/',obj).then(function(resData){
+            if(resData.code == '200100'){
+              questionObj.pop()
+              setChatList(questionObj)
               setSpinStatus(false)
-              // setInputDisabled(false)
               isLoading(false)
               evtSource.close();
-            }else{
-              const newElement = document.createElement("li");
-              newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
-              eventList.appendChild(newElement);
-              if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1 || JSON.parse(e.data).text.indexOf('···') > -1){
-                const newElementSpan = document.createElement("div");
-                newElementSpan.innerHTML ="<br/><br/>"
-                eventList.appendChild(newElementSpan);
-                // divBox.append(eventList)
-              }
-              divBox.append(eventList)
-            }
-            document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-
-            // newElement.textContent = JSON.parse(e.data).text
-
-          })
-        },1000)
-        setTimeout(function(){
-          document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-        },10)
-        // cookie.save('topicId', '')
-        request.post('/api/v1/chat/question/',obj).then(function(resData){
-          if(resData.code == '200100'){
-            questionObj.pop()
-            setChatList(questionObj)
-            setSpinStatus(false)
-            isLoading(false)
-            evtSource.close();
-            value.target.value = ''
-            setQuestionValue('')
-            message.error(resData.msg)
-            // if(Number(totalExeNumber) >= Number(experience)){
-              // message.error(resData.msg)
-            // }else{
-            //   setIsModalOpen(true)
-            // }
-
-          }else if(resData.code == '200102'){
-            questionObj.pop()
-            setChatList(questionObj)
-            setSpinStatus(false)
-            isLoading(false)
-            evtSource.close();
-            value.target.value = ''
-            setQuestionValue('')
-            setIsModalOpen(true)
-          }else{
-            // setIsModalOpen(true)
-            // cookie.save('experience', resData.experience, { path: '/' })
-            cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
-
-            cookie.save('topicId', resData.data.topic_id)
-
-            if(isFirstStatus){
-              getHistory()
-              isFirst(false)
-            }else{
-              addMenu(resData.data.topic_id,questionValue)
-            }
-            setTimeout(function(){
               value.target.value = ''
               setQuestionValue('')
-              history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+              message.error(resData.msg)
+              setIsInputEnterStatus(true)
+              // if(Number(totalExeNumber) >= Number(experience)){
+                // message.error(resData.msg)
+              // }else{
+              //   setIsModalOpen(true)
+              // }
+
+            }else if(resData.code == '200102'){
+              questionObj.pop()
+              setChatList(questionObj)
+              setSpinStatus(false)
+              isLoading(false)
               evtSource.close();
-              fetchData(resData.data.topic_id,1)
+              value.target.value = ''
+              setQuestionValue('')
+              setIsModalOpen(true)
+              setIsInputEnterStatus(true)
+            }else{
+              // setIsModalOpen(true)
+              // cookie.save('experience', resData.experience, { path: '/' })
+              cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
+
+              cookie.save('topicId', resData.data.topic_id)
+
+              if(isFirstStatus){
+                getHistory()
+                isFirst(false)
+              }else{
+                addMenu(resData.data.topic_id,questionValue)
+              }
+              setTimeout(function(){
+                value.target.value = ''
+                setQuestionValue('')
+                history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+                evtSource.close();
+                fetchData(resData.data.topic_id,1)
+                setSpinStatus(false)
+                // setInputDisabled(false)
+                isLoading(false)
+                setIsInputEnterStatus(true)
+                // evtSource.close();
+              },700)
+            }
+
+          }).catch(function(err) {
+              value.target.value = ''
+              setQuestionValue('')
+              evtSource.close();
+              if(cookie.load('topicId')){
+                fetchData(cookie.load('topicId'),2)
+                isFirst(false)
+              }else{
+                isFirst(true)
+              }
               setSpinStatus(false)
               // setInputDisabled(false)
               isLoading(false)
-              // evtSource.close();
-            },700)
-          }
-
-        }).catch(function(err) {
-            value.target.value = ''
-            setQuestionValue('')
-            evtSource.close();
-            if(cookie.load('topicId')){
-              fetchData(cookie.load('topicId'),2)
-              isFirst(false)
-            }else{
-              isFirst(true)
-            }
-            setSpinStatus(false)
-            // setInputDisabled(false)
-            isLoading(false)
-        })
+              setIsInputEnterStatus(true)
+          })
+        }
       }
+    }else{
+      message.error('Please do not click repeatedly')
+      return
     }
   }
   const onChangeInput = (value) => {
