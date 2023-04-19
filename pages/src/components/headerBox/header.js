@@ -145,6 +145,14 @@ const App = () => {
   const noFunction = () => {
     message.info('Not yet open, please look forward to...')
   }
+
+  const deleteTopic = () => {
+    let request = new Request({});
+    request.delete('/api/v1/topics/').then(function(resData){
+      getHistory()
+      message.success('Successfully cleared')
+    })
+  }
   const signOut = () => {
     setSpinStatus(true)
     cookie.save('userName', '', { path: '/' })
@@ -309,7 +317,7 @@ const App = () => {
 
             <div className="otherMenuBox">
               <div className="otherMenuItem">
-                <div className="otherMenuLeft" onClick={noFunction}>
+                <div className="otherMenuLeft" onClick={deleteTopic}>
                   <img src={require("../../assets/delete.png")} alt=""/>
                   <div>
                     清除聊天记录
