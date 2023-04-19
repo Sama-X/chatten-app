@@ -153,6 +153,7 @@ const App = () => {
       message.success('Successfully cleared')
     })
   }
+
   const signOut = () => {
     setSpinStatus(true)
     cookie.save('userName', '', { path: '/' })
@@ -417,7 +418,7 @@ const App = () => {
 
               <div className="otherMenuBox">
                 <div className="otherMenuItem">
-                  <div className="otherMenuLeft" onClick={noFunction}>
+                  <div className="otherMenuLeft" onClick={deleteTopic}>
                     <img src={require("../../assets/delete.png")} alt=""/>
                     <div>
                       清除聊天记录
