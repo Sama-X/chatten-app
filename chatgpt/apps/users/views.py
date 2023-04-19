@@ -125,7 +125,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         password = form.validated_data['password']  # type: ignore
         invite_code = form.validated_data.get('invite_code') # type: ignore
 
-        return UserService.register(username, password, invite_code)
+        return UserService.register(username, password, invite_code, user_type=AccountModel.USER_TYPE_NORMAL)
 
     @action(methods=['POST'], detail=False)
     def anonymous(self, request, *args, **kwargs):
