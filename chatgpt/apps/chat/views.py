@@ -160,7 +160,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
         return APIResponse(code=ChatErrorCode.CHATGPT_KEY_INVALID)
 
 
-class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class ChatTopicViewset(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     """
     chat topic api.
     """
@@ -245,3 +245,17 @@ class ChatTopicViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         data = ChatRecordSerializer(base, many=True).data
 
         return APIResponse(result=data, total=total)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        clear chat topic history
+        method: delete
+        url: /api/v1/chat/topics/
+        """
+        user_id = request.user.id
+        ChatTopicModel.objects.filter(
+            user_id=user_id,
+            is_delete=False
+        ).update(is_delete=True)
+
+        return APIResponse()
