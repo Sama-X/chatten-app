@@ -148,7 +148,7 @@ const App = () => {
         return
       }else{
         // setSpinStatus(true)
-        if(!questionValue || !value.target.value || value.target.value.trim() == ''){
+        if(!questionValue && !value.target.value && value.target.value.trim() == ''){
           message.error('The question cannot be empty')
           setQuestionValue(value.target.value.trim())
           value.target.value = value.target.value.trim()
