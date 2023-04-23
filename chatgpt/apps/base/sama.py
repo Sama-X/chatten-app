@@ -14,6 +14,7 @@ import base58
 from pydantic import BaseModel, Field
 
 from django.conf import settings
+from django.core.cache import cache
 
 from base.common import RequestClient
 
@@ -49,6 +50,18 @@ class SamaClient:
     SUBNET_CONFIG_URL = f'{settings.SAMA_NODE_SERVER}/ext/bc/P'
 
     @classmethod
+    def get_request_id(cls):
+        """
+        Get request id.
+        """
+        value = 1
+        try:
+            value = cache.incr("sama:client:request:id", 1)
+        except ValueError:
+            cache.set("sama:client:request:id", value)
+        return value
+
+    @classmethod
     def get_sama_rpc_url(cls) -> str:
         """
         Get sama rpc server url.
@@ -60,7 +73,7 @@ class SamaClient:
             'jsonrpc': '2.0',
             'method': 'platform.getBlockchains',
             'params': {},
-            'id': 1
+            'id': cls.get_request_id()
         }
         resp = RequestClient.post(cls.SUBNET_CONFIG_URL, json=payload, headers={
             'Content-type': 'application/json'
@@ -145,7 +158,7 @@ class SamaClient:
                     'units': amount,
                     'privKey': cls._convert_key_eth_to_ava(private_key)
                 },
-                'id': 1
+                'id': cls.get_request_id()
             }
 
             resp = RequestClient.post(rpc_url, json=payload, headers={
