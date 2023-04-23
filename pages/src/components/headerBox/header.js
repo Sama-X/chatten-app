@@ -38,6 +38,7 @@ const App = () => {
   const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const history = useHistory()
   const [userName, setUserName] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
   const [placement] = useState('left');
@@ -144,6 +145,15 @@ const App = () => {
   const noFunction = () => {
     message.info('Not yet open, please look forward to...')
   }
+
+  const deleteTopic = () => {
+    let request = new Request({});
+    request.delete('/api/v1/topics/').then(function(resData){
+      getHistory()
+      message.success('Successfully cleared')
+    })
+  }
+
   const signOut = () => {
     setSpinStatus(true)
     cookie.save('userName', '', { path: '/' })
@@ -175,15 +185,11 @@ const App = () => {
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn/?type=1'})
-        },1000)
+        },0)
         return
       }else{
-
-        let request = new Request({});
-        request.get('/api/v1/users/profile/').then(function(resData){
-          copy('http://hi.chattop.club/?invite_code='+resData.data.invite_code)
-          message.success('Successfully copied, please share with friends')
-        })
+        copy('http://hi.chattop.club/?invite_code='+inviteCode)
+        message.success('Successfully copied, please share with friends')
       }
     }else{
       message.info('Please log in first and proceed with the sharing operation')
@@ -213,11 +219,13 @@ const App = () => {
     if(isToken){
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
       setUserName(authName)
+
       getHistory()
       let request = new Request({});
       request.get('/api/v1/users/profile/').then(function(resData){
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+        setInviteCode(resData.data.invite_code)
       })
     }else{
       setSpinStatus(false)
@@ -310,7 +318,7 @@ const App = () => {
 
             <div className="otherMenuBox">
               <div className="otherMenuItem">
-                <div className="otherMenuLeft" onClick={noFunction}>
+                <div className="otherMenuLeft" onClick={deleteTopic}>
                   <img src={require("../../assets/delete.png")} alt=""/>
                   <div>
                     清除聊天记录
@@ -410,7 +418,7 @@ const App = () => {
 
               <div className="otherMenuBox">
                 <div className="otherMenuItem">
-                  <div className="otherMenuLeft" onClick={noFunction}>
+                  <div className="otherMenuLeft" onClick={deleteTopic}>
                     <img src={require("../../assets/delete.png")} alt=""/>
                     <div>
                       清除聊天记录
