@@ -44,7 +44,7 @@ def handle_sama_transfer():
                 settings.CHATGPT_WALLET, 1, private_key
             )
     if total > 1:
-        handle_sama_transfer.apply_async(countdown=2)
+        handle_sama_transfer.apply_async(countdown=5)
 
     cache.delete(EXECUTING_KEY)
-    logger.info("[execute sama transaction] success")
+    logger.info("[execute sama transaction] success total: %s", total)
