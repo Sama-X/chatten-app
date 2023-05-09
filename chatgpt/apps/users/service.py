@@ -50,7 +50,7 @@ class UserService:
                         experience=settings.SHARE_REWARD_EXPERIENCE,
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
-                    cls.add_score(invite_user_id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
+                    # cls.add_score(invite_user_id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
 
             cls.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
             token = CommonUtil.generate_user_token(account.id)
