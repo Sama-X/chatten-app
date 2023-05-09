@@ -58,6 +58,8 @@ class UserService:
                     conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([invite_user_id, 10, None]))
 
             conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
+            from users.tasks import handle_sama_transfer
+            handle_sama_transfer.delay()
             token = CommonUtil.generate_user_token(account.id)
 
             return APIResponse(result=CommonUtil.generate_login_result(token, account))
