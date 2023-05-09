@@ -3,6 +3,7 @@ account api module.
 """
 
 from datetime import datetime
+import json
 import logging
 from uuid import uuid4
 from django.conf import settings
@@ -71,7 +72,7 @@ class LoginViewSet(viewsets.GenericViewSet):
                 mobile=mobile
             )
             conn = get_redis_connection()
-            conn.lpush(UserService.SAMA_TASKS_KEY, (account.id, 10, None))
+            conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
 
         ip_addr = request.META.get('REMOTE_ADDR')
         try:

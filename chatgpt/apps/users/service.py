@@ -2,6 +2,7 @@
 api service.
 """
 from datetime import datetime, timedelta
+import json
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
@@ -54,9 +55,9 @@ class UserService:
                         experience=settings.SHARE_REWARD_EXPERIENCE,
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
-                    conn.lpush(UserService.SAMA_TASKS_KEY, (invite_user_id, 10, None))
+                    conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([invite_user_id, 10, None]))
 
-            conn.lpush(UserService.SAMA_TASKS_KEY, (account.id, 10, None))
+            conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
             token = CommonUtil.generate_user_token(account.id)
 
             return APIResponse(result=CommonUtil.generate_login_result(token, account))

@@ -2,6 +2,7 @@
 Celery task.
 """
 from datetime import datetime, timedelta
+import json
 import logging
 
 from celery import shared_task
@@ -35,7 +36,7 @@ def handle_sama_transfer():
     conn = get_redis_connection()
     total = conn.llen(SAMA_TASKS_KEY)
     if total > 0:
-        user_id, sama_token, private_key = conn.RPOP(SAMA_TASKS_KEY, 1)
+        user_id, sama_token, private_key = json.loads(conn.RPOP(SAMA_TASKS_KEY, 1))
         if not private_key:
             UserService.add_score(user_id, sama_token * settings.SAMA_UNIT, settings.CHAIN_SAMA)
         else:

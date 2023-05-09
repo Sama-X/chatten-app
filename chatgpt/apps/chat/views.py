@@ -99,7 +99,7 @@ class ChatViewset(viewsets.GenericViewSet):
                 ).first()
                 if wallet:
                     conn = get_redis_connection()
-                    conn.lpush(UserService.SAMA_TASKS_KEY, (settings.CHATGPT_WALLET, 1, wallet.private_key))
+                    conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([settings.CHATGPT_WALLET, 1, wallet.private_key]))
             except Exception as e:
                 logger.error('[chat sama transaction] error: %s', traceback.format_exc())
 
