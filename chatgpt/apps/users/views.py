@@ -3,10 +3,12 @@ account api module.
 """
 
 from datetime import datetime
+import json
 import logging
 from uuid import uuid4
 from django.conf import settings
 from django.core.cache import cache
+from django_redis import get_redis_connection
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -69,7 +71,8 @@ class LoginViewSet(viewsets.GenericViewSet):
                 username=mobile,
                 mobile=mobile
             )
-            UserService.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
+            conn = get_redis_connection()
+            conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
 
         ip_addr = request.META.get('REMOTE_ADDR')
         try:

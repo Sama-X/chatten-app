@@ -9,6 +9,7 @@ import traceback
 
 from asgiref.sync import async_to_sync
 from django.conf import settings
+from django_redis import get_redis_connection
 
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
@@ -97,9 +98,8 @@ class ChatViewset(viewsets.GenericViewSet):
                     user_id=request.user.id, chain=settings.CHAIN_SAMA
                 ).first()
                 if wallet:
-                    SamaClient.create_transaction_unconfirmed(
-                        settings.CHATGPT_WALLET, 1, wallet.private_key
-                    )
+                    conn = get_redis_connection()
+                    conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([settings.CHATGPT_WALLET, 1, wallet.private_key]))
             except Exception as e:
                 logger.error('[chat sama transaction] error: %s', traceback.format_exc())
 
