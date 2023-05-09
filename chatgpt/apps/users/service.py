@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum, F
 from django.db.models.functions import Coalesce
+from django_redis import get_redis_connection
 from base.common import CommonUtil
 from base.exception import UserErrorCode
 from base.response import APIResponse
@@ -19,12 +20,15 @@ class UserService:
     """
     user service.
     """
+    SAMA_TASKS_KEY = "sama:task:pending"
+
     @classmethod
     @transaction.atomic
     def register(cls, username, password, invite_code, user_type=AccountModel.USER_TYPE_ANONY) -> APIResponse:
         """
         register user api.
         """
+        conn = get_redis_connection()
         with transaction.atomic():
             exists = AccountModel.objects.filter(
                 username=username
@@ -50,9 +54,9 @@ class UserService:
                         experience=settings.SHARE_REWARD_EXPERIENCE,
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
-                    # cls.add_score(invite_user_id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
+                    conn.lpush(UserService.SAMA_TASKS_KEY, (invite_user_id, 10, None))
 
-            cls.add_score(account.id, 10 * settings.SAMA_UNIT, settings.CHAIN_SAMA)
+            conn.lpush(UserService.SAMA_TASKS_KEY, (account.id, 10, None))
             token = CommonUtil.generate_user_token(account.id)
 
             return APIResponse(result=CommonUtil.generate_login_result(token, account))
