@@ -15,6 +15,10 @@ import styles from "./login.css";
 import { loginAccount } from '../../api/index.js';
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
+import locales from '../../locales/locales.js'
+import get_default_language from '../../utils/get_default_language.js'
+
+
 // import { useHistory } from 'react-router-dom';
 
 export default memo(
@@ -28,6 +32,8 @@ export default memo(
     const [codeBoxStatus, setCodeBoxStatus] = useState(false);
     const [spinStatus, setSpinStatus] = useState(false);
     const history = useHistory()
+
+    const language = get_default_language()
     useImperativeHandle(ref, () => {
       return {
         changeInput: (val) => {
@@ -202,20 +208,20 @@ export default memo(
                 <div className="mobileCode">
                     {/* mobile */}
                     <div className="quickLogin">
-                        快速登录
+                        {locales(language)['login']}
                     </div>
                     <div>
-                      <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/>
+                      <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder={locales(language)['input_mobile']}/>
                     </div>
                     {/* <div> */}
-                      <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder="请输入密码"/>
+                      <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder={locales(language)['input_password']}/>
                     {/* </div>
                     <div> */}
                       {/* <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder="请再次输入密码"/> */}
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}
-                    <div className="signBtnBox">没有账号？去<span><Link to='/SignIn'>注册</Link></span></div>
+                    <div className="signBtnBox">{locales(language)['noaccount']}<span><Link to='/SignIn'>{locales(language)['register']}</Link></span></div>
                     <div><img className="sendCode" onClick={signInFunc} src={require("../../assets/rightBtn.png")} alt=""/></div>
                 </div>
             }

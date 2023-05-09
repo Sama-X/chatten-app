@@ -17,8 +17,8 @@ import { loginAccount } from '../../api/index.js';
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import { useHistory } from 'react-router-dom';
-
-
+import locales from '../../locales/locales.js'
+import get_default_language from '../../utils/get_default_language.js'
 
 
 export default memo(
@@ -32,6 +32,7 @@ export default memo(
     const [codeBoxStatus, setCodeBoxStatus] = useState(false);
     const [spinStatus, setSpinStatus] = useState(false);
     const [shareStatus, setShareStatus] = useState(false);
+    const language = get_default_language()
     const history = useHistory()
     useImperativeHandle(ref, () => {
       return {
@@ -220,16 +221,16 @@ export default memo(
                 <div className="mobileCode">
                     {/* mobile */}
                     <div className="quickLogin">
-                        快速注册
+                    {locales(language)['register']}
                     </div>
                     <div>
-                      <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/>
+                      <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder={locales(language)['input_mobile']}/>
                     </div>
                     {/* <div> */}
-                      <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder="请输入密码"/>
+                      <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder={locales(language)['input_password']}/>
                     {/* </div>
                     <div> */}
-                      <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder="请再次输入密码"/>
+                      <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder={locales(language)['input_password_again']}/>
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}

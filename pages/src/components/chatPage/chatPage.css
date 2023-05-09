@@ -190,3 +190,13 @@
     z-index: 999;
     padding: 15px 50px;
   }
+
+
+  .language {
+    background-color: #30323C;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 30px;
+    cursor: pointer;
+    font-size: 14px;
+  }

@@ -37,8 +37,13 @@
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: #FFFFFF;
-    line-height: 52px;
     height: 52px;
     background: #30323C;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.contentQuestionContent {
+    margin: 0 auto;
 }
