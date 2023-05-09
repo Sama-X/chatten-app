@@ -125,7 +125,7 @@ const App = (data) => {
         // cookie.save('experience', resData.experience, { path: '/' })
         // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
-        let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '4…', '01',<PlusCircleFilled />)]
+        let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
           if(i < 9){
             let subItem = []
@@ -510,18 +510,23 @@ const App = (data) => {
           {
             isToken ?
               // <div className="headerRight" onClick={signOut}>
-                <Popconfirm
-                placement="leftTop"
-                className="headerRight"
-                title='Do you want to log out'
-                description=''
-                onConfirm={signOut}
-                okText="Yes"
-                cancelText="No"
-              >
-                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-                <div>{ userName }</div>
-              </Popconfirm>
+                <div className="headerRight">
+                  <img src={require("../../assets/language.png")} alt=""/>
+                  <div className='language' onClick={chooseLanguage}>{language}</div>
+                  <Popconfirm
+                    placement="leftTop"
+                    className="headerRight"
+                    title='Do you want to log out'
+                    description=''
+                    onConfirm={signOut}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                    <div>{ userName }</div>
+                  </Popconfirm>
+                </div>
+               
               // </div>
               :
               <div className="headerRight">
