@@ -100,7 +100,7 @@ export default memo(
       calcCursorPosition();
     }, [inputVal]);
     const sendCodeNext = (e) => {
-        const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        const myreg = /^1[3456789]\d{9}$/;
         if (!myreg.test(e.target.value)) {
             // error
             message.error('Mobile phone number is not compliant')
@@ -112,7 +112,7 @@ export default memo(
         }
     }
     const sendCodeFunc = () => {
-        const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+        const myreg = /^1[3456789]\d{9}$/;;
         if (!myreg.test(mobileVal)) {
             // error
             message.error('Mobile phone number is not compliant')
@@ -130,7 +130,7 @@ export default memo(
       setPasswordTwo(e.target.value)
     }
     const signInFunc = () => {
-      const myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      const myreg = /^1[3456789]\d{9}$/;;
       if (!myreg.test(mobileVal)) {
           // error
           message.error('Mobile phone number is not compliant')
