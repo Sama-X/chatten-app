@@ -19,7 +19,7 @@ export default {
     dowhat: '能做什么',
     case4: '记住用户在先前对话中说过的内容',
     case5: '允许用户修正对话内容',
-    case6: 'chatGPT会拒绝不合理的请求',
+    case6: 'chatTEN会拒绝不合理的请求',
     input_mobile: '请输入手机号',
     input_password: '请输入密码',
     input_password_again: '请再次输入密码',
