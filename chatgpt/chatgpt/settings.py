@@ -195,16 +195,16 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(funcName)s %(message)s'
+            'format': '[%(processName)s - %(process)d] %(levelname)s %(asctime)s %(module)s %(funcName)s %(message)s'
         },
         'error': {
-            'format': '%(levelname)s %(asctime)s %(pathname)s %(module)s %(funcName)s %(message)s '
+            'format': '[%(processName)s - %(process)d] %(levelname)s %(asctime)s %(pathname)s %(module)s %(funcName)s %(message)s '
         },
         'simple': {
-            'format': '%(levelname)s %(asctime)s %(funcName)s %(message)s'
+            'format': '[%(processName)s - %(process)d] %(levelname)s %(asctime)s %(funcName)s %(message)s'
         },
         'collect': {
-            'format': '%(message)s'
+            'format': '[%(processName)s - %(process)d] %(message)s'
         }
     },
     'filters': {
