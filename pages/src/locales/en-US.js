@@ -19,7 +19,7 @@ export default {
     dowhat: 'What Can I DO',
     case4: 'Remember what the user said in the previous conversation',
     case5: 'Allow users to correct conversation content',
-    case6: 'ChatGPT will reject unreasonable requests',
+    case6: 'ChatTen will reject unreasonable requests',
     input_mobile: 'phone number',
     input_password: 'password',
     input_password_again: 'password again',
