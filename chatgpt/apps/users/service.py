@@ -49,9 +49,17 @@ class UserService:
                 exists = AccountModel.objects.filter(pk=invite_user_id).count() > 0
                 if exists:
                     UserServiceHelper.clear_reward_experience_cache(invite_user_id)
+                    super_inviter_user_id = None
+                    super_inviter = InviteLogModel.objects.only('inviter_user_id').filter(
+                        user_id=invite_user_id
+                    ).first()
+                    if super_inviter:
+                        super_inviter_user_id = super_inviter.inviter_user_id
+
                     InviteLogModel.objects.create(
                         user_id=account.id,
                         inviter_user_id=invite_user_id,
+                        super_inviter_user_id=super_inviter_user_id,
                         experience=settings.SHARE_REWARD_EXPERIENCE,
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
