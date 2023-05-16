@@ -18,6 +18,7 @@ from django.urls import include, path, re_path
 urlpatterns = [
     re_path(r'', include(('users.urls', 'users'), namespace="users")),
     re_path(r'', include(('chat.urls', 'chat'), namespace="chat")),
+    re_path(r'admin/', include(('order.admin.urls', 'order-admin'), namespace="order.admin")),
 ]
 
 # 增加统一v1 api

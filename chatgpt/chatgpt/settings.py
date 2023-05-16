@@ -80,6 +80,7 @@ INSTALLED_APPS = [
 
     'users',
     'chat',
+    'order',
     'corsheaders',
 ]
 
