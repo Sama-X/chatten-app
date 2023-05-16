@@ -148,8 +148,9 @@ class InviteLogModel(BaseModel):
     invite logs.
     """
 
-    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
-    invited_user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:invited user"))
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
+    inviter_user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("inviter user account id"))
+    super_inviter_user_id = models.BigIntegerField(null=True, db_index=True, verbose_name=_("super inviter user account id"))
     experience = models.IntegerField(default=1, verbose_name=_("db: chat experience times"))
     expired_time = models.DateField(null=False, db_index=True, verbose_name=_("db:invite expired time"))
 

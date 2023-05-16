@@ -18,10 +18,10 @@ from base.ai import AIErrorCode, get_ai_instance
 from base.exception import ChatErrorCode, SystemErrorCode
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
-from base.sama import SamaClient
+from base.serializer import BaseQuery
 from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
-from chat.serializer import BaseQuery, ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
+from chat.serializer import ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
 from users.models import AccountModel, WalletModel
 from users.service import UserService, UserServiceHelper
 

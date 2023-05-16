@@ -130,23 +130,6 @@ class LoginViewSet(viewsets.GenericViewSet):
 
         return UserService.register(username, password, invite_code, user_type=AccountModel.USER_TYPE_NORMAL)
 
-    @action(methods=['POST'], detail=False)
-    def anonymous(self, request, *args, **kwargs):
-        """
-        create anonymous account
-        url: /api/v1/users/anonymous
-        """
-        invite_code = request.data.get('invite_code')
-
-        username = uuid4().hex
-        exists = AccountModel.objects.filter(
-            username=username
-        ).count() > 0
-        if exists:
-            return APIResponse(code=UserErrorCode.USER_EXISTS)
-
-        return UserService.register(username, 'Aa12345678', invite_code, user_type=AccountModel.USER_TYPE_ANONY)
-
 
 class SmsMessageViewSet(viewsets.GenericViewSet):
     """

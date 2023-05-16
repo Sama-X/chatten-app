@@ -50,8 +50,8 @@ class UserService:
                 if exists:
                     UserServiceHelper.clear_reward_experience_cache(invite_user_id)
                     InviteLogModel.objects.create(
-                        user_id=invite_user_id,
-                        invited_user_id=account.id,
+                        user_id=account.id,
+                        inviter_user_id=invite_user_id,
                         experience=settings.SHARE_REWARD_EXPERIENCE,
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
@@ -116,7 +116,7 @@ class UserService:
             return total
 
         total = InviteLogModel.objects.filter(
-            user_id=user_id,
+            inviter_user_id=user_id,
             expired_time__gte=datetime.now()
         ).aggregate(total=Coalesce(Sum(F('experience')), 0)).get('total', 0)
 
