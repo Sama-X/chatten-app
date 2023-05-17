@@ -219,8 +219,6 @@ class UserServiceHelper:
         cache.set(key, value, expired)
 
 
-
-
 class ConfigService:
     """
     config service.
@@ -267,6 +265,9 @@ class ConfigService:
         if not config:
             return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
 
+        if config.name == ConfigModel.CONFIG_POINT_TO_CASH_RATIO:
+            return APIResponse(code=UserErrorCode.CONFIG_IS_FEATURE_ENABLED)
+
         data = serializer.validated_data
         value = data.get('value') # type: ignore
         description = data.get('description', '') # type: ignore
@@ -276,6 +277,7 @@ class ConfigService:
         config.value = value
         config.description = description
         config.save()
+        ConfigModel.clear_cache(name=config.name)
         return APIResponse()
 
     @classmethod
@@ -287,7 +289,9 @@ class ConfigService:
         if not config:
             return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
 
-        config.is_delete = True
-        config.save()
+        # config.is_delete = True
+        # config.save()
+        # ConfigModel.clear_cache(name=config.name)
 
-        return APIResponse()
+        # return APIResponse()
+        return APIResponse(code=UserErrorCode.CONFIG_IS_FEATURE_ENABLED)

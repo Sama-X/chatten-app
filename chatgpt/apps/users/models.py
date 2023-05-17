@@ -175,12 +175,21 @@ class ConfigModel(BaseModel):
     VALUE_TYPE_INT = "integer"
     VALUE_TYPE_BOOL = "boolean"
 
-    FREE_TRIAL_COUNT = "free-trial-count"
-    PHONE_NUMBER_VALIDATION_REQUIRED = "phone-number-validation-required"
-    LEVEL1_COMMISSION_RATIO = "level1_commission-ratio"
-    LEVEL2_COMMISSION_RATIO = "level2_commission-ratio"
-    POINT_TO_CASH_RATIO = "point-to-cash-ratio"
-    POINT_TO_CHAT_COUNT_RATIO = "point-to-chat-count-ratio"
+    CONFIG_FREE_TRIAL_COUNT = "free-trial-count"
+    CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED = "phone-number-validation-required"
+    CONFIG_LEVEL1_COMMISSION_RATIO = "level1_commission-ratio"
+    CONFIG_LEVEL2_COMMISSION_RATIO = "level2_commission-ratio"
+    CONFIG_POINT_TO_CASH_RATIO = "point-to-cash-ratio"
+    CONFIG_POINT_TO_CHAT_COUNT_RATIO = "point-to-chat-count-ratio"
+
+    CONFIGS = (
+        CONFIG_FREE_TRIAL_COUNT,
+        CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED,
+        CONFIG_LEVEL1_COMMISSION_RATIO,
+        CONFIG_LEVEL2_COMMISSION_RATIO,
+        CONFIG_POINT_TO_CASH_RATIO,
+        CONFIG_POINT_TO_CHAT_COUNT_RATIO,
+    )
 
     name = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("config item name"))
     value = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("config item value"))
@@ -196,14 +205,28 @@ class ConfigModel(BaseModel):
         db_table = "config"
 
     @classmethod
+    def clear_cache(cls, name=None):
+        """
+        clear cache.
+        """
+        if name is None:
+            for item in cls.CONFIGS:
+                key = cls.CACHE_CONFIG_PREFIX.format(item)
+                cache.delete(key)
+        else:
+            key = cls.CACHE_CONFIG_PREFIX.format(name)
+            cache.delete(key)
+
+    @classmethod
     def get(cls, name, value=None, description=None, value_type=VALUE_TYPE_STR, force=False):
         """
         get config by cache.
         """
         key = cls.CACHE_CONFIG_PREFIX.format(name)
-        value = cache.get(key)
-        if not force and value:
-            return value
+        if not force:
+            result = cache.get(key)
+            if result:
+                return result
 
         obj = cls.objects.filter(name=name).first()
         if not obj:
@@ -214,25 +237,29 @@ class ConfigModel(BaseModel):
                 description=description
             )
 
+        if obj and obj.is_delete:
+            return None
+
         cache.set(key, obj.value, cls.DURATION)
 
         return obj.value
 
     @classmethod
-    def get_bool(cls, name, value=False, description=None):
+    def get_bool(cls, name, value=False, description=None, value_type=VALUE_TYPE_BOOL, force=False):
         """
         get config.
         """
-        value = cls.get(name, value, description)
+        value = int(value)
+        value = cls.get(name, value, description, value_type=value_type, force=force)
 
         return bool(value)
 
     @classmethod
-    def get_int(cls, name, value=0, description=None):
+    def get_int(cls, name, value=0, description=None, value_type=VALUE_TYPE_INT, force=False):
         """
         get config.
         """
-        value = cls.get(name, value, description)
+        value = cls.get(name, value, description, value_type=value_type, force=force)
 
         return int(value) if value else 0
 
@@ -240,33 +267,30 @@ class ConfigModel(BaseModel):
     def config_init(cls):
         """
         """
-        cls.get(
-            cls.FREE_TRIAL_COUNT, 10, _("Number of free experiences, number type, must be greater than 0"),
+        cls.get_int(
+            cls.CONFIG_FREE_TRIAL_COUNT, 10, _("Number of free experiences, number type, must be greater than 0"),
             cls.VALUE_TYPE_INT
         )
-        cls.get(
-            cls.PHONE_NUMBER_VALIDATION_REQUIRED, False,
-            _("Whether to enable the verification rule of mobile phone number"),
-            cls.VALUE_TYPE_BOOL
+        cls.get_bool(
+            cls.CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED, False,
+            _("Whether to enable the verification rule of mobile phone number")
         )
-        cls.get(
-            cls.LEVEL1_COMMISSION_RATIO, 4000,
+        cls.get_int(
+            cls.CONFIG_LEVEL1_COMMISSION_RATIO, 4000,
             _("The proportion of first level commission. Range is between (0-10000)"),
             cls.VALUE_TYPE_INT
         )
-        cls.get(
-            cls.LEVEL2_COMMISSION_RATIO, 800,
+        cls.get_int(
+            cls.CONFIG_LEVEL2_COMMISSION_RATIO, 800,
             _("The proportion of second level commission. Range is between (0-10000)"),
             cls.VALUE_TYPE_INT
         )
-        cls.get(
-            cls.POINT_TO_CASH_RATIO, 10,
+        cls.get_int(
+            cls.CONFIG_POINT_TO_CASH_RATIO, 10,
             _("Set the redemption ratio of points withdrawal.(do not modify this item at will)"),
             cls.VALUE_TYPE_INT
         )
-        cls.get(
-            cls.POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times"),
+        cls.get_int(
+            cls.CONFIG_POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times"),
             cls.VALUE_TYPE_INT
         )
-
-# ConfigModel.config_init()

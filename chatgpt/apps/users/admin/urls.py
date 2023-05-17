@@ -9,8 +9,8 @@ from users.admin.views import ConfigViewSet
 
 
 router = DefaultRouter()
-router.register(r'', ConfigViewSet, basename="ConfigViewSet")
+router.register(r'configs', ConfigViewSet, basename="ConfigViewSet")
 
 urlpatterns = [
-    path(r'configs', include(router.urls)),
+    path(r'', include(router.urls)),
 ]

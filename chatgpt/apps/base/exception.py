@@ -47,6 +47,7 @@ class UserErrorCode:
     USER_INVALID_PASSWORD = 100102
     USER_EXISTS = 100103
     CONFIG_INVALID_INT_TYPE = 100200
+    CONFIG_IS_FEATURE_ENABLED = 100201
 
     ERRORS = (
         (USER_INVALID_CODE, _('invalid code')),
@@ -54,6 +55,7 @@ class UserErrorCode:
         (USER_INVALID_PASSWORD, _('wrong user name or password')),
         (USER_OAUTH_REQUIRED, _('code or password required')),
         (CONFIG_INVALID_INT_TYPE, _('Invalid numeric type')),
+        (CONFIG_IS_FEATURE_ENABLED, _('This item is not enabled')),
     )
 
     ERRORS_DICT = dict(ERRORS)
