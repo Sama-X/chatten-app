@@ -4,7 +4,11 @@ api service.
 from datetime import datetime, timedelta, time, date
 from math import floor
 from django.db import transaction
-from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsModel
+from django.db.models import Sum
+from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsModel, PointsWithdrawModel
+from asset.serializer import CreateWithdrawSerializer, WithdrawSerializer
+from base.exception import AssetErrorCode, SystemErrorCode
+from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
 
 from order.models import OrderModel, OrderPackageModel
@@ -30,7 +34,7 @@ class O2OPaymentService(BaseService):
                     transient_expire_time=datetime.now(),
                     transient_usage_count=0,
                     persistence_usage_count=0,
-                    free_expire_time=datetime.now().date() + timedelta(days=1),
+                    free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
                     free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
                 )
             usage_total = order.quantity * package.usage_count
@@ -98,6 +102,38 @@ class O2OPaymentService(BaseService):
 
         return True
 
+    @classmethod
+    @transaction.atomic
+    def add_payment_by_points(cls, user_id, point):
+        """
+        add payment by point.
+        """
+        with transaction.atomic():
+            usage_total = floor(point * ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CHAT_COUNT_RATIO))
+            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+            if not payment:
+                payment = O2OPaymentModel(
+                    user_id=user_id,
+                    transient_expire_time=datetime.now(),
+                    transient_usage_count=0,
+                    persistence_usage_count=0,
+                    free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
+                    free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
+                )
+
+            payment.persistence_usage_count += usage_total
+            payment.save()
+            note = f"Users use points to exchange. total: {usage_total} "
+            O2OPaymentLogModel.objects.create(
+                user_id=user_id,
+                payment_id=payment.id,
+                category=O2OPaymentLogModel.CATEGORY_EXCHANGE,
+                usage_count=usage_total,
+                note=note
+            )
+
+        return True
+
 
 class PointsService(BaseService):
     """
@@ -131,3 +167,70 @@ class PointsService(BaseService):
                 )
 
         return True
+
+    @classmethod
+    def exchange_point(cls, user_id, request):
+        """
+        Exchange points for assets
+        """
+        serializer = CreateWithdrawSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
+
+        data = serializer.validated_data
+        point = data.get('point', 0) # type: ignore
+        realname = data.get('realname') # type: ignore
+        contact = data.get('contact') # type: ignore
+
+        obj = PointsModel.objects.filter(user_id=user_id, is_delete=False).first()
+        if not obj:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        withdraw = PointsWithdrawModel.objects.filter(
+            user_id=user_id,
+            is_delete=False,
+            status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_REFUNDING]
+        ).aggregate(total=Sum('point'))
+
+        if obj.total - withdraw.get('total', 0) < point:
+            return APIResponse(code=AssetErrorCode.POINT_NOT_ENOUGH)
+
+        ratio = ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CASH_RATIO)
+        PointsWithdrawModel.objects.create(
+            user_id=user_id,
+            realname=realname,
+            contact=contact,
+            point=point,
+            amount=point / ratio,
+            ratio=ratio
+        )
+
+        return APIResponse()
+
+
+class PointsWithdrawService(BaseService):
+    """
+    points withdraw service.
+    """
+
+    @classmethod
+    @classmethod
+    def get_list(cls, user_id, page, offset, order, status) -> APIResponse:
+        """
+        get points withdraw list.
+        """
+        base = PointsWithdrawModel.objects.filter(
+            is_delete=False, user_id=user_id
+        )
+        if status is not None:
+            base = base.filter(status=status)
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            OrderPackageModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        serializer = WithdrawSerializer(objs, many=True)
+
+        return APIResponse(result=serializer.data, count=total)

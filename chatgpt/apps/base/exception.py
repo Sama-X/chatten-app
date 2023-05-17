@@ -99,8 +99,22 @@ class OrderErrorCode:
     )
     ERRORS_DICT = dict(ERRORS)
 
+
+class AssetErrorCode:
+    """
+    asset error code.
+    """
+    POINT_NOT_ENOUGH = 40000
+
+    ERRORS = (
+        (POINT_NOT_ENOUGH, _('Points are not enough')),
+    )
+    ERRORS_DICT = dict(ERRORS)
+
+
 ALL_ERROR_DICT = {}
 ALL_ERROR_DICT.update(SystemErrorCode.ERRORS_DICT)
 ALL_ERROR_DICT.update(UserErrorCode.ERRORS_DICT)
 ALL_ERROR_DICT.update(ChatErrorCode.ERRORS_DICT)
 ALL_ERROR_DICT.update(OrderErrorCode.ERRORS_DICT)
+ALL_ERROR_DICT.update(AssetErrorCode.ERRORS_DICT)

@@ -69,6 +69,44 @@ class PointsLogModel(BaseModel):
         db_table = "asset_points_log"
 
 
+class PointsWithdrawModel(BaseModel):
+    """
+    Points withdraw.
+    """
+    STATUS_PENDING = 0
+    STATUS_REFUNDING = 5
+    STATUS_SUCCESS = 10
+    STATUS_FAILURE = 11
+
+    STATUSES = (
+        (STATUS_PENDING, _("peding review")),
+        (STATUS_REFUNDING, _("refund in progress")),
+        (STATUS_SUCCESS, _("success")),
+        (STATUS_FAILURE, _("failure")),
+    )
+
+    STATUS_DICT = dict(STATUSES)
+
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
+    realname = models.CharField(max_length=64, verbose_name=_("The real name of the withdrawing person"))
+    contact = models.CharField(max_length=256, verbose_name=_("Contact information"))
+    point = models.BigIntegerField(default=0, verbose_name=_("The number of points changed this time"))
+    amount = models.FloatField(default=0, verbose_name=_("The amount exchanged"))
+    ratio = models.FloatField(default=0, verbose_name=_("Ratio of points to cash"))
+    status = models.SmallIntegerField(default=STATUS_PENDING, db_index=True, verbose_name=_("withdraw status"))
+    audit_user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("withdraw auditor"))
+    audit_time = models.DateTimeField(null=True, verbose_name=_("withdraw audit time"))
+    finish_time = models.DateTimeField(null=True, verbose_name=_("withdraw finish time"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("PointsWithdraw")
+        verbose_name_plural = verbose_name
+        db_table = "asset_points_withdraw"
+
+
 class O2OPaymentModel(BaseModel):
     """
     o2o payment.
@@ -99,12 +137,14 @@ class O2OPaymentLogModel(BaseModel):
     CATEGORY_FREE = 1
     CATEGORY_BUY = 2
     CATEGORY_REWARD = 3
+    CATEGORY_EXCHANGE = 4
 
     CATEGORIES = (
         (CATEGORY_CONSUME, _("consume")),
         (CATEGORY_FREE, _("free")),
         (CATEGORY_BUY, _("buy")),
         (CATEGORY_REWARD, _("reward")),
+        (CATEGORY_EXCHANGE, _("exchange"))
     )
     CATEGORIES_DICT = dict(CATEGORIES)
 
