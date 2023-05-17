@@ -22,7 +22,7 @@ function getItem(label, key, icon, children, type) {
 }
 
 // const items = [
-//   getItem('chatTEN', 'sub1', '', [
+//   getItem('ChatTEN', 'sub1', '', [
 //     getItem('创建新对话…', '5',<PlusCircleFilled />),
 //     getItem('解释量子力学', '6',<MessageOutlined />),
 //     getItem('人工智能的发展前景', '7',<MessageOutlined />),
@@ -141,7 +141,7 @@ const App = (data) => {
         }
         setTimeout(function(){
           setSpinStatus(false)
-          setItem([getItem('chatTEN', 'sub1', '', menuSetitemList)])
+          setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
         },1000)
       })
   }
@@ -165,7 +165,7 @@ const App = (data) => {
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
     let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
-    setItem([getItem('chatTEN', 'sub1', '', menuSetitemList)])
+    setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
@@ -243,7 +243,7 @@ const App = (data) => {
     }else{
       setSpinStatus(false)
       let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
-      setItem([getItem('chatTEN', 'sub1', '', menuSetitemList)])
+      setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
     }
