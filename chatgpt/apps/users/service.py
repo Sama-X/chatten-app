@@ -15,7 +15,10 @@ from base.response import APIResponse, SerializerErrorResponse
 
 from base.sama import SamaClient
 from users.admin.serializer import ConfigSeriazlier, UpdateConfigSerializer
-from users.models import AccountModel, ConfigModel, InviteLogModel, ScoreLogModel, ScoreModel, WalletModel
+from users.models import (
+    AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
+    SamaWalletModel
+)
 
 
 class UserService:
@@ -78,21 +81,21 @@ class UserService:
         add score.
         """
         with transaction.atomic():
-            obj = ScoreModel.objects.filter(user_id=user_id).first()
+            obj = SamaScoreModel.objects.filter(user_id=user_id).first()
             if not obj:
-                obj = ScoreModel(user_id=user_id, balance=0)
+                obj = SamaScoreModel(user_id=user_id, balance=0)
 
             obj.balance += amount
             obj.save()
 
-            wallet_obj = WalletModel.objects.filter(
+            wallet_obj = SamaWalletModel.objects.filter(
                 user_id=user_id, chain=chain
             ).first()
 
             if not wallet_obj:
                 wallet = SamaClient.create_wallet()
                 if wallet.result:
-                    wallet_obj = WalletModel(
+                    wallet_obj = SamaWalletModel(
                         user_id=user_id,
                         address=wallet.address,
                         private_key=wallet.private_key,
@@ -107,9 +110,9 @@ class UserService:
                 if result.result:
                     txid = result.txID
 
-            ScoreLogModel.objects.create(
+            SamaScoreLogModel.objects.create(
                 user_id=user_id, score_id=obj.id,
-                category=ScoreLogModel.CATEGORY_ADD,
+                category=SamaScoreLogModel.CATEGORY_ADD,
                 amount=amount,
                 txid=txid,
                 result=resp

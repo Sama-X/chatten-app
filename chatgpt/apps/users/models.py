@@ -84,7 +84,7 @@ class MessageLogModel(BaseModel):
         db_table = "message_log"
 
 
-class WalletModel(BaseModel):
+class SamaWalletModel(BaseModel):
     """
     wallet table.
     """
@@ -99,14 +99,14 @@ class WalletModel(BaseModel):
         """
         Meta
         """
-        verbose_name = _("db:Wallet")
+        verbose_name = _("SamaWallet")
         verbose_name_plural = verbose_name
-        db_table = "wallet"
+        db_table = "sama_wallet"
 
 
-class ScoreModel(BaseModel):
+class SamaScoreModel(BaseModel):
     """
-    score table.
+    Sama score table.
     """
 
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("db:user account id"))
@@ -116,14 +116,14 @@ class ScoreModel(BaseModel):
         """
         Meta
         """
-        verbose_name = _("db:Score")
+        verbose_name = _("SamaScore")
         verbose_name_plural = verbose_name
-        db_table = "account_score"
+        db_table = "sama_account_score"
 
 
-class ScoreLogModel(BaseModel):
+class SamaScoreLogModel(BaseModel):
     """
-    score log table.
+    Sama score log table.
     """
     CATEGORY_ADD = 1
     CATEGORY_SUB = -1
@@ -139,9 +139,9 @@ class ScoreLogModel(BaseModel):
         """
         Meta
         """
-        verbose_name = _("db:ScoreLog")
+        verbose_name = _("SamaScoreLog")
         verbose_name_plural = verbose_name
-        db_table = "account_score_log"
+        db_table = "sama_account_score_log"
 
 
 class InviteLogModel(BaseModel):

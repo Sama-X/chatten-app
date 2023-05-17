@@ -22,7 +22,7 @@ from base.serializer import BaseQuery
 from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
 from chat.serializer import ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
-from users.models import AccountModel, WalletModel
+from users.models import AccountModel, SamaWalletModel
 from users.service import UserService, UserServiceHelper
 
 logger = logging.getLogger(__name__)
@@ -94,7 +94,7 @@ class ChatViewset(viewsets.GenericViewSet):
         if obj.answer:
             UserServiceHelper.update_used_experience_cache(user_id, current_total + 1)
             try:
-                wallet = WalletModel.objects.filter(
+                wallet = SamaWalletModel.objects.filter(
                     user_id=request.user.id, chain=settings.CHAIN_SAMA
                 ).first()
                 if wallet:
