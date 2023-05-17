@@ -252,9 +252,10 @@ class PointsWithdrawService(BaseService):
         """
         get points withdraw list.
         """
-        base = PointsWithdrawModel.objects.filter(
-            is_delete=False, user_id=user_id
-        )
+        base = PointsWithdrawModel.objects.filter(is_delete=False)
+        if user_id is not None:
+            base = base.filter(user_id=user_id)
+
         if status is not None:
             base = base.filter(status=status)
 
@@ -267,3 +268,27 @@ class PointsWithdrawService(BaseService):
         serializer = WithdrawSerializer(objs, many=True)
 
         return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    def audit(cls, withdraw_id, request) -> APIResponse:
+        """
+        audit withdraw api.
+        """
+        obj = PointsWithdrawModel.objects.filter(
+            status=PointsWithdrawModel.STATUS_PENDING,
+            id=withdraw_id
+        ).first()
+        if not obj:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        data = request.data
+        success = data.get('success')
+        if success:
+            obj.status = PointsWithdrawModel.STATUS_REFUNDING
+        else:
+            obj.status = PointsWithdrawModel.STATUS_FAILURE
+        obj.audit_time = datetime.now()
+        obj.audit_user_id = request.user.id
+        obj.save()
+
+        return APIResponse()
