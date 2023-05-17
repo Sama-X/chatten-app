@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     'users',
     'chat',
     'order',
+    'asset',
     'corsheaders',
 ]
 

@@ -4,28 +4,16 @@ api service.
 from django.db import transaction
 from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
+from base.service import BaseService
 
 from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, UpdateOrderPackageSerializer
 from order.models import OrderPackageModel
 
 
-class OrderPackageService:
+class OrderPackageService(BaseService):
     """
     order package service.
     """
-    @classmethod
-    def check_order_fields(cls, clz, fields):
-        """
-        check order field.
-        """
-        new_fields = []
-        for field in fields:
-            new_field = field.replace('-', '')
-            if hasattr(clz, new_field):
-                new_fields.append(field)
-
-        return new_fields
-
     @classmethod
     def get_list(cls, page, offset, order) -> APIResponse:
         """
