@@ -1,9 +1,9 @@
 """
-rebate app module.
+commission app module.
 """
 from django.apps import AppConfig
 
 
-class RebateConfig(AppConfig):
+class CommissionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'rebate'
+    name = 'commission'

@@ -1,18 +1,12 @@
 """
 api service.
 """
-from django.conf import settings
 from django.db import transaction
-from django_redis import get_redis_connection
-from base.common import CommonUtil
-from base.exception import OrderErrorCode, SystemErrorCode, UserErrorCode
+from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
-from base.sama import SamaClient
 
 from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, UpdateOrderPackageSerializer
 from order.models import OrderPackageModel
-
-from users.models import AccountModel, ScoreLogModel, ScoreModel, WalletModel
 
 
 class OrderPackageService:

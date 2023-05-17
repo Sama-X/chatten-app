@@ -10,11 +10,12 @@ from django.db.models import Sum, F
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
 from base.common import CommonUtil
-from base.exception import UserErrorCode
-from base.response import APIResponse
+from base.exception import SystemErrorCode, UserErrorCode
+from base.response import APIResponse, SerializerErrorResponse
 
 from base.sama import SamaClient
-from users.models import AccountModel, InviteLogModel, ScoreLogModel, ScoreModel, WalletModel
+from users.admin.serializer import ConfigSeriazlier, UpdateConfigSerializer
+from users.models import AccountModel, ConfigModel, InviteLogModel, ScoreLogModel, ScoreModel, WalletModel
 
 
 class UserService:
@@ -216,3 +217,77 @@ class UserServiceHelper:
         """
         key = cls.EXPERIENCE_REWARD_KEY.format(user_id)
         cache.set(key, value, expired)
+
+
+
+
+class ConfigService:
+    """
+    config service.
+    """
+    @classmethod
+    def check_order_fields(cls, clz, fields):
+        """
+        check order field.
+        """
+        new_fields = []
+        for field in fields:
+            new_field = field.replace('-', '')
+            if hasattr(clz, new_field):
+                new_fields.append(field)
+
+        return new_fields
+
+    @classmethod
+    def get_list(cls, page, offset, order) -> APIResponse:
+        """
+        get config list.
+        """
+        base = ConfigModel.objects.filter(is_delete=False)
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            ConfigModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        serializer = ConfigSeriazlier(objs, many=True)
+
+        return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    def update(cls, config_id, request):
+        """
+        update config.
+        """
+        serializer = UpdateConfigSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
+
+        config = ConfigModel.objects.filter(is_delete=False, id=config_id).first()
+        if not config:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        data = serializer.validated_data
+        value = data.get('value') # type: ignore
+        description = data.get('description', '') # type: ignore
+        if config.value_type == config.VALUE_TYPE_INT and not str(value).isdigit():
+            return APIResponse(code=UserErrorCode.CONFIG_INVALID_INT_TYPE)
+
+        config.value = value
+        config.description = description
+        config.save()
+        return APIResponse()
+
+    @classmethod
+    def delete(cls, config_id):
+        """
+        update config.
+        """
+        config = ConfigModel.objects.filter(is_delete=False, id=config_id).first()
+        if not config:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        config.is_delete = True
+        config.save()
+
+        return APIResponse()

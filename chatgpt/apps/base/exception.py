@@ -46,12 +46,14 @@ class UserErrorCode:
     USER_OAUTH_REQUIRED = 100101
     USER_INVALID_PASSWORD = 100102
     USER_EXISTS = 100103
+    CONFIG_INVALID_INT_TYPE = 100200
 
     ERRORS = (
         (USER_INVALID_CODE, _('invalid code')),
         (USER_EXISTS, _('user exists')),
         (USER_INVALID_PASSWORD, _('wrong user name or password')),
         (USER_OAUTH_REQUIRED, _('code or password required')),
+        (CONFIG_INVALID_INT_TYPE, _('Invalid numeric type')),
     )
 
     ERRORS_DICT = dict(ERRORS)

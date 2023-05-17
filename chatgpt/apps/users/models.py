@@ -2,6 +2,7 @@
 User model module.
 """
 from django.contrib.auth.hashers import make_password, check_password
+from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext as _
 from base.models import BaseModel
@@ -161,3 +162,111 @@ class InviteLogModel(BaseModel):
         verbose_name = _("db:InviteLogs")
         verbose_name_plural = verbose_name
         db_table = "invite_log"
+
+
+class ConfigModel(BaseModel):
+    """
+    config.
+    """
+    CACHE_CONFIG_PREFIX = "config:cache:{}"
+    DURATION = 24 * 3600
+
+    VALUE_TYPE_STR = "string"
+    VALUE_TYPE_INT = "integer"
+    VALUE_TYPE_BOOL = "boolean"
+
+    FREE_TRIAL_COUNT = "free-trial-count"
+    PHONE_NUMBER_VALIDATION_REQUIRED = "phone-number-validation-required"
+    LEVEL1_COMMISSION_RATIO = "level1_commission-ratio"
+    LEVEL2_COMMISSION_RATIO = "level2_commission-ratio"
+    POINT_TO_CASH_RATIO = "point-to-cash-ratio"
+    POINT_TO_CHAT_COUNT_RATIO = "point-to-chat-count-ratio"
+
+    name = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("config item name"))
+    value = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("config item value"))
+    value_type = models.CharField(max_length=32, default=VALUE_TYPE_STR, verbose_name=_("config item value type"))
+    description = models.TextField(verbose_name=_("config item description"))
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("Config")
+        verbose_name_plural = verbose_name
+        db_table = "config"
+
+    @classmethod
+    def get(cls, name, value=None, description=None, value_type=VALUE_TYPE_STR, force=False):
+        """
+        get config by cache.
+        """
+        key = cls.CACHE_CONFIG_PREFIX.format(name)
+        value = cache.get(key)
+        if not force and value:
+            return value
+
+        obj = cls.objects.filter(name=name).first()
+        if not obj:
+            obj = cls.objects.create(
+                name=name,
+                value=value,
+                value_type=value_type,
+                description=description
+            )
+
+        cache.set(key, obj.value, cls.DURATION)
+
+        return obj.value
+
+    @classmethod
+    def get_bool(cls, name, value=False, description=None):
+        """
+        get config.
+        """
+        value = cls.get(name, value, description)
+
+        return bool(value)
+
+    @classmethod
+    def get_int(cls, name, value=0, description=None):
+        """
+        get config.
+        """
+        value = cls.get(name, value, description)
+
+        return int(value) if value else 0
+
+    @classmethod
+    def config_init(cls):
+        """
+        """
+        cls.get(
+            cls.FREE_TRIAL_COUNT, 10, _("Number of free experiences, number type, must be greater than 0"),
+            cls.VALUE_TYPE_INT
+        )
+        cls.get(
+            cls.PHONE_NUMBER_VALIDATION_REQUIRED, False,
+            _("Whether to enable the verification rule of mobile phone number"),
+            cls.VALUE_TYPE_BOOL
+        )
+        cls.get(
+            cls.LEVEL1_COMMISSION_RATIO, 4000,
+            _("The proportion of first level commission. Range is between (0-10000)"),
+            cls.VALUE_TYPE_INT
+        )
+        cls.get(
+            cls.LEVEL2_COMMISSION_RATIO, 800,
+            _("The proportion of second level commission. Range is between (0-10000)"),
+            cls.VALUE_TYPE_INT
+        )
+        cls.get(
+            cls.POINT_TO_CASH_RATIO, 10,
+            _("Set the redemption ratio of points withdrawal.(do not modify this item at will)"),
+            cls.VALUE_TYPE_INT
+        )
+        cls.get(
+            cls.POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times"),
+            cls.VALUE_TYPE_INT
+        )
+
+# ConfigModel.config_init()
