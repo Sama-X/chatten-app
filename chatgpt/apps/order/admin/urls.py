@@ -1,5 +1,5 @@
 """
-user router module.
+order admin router module.
 """
 from django.conf.urls import include
 from django.urls import path

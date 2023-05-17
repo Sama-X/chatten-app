@@ -58,3 +58,13 @@ class CreateWithdrawSerializer(serializers.Serializer):
     point = serializers.IntegerField(
         required=True, min_value=1, allow_null=False, help_text=_("Withdrawal point")
     )
+
+
+class ExchangePointsSerializer(serializers.Serializer):
+    """
+    Exchange Point.
+    """
+    point = serializers.IntegerField(
+        required=True, min_value=1, allow_null=False, help_text=_("Exchange point")
+    )
+

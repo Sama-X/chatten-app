@@ -6,7 +6,7 @@ from math import floor
 from django.db import transaction
 from django.db.models import Sum
 from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsModel, PointsWithdrawModel
-from asset.serializer import CreateWithdrawSerializer, WithdrawSerializer
+from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, WithdrawSerializer
 from base.exception import AssetErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
@@ -169,9 +169,42 @@ class PointsService(BaseService):
         return True
 
     @classmethod
+    @transaction.atomic
     def exchange_point(cls, user_id, request):
         """
         Exchange points for assets
+        """
+        serializer = ExchangePointsSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
+
+        data = serializer.validated_data
+        point = data.get('point', 0) # type: ignore
+
+        obj = PointsModel.objects.filter(user_id=user_id, is_delete=False).first()
+        if not obj:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        withdraw = PointsWithdrawModel.objects.filter(
+            user_id=user_id,
+            is_delete=False,
+            status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_REFUNDING]
+        ).aggregate(total=Sum('point'))
+
+        if obj.total - withdraw.get('total', 0) < point:
+            return APIResponse(code=AssetErrorCode.POINT_NOT_ENOUGH)
+
+        with transaction.atomic():
+            O2OPaymentService.add_payment_by_points(user_id, point)
+            obj.total -= point
+            obj.save()
+
+        return APIResponse()
+
+    @classmethod
+    def withdraw_point(cls, user_id, request):
+        """
+        Withdraw points for crash
         """
         serializer = CreateWithdrawSerializer(data=request.data)
         if not serializer.is_valid():
