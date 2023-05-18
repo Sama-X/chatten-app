@@ -9,6 +9,7 @@ from django.db import transaction
 from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
+from asset.models import PointsModel
 from base.common import CommonUtil
 from base.exception import SystemErrorCode, UserErrorCode
 from base.response import APIResponse, SerializerErrorResponse
@@ -164,6 +165,14 @@ class UserService:
         UserServiceHelper.update_used_experience_cache(user_id, current_total)
 
         return current_total
+
+    @classmethod
+    def get_user_points(cls, user_id):
+        """
+        get user points.
+        """
+        obj = PointsModel.objects.filter(user_id=user_id).first()
+        return obj.total if obj else 0
 
 
 class UserServiceHelper:

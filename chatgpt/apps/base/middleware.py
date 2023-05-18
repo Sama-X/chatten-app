@@ -4,6 +4,7 @@ middleware modules.
 import logging
 import traceback
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.utils.translation import gettext as _
 
@@ -12,7 +13,7 @@ from rest_framework.exceptions import (
     AuthenticationFailed, NotAuthenticated, ValidationError
 )
 
-from base.constants import LOGIN_TOKEN_ACCOUNT_KEY
+from base.constants import ADMIN_LOGIN_TOKEN_ACCOUNT_KEY, LOGIN_TOKEN_ACCOUNT_KEY
 from base.exception import SystemErrorCode
 from base.response import APIResponse
 from users.models import AccountModel
@@ -39,6 +40,34 @@ class AnonymousAuthentication(authentication.BaseAuthentication):
         # if old_token != token:
         #     return None
         user = AccountModel.objects.filter(id=account_id).first()
+        if not user:
+            msg = _('auth: user need login')
+            raise AuthenticationFailed(msg)
+
+        return (user, None)
+
+    def has_permission(self, request):
+        """
+        has permission
+        """
+        return True
+
+
+class AdminAuthentication(authentication.BaseAuthentication):
+    """
+    Admin and token authentication.
+    """
+    def authenticate(self, request):
+        """
+        authenticate
+        """
+        token = request.headers.get('Authorization')
+        if not token:
+            msg = _('auth: user need login')
+            raise AuthenticationFailed(msg)
+
+        account_id = cache.get(ADMIN_LOGIN_TOKEN_ACCOUNT_KEY.format(token))
+        user = User.objects.filter(id=account_id).first()
         if not user:
             msg = _('auth: user need login')
             raise AuthenticationFailed(msg)

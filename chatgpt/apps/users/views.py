@@ -190,6 +190,7 @@ class UserProfileViewSet(viewsets.GenericViewSet):
             'experience': user.experience,
             'reward_experience': UserService.get_reward_experience(user.id),
             'used_experience': UserService.get_used_experience(user.id, start_time=datetime.now().date()),
+            'points': UserService.get_user_points(user.id),
             'invite_code': None
         }
         if request.user.user_type == AccountModel.USER_TYPE_NORMAL:

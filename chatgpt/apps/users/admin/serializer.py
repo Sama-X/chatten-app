@@ -94,3 +94,13 @@ class ReportQuery(BaseQuery):
     """
     start_date = serializers.DateField(allow_null=True, required=False, input_formats=['%Y-%m-%d'])
     end_date = serializers.DateField(allow_null=True, required=False, input_formats=['%Y-%m-%d'])
+
+
+class AdminLoginSerializer(serializers.Serializer):
+    """
+    Login serializer.
+    """
+    username = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("username")
+    )
+    password = serializers.CharField(max_length=32, required=False, help_text=_("password"))

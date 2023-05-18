@@ -9,7 +9,7 @@ from uuid import uuid4
 from django.core.cache import cache
 import requests
 
-from base.constants import LOGIN_ACCOUNT_TOKEN_KEY, LOGIN_LIFE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY
+from base.constants import ADMIN_LOGIN_ACCOUNT_TOKEN_KEY, ADMIN_LOGIN_TOKEN_ACCOUNT_KEY, LOGIN_ACCOUNT_TOKEN_KEY, LOGIN_LIFE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY
 from users.models import AccountModel
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,17 @@ class CommonUtil:
         token = uuid4().hex
         cache.set(LOGIN_TOKEN_ACCOUNT_KEY.format(token), user_id, LOGIN_LIFE_TIME_LENGTH)
         cache.set(LOGIN_ACCOUNT_TOKEN_KEY.format(user_id), token, LOGIN_LIFE_TIME_LENGTH)
+
+        return token
+
+    @classmethod
+    def generate_admin_user_token(cls, user_id, expired=LOGIN_LIFE_TIME_LENGTH):
+        """
+        generate token
+        """
+        token = uuid4().hex
+        cache.set(ADMIN_LOGIN_TOKEN_ACCOUNT_KEY.format(token), user_id, LOGIN_LIFE_TIME_LENGTH)
+        cache.set(ADMIN_LOGIN_ACCOUNT_TOKEN_KEY.format(user_id), token, LOGIN_LIFE_TIME_LENGTH)
 
         return token
 
