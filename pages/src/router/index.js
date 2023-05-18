@@ -5,6 +5,7 @@ import SignIn from '../components/signIn/index.js'
 import ChatPage from '../components/chatPage/index.js'
 import Index from '../components/index'
 import Price from '../components/price/index.js'
+import AdminLogin from '../components/admin/login/login.js'
 // 导入路由依赖
 import {  Route,BrowserRouter } from 'react-router-dom'
 
@@ -21,6 +22,7 @@ export default class index extends Component {
         <Route component={Login} path='/Login'></Route>
         <Route component={SignIn} path='/SignIn'></Route>
         <Route component={Price} path='/price'></Route>
+        <Route component={AdminLogin} path='/admin/login'></Route>
         <Route component={ChatPage} path='/ChatPage' exact></Route>
         {/* <Route component={Index} path='/Index'></Route> */}
       </BrowserRouter>

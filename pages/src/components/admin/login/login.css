@@ -1,0 +1,62 @@
+
+.admin-login-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-login-header img {
+    height: 30px;
+    position: fixed;
+    left: 20px;
+    top: 20px;
+}
+.admin-login-frame{
+    width: 336px;
+    margin-top: -280px;
+}
+
+
+.admin-login-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.admin-login-spec {
+    text-align: left;
+    font-size: 14px;
+    margin-top:6px;
+}
+
+.admin-login-input {
+    text-align: left;
+    width: 336px;
+    margin-top: 8px;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #000;
+    height: 42px;
+    line-height: 18px;
+    padding-left: 10px;
+}
+
+.admin-login-btn{
+    background-color: #fff;
+    border-radius: 6px;
+    height: 50px;
+    margin-top: 60px;
+    color: #000;
+    line-height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+
+}
