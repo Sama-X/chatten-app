@@ -244,5 +244,8 @@ class OrderService(BaseService):
             payment_method=payment_method
         )
 
-        seria = OrderSerializer(order_obj)
+        seria = OrderSerializer(order_obj, context={
+            'user_dict': {request.user.id: request.user},
+            'order_package_dict': {package.id: package}
+        })
         return APIResponse(result=seria.data)
