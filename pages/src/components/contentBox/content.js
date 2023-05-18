@@ -1,27 +1,33 @@
 import './content.css'
 import { getCategoriesAsync } from '../../api/index.js';
+import locales from '../../locales/locales.js'
+
 
 import { useEffect, useState } from 'react';
-const App = () => {
+const App = (data) => {
+  console.log('locales====', locales)
+  const language = data['language']
+
+  console.log('language====', data)
   const [dataList, setDataList] = useState([]);
   const fetchData = () => {
     const copyList = [
       {
-        title:'问题示例',
+        title:locales(language)['examples'],
         url:require("../../assets/icon1.png"),
         questionList:[
-          "“用简单的术语解释量子力学” →",
-          "“给孩子过10岁生日的好创意”→",
-          "“如何在JavaScript中创建一个HTTP请求？”→"
+          "“" + locales(language)['case1'] + "” →",
+          "“" + locales(language)['case2'] + "”→",
+          "“" + locales(language)['case3'] + "？”→"
         ]
       },
       {
-        title:'能做什么？',
+        title:locales(language)['dowhat'],
         url:require("../../assets/icon2.png"),
         questionList:[
-          "记住用户在先前对话中说过的内容",
-          "允许用户修正对话内容",
-          "chatGPT会拒绝不合理的请求"
+          locales(language)['case4'],
+          locales(language)['case5'],
+          locales(language)['case6']
         ]
       }
     ]
@@ -32,7 +38,7 @@ const App = () => {
   }
   useEffect(()=>{
     getCategories()
-  }, [])
+  }, [data.language])
   return (
     <div>
       <div className="contentBox">
@@ -47,7 +53,7 @@ const App = () => {
                     </div>
                     {
                       item.questionList.map((queItem,queIndex) => {
-                        return <div className="contentQuestionBox" key={queIndex}>{ queItem }</div>
+                        return <div className="contentQuestionBox" key={queIndex}><div className='contentQuestionContent'>{ queItem }</div></div>
                       })
                     }
                   </div>
