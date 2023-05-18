@@ -1,12 +1,12 @@
 """
 api service.
 """
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 import json
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
 from base.common import CommonUtil
@@ -15,6 +15,8 @@ from base.response import APIResponse, SerializerErrorResponse
 
 from base.sama import SamaClient
 from base.service import BaseService
+from chat.models import ChatRecordModel
+from order.models import OrderModel
 from users.admin.serializer import ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
 from users.models import (
     AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
@@ -342,3 +344,38 @@ class InviteLogService(BaseService):
             result=serializer.data, count=total, direct_invite_count=first_level_total,
             indirect_invite_count=second_level_total
         )
+
+
+class ReportService(BaseService):
+    """
+    report service.
+    """
+
+    @classmethod
+    def get_summary(cls, start_date=None, end_date=None) -> APIResponse:
+        """
+        get today summary.
+        """
+        if not start_date:
+            start_date = date.today()
+        if not end_date:
+            end_date = date.today() + timedelta(days=1)
+
+        user_total = AccountModel.objects.filter(
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).count()
+        chat_total = ChatRecordModel.objects.filter(
+            is_delete=False, success=True, add_time__gte=start_date, add_time__lte=end_date
+        ).count()
+
+        order_dict = OrderModel.objects.filter(
+            status=OrderModel.STATUS_SUCCESS,
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).aggregate(total=Count("*"), total_price=Sum("actual_price"))
+
+        return APIResponse(result={
+            "register_user": user_total or 0,
+            "usage_total": chat_total or 0,
+            "recharge_count": order_dict.get('total') or 0,
+            "recharge_amount": order_dict.get('total_price') or 0,
+        })

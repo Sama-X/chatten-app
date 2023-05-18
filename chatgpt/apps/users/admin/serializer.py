@@ -4,6 +4,7 @@ order admin serializer.
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
+from base.serializer import BaseQuery
 
 from users.models import ConfigModel, InviteLogModel
 
@@ -85,3 +86,11 @@ class InviteLogSerializer(serializers.ModelSerializer):
             'id', 'user_id', 'user_name', 'inviter_user_id',
             'inviter_user_name', 'invite_level', 'add_time'
         )
+
+
+class ReportQuery(BaseQuery):
+    """
+    report query.
+    """
+    start_date = serializers.DateField(allow_null=True, required=False, input_formats=['%Y-%m-%d'])
+    end_date = serializers.DateField(allow_null=True, required=False, input_formats=['%Y-%m-%d'])
