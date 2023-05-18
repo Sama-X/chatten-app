@@ -5,8 +5,8 @@ from datetime import datetime, timedelta, time, date
 from math import floor
 from django.db import transaction
 from django.db.models import Sum
-from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsModel, PointsWithdrawModel
-from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, WithdrawSerializer
+from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsLogModel, PointsModel, PointsWithdrawModel
+from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, PointsLogSerializer, WithdrawSerializer
 from base.exception import AssetErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
@@ -247,7 +247,6 @@ class PointsWithdrawService(BaseService):
     """
 
     @classmethod
-    @classmethod
     def get_list(cls, user_id, page, offset, order, status) -> APIResponse:
         """
         get points withdraw list.
@@ -292,3 +291,28 @@ class PointsWithdrawService(BaseService):
         obj.save()
 
         return APIResponse()
+
+
+class PointsLogService(BaseService):
+    """
+    points log service.
+    """
+
+    @classmethod
+    def get_list(cls, user_id, page, offset, order) -> APIResponse:
+        """
+        get points withdraw list.
+        """
+        base = PointsLogModel.objects.filter(is_delete=False)
+        if user_id is not None:
+            base = base.filter(user_id=user_id)
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            PointsLogModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        serializer = PointsLogSerializer(objs, many=True)
+
+        return APIResponse(result=serializer.data, count=total)

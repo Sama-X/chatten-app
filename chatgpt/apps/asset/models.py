@@ -54,6 +54,12 @@ class PointsLogModel(BaseModel):
     CATEGORY_ADD = 1
     CATEGORY_SUB = -1
 
+    CATEGORIES = (
+        (CATEGORY_ADD, _("increase")),
+        (CATEGORY_SUB, _("reduce")),
+    )
+    CATEGORY_DICT = dict(CATEGORIES)
+
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
     point_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("points foreignkey id"))
     category = models.SmallIntegerField(default=CATEGORY_ADD, verbose_name=_("points change category"))

@@ -6,7 +6,7 @@ import json
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
 from base.common import CommonUtil
@@ -14,7 +14,8 @@ from base.exception import SystemErrorCode, UserErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 
 from base.sama import SamaClient
-from users.admin.serializer import ConfigSeriazlier, UpdateConfigSerializer
+from base.service import BaseService
+from users.admin.serializer import ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
 from users.models import (
     AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
@@ -298,3 +299,46 @@ class ConfigService:
 
         # return APIResponse()
         return APIResponse(code=UserErrorCode.CONFIG_IS_FEATURE_ENABLED)
+
+
+class InviteLogService(BaseService):
+    """
+    invite log service
+    """
+
+    @classmethod
+    def get_list(cls, page, offset, order, user_id):
+        """
+        get invite users.
+        """
+        base = InviteLogModel.objects.filter(
+            Q(inviter_user_id = user_id) | Q(super_inviter_user_id = user_id),
+            is_delete=False,
+        )
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            InviteLogModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+        user_ids = set()
+        for item in objs:
+            user_ids.add(item.user_id)
+            user_ids.add(item.inviter_user_id)
+        user_dict = {}
+        if user_ids:
+            user_dict = {
+                item.id: item for item in AccountModel.objects.filter(id__in=list(user_ids))
+            }
+
+        serializer = InviteLogSerializer(objs, many=True, context={
+            'user_dict': user_dict
+        })
+
+        first_level_total = InviteLogModel.objects.only("id").filter(inviter_user_id = user_id).count()
+        second_level_total = InviteLogModel.objects.only("id").filter(super_inviter_user_id = user_id).count()
+
+        return APIResponse(
+            result=serializer.data, count=total, direct_invite_count=first_level_total,
+            indirect_invite_count=second_level_total
+        )

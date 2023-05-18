@@ -5,9 +5,10 @@ asset api view.
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from asset.serializer import WithdrawQuery
-from asset.service import PointsService, PointsWithdrawService
+from asset.service import PointsLogService, PointsService, PointsWithdrawService
 
 from base.middleware import AnonymousAuthentication
+from base.serializer import BaseQuery
 
 
 class PointsWithdrawViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -50,3 +51,28 @@ class PointsWithdrawViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, view
         desc: Points exchange asset
         """
         return PointsService.exchange_point(request.user.id, request)
+
+
+class PointsLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    points log api.
+    """
+
+    authentication_classes = (AnonymousAuthentication,)
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/asset/points-withdraw/
+        method: get
+        desc: get points withdraw list api
+        """
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+
+        resp = PointsLogService.get_list(request.user.id, page, offset, order)
+
+        return resp
