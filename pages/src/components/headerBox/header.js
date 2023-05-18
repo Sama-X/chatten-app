@@ -320,7 +320,7 @@ const App = (data) => {
           <div>
             {
               items ?
-              <Menu
+              <Menu className='chatBoxMenu'
                 onClick={menuClick}
                 onOpenChange={historyMenu}
                 style={{
@@ -420,7 +420,7 @@ const App = (data) => {
             <div>
               {
                 items ?
-                <Menu
+                <Menu className='chatBoxMenu'
                   onClick={menuClick}
                   onOpenChange={historyMenu}
                   style={{

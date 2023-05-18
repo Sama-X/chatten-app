@@ -582,7 +582,7 @@ const App = () => {
                 <div>
                   {
                     items ?
-                    <Menu
+                    <Menu className='chatBoxMenu'
                     onClick={menuClick}
                     onOpenChange={historyMenu}
                     style={{

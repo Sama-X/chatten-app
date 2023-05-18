@@ -116,7 +116,9 @@
     line-height: 16px;
     margin-top: 1px;
 }
-.ant-menu-submenu-title{
+
+
+.chatBoxMenu .ant-menu-submenu .ant-menu-submenu-title {
     padding-left: 5px !important;
     background: #30323C;
     border-radius: 4px;
