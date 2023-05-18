@@ -184,12 +184,14 @@ class UserProfileViewSet(viewsets.GenericViewSet):
         """
         user = request.user
 
+        UserService.check_given_gift_experience(user.id)
+
         result = {
             'id': user.id,
             'nickname': user.nickname,
-            'experience': user.experience,
-            'reward_experience': UserService.get_reward_experience(user.id),
-            'used_experience': UserService.get_used_experience(user.id, start_time=datetime.now().date()),
+            'experience': UserService.get_user_experience(user.id),
+            'reward_experience': 0,
+            'used_experience': 0,
             'points': UserService.get_user_points(user.id),
             'invite_code': None
         }

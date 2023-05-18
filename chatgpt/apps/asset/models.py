@@ -139,6 +139,7 @@ class O2OPaymentLogModel(BaseModel):
     """
     o2o payment log.
     """
+    CATEGORY_EXPIRED = -2
     CATEGORY_CONSUME = -1
     CATEGORY_FREE = 1
     CATEGORY_BUY = 2
@@ -146,6 +147,7 @@ class O2OPaymentLogModel(BaseModel):
     CATEGORY_EXCHANGE = 4
 
     CATEGORIES = (
+        (CATEGORY_EXPIRED, _("expired")),
         (CATEGORY_CONSUME, _("consume")),
         (CATEGORY_FREE, _("free")),
         (CATEGORY_BUY, _("buy")),
@@ -157,7 +159,8 @@ class O2OPaymentLogModel(BaseModel):
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
     payment_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("o2opayment id"))
     category = models.SmallIntegerField(default=CATEGORY_FREE, db_index=True, verbose_name=_("log category"))
-    expire_time = models.DateTimeField(default=datetime.now, db_index=True, verbose_name=_("expiration time"))
+    expire_time = models.DateTimeField(null=True, default=datetime.now, db_index=True,
+                                       verbose_name=_("expiration time"))
     usage_count = models.IntegerField(null=False, default=0, verbose_name=_("current usage count"))
     note = models.CharField(max_length=256, null=True, verbose_name=_("Notes on payment log"))
     order_id = models.BigIntegerField(null=True, db_index=True, verbose_name=_("buy order id"))

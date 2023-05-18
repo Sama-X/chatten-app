@@ -1,7 +1,7 @@
 """
 api service.
 """
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 import json
 from django.conf import settings
 from django.core.cache import cache
@@ -9,7 +9,7 @@ from django.db import transaction
 from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
-from asset.models import PointsModel
+from asset.models import O2OPaymentModel, PointsModel
 from asset.service import O2OPaymentService
 from base.common import CommonUtil
 from base.exception import SystemErrorCode, UserErrorCode
@@ -170,6 +170,25 @@ class UserService:
         return current_total
 
     @classmethod
+    def get_user_experience(cls, user_id):
+        """
+        get user experience.
+        """
+        total = UserServiceHelper.get_experience_cache(user_id)
+        if total is not None:
+            return total
+
+        payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        if not payment_obj:
+            payment_obj = O2OPaymentService.add_free_payment(user_id)
+
+        total = payment_obj.free_usage_count + payment_obj.persistence_usage_count + payment_obj.transient_usage_count
+
+        UserServiceHelper.update_experience_cache(user_id, total, 60)
+
+        return total
+
+    @classmethod
     def get_user_points(cls, user_id):
         """
         get user points.
@@ -177,14 +196,51 @@ class UserService:
         obj = PointsModel.objects.filter(user_id=user_id).first()
         return obj.total if obj else 0
 
+    @classmethod
+    def check_given_gift_experience(cls, user_id):
+        """
+        Check whether the user has given a gift today.
+        """
+        if UserServiceHelper.had_given_gift_experience(user_id):
+            return True
+
+        payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        if not payment_obj or payment_obj.free_expire_time < datetime.now():
+            O2OPaymentService.add_free_payment(user_id)
+            UserServiceHelper.update_given_gift_experience(user_id)
+
 
 class UserServiceHelper:
     """
     user service helper.
     """
 
+    EXPERIENCE_USAGE_KEY = "chat:experience:usage:{}:times"
     EXPERIENCE_REWARD_KEY = "chat:experience:reward:{}:times"
     EXPERIENCE_USED_KEY = "chat:experience:used:{}:times"
+    EXPERIENCE_TODAY_GIFT = "chat:experience:today:gift:{}"
+
+    @classmethod
+    def had_given_gift_experience(cls, user_id):
+        """
+        Check whether the user has given a gift today.
+        """
+        key = cls.EXPERIENCE_TODAY_GIFT.format(user_id)
+        if cache.has_key(key):
+            return True
+        else:
+            return False
+
+    @classmethod
+    def update_given_gift_experience(cls, user_id):
+        """
+        update had given a gift today.
+        """
+        key = cls.EXPERIENCE_TODAY_GIFT.format(user_id)
+        end = datetime.combine(date.today() + timedelta(days=1), time.min)
+        now = datetime.now()
+
+        cache.set(key, 1, int((end - now).total_seconds()))
 
     @classmethod
     def get_reward_experience_cache(cls, user_id):
@@ -200,6 +256,14 @@ class UserServiceHelper:
         get cache.
         """
         key = cls.EXPERIENCE_USED_KEY.format(user_id)
+        return cache.get(key)
+
+    @classmethod
+    def get_experience_cache(cls, user_id):
+        """
+        get cache.
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
         return cache.get(key)
 
     @classmethod
@@ -219,6 +283,14 @@ class UserServiceHelper:
         cache.delete(key)
 
     @classmethod
+    def clear_experience_cache(cls, user_id):
+        """
+        clear cache.
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
+        cache.delete(key)
+
+    @classmethod
     def update_used_experience_cache(cls, user_id, value, expired=7200):
         """
         update cache.
@@ -234,6 +306,15 @@ class UserServiceHelper:
         default: 2 hour cache
         """
         key = cls.EXPERIENCE_REWARD_KEY.format(user_id)
+        cache.set(key, value, expired)
+
+    @classmethod
+    def update_experience_cache(cls, user_id, value, expired=7200):
+        """
+        update cache.
+        default: 2 hour cache
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
         cache.set(key, value, expired)
 
 
