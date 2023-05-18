@@ -70,7 +70,7 @@ class AdminOrderViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         """
         url: /api/v1/admin/order/orders/
         method: get
-        desc: get order package list api
+        desc: get order list api
         """
         query = AdminOrderQuery(data=request.GET)
         query.is_valid()
