@@ -91,11 +91,15 @@ class OrderErrorCode:
     ORDER_PACKAGE_TRANSIENT_NO_DAYS = 30000
     ORDER_PACKAGE_INVALID_CATEGORY = 30001
     ORDER_PACKAGE_NAME_EXISTS = 30002
+    ORDER_PACKAGE_INVALID = 30003
+    ORDER_INVALID_PAYMENT_METHOD = 300100
 
     ERRORS = (
         (ORDER_PACKAGE_TRANSIENT_NO_DAYS, _('The timeliness package cannot be used without days')),
         (ORDER_PACKAGE_INVALID_CATEGORY, _('Invalid package category')),
         (ORDER_PACKAGE_NAME_EXISTS, _('Package name already exists')),
+        (ORDER_INVALID_PAYMENT_METHOD, _('Invalid method of payment')),
+        (ORDER_PACKAGE_INVALID, _('Invalid order package')),
     )
     ERRORS_DICT = dict(ERRORS)
 

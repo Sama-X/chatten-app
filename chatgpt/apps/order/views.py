@@ -9,7 +9,7 @@ from order.serializer import OrderQuery
 from order.service import OrderService
 
 
-class OrderViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+class OrderViewset(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     order api.
     """
@@ -34,3 +34,17 @@ class OrderViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         status = query.validated_data.get('status')  # type: ignore
 
         return OrderService.get_list(page, offset, order, user_id, package_id, order_number, status)
+
+    def create(self, request, *args, **kwargs):
+        """
+        url: /api/v1/order/orders/
+        method: post
+        params: {
+            package_id: 1,
+            quantity: 1,
+            payment_method: 0
+        }
+        desc: create order  api
+        """
+
+        return OrderService.create_order(request)

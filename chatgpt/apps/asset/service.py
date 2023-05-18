@@ -31,7 +31,7 @@ class O2OPaymentService(BaseService):
             if not payment:
                 payment = O2OPaymentModel(
                     user_id=order.user_id,
-                    transient_expire_time=datetime.now(),
+                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
                     transient_usage_count=0,
                     persistence_usage_count=0,
                     free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
@@ -74,16 +74,16 @@ class O2OPaymentService(BaseService):
         """
         with transaction.atomic():
             payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+            today = date.today()
+            zero = time(0, 0, 0)
             if not payment:
                 payment = O2OPaymentModel(
                     user_id=user_id,
-                    transient_expire_time=datetime.now(),
+                    transient_expire_time=datetime.combine(today + timedelta(days=1), zero),
                     transient_usage_count=0,
                     persistence_usage_count=0
                 )
 
-            today = date.today()
-            zero = time(0, 0, 0)
             payment.free_expire_time = datetime.combine(today + timedelta(days=1), zero)
             payment.free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
             payment.save()
@@ -114,7 +114,7 @@ class O2OPaymentService(BaseService):
             if not payment:
                 payment = O2OPaymentModel(
                     user_id=user_id,
-                    transient_expire_time=datetime.now(),
+                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
                     transient_usage_count=0,
                     persistence_usage_count=0,
                     free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),

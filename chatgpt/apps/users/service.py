@@ -10,6 +10,7 @@ from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
 from asset.models import PointsModel
+from asset.service import O2OPaymentService
 from base.common import CommonUtil
 from base.exception import SystemErrorCode, UserErrorCode
 from base.response import APIResponse, SerializerErrorResponse
@@ -72,6 +73,8 @@ class UserService:
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
                     conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([invite_user_id, 10, None]))
+
+            O2OPaymentService.add_free_payment(account.id)
 
             conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
             token = CommonUtil.generate_user_token(account.id)

@@ -71,7 +71,22 @@ class OrderSerializer(serializers.ModelSerializer):
         """
         model = OrderModel
         fields = (
-            'id', 'user_id', 'package_id', 'order_number', 'quantity', 'actual_price',
-            'status', 'status_name', 'status_note', 'payment_time', 'payment_method',
-            'payment_method_name'
+            'id', 'user_id', 'user_name', 'package_id', 'package_name', 'order_number', 'quantity',
+            'actual_price', 'status', 'status_name', 'status_note', 'payment_time', 'payment_method',
+            'payment_method_name', 'add_time'
         )
+
+
+class CreateOrderSeriralizer(serializers.Serializer):
+    """
+    create order.
+    """
+    package_id = serializers.IntegerField(
+        required=True, min_value=0, allow_null=False, help_text=_("order package id")
+    )
+    quantity = serializers.IntegerField(
+        required=True, min_value=1, allow_null=False, help_text=_("order quantity")
+    )
+    payment_method = serializers.IntegerField(
+        required=True, allow_null=False, help_text=_("order paymethod")
+    )

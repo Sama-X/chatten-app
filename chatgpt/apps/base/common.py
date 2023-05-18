@@ -1,8 +1,10 @@
 """
 Common util module.
 """
+from datetime import datetime
 import logging
 import random
+
 from hashids import Hashids
 from uuid import uuid4
 
@@ -79,6 +81,23 @@ class CommonUtil:
         result = cls.HASH.decode(value)
 
         return result[0] if result else 0
+
+    @staticmethod
+    def random_number_str():
+        """
+        generate random number
+        """
+        datetime_str = datetime.now().strftime('%Y%m%d%H%M%S')
+        random_number = random.randint(0, 9999)
+        return f'{datetime_str}{random_number:04}'
+
+    @classmethod
+    def generate_order_number(cls):
+        """
+        generate order number.
+        """
+        return f'{cls.random_number_str()}'
+
 
 
 class RequestClient:
