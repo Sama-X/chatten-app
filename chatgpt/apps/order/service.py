@@ -6,8 +6,9 @@ from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
 
-from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, UpdateOrderPackageSerializer
-from order.models import OrderPackageModel
+from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, OrderSerializer, UpdateOrderPackageSerializer
+from order.models import OrderModel, OrderPackageModel
+from users.models import AccountModel
 
 
 class OrderPackageService(BaseService):
@@ -154,3 +155,56 @@ class OrderPackageService(BaseService):
         obj.save()
 
         return APIResponse()
+
+
+class OrderService(BaseService):
+    """
+    order service.
+    """
+    @classmethod
+    def get_list(cls, page, offset, order, user_id=None, package_id=None, order_number=None, status=None) -> APIResponse:
+        """
+        get order list.
+        """
+        conditions = {
+            'is_delete': False
+        }
+        if user_id:
+            conditions['user_id'] = user_id
+        if package_id:
+            conditions['package_id'] = package_id
+        if order_number:
+            conditions['order_number__icontains'] = order_number
+        if status is not None:
+            conditions['status'] = status
+
+        base = OrderModel.objects.filter(**conditions)
+        if user_id:
+            base = base.filter()
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            OrderModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        user_ids, package_ids = set(), set()
+        for item in objs:
+            user_ids.add(item.user_id)
+            package_ids.add(item.package_id)
+
+        user_dict, order_package_dict = {}, {}
+        if user_ids:
+            user_dict = {
+                user.id: user for user in AccountModel.objects.filter(id__in=list(user_ids)).all()
+            }
+        if package_ids:
+            order_package_dict = {
+                item.id: item for item in OrderPackageModel.objects.filter(id__in=list(package_ids)).all()
+            }
+
+        serializer = OrderSerializer(objs, many=True, context={
+            'user_dict': user_dict,
+            'order_package_dict': order_package_dict
+        })
+
+        return APIResponse(result=serializer.data, count=total)
