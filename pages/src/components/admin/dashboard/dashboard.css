@@ -1,0 +1,54 @@
+
+
+.overview-header {
+    background: #fff;
+    color: #000;
+}
+
+
+.overview-title {
+    padding: 20px;
+    border-bottom: 1px solid #EDEFF3;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.overview-num-list {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 80px 20px 20px;
+}
+
+
+.overview-num-item-title {
+    font-size: 14px;
+    color: rgba(0,0,0,.45);
+    margin-bottom: 2px;
+}
+
+.overview-num-item-value {
+    font-size: 24px;
+}
+
+
+.overview-topn-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.overview-topn-item {
+    width: 48%;
+    height: 340px;
+    background: #fff;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.overview-topn-item-title {
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.overview-topn-item-chart {
+    width: 100%;
+}
