@@ -4,6 +4,7 @@ order package admin api.
 
 from datetime import datetime
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
 
 from django.contrib.auth.models import User
 from base.common import CommonUtil
@@ -74,13 +75,21 @@ class AdminSummaryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         method: get
         desc: get summary api
         """
+        return ReportService.get_summary()
+
+    @action(methods=['GET'], detail=False)
+    def daily(self, request, *args, **kwargs):
+        """
+        url: /api/v1/admin/summary/daily/
+        method: get
+        desc: get summary by day api
+        """
         query = ReportQuery(data=request.GET)
         query.is_valid()
         start_date = query.validated_data.get('start_date') # type: ignore
         end_date = query.validated_data.get('end_date') # type: ignore
 
-        return ReportService.get_summary(start_date, end_date)
-
+        return ReportService.get_summary_by_day(start_date, end_date)
 
 class AdminLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """

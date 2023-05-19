@@ -445,25 +445,15 @@ class ReportService(BaseService):
     """
 
     @classmethod
-    def get_summary(cls, start_date=None, end_date=None) -> APIResponse:
+    def get_summary(cls) -> APIResponse:
         """
         get today summary.
         """
-        if not start_date:
-            start_date = date.today()
-        if not end_date:
-            end_date = date.today() + timedelta(days=1)
-
-        user_total = AccountModel.objects.filter(
-            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
-        ).count()
-        chat_total = ChatRecordModel.objects.filter(
-            is_delete=False, success=True, add_time__gte=start_date, add_time__lte=end_date
-        ).count()
+        user_total = AccountModel.objects.filter(is_delete=False).count()
+        chat_total = ChatRecordModel.objects.filter(is_delete=False, success=True).count()
 
         order_dict = OrderModel.objects.filter(
-            status=OrderModel.STATUS_SUCCESS,
-            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+            status=OrderModel.STATUS_SUCCESS, is_delete=False
         ).aggregate(total=Count("*"), total_price=Sum("actual_price"))
 
         return APIResponse(result={
@@ -472,3 +462,50 @@ class ReportService(BaseService):
             "recharge_count": order_dict.get('total') or 0,
             "recharge_amount": order_dict.get('total_price') or 0,
         })
+
+    @classmethod
+    def get_summary_by_day(cls, start_date=None, end_date=None) -> APIResponse:
+        """
+        get summary by day.
+        """
+        if not end_date:
+            end_date = date.today()
+
+        end_date += timedelta(days=1)
+
+        if not start_date:
+            start_date = end_date - timedelta(days=30)
+
+        user_objs = AccountModel.objects.filter(
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count('*'))
+        user_dict = {
+            item['add_time__date']: item['total'] for item in user_objs
+        }
+        chat_objs = ChatRecordModel.objects.filter(
+            is_delete=False, success=True, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count('*'))
+        chat_dict = {
+            item['add_time__date']: item['total'] for item in chat_objs
+        }
+        order_objs = OrderModel.objects.filter(
+            status=OrderModel.STATUS_SUCCESS,
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count("*"), total_price=Sum("actual_price"))
+        order_dict = {
+            item['add_time__date']: item for item in order_objs
+        }
+
+        result = []
+        while start_date < end_date:
+            current = str(start_date)
+            result.append({
+                'date': current,
+                "register_user": user_dict.get(current) or 0,
+                "usage_total": chat_dict.get(current) or 0,
+                "recharge_count": order_dict.get('current', {}).get('total') or 0,
+                "recharge_amount": order_dict.get('current', {}).get('actual_price') or 0,
+            })
+            start_date += timedelta(days=1)
+
+        return APIResponse(result=result)
