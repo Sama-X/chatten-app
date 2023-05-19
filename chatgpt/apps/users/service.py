@@ -495,16 +495,14 @@ class ReportService(BaseService):
         order_dict = {
             item['add_time__date']: item for item in order_objs
         }
-
         result = []
         while start_date < end_date:
-            current = str(start_date)
             result.append({
-                'date': current,
-                "register_user": user_dict.get(current) or 0,
-                "usage_total": chat_dict.get(current) or 0,
-                "recharge_count": order_dict.get('current', {}).get('total') or 0,
-                "recharge_amount": order_dict.get('current', {}).get('actual_price') or 0,
+                'date': start_date,
+                "register_user": user_dict.get(start_date) or 0,
+                "usage_total": chat_dict.get(start_date) or 0,
+                "recharge_count": order_dict.get(start_date, {}).get('total') or 0,
+                "recharge_amount": order_dict.get(start_date, {}).get('actual_price') or 0,
             })
             start_date += timedelta(days=1)
 
