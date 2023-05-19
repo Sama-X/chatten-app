@@ -201,7 +201,6 @@ class O2OPaymentService(BaseService):
                     payment.persistence_usage_count = 0
                     count = count - sub_count
 
-                payment.save()
                 O2OPaymentLogModel.objects.create(
                     user_id=user_id,
                     payment_id=payment.id,
@@ -210,6 +209,8 @@ class O2OPaymentService(BaseService):
                     usage_count=sub_count,
                     note=f'Used persistence number of times: {sub_count}'
                 )
+
+            payment.save()
 
             if count > 0:
                 raise Exception(_("consume payment error"))
