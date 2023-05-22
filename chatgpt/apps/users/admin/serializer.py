@@ -14,6 +14,15 @@ class ConfigSeriazlier(serializers.ModelSerializer):
     config serializer.
     """
     add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    description = serializers.SerializerMethodField()
+
+    def get_description(self, obj):
+        """
+        get description.
+        """
+        print(obj.description)
+        print('trans = ', _(obj.description))
+        return _(obj.description)
 
     class Meta:
         """
@@ -31,9 +40,6 @@ class UpdateConfigSerializer(serializers.Serializer):
     """
     value = serializers.CharField(
         required=True, allow_null=True, help_text=_("config item value")
-    )
-    description = serializers.CharField(
-        required=True, allow_null=False, help_text=_("config item description")
     )
 
 
