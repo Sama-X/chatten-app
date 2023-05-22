@@ -129,11 +129,11 @@ class OrderPackageService(BaseService):
 
         with transaction.atomic():
             obj.is_delete = True
+            obj.save()
             exists = OrderPackageModel.objects.filter(is_delete=False, name=name).count() > 0
             if exists:
                 return APIResponse(code=OrderErrorCode.ORDER_PACKAGE_NAME_EXISTS)
 
-            obj.save()
             OrderPackageModel.objects.create(
                 name=name,
                 category=category,
