@@ -369,12 +369,10 @@ class ConfigService:
 
         data = serializer.validated_data
         value = data.get('value') # type: ignore
-        description = data.get('description', '') # type: ignore
         if config.value_type == config.VALUE_TYPE_INT and not str(value).isdigit():
             return APIResponse(code=UserErrorCode.CONFIG_INVALID_INT_TYPE)
 
         config.value = value
-        config.description = description
         config.save()
         ConfigModel.clear_cache(name=config.name)
         return APIResponse()
