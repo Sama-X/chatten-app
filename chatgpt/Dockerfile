@@ -3,14 +3,12 @@ RUN pip install --upgrade pip -i http://mirrors.aliyun.com/pypi/simple/ --truste
 RUN pip install ipython -i http://mirrors.aliyun.com/pypi/simple/ --trusted mirrors.aliyun.com
 
 RUN echo > /etc/apt/sources.list
-RUN echo 'deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib' >> /etc/apt/sources.list
-RUN echo 'deb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib' >> /etc/apt/sources.list
-RUN echo 'deb http://mirrors.aliyun.com/debian-security stretch/updates main' >> /etc/apt/sources.list
-RUN echo 'deb-src http://mirrors.aliyun.com/debian-security stretch/updates main' >> /etc/apt/sources.list
-RUN echo 'deb http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib' >> /etc/apt/sources.list
-RUN echo 'deb-src http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib' >> /etc/apt/sources.list
-RUN echo 'deb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib' >> /etc/apt/sources.list
-RUN echo 'deb-src http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib' >> /etc/apt/sources.list
+RUN echo 'deb http://archive.debian.org/debian/ stretch main non-free contrib' >> /etc/apt/sources.list
+RUN echo 'deb-src http://archive.debian.org/debian/ stretch main non-free contrib' >> /etc/apt/sources.list
+RUN echo 'deb http://archive.debian.org/debian-security stretch/updates main' >> /etc/apt/sources.list
+RUN echo 'deb-src http://archive.debian.org/debian-security stretch/updates main' >> /etc/apt/sources.list
+RUN echo 'deb http://archive.debian.org/debian/ stretch-backports main non-free contrib' >> /etc/apt/sources.list
+RUN echo 'deb-src http://archive.debian.org/debian/ stretch-backports main non-free contrib' >> /etc/apt/sources.list
 
 RUN apt update && apt install -y libtinfo5 --allow-remove-essential
 RUN apt-get install -y gettext
