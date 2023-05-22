@@ -28,7 +28,7 @@ function App(props) {
         <div className="table-container">
           {props.location.pathname === '/admin/dashboard' ? <Dashboard></Dashboard> : ""}
           {props.location.pathname === '/admin' ? <Dashboard></Dashboard> : ""}
-          {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
+          {props.location.pathname === '/admin/packages' ? <PackageList></PackageList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
