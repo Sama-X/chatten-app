@@ -1,7 +1,9 @@
+# flake8: noqa
+# pylint: skip-file
 import requests
 import time
 from chatgpt.settings import WECHAT
-from utils import gen_code, rsa_sign, make_authorization_header
+from order.utils import gen_code, rsa_sign, make_authorization_header
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import base64
 import json
@@ -133,7 +135,7 @@ def native_prepay(amount, out_trade_no):
 
     body = json.dumps(body).replace(' ', '')
     url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/native'
-    authorization = make_authorization_header("POST", '/v3/pay/transactions/jsapi', body)
+    authorization = make_authorization_header("POST", '/v3/pay/transactions/native', body)
     response = requests.post(
         url=url,
         data=body,
@@ -145,5 +147,5 @@ def native_prepay(amount, out_trade_no):
     )
     print('native api response=', response.text)
 
-    code_url = response.json()['prepay_id']
+    code_url = response.json()['code_url']
     return code_url

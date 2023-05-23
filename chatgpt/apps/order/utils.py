@@ -1,10 +1,14 @@
+# flake8: noqa
+# pylint: skip-file
 import datetime
+from io import BytesIO
 import random
 import time
 import json
 import string
 import base64
 import requests
+import qrcode as qrcode_lib
 # from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 from Cryptodome.Signature import pkcs1_15
@@ -30,7 +34,7 @@ def gen_access_token():
 
 def rsa_sign(data):
 
-
+    print("sign data = ", data)
     with open(WECHAT['API_CLIENT_KEY_PATH'], 'r') as f:
         private_key = f.read()
         rsa_key = RSA.importKey(private_key)
@@ -70,6 +74,16 @@ def check_notify_sign(timestamp, nonce, body, certificate, signature):
         return True
     except:
         return False
+
+
+def make_qrcode(data):
+    print('qrcode = ', data)
+    img = qrcode_lib.make(data)
+    # img.show()
+    buf = BytesIO()
+    img.save(buf)
+    img_stream = buf.getvalue()
+    return img_stream
 
 
 if __name__ == '__main__':

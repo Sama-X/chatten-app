@@ -18,3 +18,4 @@ celery==5.2.7
 pycryptodome==3.17
 cryptography==40.0.2
 pycryptodomex==3.17
+qrcode==7.4.2

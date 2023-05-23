@@ -280,7 +280,7 @@ WECHAT = {
     "MCH_ID": '1644933727',  # 商户号
     "MCH_CERT_SERIAL_NO": '68FF233D8C6260FDB4D33D45D42271519283D0B9', # 商户证书序列号
     "MCH_API_V3_KEY": 'cityprotectiontech123456789maofa',              # 商户APIv3密钥
-    "API_CLIENT_KEY_PATH": os.path.dirname(__file__) + "/apiclient_key.pem",  # 证书路径,
+    "API_CLIENT_KEY_PATH": os.path.join(BASE_DIR, "apiclient_key.pem"),  # 证书路径,
     "CODE_TO_SESSION_URL": 'https://api.weixin.qq.com/sns/jscode2session',
     "PAY_NOTIFY_URL": 'https://pay-api.citypro-tech.com/pay/notify',
 }

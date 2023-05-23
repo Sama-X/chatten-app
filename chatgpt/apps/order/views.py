@@ -1,45 +1,23 @@
+# flake8: noqa
+# pylint: skip-file
 """
-<<<<<<< HEAD
-chat api module.
+order api module.
 """
 
-from datetime import datetime
-import json
 import logging
-import traceback
 
-from asgiref.sync import async_to_sync
-from django.conf import settings
-from django_redis import get_redis_connection
-
-from rest_framework import viewsets, mixins
-from rest_framework.decorators import action
-
-from base.ai import AIErrorCode, get_ai_instance
-from base.exception import SystemErrorCode
-from base.middleware import AnonymousAuthentication
-from base.response import APIResponse, SerializerErrorResponse
-from base.serializer import BaseQuery
-from order.serializer import OrderListSerializer
-from order.models import OrderModel
-from order.service import OrderService
-
-import wechat
 from chatgpt.settings import WECHAT
-import utils
 
 logger = logging.getLogger(__name__)
-
-
-class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
-    """
-    order view.
-    """
 
 from rest_framework import mixins, viewsets
 
 from base.middleware import AnonymousAuthentication
+from base.response import APIResponse
 from base.serializer import BaseQuery
+
+from order import wechat
+from order import utils
 from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
 
@@ -87,8 +65,6 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
 
         return OrderService.create_order(request)
 
-
-    
 
 class WePayNotifyHandler(mixins.CreateModelMixin):
     def post(self):

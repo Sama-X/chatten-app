@@ -2,11 +2,13 @@
 api service.
 """
 from django.db import transaction
+from django.http import HttpResponse
 from base.common import CommonUtil
 from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
 
+from order import utils, wechat
 from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, UpdateOrderPackageSerializer
 from order.models import OrderModel, OrderPackageModel
 from order.serializer import CreateOrderSeriralizer, OrderSerializer
@@ -238,14 +240,14 @@ class OrderService(BaseService):
         order_obj = OrderModel.objects.create(
             user_id=request.user.id,
             package_id=package_id,
-            order_number=CommonUtil.generate_order_number(),
+            out_trade_no=utils.gen_code(),
             quantity=quantity,
             actual_price=quantity * package.price,
             payment_method=payment_method
         )
 
-        seria = OrderSerializer(order_obj, context={
-            'user_dict': {request.user.id: request.user},
-            'order_package_dict': {package.id: package}
-        })
-        return APIResponse(result=seria.data)
+        code_url = wechat.native_prepay(order_obj.actual_price, order_obj.out_trade_no)
+
+        print('code_url = ', code_url)
+        img_stream = utils.make_qrcode(data=code_url)
+        return HttpResponse(img_stream, content_type="imge/jpg")

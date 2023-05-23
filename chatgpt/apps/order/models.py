@@ -28,11 +28,7 @@ class OrderPackageModel(BaseModel):
     usage_count = models.IntegerField(default=0, null=False, verbose_name=_("package usage count"))
     price = models.FloatField(default=0.0, verbose_name=_("package price"))
     priority = models.IntegerField(default=1, db_index=True, verbose_name=_("package sort priority"))
-    priority = models.IntegerField(default=1, db_index=True, verbose_name=_("package sort priority"))
 
-    out_trade_no = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("out_trade_no name"))
-    transaction_id = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("transaction_id"))
-    status = models.IntegerField(default=0, db_index=True, verbose_name=_("pay status"))  # 0、未支付，1、已支付
 
     class Meta:
         """
@@ -71,13 +67,15 @@ class OrderModel(BaseModel):
 
     user_id = models.BigIntegerField(db_index=True, null=False, verbose_name=_("user account id"))
     package_id = models.BigIntegerField(db_index=True, null=False, verbose_name=_("order package id"))
-    order_number = models.CharField(max_length=64, db_index=True, null=False, verbose_name=_("order number"))
     quantity = models.IntegerField(default=1, verbose_name=_("order quantity"))
-    actual_price = models.FloatField(default=0, verbose_name=_("order actual price"))
+    actual_price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("order actual price"))
     status = models.SmallIntegerField(default=STATUS_PENDING, db_index=True, verbose_name=_("order status"))
     status_note = models.CharField(max_length=64, verbose_name=_("order status note"))
     payment_time = models.DateTimeField(null=True, verbose_name=_("order payment time"))
     payment_method = models.SmallIntegerField(default=METHOD_ALIPAY, verbose_name=_("order pay method"))
+
+    out_trade_no = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("out_trade_no name"))
+    transaction_id = models.CharField(max_length=32, blank=False, db_index=True, null=True, verbose_name=_("transaction_id"))
 
     class Meta:
         """
