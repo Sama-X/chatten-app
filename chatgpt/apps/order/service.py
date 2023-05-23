@@ -251,7 +251,7 @@ class OrderService(BaseService):
 
         print('code_url = ', code_url)
         img_stream = utils.make_qrcode(data=code_url)
-        return HttpResponse(img_stream, content_type="image/jpg")
+        return HttpResponse(img_stream, content_type="image/png")
 
     @classmethod
     @transaction.atomic
