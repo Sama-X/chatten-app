@@ -1,6 +1,7 @@
 """
 api service.
 """
+import base64
 from django.db import transaction
 from django.http import HttpResponse
 from asset.service import O2OPaymentService, PointsLogService, PointsService
@@ -251,7 +252,9 @@ class OrderService(BaseService):
 
         print('code_url = ', code_url)
         img_stream = utils.make_qrcode(data=code_url)
-        return HttpResponse(img_stream, content_type="image/png")
+        return APIResponse(result={
+            'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}'
+        })
 
     @classmethod
     @transaction.atomic
