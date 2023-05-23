@@ -159,5 +159,5 @@ chatgpt/*.sh
 prod_local_settings.py
 docker-compose-prod.yaml
 # package-lock.json
-nginx.conf
+*nginx.conf
 test_local_settings.py
