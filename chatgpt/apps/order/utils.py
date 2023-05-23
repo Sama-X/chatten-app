@@ -18,6 +18,7 @@ from Cryptodome.Hash import SHA256
 from Cryptodome.PublicKey import RSA
 
 from Cryptodome.Signature import pkcs1_15
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from chatgpt.settings import WECHAT
 
@@ -85,6 +86,19 @@ def make_qrcode(data):
     img_stream = buf.getvalue()
     return img_stream
 
+
+def decryWePayNotify(params):
+    key_bytes = str.encode(WECHAT["MCH_API_V3_KEY"])
+    nonce_bytes = str.encode(params['resource']['nonce'])
+    ad_bytes = str.encode(params['resource']['associated_data'])
+    data = base64.b64decode(params['resource']['ciphertext'])
+    aesgcm = AESGCM(key_bytes)
+    plaintext = aesgcm.decrypt(nonce_bytes, data, ad_bytes)
+    plaintext_str = bytes.decode(plaintext)
+
+    print('plaintext_str=', plaintext_str)
+
+    return json.loads(plaintext_str)
 
 if __name__ == '__main__':
     signature = 'JFOy94pnyskPVAesCpYsGu2zhglkgtHh4LtEs1/gx+6NUF0S3SgTNI9yLYvZE/JyGtgC9UYXX94yIl7f1tQLr6VOl6oVZ4tfQlAaaLG53BM8bAeuCRrFhX9TV/bWcHCl8IMFwme90Nc44knXWzSytZwVAj5khF/i0mvF84oElndioGmjUvHxlebpJ4E06yd/lLYIzHVuL82h4FWMZJuYCvWRWmpNdOaPSxGdjKTZ/6lcOXU72DeLWlCaY/ancSmGZZRSXUdJ/ayWs+r3NsqmGB1vt27CZk+u7cj5+hreKjrYv8x6b/X1GZCLXdwGM5d+B1utRSuplBcpzHW7TsqFkw=='

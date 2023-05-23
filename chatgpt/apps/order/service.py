@@ -3,6 +3,7 @@ api service.
 """
 from django.db import transaction
 from django.http import HttpResponse
+from asset.service import O2OPaymentService, PointsLogService, PointsService
 from base.common import CommonUtil
 from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
@@ -251,3 +252,29 @@ class OrderService(BaseService):
         print('code_url = ', code_url)
         img_stream = utils.make_qrcode(data=code_url)
         return HttpResponse(img_stream, content_type="imge/jpg")
+
+    @classmethod
+    @transaction.atomic
+    def update_order_by_out_trade_no(cls, out_trade_no, data):
+        """
+        """
+        trade_state = data['trade_state']
+        transaction_id = data['transaction_id']
+        with transaction.atomic():
+            order_obj = OrderModel.objects.filter(
+                is_delete=False, out_trade_no=out_trade_no, status=OrderModel.STATUS_PENDING
+            ).first()
+            if not order_obj:
+                return False
+            if trade_state == "SUCCESS":
+                order_obj.transaction_id = transaction_id
+                order_obj.status = OrderModel.STATUS_SUCCESS
+                order_obj.save()
+
+                O2OPaymentService.add_payment_by_order(order_obj)
+                PointsService.add_invite_point_by_order(order_obj)
+                return True
+            else:
+                order_obj.status = OrderModel.STATUS_FAILURE
+                order_obj.save()
+        return False

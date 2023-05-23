@@ -4,7 +4,10 @@
 order api module.
 """
 
+import json
 import logging
+
+from django.http import HttpResponse
 
 from chatgpt.settings import WECHAT
 
@@ -66,27 +69,36 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
         return OrderService.create_order(request)
 
 
-class WePayNotifyHandler(mixins.CreateModelMixin):
-    def post(self):
-        # print("WePayNotifyHandler,header=", self.request.headers)
-        # print("WePayNotifyHandler,body=", self.request.body)
+class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    """
+
+    def get_json_data(self):
+        """
+        """
+        data = json.loads(self.request.body)
+        print("json data: ", data)
+        return data
+
+    def create(self, request):
+        """
+        """
+        print("WePayNotifyHandler,header=", self.request.headers)
+        print("WePayNotifyHandler,body=", self.request.body)
+
         headers = self.request.headers
         certificate = wechat.get_cert()
         print('weewww=', headers['Wechatpay-Signature'])
         serial = headers['Wechatpay-Serial']
-        if serial != wechat['MCH_CERT_SERIAL_NO']:
-            self.write({'status': 'fail'})
+        if serial != WECHAT['MCH_CERT_SERIAL_NO']:
+            return HttpResponse({'status': 'fail'})
 
         verify_ok = utils.check_notify_sign(headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'), certificate, headers['Wechatpay-Signature'])
         print('verify_ok=', verify_ok)
         if verify_ok:
             data = utils.decryWePayNotify(self.get_json_data())
             print("WePayNotifyHandler,data=", data)
-            OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id']})
-            if data['trade_state'] == "SUCCESS":
-                OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id'], "status":'2'})
-            else:
-                OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id']})
+            OrderService.update_order_by_out_trade_no(data['out_trade_no'], data)
 
         return APIResponse()
 
