@@ -89,9 +89,9 @@ class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
         headers = self.request.headers
         certificate = wechat.get_cert()
         print('weewww=', headers['Wechatpay-Signature'])
-        serial = headers['Wechatpay-Serial']
-        if serial != WECHAT['MCH_CERT_SERIAL_NO']:
-            return HttpResponse({'status': 'fail'})
+        # serial = headers['Wechatpay-Serial']
+        # if serial != WECHAT['MCH_CERT_SERIAL_NO']:
+        #     return HttpResponse({'status': 'fail'})
 
         verify_ok = utils.check_notify_sign(headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'), certificate, headers['Wechatpay-Signature'])
         print('verify_ok=', verify_ok)
