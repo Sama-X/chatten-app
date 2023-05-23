@@ -282,7 +282,7 @@ WECHAT = {
     "MCH_API_V3_KEY": 'cityprotectiontech123456789maofa',              # 商户APIv3密钥
     "API_CLIENT_KEY_PATH": os.path.join(BASE_DIR, "apiclient_key.pem"),  # 证书路径,
     "CODE_TO_SESSION_URL": 'https://api.weixin.qq.com/sns/jscode2session',
-    "PAY_NOTIFY_URL": 'https://pay-api.citypro-tech.com/pay/notify',
+    "PAY_NOTIFY_URL": 'https://pay-api.citypro-tech.com/api/v1/order/native_notify/',
 }
 
 """
