@@ -278,7 +278,7 @@ WECHAT = {
     "APP_ID": 'wx638bec1594b09d2f',  # 小程序appId
     "APP_SECRET": '7ddb1b396707f419563d8da6e1a96ba1',  # 小程序appSecret
     "MCH_ID": '1644933727',  # 商户号
-    "MCH_CERT_SERIAL_NO": '5535C78FFF50A343210E2A62F9F637E3412E996B', # 商户证书序列号
+    "MCH_CERT_SERIAL_NO": '68FF233D8C6260FDB4D33D45D42271519283D0B9', # 商户证书序列号
     "MCH_API_V3_KEY": 'cityprotectiontech123456789maofa',              # 商户APIv3密钥
     "API_CLIENT_KEY_PATH": os.path.dirname(__file__) + "/apiclient_key.pem",  # 证书路径,
     "CODE_TO_SESSION_URL": 'https://api.weixin.qq.com/sns/jscode2session',
