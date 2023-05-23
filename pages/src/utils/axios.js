@@ -14,7 +14,7 @@
 // )
 // const proBaseURL = 'http://chattop.club';//online
 // const proBaseURL = 'http://192.168.0.117:9003';//tan-bendi
-const proBaseURL  = 'http://47.122.41.201:8000/api/v1';
+const proBaseURL  = 'https://pay-api.citypro-tech.com';
 
 // const ENV = 'prod'    // dev或者prod
 

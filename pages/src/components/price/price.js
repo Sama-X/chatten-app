@@ -2,6 +2,8 @@ import './price.css'
 import { useEffect, useState } from 'react';
 import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
+import Request from '../../request.ts';
+import { useHistory } from 'react-router-dom';
 
 
 function App() {
@@ -9,7 +11,8 @@ function App() {
   let isPhone = /mobile/i.test(info);
   const [language, setLanguage] = useState(get_default_language());
   const [value, setValue] = useState(10)
-
+  let request = new Request({});
+  const navigate = useHistory()
 
   const changeValue = (e) => {
     console.log(parseInt(e.target.value))
@@ -21,9 +24,8 @@ function App() {
   }
 
   const payMoney = (value) => {
-      console.log('money=', value)
+    navigate.push('/pay/?amount=' + value)
   }
-
 
   return (
     <div className='price-container'>

@@ -1,4 +1,4 @@
-import './package.css'
+import './pay_qrcode.css'
 
 import { Button, Form, message, Popconfirm, Table, Modal, Select,Input } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -6,44 +6,42 @@ import Request from '../../request.ts';
 import { Link } from 'react-router-dom';
 
 
-
-
-const App = () => {
-
-  const [key, setKey] = useState("")
+const App = (props) => {
   let request = new Request({});
-  const fetchData = (page) => {
-    request.get('/api/v1/admin/order/order-packages/?offset=' + pageSize + '&page=' + page).then((res)=>{
-      console.log("res===", res)
 
-      if(res.code === 0){
-        setTotal(res.count)
-        var originData = []
-        for(var i=0; i<res.data.length; i++){
-           var tmp = res.data[i]
-           tmp["key"] = res.data[i].id
-           tmp["name"] = res.data[i].name
-           tmp["category"] = res.data[i].category + ''
-           tmp["category_name"] = res.data[i].category == 1? '永久期限': '固定期限'
-           tmp["usage_count"] = res.data[i].usage_count
-           tmp["price"] = res.data[i].price
-           tmp["priority"] = res.data[i].priority
-           originData.push(tmp)
-        }
-        setData(originData)
-      }
+  const [qrcodeUrl, setQrcodeUrl] = useState("")
+
+  function getBase64(data) {
+    return new Promise((resolve, reject) => {
+      const blob = new Blob([data], { type: 'image/jpg' }) // 必须指定type类型
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+  
+
+  const payMoney = (value) => {
+    console.log('money=', value)
+    request.post('/api/v1/order/orders/', {
+      package_id: 1,
+      quantity: 1,
+      'payment_method': 2
+    }).then(function(res){
+      console.log(res)
+      setQrcodeUrl(res.data.image)
     })
   }
 
   useEffect(()=>{
-    fetchData(1)
+    payMoney(1)
   }, [])
-
-
-
 
   return (
     <div>
+      <div className='qrcodePng'>{qrcodeUrl?<img src={qrcodeUrl} /> : ""}</div>
+      <div className='wexin-scan'>微信扫一扫</div>
     </div>
   );
 };
