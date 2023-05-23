@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import Content from '../contentBox/content.js'
 import Footer from '../footerBox/footer.js'
 import copy from 'copy-to-clipboard';
+import locales from '../../locales/locales.js'
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -21,7 +22,7 @@ function getItem(label, key, icon, children, type) {
 }
 
 // const items = [
-//   getItem('chatGPT', 'sub1', '', [
+//   getItem('ChatTEN', 'sub1', '', [
 //     getItem('创建新对话…', '5',<PlusCircleFilled />),
 //     getItem('解释量子力学', '6',<MessageOutlined />),
 //     getItem('人工智能的发展前景', '7',<MessageOutlined />),
@@ -32,7 +33,7 @@ function getItem(label, key, icon, children, type) {
 //   },
 // ];
 
-const App = () => {
+const App = (data) => {
   const isToken = cookie.load('token')
   const experience = cookie.load('experience') ? cookie.load('experience') : 10
   const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
@@ -45,9 +46,11 @@ const App = () => {
   const [spinStatus, setSpinStatus] = useState(true);
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const language = data.language
+  const setLanguage = data.setLanguage
+
   let info = navigator.userAgent;
   let isPhone = /mobile/i.test(info);
-
 
   const showDrawer = () => {
     setOpen(true);
@@ -56,7 +59,7 @@ const App = () => {
     setOpen(false);
   };
   const menuClick = (e) => {
-    if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
+    if(e.key == '01' && e.domEvent.target.textContent == locales(language)['create_new_talk'] + '…'){
 
       linkSkip()
     }else if(e.domEvent.target.textContent == '  正在加载... ...'){
@@ -122,7 +125,7 @@ const App = () => {
         // cookie.save('experience', resData.experience, { path: '/' })
         // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
-        let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
+        let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
         for(let i in resData.data){
           if(i < 9){
             let subItem = []
@@ -138,7 +141,7 @@ const App = () => {
         }
         setTimeout(function(){
           setSpinStatus(false)
-          setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+          setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
         },1000)
       })
   }
@@ -161,8 +164,8 @@ const App = () => {
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
-    let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
-    setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+    setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
@@ -181,7 +184,7 @@ const App = () => {
   };
   const shareFunction = () => {
     if(isToken){
-      if(userName == '访客'){
+      if(userName == '访客' || userName== 'anonymous'){
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn/?type=1'})
@@ -199,6 +202,16 @@ const App = () => {
       return
     }
   }
+
+  const chooseLanguage = () => {
+    if(cookie.load('language') == '中文'){
+      cookie.save('language', 'English')
+      setLanguage('English')
+    }else{
+      cookie.save('language', '中文')
+      setLanguage('中文')
+    }
+  };
   useEffect(()=>{
     if(history.location.search){
       let str = history.location.search.split('=')[1]
@@ -217,7 +230,7 @@ const App = () => {
       setWidthNumber('400px')
     }
     if(isToken){
-      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
+      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : locales(language)['anonymous']
       setUserName(authName)
 
       getHistory()
@@ -229,12 +242,12 @@ const App = () => {
       })
     }else{
       setSpinStatus(false)
-      let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
-      setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+      setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
     }
-  }, [])
+  }, [language])
 
   return (
     <div>
@@ -252,9 +265,13 @@ const App = () => {
         <div className="headerLeft" onClick={showDrawer}>
           <img src={require("../../assets/leftMenu.png")} alt=""/>
         </div>
+
         {
           isToken ?
             // <div className="headerRight" onClick={signOut}>
+            <div className="headerRight">
+              <img src={require("../../assets/language.png")} alt=""/>
+              <div className='language' onClick={chooseLanguage}>{language}</div>
               <Popconfirm
               placement="leftTop"
               className="headerRight"
@@ -267,12 +284,19 @@ const App = () => {
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
               <div>{ userName }</div>
             </Popconfirm>
+            </div>
+
             // </div>
             :
             <div className="headerRight">
             {/* <div className="headerRight" onClick={showModal}> */}
-              <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-              <div><Link to='/Login'>登录</Link></div>
+            <img src={require("../../assets/language.png")} alt=""/>
+            <div className='language' onClick={chooseLanguage}>{locales(language)['language']}</div>
+              <div className="headerRight">
+                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                <div><Link to='/Login'>{locales(language)['login']}</Link></div>
+              </div>
+
               {/* <span>/</span>
               <div>注册</div> */}
             </div>
@@ -296,7 +320,7 @@ const App = () => {
           <div>
             {
               items ?
-              <Menu
+              <Menu className='chatBoxMenu'
                 onClick={menuClick}
                 onOpenChange={historyMenu}
                 style={{
@@ -321,7 +345,7 @@ const App = () => {
                 <div className="otherMenuLeft" onClick={deleteTopic}>
                   <img src={require("../../assets/delete.png")} alt=""/>
                   <div>
-                    清除聊天记录
+                    {locales(language)['clear_chat_hitstory']}
                   </div>
                 </div>
               </div>
@@ -330,15 +354,15 @@ const App = () => {
                   <img src={require("../../assets/reply.png")} alt=""/>
                   <div style={{width:'90%'}}>
                     <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                      <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
                       <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>
-                          分享
+                          {locales(language)['share']}
                         </div>
                       </div>
                     </div>
-                    <div className='leftBottom'>每分享给1个好友，可增加10次</div>
+                    <div className='leftBottom'>{locales(language)['share_slogan']}</div>
                   </div>
                 </div>
 
@@ -348,22 +372,22 @@ const App = () => {
               <div className='memberHeaderBg'>
                 <div className='memberHeader'>
                   <img src={require("../../assets/vipHeader.png")} alt=""/>
-                  <div>成为会员</div>
+                  <div>{locales(language)['vip']}</div>
                 </div>
               </div>
               <div className='memberBottomBox'>
                 <div className='memberBottom'>
                   <div className='memberBoItem'>
                     <img src={require("../../assets/infinite.png")} alt=""/>
-                    <div>无限次数</div>
+                    <div>{locales(language)['unlimit']}</div>
                   </div>
                   <div className='memberBoItem'>
                     <img src={require("../../assets/faster.png")} alt=""/>
-                    <div>更快响应</div>
+                    <div>{locales(language)['faster']}</div>
                   </div>
                   <div className='memberBoItem'>
                     <img src={require("../../assets/stabilize.png")} alt=""/>
-                    <div>更稳定</div>
+                    <div>{locales(language)['stable']}</div>
                   </div>
                 </div>
               </div>
@@ -380,8 +404,8 @@ const App = () => {
         closable
       >
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
-          <Button type="primary"><Link to='/Login'>登录</Link></Button>
-          <Button type="default"><Link to='/SignIn'>注册</Link></Button>
+          <Button type="primary"><Link to='/Login'>{locales(language)['login']}</Link></Button>
+          <Button type="default"><Link to='/SignIn'>{locales(language)['register']}</Link></Button>
         </div>
       </Modal>
     </div>
@@ -396,7 +420,7 @@ const App = () => {
             <div>
               {
                 items ?
-                <Menu
+                <Menu className='chatBoxMenu'
                   onClick={menuClick}
                   onOpenChange={historyMenu}
                   style={{
@@ -421,7 +445,7 @@ const App = () => {
                   <div className="otherMenuLeft" onClick={deleteTopic}>
                     <img src={require("../../assets/delete.png")} alt=""/>
                     <div>
-                      清除聊天记录
+                      {locales(language)['clear_chat_hitstory']}
                     </div>
                   </div>
                 </div>
@@ -430,15 +454,15 @@ const App = () => {
                     <img src={require("../../assets/reply.png")} alt=""/>
                     <div style={{width:'90%'}}>
                       <div className='otherMenuRight'>
-                        <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                        <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
                         <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                           <img src={require("../../assets/share.png")} alt=""/>
                           <div>
-                            分享
+                           {locales(language)['share']}
                           </div>
                         </div>
                       </div>
-                      <div className='leftBottom'>每分享给1个好友，可增加10次</div>
+                      <div className='leftBottom'>{locales(language)['share_slogan']}</div>
                     </div>
                   </div>
 
@@ -448,26 +472,27 @@ const App = () => {
                 <div className='memberHeaderBg'>
                   <div className='memberHeader'>
                     <img src={require("../../assets/vipHeader.png")} alt=""/>
-                    <div>成为会员</div>
+                    <div>{locales(language)['vip']}</div>
                   </div>
                 </div>
                 <div className='memberBottomBox'>
                   <div className='memberBottom'>
                     <div className='memberBoItem'>
                       <img src={require("../../assets/infinite.png")} alt=""/>
-                      <div>无限次数</div>
+                      <div>{locales(language)['unlimit']}</div>
                     </div>
                     <div className='memberBoItem'>
                       <img src={require("../../assets/faster.png")} alt=""/>
-                      <div>更快响应</div>
+                      <div>{locales(language)['faster']}</div>
                     </div>
                     <div className='memberBoItem'>
                       <img src={require("../../assets/stabilize.png")} alt=""/>
-                      <div>更稳定</div>
+                      <div>{locales(language)['stable']}</div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className='my-score'>我的积分:888</div>
             </div>
         </div>
       {
@@ -486,30 +511,40 @@ const App = () => {
           {
             isToken ?
               // <div className="headerRight" onClick={signOut}>
-                <Popconfirm
-                placement="leftTop"
-                className="headerRight"
-                title='Do you want to log out'
-                description=''
-                onConfirm={signOut}
-                okText="Yes"
-                cancelText="No"
-              >
-                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-                <div>{ userName }</div>
-              </Popconfirm>
+                <div className="headerRight">
+                  <img src={require("../../assets/language.png")} alt=""/>
+                  <div className='language' onClick={chooseLanguage}>{language}</div>
+                  <Popconfirm
+                    placement="leftTop"
+                    className="headerRight"
+                    title='Do you want to log out'
+                    description=''
+                    onConfirm={signOut}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                    <div>{ userName }</div>
+                  </Popconfirm>
+                </div>
+               
               // </div>
               :
               <div className="headerRight">
               {/* <div className="headerRight" onClick={showModal}> */}
-                <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-                <div><Link to='/Login'>登录</Link></div>
+              <img src={require("../../assets/language.png")} alt=""/>
+              <div className='language' onClick={chooseLanguage}>{language}</div>
+                <div className='login-btn'>
+                  <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                  <div><Link to='/Login'>{locales(language)['login']}</Link></div>
+                </div>
+
                 {/* <span>/</span>
                 <div>注册</div> */}
               </div>
           }
         </div>
-        <Content></Content>
+        <Content language={language}></Content>
         {/* chouti */}
         {/* <LeftBox></LeftBox> */}
         {/* footer */}
@@ -528,8 +563,8 @@ const App = () => {
         closable
       >
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
-          <Button type="primary"><Link to='/Login'>登录</Link></Button>
-          <Button type="default"><Link to='/SignIn'>注册</Link></Button>
+          <Button type="primary"><Link to='/Login'>{locales(language)['login']}</Link></Button>
+          <Button type="default"><Link to='/SignIn'>{locales(language)['register']}</Link></Button>
         </div>
       </Modal>
     </div>

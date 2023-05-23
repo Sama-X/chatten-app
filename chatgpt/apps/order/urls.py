@@ -1,15 +1,11 @@
-"""
-order admin router module.
-"""
 from django.conf.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-
-from order.views import OrderPackageViewSet, OrderViewset
+from order.views import OrderPackageViewSet, OrderViewSet
 
 
 router = DefaultRouter()
-router.register(r'orders', OrderViewset, basename="OrderViewset")
+router.register(r'orders', OrderViewSet, basename="OrderViewSet")
 router.register(r'order-packages', OrderPackageViewSet, basename="OrderPackageViewSet")
 
 urlpatterns = [

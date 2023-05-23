@@ -1,0 +1,5 @@
+.adminMenu .ant-menu-submenu .ant-menu-submenu-title {
+    padding-left: 5px !important;
+    background: #fff;
+    border-radius: 4px;
+}

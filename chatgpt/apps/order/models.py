@@ -28,6 +28,11 @@ class OrderPackageModel(BaseModel):
     usage_count = models.IntegerField(default=0, null=False, verbose_name=_("package usage count"))
     price = models.FloatField(default=0.0, verbose_name=_("package price"))
     priority = models.IntegerField(default=1, db_index=True, verbose_name=_("package sort priority"))
+    priority = models.IntegerField(default=1, db_index=True, verbose_name=_("package sort priority"))
+
+    out_trade_no = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("out_trade_no name"))
+    transaction_id = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("transaction_id"))
+    status = models.IntegerField(default=0, db_index=True, verbose_name=_("pay status"))  # 0、未支付，1、已支付
 
     class Meta:
         """

@@ -1,6 +1,40 @@
 """
-order view.
+<<<<<<< HEAD
+chat api module.
 """
+
+from datetime import datetime
+import json
+import logging
+import traceback
+
+from asgiref.sync import async_to_sync
+from django.conf import settings
+from django_redis import get_redis_connection
+
+from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
+
+from base.ai import AIErrorCode, get_ai_instance
+from base.exception import SystemErrorCode
+from base.middleware import AnonymousAuthentication
+from base.response import APIResponse, SerializerErrorResponse
+from base.serializer import BaseQuery
+from order.serializer import OrderListSerializer
+from order.models import OrderModel
+from order.service import OrderService
+
+import wechat
+from chatgpt.settings import WECHAT
+import utils
+
+logger = logging.getLogger(__name__)
+
+
+class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
+    """
+    order view.
+    """
 
 from rest_framework import mixins, viewsets
 
@@ -10,7 +44,7 @@ from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
 
 
-class OrderViewset(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     order api.
     """
@@ -19,6 +53,9 @@ class OrderViewset(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
 
     def list(self, request, *args, **kwargs):
         """
+        get order list
+        url: /api/v1/orders/
+        query = BaseQuery(data=request.GET)
         url: /api/v1/order/orders/
         method: get
         desc: get order list api
@@ -49,6 +86,33 @@ class OrderViewset(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
         """
 
         return OrderService.create_order(request)
+
+
+    
+
+class WePayNotifyHandler(mixins.CreateModelMixin):
+    def post(self):
+        # print("WePayNotifyHandler,header=", self.request.headers)
+        # print("WePayNotifyHandler,body=", self.request.body)
+        headers = self.request.headers
+        certificate = wechat.get_cert()
+        print('weewww=', headers['Wechatpay-Signature'])
+        serial = headers['Wechatpay-Serial']
+        if serial != wechat['MCH_CERT_SERIAL_NO']:
+            self.write({'status': 'fail'})
+
+        verify_ok = utils.check_notify_sign(headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'), certificate, headers['Wechatpay-Signature'])
+        print('verify_ok=', verify_ok)
+        if verify_ok:
+            data = utils.decryWePayNotify(self.get_json_data())
+            print("WePayNotifyHandler,data=", data)
+            OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id']})
+            if data['trade_state'] == "SUCCESS":
+                OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id'], "status":'2'})
+            else:
+                OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id']})
+
+        return APIResponse()
 
 
 class OrderPackageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,

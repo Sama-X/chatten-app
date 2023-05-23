@@ -1,0 +1,27 @@
+.add-package-btn {
+    margin-top: 10px;
+}
+
+.package-input-item {
+    margin-top:5px;
+}
+
+.package-input-item-list {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.package-input-item-name {
+    display: inline-block;
+    width: 100px;
+}
+
+.package-input-item input{
+    color: #000;
+}
+
+
+.package-category-select {
+    width: 150px;
+}

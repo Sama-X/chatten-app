@@ -12,6 +12,8 @@ import {BASE_URL} from '../../utils/axios.js'
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import copy from 'copy-to-clipboard';
 import showdown from 'showdown'
+import locales from '../../locales/locales.js'
+import get_default_language from '../../utils/get_default_language.js'
 
 
 function getItem(label, key, icon, children, type) {
@@ -45,6 +47,8 @@ const App = () => {
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInputEnterStatus, setIsInputEnterStatus] = useState(true);
+  const [language, setLanguage] = useState(get_default_language());
+
   const converter = new showdown.Converter()
   const history = useHistory()
   let str = '```import multiprocessing class MySingleton:    def __init__(self):        self.value = 0    def reset(self):        self.value = 0my_singleton = Nonedef get_singleton():    global my_singleton    if my_singleton is None:        my_singleton = multiprocessing.Manager().Value(MySingleton())    return my_singleton.value```'
@@ -87,7 +91,7 @@ const App = () => {
       // cookie.save('experience', resData.experience, { path: '/' })
       // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
-      let menuSetitemList = [getItem('创建新对话…', '01',<PlusCircleFilled />)]
+      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
       for(let i in resData.data){
         if(i < 9){
           let subItem = []
@@ -299,7 +303,7 @@ const App = () => {
   }
 
   const menuClick = (e) => {
-    if(e.key == '01' && e.domEvent.target.textContent == '创建新对话…'){
+    if(e.key == '01' && e.domEvent.target.textContent == locales(language)['create_new_talk'] + '…'){
       cookie.save('topicId', '')
       isFirst(true)
       linkSkip()
@@ -362,7 +366,7 @@ const App = () => {
   }
   const shareFunction = () => {
     if(isToken){
-      if(userName == '访客'){
+      if(userName == '访客' || userName == 'anonymous'){
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn'})
@@ -400,6 +404,16 @@ const App = () => {
     setIsModalOpen(false);
   };
 
+  const chooseLanguage = () => {
+    if(cookie.load('language') == '中文'){
+      cookie.save('language', 'English')
+      setLanguage('English')
+    }else{
+      cookie.save('language', '中文')
+      setLanguage('中文')
+    }
+  };
+
   useEffect(()=>{
     setTimeout(function(){
       document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
@@ -410,7 +424,7 @@ const App = () => {
       setWidthNumber('400px')
     }
     if(isToken){
-      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : '访客'
+      const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : locales(language)['anonymous']
       setUserName(authName)
       getHistory()
       let request = new Request({});
@@ -428,7 +442,7 @@ const App = () => {
     }else{
       isFirst(true)
     }
-  }, [])
+  }, [language])
 
   return (
     <div  style={{width:'100%'}}>
@@ -465,7 +479,7 @@ const App = () => {
             {/* chatList */}
             {
               chatList.length == 0 ?
-              <div>暂无数据</div>
+              <div>{locales(language)['nodata']}</div>
               :
               chatList.map((item, index)=>{
 
@@ -548,7 +562,7 @@ const App = () => {
               <div className="footerBottomBox">
                 <div className="footerLeftBox">
                   <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-                  <div><span>免费提问</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
+                  <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
                 </div>
                 {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
               </div>
@@ -568,7 +582,7 @@ const App = () => {
                 <div>
                   {
                     items ?
-                    <Menu
+                    <Menu className='chatBoxMenu'
                     onClick={menuClick}
                     onOpenChange={historyMenu}
                     style={{
@@ -594,7 +608,7 @@ const App = () => {
                       <div className="otherMenuLeft" onClick={deleteTopic}>
                         <img src={require("../../assets/delete.png")} alt=""/>
                         <div>
-                          清除聊天记录
+                          {locales(language)['clear_chat_hitstory']}
                         </div>
                       </div>
                     </div>
@@ -603,15 +617,15 @@ const App = () => {
                         <img src={require("../../assets/reply.png")} alt=""/>
                         <div style={{width:'90%'}}>
                           <div className='otherMenuRight'>
-                            <div className='otherMenuRightDiv'>体验次数<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                            <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
                             <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                               <img src={require("../../assets/share.png")} alt=""/>
                               <div>
-                                分享
+                                {locales(language)['share']}
                               </div>
                             </div>
                           </div>
-                          <div className='leftBottom'>每分享给1个好友，可增加10次</div>
+                          <div className='leftBottom'>{locales(language)['share_slogan']}</div>
                         </div>
                       </div>
 
@@ -619,24 +633,25 @@ const App = () => {
                   </div>
                   <div className='memberBox' onClick={noFunction}>
                     <div className='memberHeaderBg'>
+                      
                       <div className='memberHeader'>
                         <img src={require("../../assets/vipHeader.png")} alt=""/>
-                        <div>成为会员</div>
+                        <div>{locales(language)['vip']}</div>
                       </div>
                     </div>
                     <div className='memberBottomBox'>
                       <div className='memberBottom'>
                         <div className='memberBoItem'>
                           <img src={require("../../assets/infinite.png")} alt=""/>
-                          <div>无限次数</div>
+                          <div>{locales(language)['unlimit']}</div>
                         </div>
                         <div className='memberBoItem'>
                           <img src={require("../../assets/faster.png")} alt=""/>
-                          <div>更快响应</div>
+                          <div>{locales(language)['faster']}</div>
                         </div>
                         <div className='memberBoItem'>
                           <img src={require("../../assets/stabilize.png")} alt=""/>
-                          <div>更稳定</div>
+                          <div>{locales(language)['stable']}</div>
                         </div>
                       </div>
                     </div>
@@ -659,24 +674,28 @@ const App = () => {
               {
                 isToken ?
                   // <div className="headerRight">
-                  <Popconfirm
-                    placement="leftTop"
-                    className="headerRight"
-                    title='Do you want to log out'
-                    description=''
-                    onConfirm={signOut}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-                    <div>{ userName }</div>
-                  </Popconfirm>
+                  <div className='headerRight'>
+                    <img src={require("../../assets/language.png")} alt=""/>
+                    <div className='language' onClick={chooseLanguage}>{language}</div>
+                    <Popconfirm
+                      placement="leftTop"
+                      className="headerRight"
+                      title='Do you want to log out'
+                      description=''
+                      onConfirm={signOut}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                      <div>{ userName }</div>
+                    </Popconfirm>
+                  </div>
                   // {/* </div> */}
                   :
                   <div className="headerRight">
                   {/* <div className="headerRight" onClick={showModal}> */}
                     <img src={require("../../assets/noLoginIcon.png")} alt=""/>
-                    <div><Link to='/Login'>登录</Link></div>
+                    <div><Link to='/Login'>{locales(language)['login']}</Link></div>
                     {/* <span>/</span>
                     <div>注册</div> */}
                   </div>
@@ -689,7 +708,7 @@ const App = () => {
                 {/* chatList */}
                 {
                   chatList.length == 0 ?
-                  <div>暂无数据</div>
+                  <div>{locales(language)['nodata']}</div>
                   :
                   chatList.map((item, index)=>{
 
@@ -772,7 +791,7 @@ const App = () => {
                   <div className="footerBottomBox">
                     <div className="footerLeftBox">
                       <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-                      <div><span>免费提问</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
+                      <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
                     </div>
                     {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
                   </div>
