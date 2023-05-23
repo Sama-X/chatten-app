@@ -2,12 +2,14 @@
 api service.
 """
 from django.db import transaction
+from base.common import CommonUtil
 from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
 
-from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, OrderSerializer, UpdateOrderPackageSerializer
+from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSerializer, UpdateOrderPackageSerializer
 from order.models import OrderModel, OrderPackageModel
+from order.serializer import CreateOrderSeriralizer, OrderSerializer
 from users.models import AccountModel
 
 
@@ -127,11 +129,11 @@ class OrderPackageService(BaseService):
 
         with transaction.atomic():
             obj.is_delete = True
+            obj.save()
             exists = OrderPackageModel.objects.filter(is_delete=False, name=name).count() > 0
             if exists:
                 return APIResponse(code=OrderErrorCode.ORDER_PACKAGE_NAME_EXISTS)
 
-            obj.save()
             OrderPackageModel.objects.create(
                 name=name,
                 category=category,
@@ -208,3 +210,42 @@ class OrderService(BaseService):
         })
 
         return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    @transaction.atomic
+    def create_order(cls, request):
+        """
+        create order
+        """
+        serializer = CreateOrderSeriralizer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
+
+        data = serializer.validated_data
+        package_id = data.get('package_id')  # type: ignore
+        quantity = data['quantity']  # type: ignore
+        payment_method = data.get('payment_method')  # type: ignore
+
+        if payment_method not in OrderModel.METHODS_DICT:
+            return APIResponse(code=OrderErrorCode.ORDER_INVALID_PAYMENT_METHOD)
+
+        package = OrderPackageModel.objects.filter(
+            is_delete=False, id=package_id
+        ).first()
+        if not package:
+            return APIResponse(code=OrderErrorCode.ORDER_PACKAGE_INVALID)
+
+        order_obj = OrderModel.objects.create(
+            user_id=request.user.id,
+            package_id=package_id,
+            order_number=CommonUtil.generate_order_number(),
+            quantity=quantity,
+            actual_price=quantity * package.price,
+            payment_method=payment_method
+        )
+
+        seria = OrderSerializer(order_obj, context={
+            'user_dict': {request.user.id: request.user},
+            'order_package_dict': {package.id: package}
+        })
+        return APIResponse(result=seria.data)

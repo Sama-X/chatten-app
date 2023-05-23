@@ -1,4 +1,5 @@
 """
+<<<<<<< HEAD
 chat api module.
 """
 
@@ -32,7 +33,20 @@ logger = logging.getLogger(__name__)
 
 class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
     """
-    chat topic api.
+    order view.
+    """
+
+from rest_framework import mixins, viewsets
+
+from base.middleware import AnonymousAuthentication
+from base.serializer import BaseQuery
+from order.serializer import OrderQuery
+from order.service import OrderPackageService, OrderService
+
+
+class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    order api.
     """
 
     authentication_classes = [AnonymousAuthentication,]
@@ -41,60 +55,39 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin):
         """
         get order list
         url: /api/v1/orders/
-        """
         query = BaseQuery(data=request.GET)
+        url: /api/v1/order/orders/
+        method: get
+        desc: get order list api
+        """
+        query = OrderQuery(data=request.GET)
         query.is_valid()
 
         page = query.validated_data.get('page') or 1  # type: ignore
         offset = query.validated_data.get('offset') or 20  # type: ignore
-        order = query.validated_data.get('order') or '-id'  # type: ignore
+        order = query.validated_data.get('order') or 'status,-id'  # type: ignore
         user_id = request.user.id
+        package_id = query.validated_data.get('package_id')  # type: ignore
+        order_number = query.validated_data.get('order_number')  # type: ignore
+        status = query.validated_data.get('status')  # type: ignore
 
-        order_fields = []
-        support_fields = [i.name for i in OrderModel._meta.fields]
-        for field in order.split(','):
-            if field.replace('-', '') in support_fields:
-                order_fields.append(field)
-        base = OrderModel.objects.filter(
-            user_id=user_id,
-            is_delete=False
-        )
-        total = base.count()
-        if order_fields:
-            base = base.order_by(*order_fields)
+        return OrderService.get_list(page, offset, order, user_id, package_id, order_number, status)
 
-        base = base[(page - 1) * offset: page * offset]
-
-        data = OrderListSerializer(base, many=True).data
-
-        used_experience = OrderModel.objects.filter(
-            user_id=request.user.id,
-            is_delete=False,
-            success=True,
-            question_time__gte=datetime.now().date()
-        ).count()
-
-        return APIResponse(
-            result=data, total=total, used_experience=used_experience,
-            experience=request.user.experience, is_vip=request.user.is_vip
-        )
-
-
-
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         """
-        clear chat topic history
-        method: delete
-        url: /api/v1/chat/topics/
+        url: /api/v1/order/orders/
+        method: post
+        params: {
+            package_id: 1,
+            quantity: 1,
+            payment_method: 0
+        }
+        desc: create order  api
         """
-        # create_order(float(amount), out_trade_no)
-        user_id = request.user.id
-        OrderModel.objects.filter(
-            user_id=user_id,
-            is_delete=False
-        ).update(is_delete=True)
 
-        return APIResponse()
+        return OrderService.create_order(request)
+
+
     
 
 class WePayNotifyHandler(mixins.CreateModelMixin):
@@ -120,3 +113,27 @@ class WePayNotifyHandler(mixins.CreateModelMixin):
                 OrderService.update_order_by_out_trade_no(data['out_trade_no'], {"transaction_id": data['transaction_id']})
 
         return APIResponse()
+
+
+class OrderPackageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+                          mixins.RetrieveModelMixin, mixins.DestroyModelMixin,
+                          mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    order package api.
+    """
+    authentication_classes = (AnonymousAuthentication,)
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/order/order-packages
+        method: get
+        desc: get order list
+        """
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or 'priority,id'  # type: ignore
+
+        return OrderPackageService.get_list(page, offset, order)

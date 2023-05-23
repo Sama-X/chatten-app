@@ -3,8 +3,8 @@ order package admin api.
 """
 
 from rest_framework import mixins, viewsets
-from rest_framework.authentication import SessionAuthentication
 from apps.order.service import OrderPackageService, OrderService
+from base.middleware import AdminAuthentication
 
 from base.serializer import BaseQuery
 from order.admin.serializer import AdminOrderQuery
@@ -17,7 +17,7 @@ class AdminPackageViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
     """
     order package manage api.
     """
-    authentication_classes = ()
+    authentication_classes = (AdminAuthentication,)
 
     def list(self, request, *args, **kwargs):
         """
@@ -64,13 +64,13 @@ class AdminOrderViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     order manage api.
     """
-    authentication_classes = ()
+    authentication_classes = (AdminAuthentication,)
 
     def list(self, request, *args, **kwargs):
         """
         url: /api/v1/admin/order/orders/
         method: get
-        desc: get order package list api
+        desc: get order list api
         """
         query = AdminOrderQuery(data=request.GET)
         query.is_valid()

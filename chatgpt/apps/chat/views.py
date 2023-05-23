@@ -13,6 +13,7 @@ from django_redis import get_redis_connection
 
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
+from asset.service import O2OPaymentService
 
 from base.ai import AIErrorCode, get_ai_instance
 from base.exception import ChatErrorCode, SystemErrorCode
@@ -51,10 +52,10 @@ class ChatViewset(viewsets.GenericViewSet):
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         user_id = request.user.id
-        current_total = UserService.get_used_experience(user_id, start_time=datetime.now().date())
-        reward_experience = UserService.get_reward_experience(user_id)
 
-        if current_total >= request.user.experience + reward_experience:
+        total_experience = UserService.get_user_experience(user_id)
+
+        if total_experience <= 0:
             return APIResponse(code=ChatErrorCode.CHAT_ROBOT_NO_EXPERIENCES)
 
         messages = []
@@ -92,7 +93,8 @@ class ChatViewset(viewsets.GenericViewSet):
         obj.save()
 
         if obj.answer:
-            UserServiceHelper.update_used_experience_cache(user_id, current_total + 1)
+            O2OPaymentService.reduce_payment(user_id, 1)
+            UserServiceHelper.update_experience_cache(user_id, total_experience - 1, 60)
             try:
                 wallet = SamaWalletModel.objects.filter(
                     user_id=request.user.id, chain=settings.CHAIN_SAMA
@@ -106,7 +108,7 @@ class ChatViewset(viewsets.GenericViewSet):
             return APIResponse(result={
                 "answer": obj.answer,
                 "topic_id": topic_id,
-                "experience": current_total + 1
+                "experience": total_experience - 1
             })
 
         if resp.get('error_code') == AIErrorCode.CONTEXT_LENGTH_EXCEEDED:

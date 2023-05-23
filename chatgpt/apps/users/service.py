@@ -1,20 +1,25 @@
 """
 api service.
 """
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta
 import json
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
+from asset.models import O2OPaymentModel, PointsModel
+from asset.service import O2OPaymentService
 from base.common import CommonUtil
 from base.exception import SystemErrorCode, UserErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 
 from base.sama import SamaClient
-from users.admin.serializer import ConfigSeriazlier, UpdateConfigSerializer
+from base.service import BaseService
+from chat.models import ChatRecordModel
+from order.models import OrderModel
+from users.admin.serializer import ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
 from users.models import (
     AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
@@ -68,6 +73,8 @@ class UserService:
                         expired_time=datetime.now() + timedelta(days=3650)  # ten years
                     )
                     conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([invite_user_id, 10, None]))
+
+            O2OPaymentService.add_free_payment(account.id)
 
             conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([account.id, 10, None]))
             token = CommonUtil.generate_user_token(account.id)
@@ -162,14 +169,78 @@ class UserService:
 
         return current_total
 
+    @classmethod
+    def get_user_experience(cls, user_id):
+        """
+        get user experience.
+        """
+        total = UserServiceHelper.get_experience_cache(user_id)
+        if total is not None:
+            return total
+
+        payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        if not payment_obj:
+            payment_obj = O2OPaymentService.add_free_payment(user_id)
+
+        total = payment_obj.free_usage_count + payment_obj.persistence_usage_count + payment_obj.transient_usage_count
+
+        UserServiceHelper.update_experience_cache(user_id, total, 60)
+
+        return total
+
+    @classmethod
+    def get_user_points(cls, user_id):
+        """
+        get user points.
+        """
+        obj = PointsModel.objects.filter(user_id=user_id).first()
+        return obj.total if obj else 0
+
+    @classmethod
+    def check_given_gift_experience(cls, user_id):
+        """
+        Check whether the user has given a gift today.
+        """
+        if UserServiceHelper.had_given_gift_experience(user_id):
+            return True
+
+        payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        if not payment_obj or payment_obj.free_expire_time < datetime.now():
+            O2OPaymentService.add_free_payment(user_id)
+            UserServiceHelper.update_given_gift_experience(user_id)
+
 
 class UserServiceHelper:
     """
     user service helper.
     """
 
+    EXPERIENCE_USAGE_KEY = "chat:experience:usage:{}:times"
     EXPERIENCE_REWARD_KEY = "chat:experience:reward:{}:times"
     EXPERIENCE_USED_KEY = "chat:experience:used:{}:times"
+    EXPERIENCE_TODAY_GIFT = "chat:experience:today:gift:{}"
+
+    @classmethod
+    def had_given_gift_experience(cls, user_id):
+        """
+        Check whether the user has given a gift today.
+        """
+        key = cls.EXPERIENCE_TODAY_GIFT.format(user_id)
+        if cache.has_key(key):
+            return True
+        else:
+            return False
+
+    @classmethod
+    def update_given_gift_experience(cls, user_id):
+        """
+        update had given a gift today.
+        """
+        key = cls.EXPERIENCE_TODAY_GIFT.format(user_id)
+        end = datetime.combine(date.today() + timedelta(days=1), time.min)
+        now = datetime.now()
+
+        cache.set(key, 1, int((end - now).total_seconds()))
 
     @classmethod
     def get_reward_experience_cache(cls, user_id):
@@ -185,6 +256,14 @@ class UserServiceHelper:
         get cache.
         """
         key = cls.EXPERIENCE_USED_KEY.format(user_id)
+        return cache.get(key)
+
+    @classmethod
+    def get_experience_cache(cls, user_id):
+        """
+        get cache.
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
         return cache.get(key)
 
     @classmethod
@@ -204,6 +283,14 @@ class UserServiceHelper:
         cache.delete(key)
 
     @classmethod
+    def clear_experience_cache(cls, user_id):
+        """
+        clear cache.
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
+        cache.delete(key)
+
+    @classmethod
     def update_used_experience_cache(cls, user_id, value, expired=7200):
         """
         update cache.
@@ -219,6 +306,15 @@ class UserServiceHelper:
         default: 2 hour cache
         """
         key = cls.EXPERIENCE_REWARD_KEY.format(user_id)
+        cache.set(key, value, expired)
+
+    @classmethod
+    def update_experience_cache(cls, user_id, value, expired=7200):
+        """
+        update cache.
+        default: 2 hour cache
+        """
+        key = cls.EXPERIENCE_USAGE_KEY.format(user_id)
         cache.set(key, value, expired)
 
 
@@ -298,3 +394,116 @@ class ConfigService:
 
         # return APIResponse()
         return APIResponse(code=UserErrorCode.CONFIG_IS_FEATURE_ENABLED)
+
+
+class InviteLogService(BaseService):
+    """
+    invite log service
+    """
+
+    @classmethod
+    def get_list(cls, page, offset, order, user_id):
+        """
+        get invite users.
+        """
+        base = InviteLogModel.objects.filter(
+            Q(inviter_user_id = user_id) | Q(super_inviter_user_id = user_id),
+            is_delete=False,
+        )
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            InviteLogModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+        user_ids = set()
+        for item in objs:
+            user_ids.add(item.user_id)
+            user_ids.add(item.inviter_user_id)
+        user_dict = {}
+        if user_ids:
+            user_dict = {
+                item.id: item for item in AccountModel.objects.filter(id__in=list(user_ids))
+            }
+
+        serializer = InviteLogSerializer(objs, many=True, context={
+            'user_dict': user_dict
+        })
+
+        first_level_total = InviteLogModel.objects.only("id").filter(inviter_user_id = user_id).count()
+        second_level_total = InviteLogModel.objects.only("id").filter(super_inviter_user_id = user_id).count()
+
+        return APIResponse(
+            result=serializer.data, count=total, direct_invite_count=first_level_total,
+            indirect_invite_count=second_level_total
+        )
+
+
+class ReportService(BaseService):
+    """
+    report service.
+    """
+
+    @classmethod
+    def get_summary(cls) -> APIResponse:
+        """
+        get today summary.
+        """
+        user_total = AccountModel.objects.filter(is_delete=False).count()
+        chat_total = ChatRecordModel.objects.filter(is_delete=False, success=True).count()
+
+        order_dict = OrderModel.objects.filter(
+            status=OrderModel.STATUS_SUCCESS, is_delete=False
+        ).aggregate(total=Count("*"), total_price=Sum("actual_price"))
+
+        return APIResponse(result={
+            "register_user": user_total or 0,
+            "usage_total": chat_total or 0,
+            "recharge_count": order_dict.get('total') or 0,
+            "recharge_amount": order_dict.get('total_price') or 0,
+        })
+
+    @classmethod
+    def get_summary_by_day(cls, start_date=None, end_date=None) -> APIResponse:
+        """
+        get summary by day.
+        """
+        if not end_date:
+            end_date = date.today()
+
+        end_date += timedelta(days=1)
+
+        if not start_date:
+            start_date = end_date - timedelta(days=30)
+
+        user_objs = AccountModel.objects.filter(
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count('*'))
+        user_dict = {
+            item['add_time__date']: item['total'] for item in user_objs
+        }
+        chat_objs = ChatRecordModel.objects.filter(
+            is_delete=False, success=True, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count('*'))
+        chat_dict = {
+            item['add_time__date']: item['total'] for item in chat_objs
+        }
+        order_objs = OrderModel.objects.filter(
+            status=OrderModel.STATUS_SUCCESS,
+            is_delete=False, add_time__gte=start_date, add_time__lte=end_date
+        ).values('add_time__date').annotate(total=Count("*"), total_price=Sum("actual_price"))
+        order_dict = {
+            item['add_time__date']: item for item in order_objs
+        }
+        result = []
+        while start_date < end_date:
+            result.append({
+                'date': start_date,
+                "register_user": user_dict.get(start_date) or 0,
+                "usage_total": chat_dict.get(start_date) or 0,
+                "recharge_count": order_dict.get(start_date, {}).get('total') or 0,
+                "recharge_amount": order_dict.get(start_date, {}).get('actual_price') or 0,
+            })
+            start_date += timedelta(days=1)
+
+        return APIResponse(result=result)

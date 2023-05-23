@@ -1,15 +1,17 @@
 """
 Common util module.
 """
+from datetime import datetime
 import logging
 import random
+
 from hashids import Hashids
 from uuid import uuid4
 
 from django.core.cache import cache
 import requests
 
-from base.constants import LOGIN_ACCOUNT_TOKEN_KEY, LOGIN_LIFE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY
+from base.constants import ADMIN_LOGIN_ACCOUNT_TOKEN_KEY, ADMIN_LOGIN_TOKEN_ACCOUNT_KEY, LOGIN_ACCOUNT_TOKEN_KEY, LOGIN_LIFE_TIME_LENGTH, LOGIN_TOKEN_ACCOUNT_KEY
 from users.models import AccountModel
 
 logger = logging.getLogger(__name__)
@@ -41,6 +43,17 @@ class CommonUtil:
         return token
 
     @classmethod
+    def generate_admin_user_token(cls, user_id, expired=LOGIN_LIFE_TIME_LENGTH):
+        """
+        generate token
+        """
+        token = uuid4().hex
+        cache.set(ADMIN_LOGIN_TOKEN_ACCOUNT_KEY.format(token), user_id, LOGIN_LIFE_TIME_LENGTH)
+        cache.set(ADMIN_LOGIN_ACCOUNT_TOKEN_KEY.format(user_id), token, LOGIN_LIFE_TIME_LENGTH)
+
+        return token
+
+    @classmethod
     def generate_login_result(cls, token, user: AccountModel) -> dict:
         """
         generate login user result.
@@ -68,6 +81,23 @@ class CommonUtil:
         result = cls.HASH.decode(value)
 
         return result[0] if result else 0
+
+    @staticmethod
+    def random_number_str():
+        """
+        generate random number
+        """
+        datetime_str = datetime.now().strftime('%Y%m%d%H%M%S')
+        random_number = random.randint(0, 9999)
+        return f'{datetime_str}{random_number:04}'
+
+    @classmethod
+    def generate_order_number(cls):
+        """
+        generate order number.
+        """
+        return f'{cls.random_number_str()}'
+
 
 
 class RequestClient:

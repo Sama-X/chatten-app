@@ -5,8 +5,10 @@ from datetime import datetime, timedelta, time, date
 from math import floor
 from django.db import transaction
 from django.db.models import Sum
-from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsModel, PointsWithdrawModel
-from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, WithdrawSerializer
+from django.utils.translation import gettext as _
+
+from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsLogModel, PointsModel, PointsWithdrawModel
+from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, PointsLogSerializer, WithdrawSerializer
 from base.exception import AssetErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
@@ -19,6 +21,7 @@ class O2OPaymentService(BaseService):
     """
     o2opayment service.
     """
+
     @classmethod
     @transaction.atomic
     def add_payment_by_order(cls, order: OrderModel):
@@ -29,14 +32,8 @@ class O2OPaymentService(BaseService):
         with transaction.atomic():
             payment = O2OPaymentModel.objects.filter(user_id=order.user_id).first()
             if not payment:
-                payment = O2OPaymentModel(
-                    user_id=order.user_id,
-                    transient_expire_time=datetime.now(),
-                    transient_usage_count=0,
-                    persistence_usage_count=0,
-                    free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
-                    free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
-                )
+                payment = cls.add_free_payment(order.user_id)
+
             usage_total = order.quantity * package.usage_count
             usage_expire_time = None
             if package.category == OrderPackageModel.CATEGORY_TRANSIENT:
@@ -77,20 +74,33 @@ class O2OPaymentService(BaseService):
             if not payment:
                 payment = O2OPaymentModel(
                     user_id=user_id,
-                    transient_expire_time=datetime.now(),
+                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
                     transient_usage_count=0,
-                    persistence_usage_count=0
+                    persistence_usage_count=0,
+                    free_expire_time=None,
+                    free_usage_count=0
                 )
 
-            today = date.today()
-            zero = time(0, 0, 0)
-            payment.free_expire_time = datetime.combine(today + timedelta(days=1), zero)
-            payment.free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
+            old_free_usage_count = payment.free_usage_count
+
+            payment.free_expire_time = datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0))
+            payment.free_usage_count = ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
             payment.save()
             note = (
-                f"User has purchased a transient package. total: {payment.free_usage_count} "
+                f"Get free experience. total: {payment.free_usage_count} "
                 f"expired_at: {payment.free_expire_time}"
             )
+
+            if old_free_usage_count > 0:
+                O2OPaymentLogModel.objects.create(
+                    user_id=user_id,
+                    payment_id=payment.id,
+                    category=O2OPaymentLogModel.CATEGORY_EXPIRED,
+                    expire_time=payment.free_expire_time,
+                    usage_count=payment.free_usage_count,
+                    note=f'Free emptying times per day'
+                )
+
             O2OPaymentLogModel.objects.create(
                 user_id=user_id,
                 payment_id=payment.id,
@@ -100,7 +110,7 @@ class O2OPaymentService(BaseService):
                 note=note
             )
 
-        return True
+            return payment
 
     @classmethod
     @transaction.atomic
@@ -112,14 +122,7 @@ class O2OPaymentService(BaseService):
             usage_total = floor(point * ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CHAT_COUNT_RATIO))
             payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
             if not payment:
-                payment = O2OPaymentModel(
-                    user_id=user_id,
-                    transient_expire_time=datetime.now(),
-                    transient_usage_count=0,
-                    persistence_usage_count=0,
-                    free_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
-                    free_usage_count=ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
-                )
+                payment = cls.add_free_payment(user_id)
 
             payment.persistence_usage_count += usage_total
             payment.save()
@@ -133,6 +136,86 @@ class O2OPaymentService(BaseService):
             )
 
         return True
+
+    @classmethod
+    @transaction.atomic
+    def reduce_payment(cls, user_id, count):
+        """
+        reduce payment.
+        """
+        with transaction.atomic():
+            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+            if not payment:
+                payment = cls.add_free_payment(user_id)
+
+            payment = O2OPaymentModel.objects.select_for_update().get(pk=payment.id)
+
+            total_count = payment.free_usage_count + payment.transient_usage_count + payment.persistence_usage_count
+            if total_count < count:
+                return False
+
+            if payment.free_usage_count > 0:
+                sub_count = 0
+                if count <= payment.free_usage_count:
+                    sub_count = count
+                    payment.free_usage_count -= count
+                    count = 0
+                else:
+                    sub_count = payment.free_usage_count
+                    payment.free_usage_count = 0
+                    count = count - sub_count
+                O2OPaymentLogModel.objects.create(
+                    user_id=user_id,
+                    payment_id=payment.id,
+                    category=O2OPaymentLogModel.CATEGORY_CONSUME,
+                    expire_time=None,
+                    usage_count=sub_count,
+                    note=f'Used free number of times: {sub_count}'
+                )
+            if count > 0 and payment.transient_usage_count > 0:
+                sub_count = 0
+                if count <= payment.transient_usage_count:
+                    sub_count = count
+                    payment.transient_usage_count -= count
+                    count = 0
+                else:
+                    sub_count = payment.transient_usage_count
+                    payment.transient_usage_count = 0
+                    count = count - sub_count
+                O2OPaymentLogModel.objects.create(
+                    user_id=user_id,
+                    payment_id=payment.id,
+                    category=O2OPaymentLogModel.CATEGORY_CONSUME,
+                    expire_time=None,
+                    usage_count=sub_count,
+                    note=f'Used transient number of times: {sub_count}'
+                )
+            if count > 0 and payment.persistence_usage_count > 0:
+                sub_count = 0
+                if count <= payment.persistence_usage_count:
+                    sub_count = count
+                    payment.persistence_usage_count -= count
+                    count = 0
+                else:
+                    sub_count = payment.persistence_usage_count
+                    payment.persistence_usage_count = 0
+                    count = count - sub_count
+
+                O2OPaymentLogModel.objects.create(
+                    user_id=user_id,
+                    payment_id=payment.id,
+                    category=O2OPaymentLogModel.CATEGORY_CONSUME,
+                    expire_time=None,
+                    usage_count=sub_count,
+                    note=f'Used persistence number of times: {sub_count}'
+                )
+
+            payment.save()
+
+            if count > 0:
+                raise Exception(_("consume payment error"))
+
+            return True
 
 
 class PointsService(BaseService):
@@ -247,7 +330,6 @@ class PointsWithdrawService(BaseService):
     """
 
     @classmethod
-    @classmethod
     def get_list(cls, user_id, page, offset, order, status) -> APIResponse:
         """
         get points withdraw list.
@@ -292,3 +374,28 @@ class PointsWithdrawService(BaseService):
         obj.save()
 
         return APIResponse()
+
+
+class PointsLogService(BaseService):
+    """
+    points log service.
+    """
+
+    @classmethod
+    def get_list(cls, user_id, page, offset, order) -> APIResponse:
+        """
+        get points withdraw list.
+        """
+        base = PointsLogModel.objects.filter(is_delete=False)
+        if user_id is not None:
+            base = base.filter(user_id=user_id)
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            PointsLogModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        serializer = PointsLogSerializer(objs, many=True)
+
+        return APIResponse(result=serializer.data, count=total)

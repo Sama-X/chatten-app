@@ -83,7 +83,7 @@ class AdminOrderQuery(BaseQuery):
     )
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class AdminOrderSerializer(serializers.ModelSerializer):
     """
     order serializer.
     """
@@ -130,7 +130,7 @@ class OrderSerializer(serializers.ModelSerializer):
         """
         model = OrderModel
         fields = (
-            'id', 'user_id', 'package_id', 'order_number', 'quantity', 'actual_price',
-            'status', 'status_name', 'status_note', 'payment_time', 'payment_method',
-            'payment_method_name'
+            'id', 'user_id', 'user_name', 'package_id', 'package_name', 'order_number',
+            'quantity', 'actual_price', 'status', 'status_name', 'status_note', 'payment_time',
+            'payment_method', 'payment_method_name'
         )

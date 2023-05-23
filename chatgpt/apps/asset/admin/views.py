@@ -3,11 +3,11 @@ admin api.
 """
 
 from rest_framework import mixins, viewsets
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from asset.admin.serializer import AdminWithdrawQuery
 from asset.models import PointsWithdrawModel
 from asset.service import PointsWithdrawService
+from base.middleware import AdminAuthentication
 
 from base.serializer import BaseQuery
 
@@ -17,7 +17,7 @@ class AdminWithdrawAuditViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     withdraw manage api.
     """
-    authentication_classes = ()
+    authentication_classes = (AdminAuthentication,)
 
     def list(self, request, *args, **kwargs):
         """

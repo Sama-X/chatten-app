@@ -76,7 +76,7 @@ class OrderModel(BaseModel):
     actual_price = models.FloatField(default=0, verbose_name=_("order actual price"))
     status = models.SmallIntegerField(default=STATUS_PENDING, db_index=True, verbose_name=_("order status"))
     status_note = models.CharField(max_length=64, verbose_name=_("order status note"))
-    payment_time = models.DateTimeField(verbose_name=_("order payment time"))
+    payment_time = models.DateTimeField(null=True, verbose_name=_("order payment time"))
     payment_method = models.SmallIntegerField(default=METHOD_ALIPAY, verbose_name=_("order pay method"))
 
     class Meta:

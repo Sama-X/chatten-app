@@ -4,7 +4,7 @@ asset serializer.
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
-from asset.models import PointsWithdrawModel
+from asset.models import PointsLogModel, PointsWithdrawModel
 
 from base.serializer import BaseQuery
 
@@ -68,3 +68,28 @@ class ExchangePointsSerializer(serializers.Serializer):
         required=True, min_value=1, allow_null=False, help_text=_("Exchange point")
     )
 
+
+class PointsLogSerializer(serializers.ModelSerializer):
+    """
+    points logs list.
+    """
+
+    category_name = serializers.SerializerMethodField()
+    add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    audit_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    finish_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+
+    def get_category_name(self, obj):
+        """
+        get category name.
+        """
+        return PointsLogModel.CATEGORY_DICT.get(obj.category)
+
+    class Meta:
+        """
+        meta class.
+        """
+        model = PointsLogModel
+        fields = (
+            'id', 'category', 'amount', 'note', 'add_time'
+        )

@@ -29,5 +29,9 @@ app.conf.beat_schedule = {
     'sync-handle-sama-transfer': {
         'task': 'users.tasks.handle_sama_transfer',
         'schedule': crontab(minute='*')
+    },
+    'auto-clear-expired-payment': {
+        'task': 'asset.tasks.auto_clear_expired_payment',
+        'schedule': crontab(hour="*/6", minute="0")
     }
 }

@@ -19,6 +19,7 @@ urlpatterns = [
     re_path(r'', include(('users.urls', 'users'), namespace="users")),
     re_path(r'', include(('chat.urls', 'chat'), namespace="chat")),
     re_path(r'', include(('asset.urls', 'asset'), namespace="asset")),
+    re_path(r'', include(('order.urls', 'order'), namespace="order")),
     re_path(r'admin/', include(('order.admin.urls', 'order-admin'), namespace="order.admin")),
     re_path(r'admin/', include(('users.admin.urls', 'users-admin'), namespace="users.admin")),
     re_path(r'admin/', include(('asset.admin.urls', 'asset-admin'), namespace="asset.admin")),

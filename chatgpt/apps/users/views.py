@@ -5,12 +5,11 @@ account api module.
 from datetime import datetime
 import json
 import logging
-from uuid import uuid4
 from django.conf import settings
 from django.core.cache import cache
 from django_redis import get_redis_connection
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.throttling import ScopedRateThrottle
 
@@ -22,9 +21,10 @@ from base.constants import (
 )
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
+from base.serializer import BaseQuery
 from users.models import AccountModel, MessageLogModel
 from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
-from users.service import UserService
+from users.service import InviteLogService, UserService
 
 logger = logging.getLogger(__name__)
 
@@ -184,15 +184,42 @@ class UserProfileViewSet(viewsets.GenericViewSet):
         """
         user = request.user
 
+        UserService.check_given_gift_experience(user.id)
+
         result = {
             'id': user.id,
             'nickname': user.nickname,
-            'experience': user.experience,
-            'reward_experience': UserService.get_reward_experience(user.id),
-            'used_experience': UserService.get_used_experience(user.id, start_time=datetime.now().date()),
+            'experience': UserService.get_user_experience(user.id),
+            'reward_experience': 0,
+            'used_experience': 0,
+            'points': UserService.get_user_points(user.id),
             'invite_code': None
         }
         if request.user.user_type == AccountModel.USER_TYPE_NORMAL:
             result['invite_code'] = CommonUtil.encode_hashids(user.id)
 
         return APIResponse(result=result)
+
+
+class InviteLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    invite log api
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/users/invite-logs/
+        method: get
+        desc: get invite logs api
+        """
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+        user_id = request.user.id
+
+        return InviteLogService.get_list(page, offset, order, user_id)

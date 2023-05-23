@@ -287,7 +287,7 @@ class ConfigModel(BaseModel):
         )
         cls.get_int(
             cls.CONFIG_POINT_TO_CASH_RATIO, 10,
-            _("Set the redemption ratio of points withdrawal.(do not modify this item at will)"),
+            _("Set the redemption ratio of points withdrawal."),
             cls.VALUE_TYPE_INT
         )
         cls.get_int(
