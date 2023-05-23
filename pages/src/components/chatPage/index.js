@@ -633,6 +633,7 @@ const App = () => {
                   </div>
                   <div className='memberBox' onClick={noFunction}>
                     <div className='memberHeaderBg'>
+                      
                       <div className='memberHeader'>
                         <img src={require("../../assets/vipHeader.png")} alt=""/>
                         <div>{locales(language)['vip']}</div>

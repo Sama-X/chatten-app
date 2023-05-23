@@ -492,6 +492,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
+              <div className='my-score'>我的积分:888</div>
             </div>
         </div>
       {

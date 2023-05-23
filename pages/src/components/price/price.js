@@ -20,6 +20,10 @@ function App() {
     setValue(parseInt(v))
   }
 
+  const payMoney = (value) => {
+      console.log('money=', value)
+  }
+
 
   return (
     <div className='price-container'>
@@ -31,22 +35,22 @@ function App() {
             <div className='price-item'>
                 <div className='price-item-name'>季卡</div>
                 <div className='price-item-content'><span className='price-item-limit'>2000</span>次提问</div>
-                <div className='price-item-btn'>充值100元 👉 </div>
+                <div className='price-item-btn' onClick={()=>{payMoney(100)}}>充值100元 👉 </div>
             </div>
             <div className='price-item'>
                 <div className='price-item-name'>半年</div>
                 <div className='price-item-content'><span className='price-item-limit'>4500</span>次提问</div>
-                <div className='price-item-btn'>充值200元 👉 </div>
+                <div className='price-item-btn' onClick={()=>{payMoney(200)}}>充值200元 👉 </div>
             </div>
             <div className='price-item'>
                 <div className='price-item-name'>年卡</div>
                 <div className='price-item-content'><span className='price-item-limit'>10000</span>次提问</div>
-                <div className='price-item-btn'>充值400元 👉 </div>
+                <div className='price-item-btn' onClick={()=>{payMoney(400)}}>充值400元 👉 </div>
             </div>
             <div className='price-item'>
                 <div className='price-item-name'>按次购买</div>
                 <div className='price-item-content'><span className='price-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次提问</div>
-                <div className='price-item-btn'>充值{value/10}元 👉 </div>
+                <div className='price-item-btn' onClick={()=>{payMoney(value/10)}}>充值{value/10}元 👉 </div>
             </div>
         </div>
       </div>

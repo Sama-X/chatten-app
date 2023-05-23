@@ -8,6 +8,7 @@ import Header from '../header/header.js'
 import Menu from '../menu/menu.js'
 import Dashboard from '../dashboard/dashboard.js'
 import PackageList from '../package/package.js'
+import ConfigList from '../config/config.js'
 
 
 function App(props) {
@@ -29,7 +30,7 @@ function App(props) {
           {props.location.pathname === '/admin/dashboard' ? <Dashboard></Dashboard> : ""}
           {props.location.pathname === '/admin' ? <Dashboard></Dashboard> : ""}
           {props.location.pathname === '/admin/packages' ? <PackageList></PackageList> : ""}
-          {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
+          {props.location.pathname === '/admin/configs' ? <ConfigList></ConfigList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
           {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
