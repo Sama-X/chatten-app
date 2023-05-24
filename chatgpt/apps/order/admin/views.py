@@ -80,9 +80,9 @@ class AdminOrderViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         order = query.validated_data.get('order') or '-id'  # type: ignore
         user_id = query.validated_data.get('user_id')  # type: ignore
         package_id = query.validated_data.get('package_id')  # type: ignore
-        order_number = query.validated_data.get('order_number')  # type: ignore
+        out_trade_no = query.validated_data.get('out_trade_no')  # type: ignore
         status = query.validated_data.get('status')  # type: ignore
 
-        resp = OrderService.get_list(page, offset, order, user_id, package_id, order_number, status)
+        resp = OrderService.get_list(page, offset, order, user_id, package_id, out_trade_no, status)
 
         return resp

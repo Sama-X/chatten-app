@@ -25,7 +25,9 @@ from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
 
 
-class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
+                   mixins.RetrieveModelMixin,
+                   viewsets.GenericViewSet):
     """
     order api.
     """
@@ -49,10 +51,10 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
         order = query.validated_data.get('order') or 'status,-id'  # type: ignore
         user_id = request.user.id
         package_id = query.validated_data.get('package_id')  # type: ignore
-        order_number = query.validated_data.get('order_number')  # type: ignore
+        out_trade_no = query.validated_data.get('out_trade_no')  # type: ignore
         status = query.validated_data.get('status')  # type: ignore
 
-        return OrderService.get_list(page, offset, order, user_id, package_id, order_number, status)
+        return OrderService.get_list(page, offset, order, user_id, package_id, out_trade_no, status)
 
     def create(self, request, *args, **kwargs):
         """
@@ -67,6 +69,15 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.Gene
         """
 
         return OrderService.create_order(request)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        url: /api/v1/order/orders/<order_id>/
+        method: get
+        desc: get order detail api
+        """
+        order_id = kwargs["pk"]
+        return OrderService.get_order_detail(order_id)
 
 
 class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):

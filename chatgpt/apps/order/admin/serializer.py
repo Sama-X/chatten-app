@@ -75,7 +75,7 @@ class AdminOrderQuery(BaseQuery):
     package_id = serializers.IntegerField(
         required=False, allow_null=True, help_text=_("order package id")
     )
-    order_number = serializers.CharField(
+    out_trade_no = serializers.CharField(
         required=False, allow_null=True, help_text=_("order number")
     )
     status = serializers.IntegerField(
@@ -130,7 +130,7 @@ class AdminOrderSerializer(serializers.ModelSerializer):
         """
         model = OrderModel
         fields = (
-            'id', 'user_id', 'user_name', 'package_id', 'package_name', 'order_number',
+            'id', 'user_id', 'user_name', 'package_id', 'package_name', 'out_trade_no',
             'quantity', 'actual_price', 'status', 'status_name', 'status_note', 'payment_time',
             'payment_method', 'payment_method_name'
         )
