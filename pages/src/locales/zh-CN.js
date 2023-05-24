@@ -5,7 +5,7 @@ export default {
     noaccount: "没有账号？去",
     create_new_talk: '创建新对话',
     clear_chat_hitstory: '清除聊天记录',
-    experience_count: '体验次数',
+    experience_count: '提问次数',
     unlimit: '无限次数',
     faster: '更快响应',
     stable: '更加稳定',
@@ -25,6 +25,6 @@ export default {
     input_password_again: '请再次输入密码',
     anonymous: '访客',
     nodata: '暂无数据',
-    ask_free: '免费提问',
-
+    ask_free: '提问次数',
+    login_first: '请先登录'
 }

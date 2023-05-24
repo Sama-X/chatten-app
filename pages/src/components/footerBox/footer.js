@@ -1,34 +1,43 @@
 import './footer.css'
 
-import { Input, Spin } from 'antd';
+import { Input, message, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom'
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import { useHistory } from 'react-router-dom';
+import locales from '../../locales/locales.js'
 
-const App = () => {
+
+const App = (data) => {
   const isToken = cookie.load('token') ? true : false
   const [spinStatus, setSpinStatus] = useState(false);
+  const language = data.language
+  const setLanguage = data.setLanguage
+
 
   const history = useHistory()
   const onSearchFunc = (value) => {
     // console.log(value,'value');
   }
   const linkSkip =  () => {
+    console.log("isToken=", isToken)
     if(isToken) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
-    }else{
-      let request = new Request({});
-      setSpinStatus(true)
-      request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,}).then(function(resData){
-        setSpinStatus(false)
-        cookie.save('userName', resData.data.nickname, { path: '/' })
-        cookie.save('userId', resData.data.id, { path: '/' })
-        cookie.save('token', resData.data.token, { path: '/' })
-        history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-      })
+    }
+    else{
+      setSpinStatus(false)
+      message.error(locales(language)["login_first"])
+      // let request = new Request({});
+      // setSpinStatus(true)
+      // request.post('/api/v1/users/anonymous/',{invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,}).then(function(resData){
+      //   setSpinStatus(false)
+      //   cookie.save('userName', resData.data.nickname, { path: '/' })
+      //   cookie.save('userId', resData.data.id, { path: '/' })
+      //   cookie.save('token', resData.data.token, { path: '/' })
+      //   history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+      // })
     }
   }
   useEffect(()=>{

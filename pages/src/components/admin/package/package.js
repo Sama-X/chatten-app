@@ -95,7 +95,6 @@ const App = () => {
   };
 
   const changeName = (e) => {
-    console.log("8888", e.target.value)
       setName(e.target.value)
   }
   const changeCategory = (value) => {
@@ -157,6 +156,12 @@ const App = () => {
 
   const columns = [
     {
+      title: 'id',
+      dataIndex: 'id',
+      width: '15%',
+      editable: false,
+    },
+    {
       title: '名称',
       dataIndex: 'name',
       width: '15%',
@@ -185,6 +190,12 @@ const App = () => {
       dataIndex: 'price',
       width: '10%',
       editable: false,
+    },
+    {
+      title: '优先级',
+      dataIndex: 'priority',
+      width: '10%',
+      editable: true,
     },
     {
       title: '操作',

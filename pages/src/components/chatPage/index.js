@@ -145,7 +145,8 @@ const App = () => {
   }
   const onSearchFunc = (value) => {
     if(isInputEnterStatus){
-      if(Number(totalExeNumber) >= Number(experience)){
+      // if(Number(totalExeNumber) >= Number(experience)){
+      if(Number(experience) === 0){
         setQuestionValue('')
         value.target.value = ''
         message.info('Questioning more than ten times, reaching the upper limit')
@@ -247,7 +248,9 @@ const App = () => {
             }else{
               // setIsModalOpen(true)
               // cookie.save('experience', resData.experience, { path: '/' })
+              console.log('rrrr=', resData.data)
               cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
+              cookie.save('experience', resData.data.experience, { path: '/' })
 
               cookie.save('topicId', resData.data.topic_id)
 
@@ -414,6 +417,15 @@ const App = () => {
     }
   };
 
+  const goToPrice = () =>{
+    if(isToken){
+      history.push({pathname: '/price'})
+    }else{
+      history.push({pathname: '/SignIn/'})
+    }
+  }
+
+
   useEffect(()=>{
     setTimeout(function(){
       document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
@@ -429,8 +441,9 @@ const App = () => {
       getHistory()
       let request = new Request({});
       request.get('/api/v1/users/profile/').then(function(resData){
-        cookie.save('totalExeNumber', resData.data.used_experience)
-        cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+        // cookie.save('totalExeNumber', resData.data.used_experience)
+        // cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+        cookie.save('experience', resData.data.experience)
       })
     }else{
       cookie.save('topicId', '')
@@ -545,7 +558,7 @@ const App = () => {
                         disabled={inputDisabled}
                         onPressEnter={onSearchFunc}
                         onChange={onChangeInput}
-                        value={questionValue}
+                        value={'questionValue'}
                         className="tokenInput"
                       />
                   {/* </div> */}
@@ -562,7 +575,8 @@ const App = () => {
               <div className="footerBottomBox">
                 <div className="footerLeftBox">
                   <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-                  <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
+                  {/* <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div> */}
+                  <div><span>{locales(language)['ask_free']}: </span>{experience}</div>
                 </div>
                 {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
               </div>
@@ -617,7 +631,8 @@ const App = () => {
                         <img src={require("../../assets/reply.png")} alt=""/>
                         <div style={{width:'90%'}}>
                           <div className='otherMenuRight'>
-                            <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                            {/* <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div> */}
+                            <div className='otherMenuRightDiv'>{locales(language)['experience_count']}: <span className='leftNumber'>{experience}</span></div>
                             <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                               <img src={require("../../assets/share.png")} alt=""/>
                               <div>
@@ -631,7 +646,7 @@ const App = () => {
 
                     </div>
                   </div>
-                  <div className='memberBox' onClick={noFunction}>
+                  <div className='memberBox' onClick={goToPrice}>
                     <div className='memberHeaderBg'>
                       
                       <div className='memberHeader'>
@@ -791,7 +806,8 @@ const App = () => {
                   <div className="footerBottomBox">
                     <div className="footerLeftBox">
                       <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
-                      <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div>
+                      {/* <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div> */}
+                      <div><span>{locales(language)['ask_free']}: </span>{experience}</div>
                     </div>
                     {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
                   </div>

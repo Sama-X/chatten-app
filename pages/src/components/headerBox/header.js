@@ -36,6 +36,7 @@ function getItem(label, key, icon, children, type) {
 const App = (data) => {
   const isToken = cookie.load('token')
   const experience = cookie.load('experience') ? cookie.load('experience') : 10
+  const points = cookie.load('points') ? cookie.load('points') : 0
   const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const history = useHistory()
   const [userName, setUserName] = useState('');
@@ -179,6 +180,14 @@ const App = (data) => {
     setIsModalOpen(false);
   };
 
+  const goToPrice = () =>{
+    if(isToken){
+      history.push({pathname: '/price'})
+    }else{
+      history.push({pathname: '/SignIn/'})
+    }
+  }
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -238,6 +247,7 @@ const App = (data) => {
       request.get('/api/v1/users/profile/').then(function(resData){
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
+        cookie.save('points', resData.data.points)
         setInviteCode(resData.data.invite_code)
       })
     }else{
@@ -354,7 +364,8 @@ const App = (data) => {
                   <img src={require("../../assets/reply.png")} alt=""/>
                   <div style={{width:'90%'}}>
                     <div className='otherMenuRight'>
-                      <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                      {/* <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div> */}
+                      <div className='otherMenuRightDiv'>{locales(language)['experience_count']}: <span className='leftNumber'>{experience}</span></div>
                       <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>
@@ -454,7 +465,8 @@ const App = (data) => {
                     <img src={require("../../assets/reply.png")} alt=""/>
                     <div style={{width:'90%'}}>
                       <div className='otherMenuRight'>
-                        <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div>
+                        {/* <div className='otherMenuRightDiv'>{locales(language)['experience_count']}<span className='leftNumber'>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</span></div> */}
+                        <div className='otherMenuRightDiv'>{locales(language)['experience_count']}: <span className='leftNumber'>{experience}</span></div>
                         <div className='otherMenuRightItem shareCursor' onClick={shareFunction}>
                           <img src={require("../../assets/share.png")} alt=""/>
                           <div>
@@ -468,7 +480,7 @@ const App = (data) => {
 
                 </div>
               </div>
-              <div className='memberBox' onClick={noFunction}>
+              <div className='memberBox' onClick={goToPrice}>
                 <div className='memberHeaderBg'>
                   <div className='memberHeader'>
                     <img src={require("../../assets/vipHeader.png")} alt=""/>
@@ -492,7 +504,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>我的积分:888</div>
+              <div className='my-score'>我的积分:{points}</div>
             </div>
         </div>
       {
@@ -548,7 +560,7 @@ const App = (data) => {
         {/* chouti */}
         {/* <LeftBox></LeftBox> */}
         {/* footer */}
-        <Footer style={{width:'70%',left:'30%'}}></Footer>
+        <Footer language={language} setLanguage={setLanguage} style={{width:'70%',left:'30%'} }></Footer>
       </div>
 
       <>

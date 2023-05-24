@@ -26,7 +26,7 @@ function App() {
         {/* <LeftBox></LeftBox> */}
         {/* footer */}
         {
-          isPhone ? <Footer></Footer> : ''
+          isPhone ? <Footer language={language} setLanguage={setLanguage}></Footer> : ''
         }
         {/* <Footer></Footer> */}
 

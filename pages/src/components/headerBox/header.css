@@ -138,6 +138,7 @@
     width: 100%;
     padding: 10px 20px;
     background: url("../../assets/vipHeaderBg.png");
+    cursor: pointer;
 }
 .memberHeader {
     width: 40%;

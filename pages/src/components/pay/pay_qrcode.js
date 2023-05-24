@@ -4,38 +4,59 @@ import { Button, Form, message, Popconfirm, Table, Modal, Select,Input } from 'a
 import React, { useEffect, useState } from 'react';
 import Request from '../../request.ts';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 const App = (props) => {
   let request = new Request({});
+  const navigate = useHistory()
+
 
   const [qrcodeUrl, setQrcodeUrl] = useState("")
+  const [orderId, setOrderId] = useState("")
 
-  function getBase64(data) {
-    return new Promise((resolve, reject) => {
-      const blob = new Blob([data], { type: 'image/jpg' }) // 必须指定type类型
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      reader.onload = () => resolve(reader.result)
-      reader.onerror = (error) => reject(error)
-    })
-  }
-  
-
-  const payMoney = (value) => {
-    console.log('money=', value)
+  const payMoney = (package_id, quantity) => {
     request.post('/api/v1/order/orders/', {
-      package_id: 1,
-      quantity: 1,
+      package_id: parseInt(package_id),
+      quantity: parseInt(quantity),
       'payment_method': 2
     }).then(function(res){
       console.log(res)
       setQrcodeUrl(res.data.image)
+      setOrderId(res.data.order_id)
+      console.log("orderId=", orderId)
     })
   }
 
   useEffect(()=>{
-    payMoney(1)
+    let interval = setInterval(function(){
+      if(!orderId){
+        return
+      }
+      request.get('/api/v1/order/orders/'+ orderId + '/', {
+      }).then(function(res){
+        console.log(res)
+        if(res.data.status != 0){
+          if(res.data.status == 10){
+            message.info('支付成功')
+            navigate.push('')
+          }
+          if(res.data.status == 100){
+            message.info('支付失败')
+          }
+          clearInterval(interval);
+        }
+      })
+      }, 5000);
+    },
+  [orderId])
+
+  useEffect(()=>{
+    let params = props.location.search
+    let amount = params.split('&')[0].split('=')[1]
+    let package_id = params.split('&')[1].split('=')[1]
+    let quantity = params.split('&')[2].split('=')[1]
+    payMoney(package_id, quantity)
   }, [])
 
   return (

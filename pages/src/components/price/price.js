@@ -13,9 +13,9 @@ function App() {
   const [value, setValue] = useState(10)
   let request = new Request({});
   const navigate = useHistory()
+  const [packageList, setPackageList] = useState([])
 
   const changeValue = (e) => {
-    console.log(parseInt(e.target.value))
     let v = e.target.value.replace(/[^\d]/g, "");
     if(v==''){
         v = 0
@@ -23,9 +23,18 @@ function App() {
     setValue(parseInt(v))
   }
 
-  const payMoney = (value) => {
-    navigate.push('/pay/?amount=' + value)
+  const payMoney = (value, package_id, quantity) => {
+    console.log('zzzz=', '/pay/?amount=' + value + '&package_id=' + package_id + '&quantity=' + quantity)
+    navigate.push('/pay/?amount=' + value + '&package_id=' + package_id + '&quantity=' + quantity)
   }
+
+  useEffect(()=>{
+    let request = new Request({});
+    request.get('/api/v1/order/order-packages/').then(function(resData){
+      console.log(resData.data)
+      setPackageList(resData.data)
+    })
+  }, [])
 
   return (
     <div className='price-container'>
@@ -34,26 +43,24 @@ function App() {
         <div className='price-title'>价格</div>
         <div className='price-slogan'>选择适合你的最佳方案</div>
         <div className='price-list'>
-            <div className='price-item'>
-                <div className='price-item-name'>季卡</div>
-                <div className='price-item-content'><span className='price-item-limit'>2000</span>次提问</div>
-                <div className='price-item-btn' onClick={()=>{payMoney(100)}}>充值100元 👉 </div>
-            </div>
-            <div className='price-item'>
-                <div className='price-item-name'>半年</div>
-                <div className='price-item-content'><span className='price-item-limit'>4500</span>次提问</div>
-                <div className='price-item-btn' onClick={()=>{payMoney(200)}}>充值200元 👉 </div>
-            </div>
-            <div className='price-item'>
-                <div className='price-item-name'>年卡</div>
-                <div className='price-item-content'><span className='price-item-limit'>10000</span>次提问</div>
-                <div className='price-item-btn' onClick={()=>{payMoney(400)}}>充值400元 👉 </div>
-            </div>
-            <div className='price-item'>
-                <div className='price-item-name'>按次购买</div>
-                <div className='price-item-content'><span className='price-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次提问</div>
-                <div className='price-item-btn' onClick={()=>{payMoney(value/10)}}>充值{value/10}元 👉 </div>
-            </div>
+            {
+              packageList.map((item)=>{
+                  {
+                    return (item.category === 0 ?
+                    <div className='price-item' key={item.id}>
+                      <div className='price-item-name'>{item.name}</div>
+                      <div className='price-item-content'><span className='price-item-limit'>{item.usage_count}</span>次提问</div>
+                      <div className='price-item-btn' onClick={()=>{payMoney(item.price, item.id, 1)}}>充值{item.price}元 👉 </div>
+                    </div>:
+                    <div className='price-item' key={item.id}>
+                      <div className='price-item-name'>按次购买</div>
+                      <div className='price-item-content'><span className='price-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次提问</div>
+                      <div className='price-item-btn' onClick={()=>{payMoney(value*item.price, item.id, value)}}>充值{value*item.price}元 👉 </div>
+                    </div>
+                    )
+                  }
+              })
+            }
         </div>
       </div>
     </div>
