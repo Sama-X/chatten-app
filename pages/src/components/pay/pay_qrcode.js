@@ -11,7 +11,6 @@ const App = (props) => {
   let request = new Request({});
   const navigate = useHistory()
 
-
   const [qrcodeUrl, setQrcodeUrl] = useState("")
   const [orderId, setOrderId] = useState("")
 

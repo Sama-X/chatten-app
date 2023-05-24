@@ -14,6 +14,7 @@ function App() {
   const [packageId, setPackageId] = useState('')
   const [amount, setAmount] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const [orderId, setOrderId] = useState("")
   let request = new Request({});
   const navigate = useHistory()
   const [packageList, setPackageList] = useState([])
@@ -42,12 +43,35 @@ function App() {
       client: 'h5'
     }).then(function(res){
       console.log(res)
+      setOrderId(res.data.order_id)
       window.location.href = res.data.h5_url
       // setQrcodeUrl(res.data.image)
-      // setOrderId(res.data.order_id)
       // console.log("orderId=", orderId)
     })
   }
+
+  useEffect(()=>{
+    let interval = setInterval(function(){
+      if(!orderId){
+        return
+      }
+      request.get('/api/v1/order/orders/'+ orderId + '/', {
+      }).then(function(res){
+        console.log(res)
+        if(res.data.status != 0){
+          if(res.data.status == 10){
+            message.info('支付成功')
+            navigate.push('')
+          }
+          if(res.data.status == 100){
+            message.info('支付失败')
+          }
+          clearInterval(interval);
+        }
+      })
+      }, 5000);
+    },
+  [orderId])
 
   useEffect(()=>{
     let request = new Request({});
