@@ -123,3 +123,6 @@ class CreateOrderSeriralizer(serializers.Serializer):
     client = serializers.CharField(
         required=False, allow_null=True, help_text=_("order pay client")
     )
+    openid = serializers.CharField(
+        required=False, allow_null=True, help_text=_("wechat openid")
+    )

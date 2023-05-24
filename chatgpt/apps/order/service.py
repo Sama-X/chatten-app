@@ -259,6 +259,7 @@ class OrderService(BaseService):
         quantity = data['quantity']  # type: ignore
         payment_method = data.get('payment_method')  # type: ignore
         client = data.get('client')  # type: ignore
+        openid = data.get('openid')  # type: ignore
 
         if payment_method not in OrderModel.METHODS_DICT:
             return APIResponse(code=OrderErrorCode.ORDER_INVALID_PAYMENT_METHOD)
@@ -303,6 +304,14 @@ class OrderService(BaseService):
                 print('h5_url = ', h5_url)
                 return APIResponse(result={
                     'h5_url': h5_url,
+                    'order_id': order_obj.id
+                })
+            elif client == OrderModel.CLIENT_JSAPI:
+                print("openid = ", openid)
+                data = wechat.js_api_prepay(openid, order_obj.actual_price / 1000, order_obj.out_trade_no)
+                print('data = ', data)
+                return APIResponse(result={
+                    'data': data,
                     'order_id': order_obj.id
                 })
 
