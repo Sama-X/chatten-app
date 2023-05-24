@@ -168,7 +168,7 @@ class OrderService(BaseService):
     order service.
     """
     @classmethod
-    def get_list(cls, page, offset, order, user_id=None, package_id=None, order_number=None, status=None) -> APIResponse:
+    def get_list(cls, page, offset, order, user_id=None, package_id=None, out_trade_no=None, status=None) -> APIResponse:
         """
         get order list.
         """
@@ -179,8 +179,8 @@ class OrderService(BaseService):
             conditions['user_id'] = user_id
         if package_id:
             conditions['package_id'] = package_id
-        if order_number:
-            conditions['order_number__icontains'] = order_number
+        if out_trade_no:
+            conditions['out_trade_no__icontains'] = out_trade_no
         if status is not None:
             conditions['status'] = status
 
@@ -214,6 +214,35 @@ class OrderService(BaseService):
         })
 
         return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    def get_order_detail(self, order_id):
+        """
+        get order detail.
+        """
+        order_obj = OrderModel.objects.filter(id=order_id, is_delete=False).first()
+
+        if not order_obj:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        user_ids, package_ids = {order_obj.user_id}, {order_obj.package_id}
+
+        user_dict, order_package_dict = {}, {}
+        if user_ids:
+            user_dict = {
+                user.id: user for user in AccountModel.objects.filter(id__in=list(user_ids)).all()
+            }
+        if package_ids:
+            order_package_dict = {
+                item.id: item for item in OrderPackageModel.objects.filter(id__in=list(package_ids)).all()
+            }
+
+        serializer = OrderSerializer(order_obj, context={
+            'user_dict': user_dict,
+            'order_package_dict': order_package_dict
+        })
+
+        return APIResponse(result=serializer.data)
 
     @classmethod
     @transaction.atomic
@@ -253,7 +282,8 @@ class OrderService(BaseService):
         print('code_url = ', code_url)
         img_stream = utils.make_qrcode(data=code_url)
         return APIResponse(result={
-            'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}'
+            'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}',
+            'order_id': order_obj.id
         })
 
     @classmethod
