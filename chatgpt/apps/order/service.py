@@ -277,7 +277,7 @@ class OrderService(BaseService):
             payment_method=payment_method
         )
 
-        code_url = wechat.native_prepay(order_obj.actual_price, order_obj.out_trade_no)
+        code_url = wechat.native_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
 
         print('code_url = ', code_url)
         img_stream = utils.make_qrcode(data=code_url)
