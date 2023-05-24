@@ -93,6 +93,7 @@ class OrderErrorCode:
     ORDER_PACKAGE_NAME_EXISTS = 30002
     ORDER_PACKAGE_INVALID = 30003
     ORDER_INVALID_PAYMENT_METHOD = 300100
+    ORDER_INVALID_PAYMENT_CLIENT = 300101
 
     ERRORS = (
         (ORDER_PACKAGE_TRANSIENT_NO_DAYS, _('The timeliness package cannot be used without days')),
@@ -100,6 +101,7 @@ class OrderErrorCode:
         (ORDER_PACKAGE_NAME_EXISTS, _('Package name already exists')),
         (ORDER_INVALID_PAYMENT_METHOD, _('Invalid method of payment')),
         (ORDER_PACKAGE_INVALID, _('Invalid order package')),
+        (ORDER_INVALID_PAYMENT_CLIENT, _('Unsupported payment client')),
     )
     ERRORS_DICT = dict(ERRORS)
 
