@@ -150,7 +150,7 @@ def native_prepay(amount, out_trade_no):
     code_url = response.json()['code_url']
     return code_url
 
-def h5_prepay(amount, out_trade_no):
+def h5_prepay(amount, out_trade_no, ip=None):
     body = {
         "mchid": mch_id,
         "out_trade_no": out_trade_no,
@@ -162,7 +162,7 @@ def h5_prepay(amount, out_trade_no):
             "currency": "CNY"
         },
         "scene_info": {
-            "payer_client_ip": "127.0.0.1",
+            "payer_client_ip": ip,
             "h5_info": {
                 "type": "Wap"
             }
