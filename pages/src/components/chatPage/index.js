@@ -561,7 +561,7 @@ const App = () => {
                         disabled={inputDisabled}
                         onPressEnter={onSearchFunc}
                         onChange={onChangeInput}
-                        value={'questionValue'}
+                        value={questionValue}
                         className="tokenInput"
                       />
                   {/* </div> */}
