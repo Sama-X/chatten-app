@@ -41,6 +41,7 @@ function App() {
       'payment_method': 2
     }).then(function(res){
       console.log(res)
+      navigate.push(res.data.h5_url)
       // setQrcodeUrl(res.data.image)
       // setOrderId(res.data.order_id)
       // console.log("orderId=", orderId)
