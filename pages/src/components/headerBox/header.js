@@ -379,7 +379,7 @@ const App = (data) => {
 
               </div>
             </div>
-            <div className='memberBox' onClick={noFunction}>
+            <div className='memberBox' onClick={goToPrice}>
               <div className='memberHeaderBg'>
                 <div className='memberHeader'>
                   <img src={require("../../assets/vipHeader.png")} alt=""/>

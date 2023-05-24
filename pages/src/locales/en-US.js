@@ -5,7 +5,7 @@ export default {
     noaccount: "Don't have a account? go to ",
     create_new_talk: 'Create new talk',
     clear_chat_hitstory: 'Clear history',
-    experience_count: 'Number of questions',
+    experience_count: 'Question times',
     unlimit: 'Unlimit',
     faster: 'Faster',
     stable: 'Stable',
@@ -25,6 +25,6 @@ export default {
     input_password_again: 'password again',
     anonymous: 'Anonymous',
     nodata: 'No data',
-    ask_free: 'question times',
+    ask_free: 'Question times',
     login_first: 'Please Login'
   }
