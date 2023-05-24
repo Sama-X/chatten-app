@@ -293,7 +293,12 @@ class OrderService(BaseService):
                     'order_id': order_obj.id
                 })
             elif client == OrderModel.CLIENT_H5:
-                h5_url = wechat.h5_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
+                ip_addr = request.META.get('REMOTE_ADDR')
+                try:
+                    ip_addr = request.headers['X-Forwarded-For']
+                except:
+                    pass
+                h5_url = wechat.h5_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no, ip=ip_addr)
 
                 print('h5_url = ', h5_url)
                 return APIResponse(result={
