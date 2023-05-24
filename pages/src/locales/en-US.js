@@ -26,5 +26,6 @@ export default {
     anonymous: 'Anonymous',
     nodata: 'No data',
     ask_free: 'Question times',
-    login_first: 'Please Login'
+    login_first: 'Please Login',
+    myscore: 'My Points'
   }

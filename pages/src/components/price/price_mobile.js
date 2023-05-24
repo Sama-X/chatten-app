@@ -1,4 +1,4 @@
-import './price.css'
+import './price_mobile.css'
 import { useEffect, useState } from 'react';
 import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
@@ -11,6 +11,9 @@ function App() {
   let isPhone = /mobile/i.test(info);
   const [language, setLanguage] = useState(get_default_language());
   const [value, setValue] = useState(10)
+  const [packageId, setPackageId] = useState('')
+  const [amount, setAmount] = useState(0)
+  const [quantity, setQuantity] = useState(1)
   let request = new Request({});
   const navigate = useHistory()
   const [packageList, setPackageList] = useState([])
@@ -21,11 +24,27 @@ function App() {
         v = 0
     }
     setValue(parseInt(v))
+    setQuantity(parseInt(v))
   }
 
-  const payMoney = (value, package_id, quantity) => {
-    console.log('zzzz=', '/pay/?amount=' + value + '&package_id=' + package_id + '&quantity=' + quantity)
-    navigate.push('/pay/?amount=' + value + '&package_id=' + package_id + '&quantity=' + quantity)
+  const choosePackage = (amount, package_id, quantity) =>{
+    setAmount(amount)
+    setPackageId(package_id)
+    console.log('packageId=', packageId)
+    setQuantity(quantity)
+  }
+
+  const payMoney = () => {
+    request.post('/api/v1/order/orders/', {
+      package_id: parseInt(packageId),
+      quantity: parseInt(quantity),
+      'payment_method': 2
+    }).then(function(res){
+      console.log(res)
+      // setQrcodeUrl(res.data.image)
+      // setOrderId(res.data.order_id)
+      // console.log("orderId=", orderId)
+    })
   }
 
   useEffect(()=>{
@@ -33,38 +52,43 @@ function App() {
     request.get('/api/v1/order/order-packages/').then(function(resData){
       console.log(resData.data)
       setPackageList(resData.data)
+      if(!packageId){
+        console.log('88888')
+        setPackageId(resData.data[0].id)
+        setAmount(resData.data[0].price)
+      }
     })
   }, [])
 
   return (
-    <div className='price-container'>
-      <div className='price-header'><img src={require("../../assets/logo.png")} alt=""/></div>
-      <div className='price-frame'>
-        <div className='price-title'>价格33</div>
-        <div className='price-slogan'>选择适合你的最佳方案</div>
-        <div className='price-list'>
+    <div className='price-mobile-container'>
+      <div className='price-mobile-header'><img src={require("../../assets/logo.png")} alt=""/></div>
+      <div className='price-mobile-frame'>
+        <div className='price-mobile-title'>价格</div>
+        <div className='price-mobile-slogan'>选择适合你的最佳方案</div>
+        <div className='price-mobile-list'>
             {
               packageList.map((item)=>{
                   {
                     return (item.category === 0 ?
-                    <div className='price-item' key={item.id}>
-                      <div className='price-item-name'>{item.name}</div>
-                      <div className='price-item-content'><span className='price-item-limit'>{item.usage_count}</span>次提问</div>
-                      <div className='price-item-btn' onClick={()=>{payMoney(item.price, item.id, 1)}}>充值{item.price}元 👉 </div>
+                    <div className={item.id == packageId ? 'price-mobile-item price-mobile-item-selected':'price-mobile-item'} key={item.id} onClick={()=>{choosePackage(item.price, item.id, 1)}}>
+                      <div className='price-mobile-item-name'>{item.name}</div>
+                      <div className='price-mobile-item-price'>¥{item.price}</div>
+                      <div className='price-mobile-item-content'><span className='price-mobile-item-limit'>{item.usage_count}</span>次</div>
                     </div>:
-                    <div className='price-item' key={item.id}>
-                      <div className='price-item-name'>按次购买</div>
-                      <div className='price-item-content'><span className='price-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次提问</div>
-                      <div className='price-item-btn' onClick={()=>{payMoney(value*item.price, item.id, value)}}>充值{value*item.price}元 👉 </div>
+                    <div className={item.id == packageId ? 'price-mobile-item price-mobile-item-selected':'price-mobile-item'}  key={item.id} onClick={()=>{choosePackage(item.price, item.id, value)}}>
+                      <div className='price-mobile-item-name'>按次购买</div>
+                      <div className='price-mobile-item-price'>¥{parseFloat(item.price * value).toFixed(2)}</div>
+                      <div className='price-mobile-item-content'><span className='price-mobile-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次</div>
                     </div>
                     )
                   }
               })
             }
         </div>
+        <div className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</div>
       </div>
     </div>
-
   );
 }
 

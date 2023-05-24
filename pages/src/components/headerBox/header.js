@@ -200,7 +200,7 @@ const App = (data) => {
         },0)
         return
       }else{
-        copy('http://hi.chattop.club/?invite_code='+inviteCode)
+        copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
         message.success('Successfully copied, please share with friends')
       }
     }else{
@@ -402,6 +402,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
+              <div className='my-score'>{locales(language)['myscore']}:{points}</div>
             </div>
           </div>
         </Drawer>
@@ -504,7 +505,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>我的积分:{points}</div>
+              <div className='my-score'>{locales(language)['myscore']}:{points}</div>
             </div>
         </div>
       {

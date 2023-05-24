@@ -26,5 +26,6 @@ export default {
     anonymous: '访客',
     nodata: '暂无数据',
     ask_free: '提问次数',
-    login_first: '请先登录'
+    login_first: '请先登录',
+    myscore: '我的积分'
 }

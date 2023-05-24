@@ -32,6 +32,7 @@ const App = () => {
   const isToken = cookie.load('token')
   const topicId = cookie.load('topicId')
   const experience = cookie.load('experience')
+  const points = cookie.load('points')
   const totalExeNumber = cookie.load('totalExeNumber')
   const [userName, setUserName] = useState('');
   const [questionValue, setQuestionValue] = useState('');
@@ -361,6 +362,7 @@ const App = () => {
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
     cookie.save('topicId', '')
+    cookie.save('points', '')
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
@@ -378,7 +380,7 @@ const App = () => {
       }else{
         let request = new Request({});
         request.get('/api/v1/users/profile/').then(function(resData){
-          copy('http://hi.chattop.club/?invite_code='+resData.data.invite_code)
+          copy('http://pay.citypro-tech.com/?invite_code='+resData.data.invite_code)
           message.success('Successfully copied, please share with friends')
         })
       }
@@ -444,6 +446,7 @@ const App = () => {
         // cookie.save('totalExeNumber', resData.data.used_experience)
         // cookie.save('experience', resData.data.reward_experience+resData.data.experience)
         cookie.save('experience', resData.data.experience)
+        cookie.save('points', resData.data.points)
       })
     }else{
       cookie.save('topicId', '')
@@ -671,6 +674,7 @@ const App = () => {
                       </div>
                     </div>
                   </div>
+                  <div className='my-score'>{locales(language)['myscore']}:{points}</div>
                 </div>
             </div>
           {

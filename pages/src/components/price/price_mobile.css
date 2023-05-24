@@ -1,82 +1,48 @@
+.price-mobile-header img {
+    width: 80px;
+    margin-bottom: 30px;
+}
 
-.price-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+.price-mobile-list {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-around;
+    margin-top: 10px;
+    flex-wrap: wrap;
 }
 
-.price-header img {
-    height: 30px;
-    position: fixed;
-    left: 20px;
-    top: 20px;
-}
-.price-frame{
-    margin-top: -80px;
-}
-
-.price-title {
-    font-size: 16px;
-}
-
-
-.price-slogan {
-    margin-top: 8px;
-    font-size: 36px;
-}
-
-.price-list {
-    display: flex;
-    margin-top: 40px;
-    justify-content: space-between;
-    width: 1250px;
-}
-
-
-.price-item {
-    width: 298px;
-    height: 438px;
+.price-mobile-item {
     background-color: #fff;
-}
-
-.price-item-name {
-    background-color: #5186f4;
-    height: 100px;
-    line-height: 100px;
-}
-
-.price-item-content {
-    margin-top: 30px;
+    border-radius: 3px;
+    width: 30%;
     color: #000;
-    font-size: 14px;
+    padding: 10px;
+    margin-top: 5px;
 }
 
-.price-item-limit {
-    color: #dc2626;
-    font-size: 36px;
-    margin-right: 10px;
+.price-mobile-item-selected {
+    background-color: rgb(240, 183, 183);
 }
 
-.price-item-btn {
-    margin-top: 190px;
-    margin-left: 32px;
-    background-color: #5186f4;
-    width: 80%;
+.price-mobile-item-name {
+    margin-bottom: 5px;
+}
+
+.price-mobile-item-price {
+    color: red;
+    margin-bottom: 3px;
+}
+
+.price-mobile-item-content input {
+    width: 40px;
+    margin-right: 3px;
+}
+
+
+.price-mobile-pay {
+    margin-top: 100px;
+    width: 90%;
+    height: 60px;
+    line-height: 60px;
     border-radius: 4px;
-    font-size: 14px;
-    height: 40px;
-    line-height: 40px;
-    cursor: pointer;
-}
-
-.price-item-content input {
-    width: 120px;
+    background-color: #05c160;
 }
