@@ -25,6 +25,6 @@ export default {
     input_password_again: 'password again',
     anonymous: 'Anonymous',
     nodata: 'No data',
-    ask_free: 'Number of questions',
+    ask_free: 'question times',
     login_first: 'Please Login'
   }
