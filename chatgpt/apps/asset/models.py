@@ -39,6 +39,7 @@ class PointsModel(BaseModel):
             )
         else:
             obj.total += amount
+            obj.save()
 
         PointsLogModel.objects.create(
             user_id=user_id,
