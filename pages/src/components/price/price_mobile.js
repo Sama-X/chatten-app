@@ -1,5 +1,6 @@
 import './price_mobile.css'
 import { useEffect, useState } from 'react';
+import { message } from 'antd';
 import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
 import Request from '../../request.ts';
