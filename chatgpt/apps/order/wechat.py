@@ -152,15 +152,21 @@ def native_prepay(amount, out_trade_no):
 
 def h5_prepay(amount, out_trade_no):
     body = {
-	"mchid": mch_id,
-	"out_trade_no": out_trade_no,
-	"appid": app_id,
-	"description": "积分充值",
-	"notify_url": pay_notify_url,
-	"amount": {
-		"total": int(float(amount) * 100),
-		"currency": "CNY"
-	  }
+        "mchid": mch_id,
+        "out_trade_no": out_trade_no,
+        "appid": app_id,
+        "description": "积分充值",
+        "notify_url": pay_notify_url,
+        "amount": {
+            "total": int(float(amount) * 100),
+            "currency": "CNY"
+        },
+        "scene_info": {
+            "payer_client_ip": "127.0.0.1",
+            "h5_info": {
+                "type": "Wap"
+            }
+        }
     }
     print('native body=', body)
 
