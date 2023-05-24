@@ -38,10 +38,11 @@ function App() {
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
-      'payment_method': 2
+      payment_method: 2,
+      client: 'h5'
     }).then(function(res){
       console.log(res)
-      navigate.push(res.data.h5_url)
+      window.location.href = res.data.h5_url
       // setQrcodeUrl(res.data.image)
       // setOrderId(res.data.order_id)
       // console.log("orderId=", orderId)

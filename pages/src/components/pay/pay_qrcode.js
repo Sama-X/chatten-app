@@ -19,7 +19,8 @@ const App = (props) => {
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(package_id),
       quantity: parseInt(quantity),
-      'payment_method': 2
+      payment_method: 2,
+      client: 'native',
     }).then(function(res){
       console.log(res)
       setQrcodeUrl(res.data.image)
