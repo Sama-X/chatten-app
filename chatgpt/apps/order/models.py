@@ -63,7 +63,19 @@ class OrderModel(BaseModel):
         (METHOD_WECHAT, _("wechat")),
         (METHOD_POINTS, _("points")),
     )
+
     METHODS_DICT = dict(METHODS)
+
+    CLIENT_NATIVE = "native"
+    CLIENT_H5 = "h5"
+    CLIENT_JSAPI = "jsapi"
+
+    CLIENTS = (
+        (CLIENT_NATIVE, "native"),
+        (CLIENT_H5, "h5"),
+        (CLIENT_JSAPI, "jsapi"),
+    )
+    CLIENT_DICT = dict(CLIENTS)
 
     user_id = models.BigIntegerField(db_index=True, null=False, verbose_name=_("user account id"))
     package_id = models.BigIntegerField(db_index=True, null=False, verbose_name=_("order package id"))
@@ -73,6 +85,7 @@ class OrderModel(BaseModel):
     status_note = models.CharField(max_length=64, verbose_name=_("order status note"))
     payment_time = models.DateTimeField(null=True, verbose_name=_("order payment time"))
     payment_method = models.SmallIntegerField(default=METHOD_ALIPAY, verbose_name=_("order pay method"))
+    client = models.CharField(max_length=16, default=CLIENT_NATIVE, verbose_name=_("order pay client"))
 
     out_trade_no = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("out_trade_no name"))
     transaction_id = models.CharField(max_length=32, blank=False, db_index=True, null=True, verbose_name=_("transaction_id"))

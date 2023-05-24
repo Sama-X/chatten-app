@@ -258,9 +258,13 @@ class OrderService(BaseService):
         package_id = data.get('package_id')  # type: ignore
         quantity = data['quantity']  # type: ignore
         payment_method = data.get('payment_method')  # type: ignore
+        client = data.get('client')  # type: ignore
 
         if payment_method not in OrderModel.METHODS_DICT:
             return APIResponse(code=OrderErrorCode.ORDER_INVALID_PAYMENT_METHOD)
+
+        if payment_method == OrderModel.METHOD_WECHAT and client not in OrderModel.CLIENT_DICT:
+            return APIResponse(code=OrderErrorCode.ORDER_INVALID_PAYMENT_CLIENT)
 
         package = OrderPackageModel.objects.filter(
             is_delete=False, id=package_id
@@ -274,17 +278,30 @@ class OrderService(BaseService):
             out_trade_no=utils.gen_code(),
             quantity=quantity,
             actual_price=quantity * package.price,
-            payment_method=payment_method
+            payment_method=payment_method,
+            client=client
         )
 
-        code_url = wechat.native_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
+        if order_obj.payment_method == OrderModel.METHOD_WECHAT:
+            if client == OrderModel.CLIENT_NATIVE:
+                code_url = wechat.native_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
 
-        print('code_url = ', code_url)
-        img_stream = utils.make_qrcode(data=code_url)
-        return APIResponse(result={
-            'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}',
-            'order_id': order_obj.id
-        })
+                print('code_url = ', code_url)
+                img_stream = utils.make_qrcode(data=code_url)
+                return APIResponse(result={
+                    'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}',
+                    'order_id': order_obj.id
+                })
+            elif client == OrderModel.CLIENT_H5:
+                h5_url = wechat.h5_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
+
+                print('h5_url = ', h5_url)
+                return APIResponse(result={
+                    'h5_url': h5_url,
+                    'order_id': order_obj.id
+                })
+
+        return APIResponse(code=SystemErrorCode.HTTP_400_BAD_REQUEST)
 
     @classmethod
     @transaction.atomic

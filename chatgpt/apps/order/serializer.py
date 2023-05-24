@@ -120,3 +120,6 @@ class CreateOrderSeriralizer(serializers.Serializer):
     payment_method = serializers.IntegerField(
         required=True, allow_null=False, help_text=_("order paymethod")
     )
+    client = serializers.CharField(
+        required=False, allow_null=True, help_text=_("order pay client")
+    )

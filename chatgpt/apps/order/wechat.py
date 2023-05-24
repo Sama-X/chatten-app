@@ -149,3 +149,34 @@ def native_prepay(amount, out_trade_no):
 
     code_url = response.json()['code_url']
     return code_url
+
+def h5_prepay(amount, out_trade_no):
+    body = {
+	"mchid": mch_id,
+	"out_trade_no": out_trade_no,
+	"appid": app_id,
+	"description": "积分充值",
+	"notify_url": pay_notify_url,
+	"amount": {
+		"total": int(float(amount) * 100),
+		"currency": "CNY"
+	  }
+    }
+    print('native body=', body)
+
+    body = json.dumps(body).replace(' ', '')
+    url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/h5'
+    authorization = make_authorization_header("POST", '/v3/pay/transactions/h5', body)
+    response = requests.post(
+        url=url,
+        data=body,
+        headers={
+            "Authorization": authorization,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    )
+    print('native api response=', response.text)
+
+    h5_url = response.json()['h5_url']
+    return h5_url

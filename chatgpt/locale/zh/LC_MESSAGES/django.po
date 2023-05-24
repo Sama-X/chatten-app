@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-22 17:37+0800\n"
+"POT-Creation-Date: 2023-05-24 17:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,8 +20,8 @@ msgstr ""
 msgid "point withdraw status"
 msgstr "提现状态"
 
-#: apps/asset/models.py:18 apps/asset/models.py:63 apps/asset/models.py:96
-#: apps/asset/models.py:120 apps/asset/models.py:159 apps/order/models.py:67
+#: apps/asset/models.py:18 apps/asset/models.py:66 apps/asset/models.py:99
+#: apps/asset/models.py:123 apps/asset/models.py:162 apps/order/models.py:80
 #: apps/users/models.py:152
 msgid "user account id"
 msgstr "用户id"
@@ -34,167 +34,167 @@ msgstr "总积分数"
 msgid "Points"
 msgstr "积分"
 
-#: apps/asset/models.py:58
+#: apps/asset/models.py:61
 msgid "increase"
 msgstr "增加"
 
-#: apps/asset/models.py:59
+#: apps/asset/models.py:62
 msgid "reduce"
 msgstr "减少"
 
-#: apps/asset/models.py:64
+#: apps/asset/models.py:67
 msgid "points foreignkey id"
 msgstr "用户id"
 
-#: apps/asset/models.py:65
+#: apps/asset/models.py:68
 msgid "points change category"
 msgstr "变动类别"
 
-#: apps/asset/models.py:66 apps/asset/models.py:99
+#: apps/asset/models.py:69 apps/asset/models.py:102
 msgid "The number of points changed this time"
 msgstr "变动积分数"
 
-#: apps/asset/models.py:67
+#: apps/asset/models.py:70
 msgid "Notes on integral changes"
 msgstr "备注"
 
-#: apps/asset/models.py:73
+#: apps/asset/models.py:76
 msgid "PointsLog"
 msgstr "积分记录"
 
-#: apps/asset/models.py:88
+#: apps/asset/models.py:91
 msgid "peding review"
 msgstr "待审核"
 
-#: apps/asset/models.py:89
+#: apps/asset/models.py:92
 msgid "refund in progress"
 msgstr "退款中"
 
-#: apps/asset/models.py:90 apps/base/exception.py:26 apps/order/models.py:51
+#: apps/asset/models.py:93 apps/base/exception.py:26 apps/order/models.py:52
 msgid "success"
 msgstr "成功"
 
-#: apps/asset/models.py:91 apps/order/models.py:52
+#: apps/asset/models.py:94 apps/order/models.py:53
 msgid "failure"
 msgstr "失败"
 
-#: apps/asset/models.py:97 apps/asset/serializer.py:52
+#: apps/asset/models.py:100 apps/asset/serializer.py:52
 msgid "The real name of the withdrawing person"
 msgstr "真实姓名"
 
-#: apps/asset/models.py:98
+#: apps/asset/models.py:101
 msgid "Contact information"
 msgstr "提现人信息"
 
-#: apps/asset/models.py:100
+#: apps/asset/models.py:103
 msgid "The amount exchanged"
 msgstr "兑换积分数"
 
-#: apps/asset/models.py:101
+#: apps/asset/models.py:104
 msgid "Ratio of points to cash"
 msgstr "积分与现金的比率"
 
-#: apps/asset/models.py:102
+#: apps/asset/models.py:105
 msgid "withdraw status"
 msgstr "提现状态"
 
-#: apps/asset/models.py:103
+#: apps/asset/models.py:106
 msgid "withdraw auditor"
 msgstr "审核人"
 
-#: apps/asset/models.py:104
+#: apps/asset/models.py:107
 msgid "withdraw audit time"
 msgstr "审核时间"
 
-#: apps/asset/models.py:105
+#: apps/asset/models.py:108
 msgid "withdraw finish time"
 msgstr "完成时间"
 
-#: apps/asset/models.py:111
+#: apps/asset/models.py:114
 msgid "PointsWithdraw"
 msgstr "积分提现"
 
-#: apps/asset/models.py:122
+#: apps/asset/models.py:125
 msgid "Transient expiration time"
 msgstr "临时有限时间"
 
-#: apps/asset/models.py:123
+#: apps/asset/models.py:126
 msgid "Transient expiration usage count"
 msgstr "临时使用次数"
 
-#: apps/asset/models.py:124
+#: apps/asset/models.py:127
 msgid "Persistence expiration usage count"
 msgstr "永久使用次数"
 
-#: apps/asset/models.py:125
+#: apps/asset/models.py:128
 msgid "free expiration time"
 msgstr "免费过期时间"
 
-#: apps/asset/models.py:126
+#: apps/asset/models.py:129
 msgid "Free usage count"
 msgstr "免费次数"
 
-#: apps/asset/models.py:127
+#: apps/asset/models.py:130
 msgid "Whether it is available or not"
 msgstr "是否可用"
 
-#: apps/asset/models.py:133
+#: apps/asset/models.py:136
 msgid "O2OPayment"
 msgstr "资源"
 
-#: apps/asset/models.py:150
+#: apps/asset/models.py:153
 msgid "expired"
 msgstr "过期"
 
-#: apps/asset/models.py:151
+#: apps/asset/models.py:154
 msgid "consume"
 msgstr "消耗"
 
-#: apps/asset/models.py:152
+#: apps/asset/models.py:155
 msgid "free"
 msgstr "免费"
 
-#: apps/asset/models.py:153
+#: apps/asset/models.py:156
 msgid "buy"
 msgstr "购买"
 
-#: apps/asset/models.py:154
+#: apps/asset/models.py:157
 msgid "reward"
 msgstr "奖励"
 
-#: apps/asset/models.py:155
+#: apps/asset/models.py:158
 msgid "exchange"
 msgstr "兑换"
 
-#: apps/asset/models.py:160
+#: apps/asset/models.py:163
 msgid "o2opayment id"
 msgstr "记录id"
 
-#: apps/asset/models.py:161
+#: apps/asset/models.py:164
 msgid "log category"
 msgstr "钱包类型"
 
-#: apps/asset/models.py:163
+#: apps/asset/models.py:166
 msgid "expiration time"
 msgstr "过期时间"
 
-#: apps/asset/models.py:164
+#: apps/asset/models.py:167
 msgid "current usage count"
 msgstr "使用数"
 
-#: apps/asset/models.py:165
+#: apps/asset/models.py:168
 msgid "Notes on payment log"
 msgstr "备注"
 
-#: apps/asset/models.py:166
+#: apps/asset/models.py:169
 msgid "buy order id"
 msgstr "购买订单id"
 
-#: apps/asset/models.py:167
+#: apps/asset/models.py:170
 msgid "consume record id"
 msgstr "消耗记录id"
 
-#: apps/asset/models.py:173
+#: apps/asset/models.py:176
 msgid "O2OPaymentLog"
 msgstr "资源消耗记录"
 
@@ -298,27 +298,33 @@ msgstr "不支持匿名用户"
 msgid "chatgpt key already exists"
 msgstr "chatgpt键已存在"
 
-#: apps/base/exception.py:98
+#: apps/base/exception.py:99
 msgid "The timeliness package cannot be used without days"
 msgstr "失效套餐不能没有使用天数"
 
-#: apps/base/exception.py:99
+#: apps/base/exception.py:100
 msgid "Invalid package category"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:100
+#: apps/base/exception.py:101
 msgid "Package name already exists"
 msgstr "套餐名已存在"
 
-#: apps/base/exception.py:101
+#: apps/base/exception.py:102
 msgid "Invalid method of payment"
 msgstr "无效的支付方式"
 
-#: apps/base/exception.py:102
+#: apps/base/exception.py:103
 msgid "Invalid order package"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:114
+#: apps/base/exception.py:104
+#, fuzzy
+#| msgid "order payment time"
+msgid "Unsupported payment client"
+msgstr "不支持的客户端"
+
+#: apps/base/exception.py:116
 msgid "Points are not enough"
 msgstr "积分不够"
 
@@ -427,7 +433,7 @@ msgstr "问题"
 msgid "serializer: chat topic id"
 msgstr "聊天话题id"
 
-#: apps/chat/serializer.py:49
+#: apps/chat/serializer.py:49 apps/order/serializer.py:40
 msgid "serializer:chatgpt key"
 msgstr "chatgpt键"
 
@@ -459,18 +465,17 @@ msgstr "套餐排序优先级"
 msgid "order user id"
 msgstr "下单用户"
 
-#: apps/order/admin/serializer.py:76 apps/order/models.py:68
-#: apps/order/serializer.py:17 apps/order/serializer.py:85
+#: apps/order/admin/serializer.py:76 apps/order/models.py:81
+#: apps/order/serializer.py:47 apps/order/serializer.py:115
 msgid "order package id"
 msgstr "套餐id"
 
-#: apps/order/admin/serializer.py:79 apps/order/models.py:69
-#: apps/order/serializer.py:20
+#: apps/order/admin/serializer.py:79 apps/order/serializer.py:50
 msgid "order number"
 msgstr "订单号"
 
-#: apps/order/admin/serializer.py:82 apps/order/models.py:72
-#: apps/order/serializer.py:23
+#: apps/order/admin/serializer.py:82 apps/order/models.py:84
+#: apps/order/serializer.py:53
 msgid "order status"
 msgstr "订单状态"
 
@@ -498,59 +503,67 @@ msgstr "套餐单价"
 msgid "package sort priority"
 msgstr "套餐排序优先级"
 
-#: apps/order/models.py:50
+#: apps/order/models.py:51
 msgid "unpaid"
 msgstr "未支付"
 
-#: apps/order/models.py:61
+#: apps/order/models.py:62
 msgid "alipay"
 msgstr "支付宝"
 
-#: apps/order/models.py:62
+#: apps/order/models.py:63
 msgid "wechat"
 msgstr "微信"
 
-#: apps/order/models.py:63
+#: apps/order/models.py:64
 msgid "points"
 msgstr "积分"
 
-#: apps/order/models.py:70 apps/order/serializer.py:88
+#: apps/order/models.py:82 apps/order/serializer.py:118
 msgid "order quantity"
 msgstr "数量"
 
-#: apps/order/models.py:71
+#: apps/order/models.py:83
 msgid "order actual price"
 msgstr "实际支付金额"
 
-#: apps/order/models.py:73
+#: apps/order/models.py:85
 msgid "order status note"
 msgstr "订单备注"
 
-#: apps/order/models.py:74
+#: apps/order/models.py:86
 msgid "order payment time"
 msgstr "支付时间"
 
-#: apps/order/models.py:75
+#: apps/order/models.py:87
 msgid "order pay method"
 msgstr "支付方式"
 
-#: apps/order/serializer.py:91
+#: apps/order/models.py:88 apps/order/serializer.py:124
+msgid "order pay client"
+msgstr "支付客户端"
+
+#: apps/order/models.py:90
+msgid "out_trade_no name"
+msgstr "订单编号"
+
+#: apps/order/models.py:91
+msgid "transaction_id"
+msgstr "微信支付订单号"
+
+#: apps/order/serializer.py:121
 msgid "order paymethod"
 msgstr "支付方式"
 
-#: apps/users/admin/serializer.py:33 apps/users/models.py:195
+#: apps/users/admin/serializer.py:42 apps/users/models.py:195
 msgid "config item value"
 msgstr "配置项值"
 
-#: apps/users/admin/serializer.py:36 apps/users/models.py:197
-msgid "config item description"
-msgstr "配置项描述"
-
-#: apps/users/admin/serializer.py:104 apps/users/serializer.py:27
+#: apps/users/admin/serializer.py:110 apps/users/serializer.py:27
 msgid "username"
 msgstr "用户名"
 
-#: apps/users/admin/serializer.py:106 apps/users/serializer.py:19
+#: apps/users/admin/serializer.py:112 apps/users/serializer.py:19
 #: apps/users/serializer.py:30
 msgid "password"
 msgstr "密码"
@@ -718,6 +731,10 @@ msgstr "配置项名称"
 #: apps/users/models.py:196
 msgid "config item value type"
 msgstr "配置项的值"
+
+#: apps/users/models.py:197
+msgid "config item description"
+msgstr "配置项描述"
 
 #: apps/users/models.py:203
 msgid "Config"
