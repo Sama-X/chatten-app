@@ -63,7 +63,7 @@ const App = (data) => {
   };
 
   const handleWithdrawOk = () => {
-    let request = Request()
+    let request = new Request({});
     setIsWithdrawModalOpen(false);
     let code = ''
     if(history.location.search.indexOf('code=')){
@@ -78,9 +78,15 @@ const App = (data) => {
         let access_token = data.data['access_token']
         let openid = data.data['openid']
         setOpenid(data.data['openid'])
-        request.post('/api/v1/users/wechat-profile', {access_token: access_token, openid: openid}).then(function(data){
+        request.get('/api/v1/users/wechat-profile/', {access_token: access_token, openid: openid}).then(function(data){
           console.log('userinfo=', data)
-          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickanme'], point: points, openid: openid, contact: userName})
+          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickanme'], point: points, openid: openid, contact: userName}).then(function(){
+            if(data.code === 0){
+              message.info('提现成功')
+            }else{
+              message.error(data.data.errcode)
+            }
+          })
         })
       })
     }  
@@ -313,6 +319,10 @@ const App = (data) => {
     if(!isWeixinBrowser()){
       message.info("请使用微信浏览器打开本页面操作")
     }else{
+      if(points<=10){
+        message.error("少于10积分，不支持提现")
+        return
+      }
       console.log('withdraw')
       showWithdrawModal()  
     }
