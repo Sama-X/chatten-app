@@ -55,7 +55,7 @@ const App = (data) => {
   let info = navigator.userAgent;
   let isPhone = /mobile/i.test(info);
 
-  let exec_once = 0
+  const [execOnce, setExecOnce]= useState(0)
 
 
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -290,13 +290,13 @@ const App = (data) => {
       code = history.location.search.split('&')[0].split('=')[1]
     }
 
-    console.log('8888888', code)
-
     if(code != undefined){
-      if(exec_once == 1){
+      if(execOnce == 1){
         return
       }
-      exec_once = 1
+      console.log('8888888', code)
+      console.log('9999', exec_once)
+      setExecOnce(1)
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
         let access_token = data.data['access_token']
@@ -325,7 +325,7 @@ const App = (data) => {
         })
       })
     }  
-  })
+  }, [execOnce])
 
   function isWeixinBrowser() {
     let ua = navigator.userAgent.toLowerCase();
