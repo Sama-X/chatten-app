@@ -13,7 +13,7 @@ from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.throttling import ScopedRateThrottle
 
-from base.common import CommonUtil
+from base.common import CommonUtil, RequestClient
 
 from base.exception import SystemErrorCode, UserErrorCode
 from base.constants import (
@@ -223,3 +223,28 @@ class InviteLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
         user_id = request.user.id
 
         return InviteLogService.get_list(page, offset, order, user_id)
+
+
+class WechatLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    wechat login.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def create(self, request, *args, **kwargs):
+        """
+        wechat login api.
+        """
+        appid = settings.WECHAT["APP_ID"]
+        secret = settings.WECHAT["APP_SECRET"]
+        code = request.data.get('code')
+        if not code:
+            return APIResponse(code=SystemErrorCode.HTTP_400_BAD_REQUEST)
+
+        url = (
+            f"https://api.weixin.qq.com/sns/oauth2/access_token?"
+            f"appid={appid}&secret={secret}&code={code}&grant_type=authorization_code"
+        )
+        resp = RequestClient.get(url)
+        return APIResponse(result=resp)
