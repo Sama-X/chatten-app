@@ -205,7 +205,7 @@ const App = (data) => {
 
   const goToPrice = () =>{
     if(isToken){
-      history.push({pathname: '/price'})
+      history.push({pathname: '/price/'})
     }else{
       history.push({pathname: '/SignIn/'})
     }
@@ -295,7 +295,7 @@ const App = (data) => {
         return
       }
       console.log('8888888', code)
-      console.log('9999', exec_once)
+      console.log('9999', execOnce)
       setExecOnce(1)
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
@@ -309,17 +309,17 @@ const App = (data) => {
           setOpenid(data.data.openid)
           setNickname(data.data.nickname)
           setOpenid(data.data['openid'])
-          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickname'], point: points, openid: openid}).then(function(){
+          request.post('/api/v1/asset/points-withdraw/', {realname: data.data['nickname'], point: points, openid: openid}).then(function(data){
             if(data.code === 0){
               message.info('提现成功')
               setTimeout(()=>{
                 window.location.href = '/'
-              }, 3000)
+              }, 300000)
             }else{
               message.error(data.data.errcode)
               setTimeout(()=>{
                 window.location.href = '/'
-              }, 3000)
+              }, 300000)
             }
           })
         })

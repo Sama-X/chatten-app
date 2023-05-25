@@ -421,7 +421,7 @@ const App = () => {
 
   const goToPrice = () =>{
     if(isToken){
-      history.push({pathname: '/price'})
+      history.push({pathname: '/price/'})
     }else{
       history.push({pathname: '/SignIn/'})
     }
