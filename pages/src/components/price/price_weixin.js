@@ -115,6 +115,7 @@ function App() {
 
   useEffect(()=>{
     let code = ''
+    alert(history.location.search)
     if('code=' in history.location.search){
       code = history.location.search.split('&')[0].split('=')[1]
     }
