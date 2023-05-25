@@ -9,7 +9,7 @@ from django.db import transaction
 from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
-from asset.models import O2OPaymentModel, PointsModel
+from asset.models import O2OPaymentModel, PointsModel, PointsWithdrawModel
 from asset.service import O2OPaymentService
 from base.common import CommonUtil
 from base.exception import SystemErrorCode, UserErrorCode
@@ -195,7 +195,14 @@ class UserService:
         get user points.
         """
         obj = PointsModel.objects.filter(user_id=user_id).first()
-        return obj.total if obj else 0
+        lock_point = PointsWithdrawModel.objects.filter(
+            user_id = user_id, is_delete=False,
+            status = PointsWithdrawModel.STATUS_PENDING
+        ).aggregate(total=Coalesce(Sum('point'), 0)).get('total', 0)
+        if obj:
+            return obj.total - lock_point
+
+        return 0
 
     @classmethod
     def check_given_gift_experience(cls, user_id):

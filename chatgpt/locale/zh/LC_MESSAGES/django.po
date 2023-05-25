@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 15:16+0800\n"
+"POT-Creation-Date: 2023-05-25 17:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,9 +215,13 @@ msgstr "提现积分"
 msgid "Exchange point"
 msgstr "兑换积分"
 
-#: apps/asset/service.py:216
+#: apps/asset/service.py:217
 msgid "consume payment error"
 msgstr "积分消费失败"
+
+#: apps/asset/service.py:411
+msgid "Cash withdrawal examination and approval, deducting points"
+msgstr "提现审核通过，扣除积分"
 
 #: apps/base/exception.py:27
 msgid "bad request"
@@ -327,9 +331,15 @@ msgstr "无效的套餐"
 msgid "Unsupported payment client"
 msgstr "不支持的客户端"
 
-#: apps/base/exception.py:116
+#: apps/base/exception.py:117
 msgid "Points are not enough"
 msgstr "积分不够"
+
+#: apps/base/exception.py:118
+#, fuzzy, python-format
+#| msgid "The withdrawal point cannot be less than %(count)s"
+msgid "The withdrawal point cannot be less than %(count)s"
+msgstr "提现积分不能低于%s"
 
 #: apps/base/middleware.py:34 apps/base/middleware.py:44
 #: apps/base/middleware.py:66 apps/base/middleware.py:72

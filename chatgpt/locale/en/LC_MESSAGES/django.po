@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 15:16+0800\n"
+"POT-Creation-Date: 2023-05-25 17:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -224,8 +224,12 @@ msgstr ""
 msgid "Exchange point"
 msgstr ""
 
-#: apps/asset/service.py:216
+#: apps/asset/service.py:217
 msgid "consume payment error"
+msgstr ""
+
+#: apps/asset/service.py:411
+msgid "Cash withdrawal examination and approval, deducting points"
 msgstr ""
 
 #: apps/base/exception.py:27
@@ -340,8 +344,13 @@ msgstr "invalid code"
 msgid "Unsupported payment client"
 msgstr ""
 
-#: apps/base/exception.py:116
+#: apps/base/exception.py:117
 msgid "Points are not enough"
+msgstr ""
+
+#: apps/base/exception.py:118
+#, python-format
+msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
 
 #: apps/base/middleware.py:34 apps/base/middleware.py:44
