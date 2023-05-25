@@ -170,17 +170,17 @@ class SmsMessageViewSet(viewsets.GenericViewSet):
         return APIResponse()
 
 
-class UserProfileViewSet(viewsets.GenericViewSet):
+class UserProfileViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     user profile api.
     """
     authentication_classes = [AnonymousAuthentication,]
 
-    @action(methods=['GET'], detail=False)
-    def profile(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         """
         get user profile.
-        url: /api/v1/users/sms-code
+        url: /api/v1/users/profile
+        method: get
         """
         user = request.user
 
@@ -188,17 +188,60 @@ class UserProfileViewSet(viewsets.GenericViewSet):
 
         result = {
             'id': user.id,
+            'username': user.username,
             'nickname': user.nickname,
             'experience': UserService.get_user_experience(user.id),
             'reward_experience': 0,
             'used_experience': 0,
             'points': UserService.get_user_points(user.id),
-            'invite_code': None
+            'invite_code': None,
+            'openid': user.openid
         }
         if request.user.user_type == AccountModel.USER_TYPE_NORMAL:
             result['invite_code'] = CommonUtil.encode_hashids(user.id)
 
         return APIResponse(result=result)
+
+    def update(self, request, *args, **kwargs):
+        """
+        get user profile.
+        url: /api/v1/users/profile
+        data: {
+            "openid": "",
+            "nickname": ""
+        }
+        method: put
+        """
+        return UserService.update_wechat_info(request)
+
+
+class WechatProfileViewSet(viewsets.GenericViewSet):
+    """
+    获取微信个人信息.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def list(self, request, *args, **kwargs):
+        """
+        get user profile.
+        url: /api/v1/users/wechat-profile
+        method: get
+        """
+        data = request.GET
+        access_token = data.get('access_token')
+        openid = data.get('openid')
+
+        if not access_token or not openid:
+            return APIResponse()
+
+        url = (
+            f'https://api.weixin.qq.com/sns/userinfo?'
+            f'access_token={access_token}&openid={openid}&lang=zh_CN'
+        )
+        resp = RequestClient.get(url)
+
+        return APIResponse(result=resp)
 
 
 class InviteLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):

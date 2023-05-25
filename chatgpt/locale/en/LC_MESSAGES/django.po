@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 17:44+0800\n"
+"POT-Creation-Date: 2023-05-25 15:16+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "point withdraw status"
 msgstr ""
 
 #: apps/asset/models.py:18 apps/asset/models.py:66 apps/asset/models.py:99
-#: apps/asset/models.py:123 apps/asset/models.py:162 apps/order/models.py:80
-#: apps/users/models.py:152
+#: apps/asset/models.py:124 apps/asset/models.py:163 apps/order/models.py:80
+#: apps/users/models.py:153
 #, fuzzy
 #| msgid "db:user account id"
 msgid "user account id"
@@ -55,7 +55,7 @@ msgstr "user foreign key"
 msgid "points change category"
 msgstr ""
 
-#: apps/asset/models.py:69 apps/asset/models.py:102
+#: apps/asset/models.py:69 apps/asset/models.py:103
 msgid "The number of points changed this time"
 msgstr ""
 
@@ -91,117 +91,124 @@ msgstr ""
 msgid "Contact information"
 msgstr ""
 
-#: apps/asset/models.py:103
+#: apps/asset/models.py:102 apps/asset/serializer.py:60
+#: apps/order/serializer.py:127
+#, fuzzy
+#| msgid "db:chat topic id"
+msgid "wechat openid"
+msgstr "chat topic id"
+
+#: apps/asset/models.py:104
 msgid "The amount exchanged"
 msgstr ""
 
-#: apps/asset/models.py:104
+#: apps/asset/models.py:105
 msgid "Ratio of points to cash"
 msgstr ""
 
-#: apps/asset/models.py:105
+#: apps/asset/models.py:106
 msgid "withdraw status"
 msgstr ""
 
-#: apps/asset/models.py:106
+#: apps/asset/models.py:107
 msgid "withdraw auditor"
 msgstr ""
 
-#: apps/asset/models.py:107
+#: apps/asset/models.py:108
 msgid "withdraw audit time"
 msgstr ""
 
-#: apps/asset/models.py:108
+#: apps/asset/models.py:109
 msgid "withdraw finish time"
 msgstr ""
 
-#: apps/asset/models.py:114
+#: apps/asset/models.py:115
 msgid "PointsWithdraw"
 msgstr ""
 
-#: apps/asset/models.py:125
+#: apps/asset/models.py:126
 msgid "Transient expiration time"
 msgstr ""
 
-#: apps/asset/models.py:126
+#: apps/asset/models.py:127
 msgid "Transient expiration usage count"
 msgstr ""
 
-#: apps/asset/models.py:127
+#: apps/asset/models.py:128
 msgid "Persistence expiration usage count"
 msgstr ""
 
-#: apps/asset/models.py:128
+#: apps/asset/models.py:129
 msgid "free expiration time"
 msgstr ""
 
-#: apps/asset/models.py:129
+#: apps/asset/models.py:130
 msgid "Free usage count"
 msgstr ""
 
-#: apps/asset/models.py:130
+#: apps/asset/models.py:131
 msgid "Whether it is available or not"
 msgstr ""
 
-#: apps/asset/models.py:136
+#: apps/asset/models.py:137
 msgid "O2OPayment"
 msgstr ""
 
-#: apps/asset/models.py:153
+#: apps/asset/models.py:154
 msgid "expired"
 msgstr ""
 
-#: apps/asset/models.py:154
+#: apps/asset/models.py:155
 msgid "consume"
 msgstr ""
 
-#: apps/asset/models.py:155
+#: apps/asset/models.py:156
 msgid "free"
 msgstr ""
 
-#: apps/asset/models.py:156
+#: apps/asset/models.py:157
 msgid "buy"
 msgstr ""
 
-#: apps/asset/models.py:157
+#: apps/asset/models.py:158
 msgid "reward"
 msgstr ""
 
-#: apps/asset/models.py:158
+#: apps/asset/models.py:159
 msgid "exchange"
 msgstr ""
 
-#: apps/asset/models.py:163
+#: apps/asset/models.py:164
 msgid "o2opayment id"
 msgstr ""
 
-#: apps/asset/models.py:164
+#: apps/asset/models.py:165
 #, fuzzy
 #| msgid "db:Wallet:category"
 msgid "log category"
 msgstr "wallet category"
 
-#: apps/asset/models.py:166
+#: apps/asset/models.py:167
 msgid "expiration time"
 msgstr ""
 
-#: apps/asset/models.py:167
+#: apps/asset/models.py:168
 msgid "current usage count"
 msgstr ""
 
-#: apps/asset/models.py:168
+#: apps/asset/models.py:169
 msgid "Notes on payment log"
 msgstr ""
 
-#: apps/asset/models.py:169
+#: apps/asset/models.py:170
 msgid "buy order id"
 msgstr ""
 
-#: apps/asset/models.py:170
+#: apps/asset/models.py:171
 msgid "consume record id"
 msgstr ""
 
-#: apps/asset/models.py:176
+#: apps/asset/models.py:177
 msgid "O2OPaymentLog"
 msgstr ""
 
@@ -209,11 +216,11 @@ msgstr ""
 msgid "Withdrawal person's contact information"
 msgstr ""
 
-#: apps/asset/serializer.py:59
+#: apps/asset/serializer.py:63
 msgid "Withdrawal point"
 msgstr ""
 
-#: apps/asset/serializer.py:68
+#: apps/asset/serializer.py:72
 msgid "Exchange point"
 msgstr ""
 
@@ -564,7 +571,7 @@ msgstr ""
 msgid "order paymethod"
 msgstr ""
 
-#: apps/users/admin/serializer.py:42 apps/users/models.py:195
+#: apps/users/admin/serializer.py:42 apps/users/models.py:196
 msgid "config item value"
 msgstr ""
 
@@ -617,171 +624,177 @@ msgstr "user last login ip"
 msgid "db:account:user type"
 msgstr "user type"
 
-#: apps/users/models.py:33
+#: apps/users/models.py:28
+#, fuzzy
+#| msgid "db:account:user type"
+msgid "db:account:user wechat openid"
+msgstr "user type"
+
+#: apps/users/models.py:34
 msgid "db:account:Account"
 msgstr "Account"
 
-#: apps/users/models.py:64
+#: apps/users/models.py:65
 msgid "db:MessageLog: category notify"
 msgstr "notice"
 
-#: apps/users/models.py:69
+#: apps/users/models.py:70
 msgid "db:MessageLog:message mobile"
 msgstr "message mobile"
 
-#: apps/users/models.py:71
+#: apps/users/models.py:72
 msgid "db:MessageLog:message content"
 msgstr "message content"
 
-#: apps/users/models.py:72
+#: apps/users/models.py:73
 msgid "db:MessageLog:message category"
 msgstr "message category"
 
-#: apps/users/models.py:73
+#: apps/users/models.py:74
 msgid "db:MessageLog: message send status"
 msgstr "message send status"
 
-#: apps/users/models.py:74
+#: apps/users/models.py:75
 msgid "db:MessageLog: request time"
 msgstr "request time"
 
-#: apps/users/models.py:75
+#: apps/users/models.py:76
 msgid "db:MessageLog: send message response"
 msgstr "send message response"
 
-#: apps/users/models.py:76
+#: apps/users/models.py:77
 msgid "db:MessageLog: response time"
 msgstr "response time"
 
-#: apps/users/models.py:82
+#: apps/users/models.py:83
 msgid "db:account:MessageLog"
 msgstr "message log"
 
-#: apps/users/models.py:92 apps/users/models.py:112 apps/users/models.py:131
+#: apps/users/models.py:93 apps/users/models.py:113 apps/users/models.py:132
 msgid "db:user account id"
 msgstr "user id"
 
-#: apps/users/models.py:93
+#: apps/users/models.py:94
 msgid "db:Wallet:belong to the chain"
 msgstr "belong to the chain"
 
-#: apps/users/models.py:94
+#: apps/users/models.py:95
 msgid "db:Wallet:balance"
 msgstr "balance"
 
-#: apps/users/models.py:95
+#: apps/users/models.py:96
 msgid "db:Wallet:address"
 msgstr "wallet address"
 
-#: apps/users/models.py:96
+#: apps/users/models.py:97
 msgid "db:Wallet:private key"
 msgstr "wallet private key"
 
-#: apps/users/models.py:102
+#: apps/users/models.py:103
 #, fuzzy
 #| msgid "db:Wallet"
 msgid "SamaWallet"
 msgstr "Wallet"
 
-#: apps/users/models.py:113
+#: apps/users/models.py:114
 msgid "db:Score:score balance"
 msgstr "score balance"
 
-#: apps/users/models.py:119
+#: apps/users/models.py:120
 msgid "SamaScore"
 msgstr ""
 
-#: apps/users/models.py:132
+#: apps/users/models.py:133
 msgid "db:ScoreLog:score id"
 msgstr "score foreign key"
 
-#: apps/users/models.py:133
+#: apps/users/models.py:134
 msgid "db:ScoreLog:score category"
 msgstr "score operate category"
 
-#: apps/users/models.py:134
+#: apps/users/models.py:135
 msgid "db:ScoreLog:score"
 msgstr "score"
 
-#: apps/users/models.py:135
+#: apps/users/models.py:136
 msgid "db:ScoreLog:chain transaction id"
 msgstr "chain transaction id"
 
-#: apps/users/models.py:136
+#: apps/users/models.py:137
 msgid "db:ScoreLog:chain response"
 msgstr "chain response"
 
-#: apps/users/models.py:142
+#: apps/users/models.py:143
 #, fuzzy
 #| msgid "db:ScoreLog"
 msgid "SamaScoreLog"
 msgstr "ScoreLog"
 
-#: apps/users/models.py:153
+#: apps/users/models.py:154
 #, fuzzy
 #| msgid "db:user account id"
 msgid "inviter user account id"
 msgstr "user id"
 
-#: apps/users/models.py:154
+#: apps/users/models.py:155
 #, fuzzy
 #| msgid "db:user account id"
 msgid "super inviter user account id"
 msgstr "user id"
 
-#: apps/users/models.py:155
+#: apps/users/models.py:156
 msgid "db: chat experience times"
 msgstr "user experience times"
 
-#: apps/users/models.py:156
+#: apps/users/models.py:157
 msgid "db:invite expired time"
 msgstr "invitation expiration time"
 
-#: apps/users/models.py:162
+#: apps/users/models.py:163
 msgid "db:InviteLogs"
 msgstr "InviteLogs"
 
-#: apps/users/models.py:194
+#: apps/users/models.py:195
 msgid "config item name"
 msgstr ""
 
-#: apps/users/models.py:196
+#: apps/users/models.py:197
 msgid "config item value type"
 msgstr ""
 
-#: apps/users/models.py:197
+#: apps/users/models.py:198
 msgid "config item description"
 msgstr ""
 
-#: apps/users/models.py:203
+#: apps/users/models.py:204
 msgid "Config"
 msgstr ""
 
-#: apps/users/models.py:271
+#: apps/users/models.py:272
 msgid "Number of free experiences, number type, must be greater than 0"
 msgstr ""
 
-#: apps/users/models.py:276
+#: apps/users/models.py:277
 msgid "Whether to enable the verification rule of mobile phone number"
 msgstr ""
 
-#: apps/users/models.py:280
+#: apps/users/models.py:281
 msgid "The proportion of first level commission. Range is between (0-10000)"
 msgstr ""
 
-#: apps/users/models.py:285
+#: apps/users/models.py:286
 msgid "The proportion of second level commission. Range is between (0-10000)"
 msgstr ""
 
-#: apps/users/models.py:290
+#: apps/users/models.py:291
 msgid "Set the redemption ratio of points withdrawal."
 msgstr ""
 
-#: apps/users/models.py:294
+#: apps/users/models.py:295
 msgid "Set the proportion of points redemption times"
 msgstr ""
 
-#: apps/users/serializer.py:16 apps/users/serializer.py:42
+#: apps/users/serializer.py:16 apps/users/serializer.py:54
 msgid "mobile phone number"
 msgstr "mobile phone number"
 
@@ -793,7 +806,15 @@ msgstr "verification code"
 msgid "invite code"
 msgstr "invite code"
 
-#: apps/users/serializer.py:52
+#: apps/users/serializer.py:42
+msgid "nickname"
+msgstr ""
+
+#: apps/users/serializer.py:45
+msgid "openid"
+msgstr ""
+
+#: apps/users/serializer.py:64
 msgid "Incorrect format of mobile phone number"
 msgstr "Incorrect format of mobile phone number"
 
