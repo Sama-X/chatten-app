@@ -78,7 +78,7 @@ const App = (data) => {
         let access_token = data.data['access_token']
         let openid = data.data['openid']
         setOpenid(data.data['openid'])
-        request.get('/api/v1/users/wechat-profile/', {access_token: access_token, openid: openid}).then(function(data){
+        request.get('/api/v1/users/wechat-profile/?access_token=' + access_token + '&openid=' + openid).then(function(data){
           console.log('userinfo=', data)
           request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickanme'], point: points, openid: openid, contact: userName}).then(function(){
             if(data.code === 0){

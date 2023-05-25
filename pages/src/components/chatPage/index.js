@@ -107,7 +107,7 @@ const App = () => {
         }
       }
       setTimeout(function(){
-        setItem([getItem('chatGPT', 'sub1', '', menuSetitemList)])
+        setItem([getItem('chatTEN', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
       },1000)
     })
