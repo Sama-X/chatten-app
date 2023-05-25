@@ -287,7 +287,9 @@ const App = (data) => {
     if(history.location.search.indexOf('code=')){
       code = history.location.search.split('&')[0].split('=')[1]
     }
-    if(code){
+
+    console.log('8888888', code)
+    if(code != ''){
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
         let access_token = data.data['access_token']
@@ -303,10 +305,14 @@ const App = (data) => {
           request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickname'], point: points, openid: openid}).then(function(){
             if(data.code === 0){
               message.info('提现成功')
-              window.location.href = '/'
+              setTimeout(()=>{
+                window.location.href = '/'
+              }, 3000)
             }else{
               message.error(data.data.errcode)
-              window.location.href = '/'
+              setTimeout(()=>{
+                window.location.href = '/'
+              }, 3000)
             }
           })
         })
