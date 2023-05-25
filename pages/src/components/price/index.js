@@ -9,20 +9,22 @@ import Price from './price.js'
 
 function App() {
   let info = navigator.userAgent;
+
   let isPhone = /mobile/i.test(info);
+  console.log('isPhone=', isPhone)
   const [language, setLanguage] = useState(get_default_language());
 
   // 判断是否为微信浏览器
   function isWeixinBrowser() {
     let ua = navigator.userAgent.toLowerCase();
-    alert('ua=', ua)
+    console.log('isWeixinBrowser=', /micromessenger/.test(ua) ? true : false)
     return /micromessenger/.test(ua) ? true : false;
   }
 
   return (
     <div>
         {
-            isWeixinBrowser ? <PriceWeixin language={language} setLanguage={setLanguage}></PriceWeixin>:
+            isWeixinBrowser() ? <PriceWeixin language={language} setLanguage={setLanguage}></PriceWeixin>:
             isPhone ? <PriceMobile language={language} setLanguage={setLanguage}></PriceMobile> :
             <Price language={language} setLanguage={setLanguage}></Price>
         }
