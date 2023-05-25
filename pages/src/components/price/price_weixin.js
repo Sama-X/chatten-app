@@ -126,13 +126,12 @@ function App() {
         setPackageId(resData.data[0].id)
         setAmount(resData.data[0].price)
       }
-      if(code != ''){
+      if(code == ''){
         let appid = 'wx638bec1594b09d2f'
         let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com/price')
         window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
       }else{
         request.get('/api/v1/users/wechat/').then(function(data){
-          alert(data.data);
           setOpenid(data.data['openid'])
         })
       }
