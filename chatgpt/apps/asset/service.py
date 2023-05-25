@@ -341,7 +341,8 @@ class PointsService(BaseService):
         ratio = ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CASH_RATIO)
         if point < ratio:
             error = AssetErrorCode.ERRORS_DICT.get(AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, '')
-            return APIResponse(code=AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, msg=error % ratio)
+            print('error = ', error)
+            return APIResponse(code=AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, msg=_(error) % {"count": ratio})
 
         PointsWithdrawModel.objects.create(
             user_id=user_id,
