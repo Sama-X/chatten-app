@@ -16,10 +16,10 @@ mch_cert_serial_no = WECHAT["MCH_CERT_SERIAL_NO"]
 mch_api_v3_key = WECHAT["MCH_API_V3_KEY"]
 
 
-def js_api_prepay(openid, amount, out_trade_no, description, team):
+def js_api_prepay(openid, amount, out_trade_no):
     print('amount=', amount)
 
-    description = description if description else "积分充值"
+    description = "积分充值"
 
     body = {
         "mchid": mch_id,
@@ -33,13 +33,6 @@ def js_api_prepay(openid, amount, out_trade_no, description, team):
         },
         "payer": {
             "openid": openid
-        },
-        "scene_info": {
-            "payer_client_ip": "8.8.8.8",
-            "device_id": team
-        },
-        "settle_info": {
-            "profit_sharing": True
         }
     }
 
@@ -67,11 +60,12 @@ def js_api_prepay(openid, amount, out_trade_no, description, team):
     pay_sign = rsa_sign(params)
 
     data = {
-            "timeStamp": timestamp,
-            "nonceStr": nonce,
-            "package": package,
-            "signType": sign_type,
-            "paySign": pay_sign,
+        "timeStamp": timestamp,
+        "nonceStr": nonce,
+        "package": package,
+        "signType": sign_type,
+        "paySign": pay_sign,
+        "appid": app_id,
     }
 
     return data
