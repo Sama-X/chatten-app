@@ -10,7 +10,7 @@ from users.views import InviteLogViewset, LoginViewSet, SmsMessageViewSet, UserP
 router = DefaultRouter()
 router.register(r'', LoginViewSet, basename="token")
 router.register(r'', SmsMessageViewSet, basename="sms-code")
-router.register(r'', UserProfileViewSet, basename="user-profile")
+router.register(r'profile', UserProfileViewSet, basename="user-profile")
 router.register(r'invite-logs', InviteLogViewset, "InviteLogViewset")
 router.register('wechat', WechatLoginViewSet, basename="WechatLoginViewSet")
 

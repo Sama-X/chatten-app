@@ -24,6 +24,7 @@ from users.models import (
     AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
 )
+from users.serializer import UpdateAccountSerializer
 
 
 class UserService:
@@ -208,6 +209,25 @@ class UserService:
         if not payment_obj or payment_obj.free_expire_time < datetime.now():
             O2OPaymentService.add_free_payment(user_id)
             UserServiceHelper.update_given_gift_experience(user_id)
+
+    @classmethod
+    def update_wechat_info(cls, request):
+        """
+        update user wechat info.
+        """
+        serializer = UpdateAccountSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer)
+
+        data = serializer.validated_data
+        nickname = data['nickname']  # type: ignore
+        openid = data['openid']  # type: ignore
+        account = AccountModel.objects.get(pk=request.user.id)
+        account.nickname = nickname
+        account.openid = openid
+        account.save()
+
+        return APIResponse()
 
 
 class UserServiceHelper:

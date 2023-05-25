@@ -34,6 +34,18 @@ class CreateAccountSerializer(serializers.Serializer):
     )
 
 
+class UpdateAccountSerializer(serializers.Serializer):
+    """
+    update account serializer.
+    """
+    nickname = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("nickname")
+    )
+    openid = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("openid")
+    )
+
+
 class SendSmsMessageSerializer(serializers.Serializer):
     """
     send sms message serializer.

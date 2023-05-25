@@ -170,17 +170,17 @@ class SmsMessageViewSet(viewsets.GenericViewSet):
         return APIResponse()
 
 
-class UserProfileViewSet(viewsets.GenericViewSet):
+class UserProfileViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     """
     user profile api.
     """
     authentication_classes = [AnonymousAuthentication,]
 
-    @action(methods=['GET'], detail=False)
-    def profile(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         """
         get user profile.
-        url: /api/v1/users/sms-code
+        url: /api/v1/users/profile
+        method: get
         """
         user = request.user
 
@@ -193,12 +193,25 @@ class UserProfileViewSet(viewsets.GenericViewSet):
             'reward_experience': 0,
             'used_experience': 0,
             'points': UserService.get_user_points(user.id),
-            'invite_code': None
+            'invite_code': None,
+            'openid': user.openid
         }
         if request.user.user_type == AccountModel.USER_TYPE_NORMAL:
             result['invite_code'] = CommonUtil.encode_hashids(user.id)
 
         return APIResponse(result=result)
+
+    def update(self, request, *args, **kwargs):
+        """
+        get user profile.
+        url: /api/v1/users/profile
+        data: {
+            "openid": "",
+            "nickname": ""
+        }
+        method: put
+        """
+        return UserService.update_wechat_info(request)
 
 
 class InviteLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):
