@@ -188,6 +188,7 @@ class UserProfileViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
         result = {
             'id': user.id,
+            'username': user.username,
             'nickname': user.nickname,
             'experience': UserService.get_user_experience(user.id),
             'reward_experience': 0,
@@ -212,6 +213,35 @@ class UserProfileViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         method: put
         """
         return UserService.update_wechat_info(request)
+
+
+class WechatProfileViewSet(viewsets.GenericViewSet):
+    """
+    获取微信个人信息.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def list(self, request, *args, **kwargs):
+        """
+        get user profile.
+        url: /api/v1/users/wechat-profile
+        method: get
+        """
+        data = request.GET
+        access_token = data.get('access_token')
+        openid = data.get('openid')
+
+        if not access_token or not openid:
+            return APIResponse()
+
+        url = (
+            f'https://api.weixin.qq.com/sns/userinfo?'
+            f'access_token={access_token}&openid={openid}&lang=zh_CN'
+        )
+        resp = RequestClient.get(url)
+
+        return APIResponse(result=resp)
 
 
 class InviteLogViewset(mixins.ListModelMixin, viewsets.GenericViewSet):

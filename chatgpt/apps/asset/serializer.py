@@ -55,6 +55,10 @@ class CreateWithdrawSerializer(serializers.Serializer):
         max_length=32, required=True, allow_blank=False, allow_null=False,
         help_text=_("Withdrawal person's contact information")
     )
+    openid = serializers.CharField(
+        max_length=32, required=True, allow_blank=False, allow_null=False,
+        help_text=_("wechat openid")
+    )
     point = serializers.IntegerField(
         required=True, min_value=1, allow_null=False, help_text=_("Withdrawal point")
     )

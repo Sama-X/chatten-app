@@ -297,6 +297,7 @@ class PointsService(BaseService):
         point = data.get('point', 0) # type: ignore
         realname = data.get('realname') # type: ignore
         contact = data.get('contact') # type: ignore
+        openid = data.get('openid')  # type: ignore
 
         obj = PointsModel.objects.filter(user_id=user_id, is_delete=False).first()
         if not obj:
@@ -318,7 +319,8 @@ class PointsService(BaseService):
             contact=contact,
             point=point,
             amount=point / ratio,
-            ratio=ratio
+            ratio=ratio,
+            openid=openid
         )
 
         return APIResponse()
