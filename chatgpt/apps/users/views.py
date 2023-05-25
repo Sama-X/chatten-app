@@ -241,6 +241,9 @@ class WechatProfileViewSet(viewsets.GenericViewSet):
         )
         resp = RequestClient.get(url)
 
+        if resp and isinstance(resp, dict) and 'nickname' in resp:
+            resp['nickname'] = resp['nickname'].encode('iso-8859-1').decode('utf-8')
+
         return APIResponse(result=resp)
 
 
