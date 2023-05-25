@@ -104,7 +104,7 @@ class PointsWithdrawModel(BaseModel):
     amount = models.FloatField(default=0, verbose_name=_("The amount exchanged"))
     ratio = models.FloatField(default=0, verbose_name=_("Ratio of points to cash"))
     status = models.SmallIntegerField(default=STATUS_PENDING, db_index=True, verbose_name=_("withdraw status"))
-    audit_user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("withdraw auditor"))
+    audit_user_id = models.BigIntegerField(null=True, db_index=True, verbose_name=_("withdraw auditor"))
     audit_time = models.DateTimeField(null=True, verbose_name=_("withdraw audit time"))
     finish_time = models.DateTimeField(null=True, verbose_name=_("withdraw finish time"))
 
