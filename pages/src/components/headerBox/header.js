@@ -289,7 +289,7 @@ const App = (data) => {
     }
 
     console.log('8888888', code)
-    if(code != ''){
+    if(code != undefined){
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
         let access_token = data.data['access_token']
