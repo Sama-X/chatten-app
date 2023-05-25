@@ -4,7 +4,7 @@ import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
 import { Link } from 'react-router-dom'
-import cookie from 'react-cookies'
+import cookie, { setRawCookie } from 'react-cookies'
 import { useHistory } from 'react-router-dom';
 import Content from '../contentBox/content.js'
 import Footer from '../footerBox/footer.js'
@@ -54,6 +54,8 @@ const App = (data) => {
 
   let info = navigator.userAgent;
   let isPhone = /mobile/i.test(info);
+
+  let exec_once = 0
 
 
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -289,7 +291,12 @@ const App = (data) => {
     }
 
     console.log('8888888', code)
+
     if(code != undefined){
+      if(exec_once == 1){
+        return
+      }
+      exec_once = 1
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
         let access_token = data.data['access_token']
