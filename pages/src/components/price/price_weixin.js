@@ -15,6 +15,7 @@ function App() {
   const [amount, setAmount] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [orderId, setOrderId] = useState("")
+  const [openid, setOpenid] = useState("")
   let request = new Request({});
   const navigate = useHistory()
   const [packageList, setPackageList] = useState([])
@@ -24,6 +25,8 @@ function App() {
   const [nonceStr, setNonceStr] = useState('')
   const [packagex, setPackage] = useState('')
   const [paySign, setPaySign] = useState('')
+  const history = useHistory()
+
 
   const changeValue = (e) => {
     let v = e.target.value.replace(/[^\d]/g, "");
@@ -63,7 +66,8 @@ function App() {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
       payment_method: 2,
-      client: 'jsapi'
+      client: 'jsapi',
+      openid: openid
     }).then(function(res){
       console.log(res)
       setOrderId(res.data.order_id)
@@ -110,14 +114,27 @@ function App() {
   [orderId])
 
   useEffect(()=>{
+    let code = ''
+    if('code=' in history.location.search){
+      code = history.location.search.split('&')[0].split('=')[1]
+    }
     let request = new Request({});
     request.get('/api/v1/order/order-packages/').then(function(resData){
       console.log(resData.data)
       setPackageList(resData.data)
       if(!packageId){
-        console.log('88888')
         setPackageId(resData.data[0].id)
         setAmount(resData.data[0].price)
+      }
+      if(code != ''){
+        let appid = 'wx638bec1594b09d2f'
+        let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com/price')
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
+      }else{
+        request.get('/api/v1/users/wechat/').then(function(data){
+          alert(data.data);
+          setOpenid(data.data['openid'])
+        })
       }
     })
   }, [])
