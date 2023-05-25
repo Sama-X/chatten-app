@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, time, date
 from math import floor
 from django.db import transaction
 from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from django.utils.translation import gettext as _
 
 from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsLogModel, PointsModel, PointsWithdrawModel
@@ -253,6 +254,31 @@ class PointsService(BaseService):
 
     @classmethod
     @transaction.atomic
+    def reduce_point(cls, user_id, amount, description):
+        """
+        reduce point.
+        """
+        with transaction.atomic():
+            obj = PointsModel.objects.filter(user_id=user_id, is_delete=False).first()
+            if not obj:
+                return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+            if obj.total < amount:
+                return APIResponse(code=AssetErrorCode.POINT_NOT_ENOUGH)
+
+            obj.total -= amount
+            obj.save()
+
+            PointsLogModel.objects.create(
+                user_id=user_id,
+                point_id=obj.id,
+                category=PointsLogModel.CATEGORY_SUB,
+                amount=amount,
+                note=description
+            )
+
+    @classmethod
+    @transaction.atomic
     def exchange_point(cls, user_id, request):
         """
         Exchange points for assets
@@ -307,12 +333,16 @@ class PointsService(BaseService):
             user_id=user_id,
             is_delete=False,
             status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_REFUNDING]
-        ).aggregate(total=Sum('point'))
+        ).aggregate(total=Coalesce(Sum('point'), 0))
 
         if obj.total - withdraw.get('total', 0) < point:
             return APIResponse(code=AssetErrorCode.POINT_NOT_ENOUGH)
 
         ratio = ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CASH_RATIO)
+        if point < ratio:
+            error = AssetErrorCode.ERRORS_DICT.get(AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, '')
+            return APIResponse(code=AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, msg=_(error) % ratio)
+
         PointsWithdrawModel.objects.create(
             user_id=user_id,
             realname=realname,
@@ -354,26 +384,32 @@ class PointsWithdrawService(BaseService):
         return APIResponse(result=serializer.data, count=total)
 
     @classmethod
+    @transaction.atomic
     def audit(cls, withdraw_id, request) -> APIResponse:
         """
         audit withdraw api.
         """
-        obj = PointsWithdrawModel.objects.filter(
-            status=PointsWithdrawModel.STATUS_PENDING,
-            id=withdraw_id
-        ).first()
-        if not obj:
-            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+        with transaction.atomic():
+            obj = PointsWithdrawModel.objects.filter(
+                status=PointsWithdrawModel.STATUS_PENDING,
+                id=withdraw_id
+            ).first()
+            if not obj:
+                return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
 
-        data = request.data
-        success = data.get('success')
-        if success:
-            obj.status = PointsWithdrawModel.STATUS_REFUNDING
-        else:
-            obj.status = PointsWithdrawModel.STATUS_FAILURE
-        obj.audit_time = datetime.now()
-        obj.audit_user_id = request.user.id
-        obj.save()
+            data = request.data
+            success = data.get('success')
+            if success:
+                obj.status = PointsWithdrawModel.STATUS_REFUNDING
+            else:
+                obj.status = PointsWithdrawModel.STATUS_FAILURE
+            obj.audit_time = datetime.now()
+            obj.audit_user_id = request.user.id
+            obj.save()
+            if obj.status == PointsWithdrawModel.STATUS_REFUNDING:
+                PointsService.reduce_point(
+                    obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points")
+                )
 
         return APIResponse()
 

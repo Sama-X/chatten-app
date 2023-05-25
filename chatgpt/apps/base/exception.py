@@ -111,9 +111,11 @@ class AssetErrorCode:
     asset error code.
     """
     POINT_NOT_ENOUGH = 40000
+    POINT_LESS_THAN_MIN_VALUE = 40001
 
     ERRORS = (
         (POINT_NOT_ENOUGH, _('Points are not enough')),
+        (POINT_LESS_THAN_MIN_VALUE, _('The withdrawal point cannot be less than %(count)s')),
     )
     ERRORS_DICT = dict(ERRORS)
 
