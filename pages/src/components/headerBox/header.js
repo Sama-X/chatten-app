@@ -40,6 +40,8 @@ const App = (data) => {
   const totalExeNumber = cookie.load('totalExeNumber') ? cookie.load('totalExeNumber') : 0
   const history = useHistory()
   const [userName, setUserName] = useState('');
+  const [openid, setOpenid] = useState('');
+  const [nickname, setNickname] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [open, setOpen] = useState(false);
   const [items, setItem] = useState([]);
@@ -52,6 +54,42 @@ const App = (data) => {
 
   let info = navigator.userAgent;
   let isPhone = /mobile/i.test(info);
+
+
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  const showWithdrawModal = () => {
+    setIsWithdrawModalOpen(true);
+  };
+
+  const handleWithdrawOk = () => {
+    let request = Request()
+    setIsWithdrawModalOpen(false);
+    let code = ''
+    if(history.location.search.indexOf('code=')){
+      code = history.location.search.split('&')[0].split('=')[1]
+    }
+    if(code == undefined){
+      let appid = 'wx638bec1594b09d2f'
+      let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com')
+      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
+    }else{
+      request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
+        let access_token = data.data['access_token']
+        let openid = data.data['openid']
+        setOpenid(data.data['openid'])
+        request.post('/api/v1/users/wechat-profile', {access_token: access_token, openid: openid}).then(function(data){
+          console.log('userinfo=', data)
+          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickanme'], point: points, openid: openid, contact: userName})
+        })
+      })
+    }  
+  };
+
+  const handleWithdrawCancel = () => {
+    setIsWithdrawModalOpen(false);
+  };
+
 
   const showDrawer = () => {
     setOpen(true);
@@ -248,6 +286,12 @@ const App = (data) => {
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
         cookie.save('points', resData.data.points)
+        cookie.save('openid', resData.data.openid)
+        cookie.save('nickname', resData.data.nickname)
+        if (resData.data.openid){
+          setOpenid(resData.data.openid)
+          setNickname(resData.data.nickname)
+        }
         setInviteCode(resData.data.invite_code)
       })
     }else{
@@ -258,6 +302,21 @@ const App = (data) => {
       cookie.save('totalExeNumber', '0', { path: '/' })
     }
   }, [language])
+
+  function isWeixinBrowser() {
+    let ua = navigator.userAgent.toLowerCase();
+    console.log('isWeixinBrowser=', /micromessenger/.test(ua) ? true : false)
+    return /micromessenger/.test(ua) ? true : false;
+  }
+
+  const bindWeixin = () =>{
+    if(!isWeixinBrowser()){
+      message.info("请使用微信浏览器打开本页面操作")
+    }else{
+      console.log('withdraw')
+      showWithdrawModal()  
+    }
+  }
 
   return (
     <div>
@@ -379,9 +438,9 @@ const App = (data) => {
 
               </div>
             </div>
-            <div className='memberBox' onClick={goToPrice}>
+            <div className='memberBox'>
               <div className='memberHeaderBg'>
-                <div className='memberHeader'>
+                <div className='memberHeader' onClick={goToPrice}>
                   <img src={require("../../assets/vipHeader.png")} alt=""/>
                   <div>{locales(language)['vip']}</div>
                 </div>
@@ -402,7 +461,10 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>{locales(language)['myscore']}:{points}</div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span></div>
+              <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
+                <p>确定提现吗？</p>
+              </Modal>
             </div>
           </div>
         </Drawer>
@@ -481,9 +543,9 @@ const App = (data) => {
 
                 </div>
               </div>
-              <div className='memberBox' onClick={goToPrice}>
+              <div className='memberBox'>
                 <div className='memberHeaderBg'>
-                  <div className='memberHeader'>
+                  <div className='memberHeader' onClick={goToPrice}>
                     <img src={require("../../assets/vipHeader.png")} alt=""/>
                     <div>{locales(language)['vip']}</div>
                   </div>
@@ -505,7 +567,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>{locales(language)['myscore']}:{points}</div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span></div>
             </div>
         </div>
       {
