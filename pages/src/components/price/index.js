@@ -15,14 +15,15 @@ function App() {
   // 判断是否为微信浏览器
   function isWeixinBrowser() {
     let ua = navigator.userAgent.toLowerCase();
+    alert('ua=', ua)
     return /micromessenger/.test(ua) ? true : false;
   }
 
   return (
     <div>
         {
-          isPhone ? <PriceMobile language={language} setLanguage={setLanguage}></PriceMobile> : 
             isWeixinBrowser ? <PriceWeixin language={language} setLanguage={setLanguage}></PriceWeixin>:
+            isPhone ? <PriceMobile language={language} setLanguage={setLanguage}></PriceMobile> :
             <Price language={language} setLanguage={setLanguage}></Price>
         }
     </div>
