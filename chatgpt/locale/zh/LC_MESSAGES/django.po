@@ -336,10 +336,8 @@ msgid "Points are not enough"
 msgstr "积分不够"
 
 #: apps/base/exception.py:118
-#, fuzzy, python-format
-#| msgid "The withdrawal point cannot be less than %(count)s"
 msgid "The withdrawal point cannot be less than %(count)s"
-msgstr "提现积分不能低于%s"
+msgstr "提现积分不能低于 %(count)s"
 
 #: apps/base/middleware.py:34 apps/base/middleware.py:44
 #: apps/base/middleware.py:66 apps/base/middleware.py:72

@@ -52,7 +52,7 @@ class CreateWithdrawSerializer(serializers.Serializer):
         help_text=_("The real name of the withdrawing person")
     )
     contact = serializers.CharField(
-        max_length=32, required=True, allow_blank=False, allow_null=False,
+        max_length=32, required=False, allow_blank=True, allow_null=True,
         help_text=_("Withdrawal person's contact information")
     )
     openid = serializers.CharField(
