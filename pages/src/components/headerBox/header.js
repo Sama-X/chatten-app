@@ -63,33 +63,10 @@ const App = (data) => {
   };
 
   const handleWithdrawOk = () => {
-    let request = new Request({});
     setIsWithdrawModalOpen(false);
-    let code = ''
-    if(history.location.search.indexOf('code=')){
-      code = history.location.search.split('&')[0].split('=')[1]
-    }
-    if(code == undefined){
-      let appid = 'wx638bec1594b09d2f'
-      let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com')
-      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
-    }else{
-      request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
-        let access_token = data.data['access_token']
-        let openid = data.data['openid']
-        setOpenid(data.data['openid'])
-        request.get('/api/v1/users/wechat-profile/?access_token=' + access_token + '&openid=' + openid).then(function(data){
-          console.log('userinfo=', data)
-          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickanme'], point: points, openid: openid, contact: userName}).then(function(){
-            if(data.code === 0){
-              message.info('提现成功')
-            }else{
-              message.error(data.data.errcode)
-            }
-          })
-        })
-      })
-    }  
+    let appid = 'wx638bec1594b09d2f'
+    let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com')
+    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
   };
 
   const handleWithdrawCancel = () => {
@@ -289,15 +266,10 @@ const App = (data) => {
       getHistory()
       let request = new Request({});
       request.get('/api/v1/users/profile/').then(function(resData){
+        console.log('8888888', resData.data)
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
         cookie.save('points', resData.data.points)
-        cookie.save('openid', resData.data.openid)
-        cookie.save('nickname', resData.data.nickname)
-        if (resData.data.openid){
-          setOpenid(resData.data.openid)
-          setNickname(resData.data.nickname)
-        }
         setInviteCode(resData.data.invite_code)
       })
     }else{
@@ -308,6 +280,39 @@ const App = (data) => {
       cookie.save('totalExeNumber', '0', { path: '/' })
     }
   }, [language])
+
+  useEffect(()=>{
+    let request = new Request({});
+    let code = ''
+    if(history.location.search.indexOf('code=')){
+      code = history.location.search.split('&')[0].split('=')[1]
+    }
+    if(code){
+      // setIsWithdrawModalOpen(true);
+      request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
+        let access_token = data.data['access_token']
+        let openid = data.data['openid']
+        setOpenid(data.data['openid'])
+        request.get('/api/v1/users/wechat-profile/?access_token=' + access_token + '&openid=' + openid).then(function(data){
+          console.log('userinfo=', data)
+          cookie.save('openid', data.data.openid)
+          cookie.save('nickname', data.data.nickname)
+          setOpenid(data.data.openid)
+          setNickname(data.data.nickname)
+          setOpenid(data.data['openid'])
+          request.post('/api/v1/asset/points-withdraw/', {nickname: data.data['nickname'], point: points, openid: openid}).then(function(){
+            if(data.code === 0){
+              message.info('提现成功')
+              window.location.href = '/'
+            }else{
+              message.error(data.data.errcode)
+              window.location.href = '/'
+            }
+          })
+        })
+      })
+    }  
+  })
 
   function isWeixinBrowser() {
     let ua = navigator.userAgent.toLowerCase();
