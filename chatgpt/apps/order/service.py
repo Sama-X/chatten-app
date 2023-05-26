@@ -269,7 +269,7 @@ class OrderService(BaseService):
         if payment_method == OrderModel.METHOD_WECHAT and client not in OrderModel.CLIENT_DICT:
             return APIResponse(code=OrderErrorCode.ORDER_INVALID_PAYMENT_CLIENT)
 
-        if payment_method == OrderModel.METHOD_WECHAT and client in OrderModel.CLIENT_DICT and not openid:
+        if payment_method == OrderModel.METHOD_WECHAT and client == OrderModel.CLIENT_JSAPI and not openid:
             return APIResponse(code=OrderErrorCode.ORDER_INVALID_JSAPI_OPENID)
 
         package = OrderPackageModel.objects.filter(
