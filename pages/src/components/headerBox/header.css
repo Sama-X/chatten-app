@@ -227,10 +227,17 @@
     position: absolute;
     bottom: 30px;
     left:30px;
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .points-widthdraw {
     color:#E84142;
     cursor: pointer;
+    font-size: 14px;
+  }
+
+  .points-records {
+    color:#E84142;
+    cursor: pointer;
+    font-size: 14px;
   }
