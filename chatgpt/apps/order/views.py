@@ -7,11 +7,7 @@ order api module.
 import json
 import logging
 
-from django.http import HttpResponse
-
 from chatgpt.settings import WECHAT
-
-logger = logging.getLogger(__name__)
 
 from rest_framework import mixins, viewsets
 
@@ -23,6 +19,8 @@ from order import wechat
 from order import utils
 from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
+
+logger = logging.getLogger(__name__)
 
 
 class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
@@ -88,27 +86,27 @@ class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
         """
         """
         data = json.loads(self.request.body)
-        print("json data: ", data)
+        logger.info("[wechat notify api] json data: %s", data)
         return data
 
     def create(self, request):
         """
         """
-        print("WePayNotifyHandler,header=", self.request.headers)
-        print("WePayNotifyHandler,body=", self.request.body)
+        logger.info("[wechat notify api] WePayNotifyHandler, header=%s", self.request.headers)
+        logger.info("[wechat notify api] WePayNotifyHandler, body=%s", self.request.body)
 
         headers = self.request.headers
         certificate = wechat.get_cert()
-        print('weewww=', headers['Wechatpay-Signature'])
+        logger.info('[wechat notify api] signature: %s', headers['Wechatpay-Signature'])
         # serial = headers['Wechatpay-Serial']
         # if serial != WECHAT['MCH_CERT_SERIAL_NO']:
         #     return HttpResponse({'status': 'fail'})
 
         verify_ok = utils.check_notify_sign(headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'), certificate, headers['Wechatpay-Signature'])
-        print('verify_ok=', verify_ok)
+        logger.info('[wechat notify api] verify_ok = %s', verify_ok)
         if verify_ok:
             data = utils.decryWePayNotify(self.get_json_data())
-            print("WePayNotifyHandler,data=", data)
+            logger.info("[wechat notify api] WePayNotifyHandler, data=%s", data)
             OrderService.update_order_by_out_trade_no(data['out_trade_no'], data)
 
         return APIResponse()
