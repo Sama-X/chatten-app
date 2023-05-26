@@ -44,8 +44,8 @@ function App() {
     setQuantity(quantity)
   }
 
-  function onBridgeReady() {
-    alert('appid=' + appid)
+  function onBridgeReady(timeStamp, nonceStr, packagex, paySign) {
+    alert('nonceStr=' + nonceStr)
     window.WeixinJSBridge.invoke('getBrandWCPayRequest', {
         "appId": appid,     //公众号ID，由商户传入     
         "timeStamp": timeStamp,     //时间戳，自1970年以来的秒数     
@@ -62,8 +62,15 @@ function App() {
     });
   }
 
+  function getData() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(['foo', 'bar'])
+      }, 1000)
+    })
+  }
+
   const payMoney = () => {
-    alert('payopenid=' +  openid)
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
@@ -72,12 +79,13 @@ function App() {
       openid: openid
     }).then(function(res){
       console.log(res)
-      setOrderId(res.data.order_id)
-      setAppid(res.data.data['appid'])
-      setTimeStamp(res.data.data['timeStamp'])
-      setNonceStr(res.data.data['nonceStr'])
-      setPackage(res.data.data['package'])
-      setPaySign(res.data.data['paySign'])
+      setTimeout(() => {
+        setOrderId(res.data.order_id)
+        setTimeStamp(res.data.data['timeStamp'])
+        setNonceStr(res.data.data['nonceStr'])
+        setPackage(res.data.data['package'])
+        setPaySign(res.data.data['paySign'])
+      }, 0)
 
     if (typeof window.WeixinJSBridge == "undefined") {
         if (document.addEventListener) {
@@ -87,7 +95,7 @@ function App() {
             document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
         }
     } else {
-        onBridgeReady();
+        onBridgeReady(res.data.data['timeStamp'], res.data.data['nonceStr'], res.data.data['package'], res.data.data['paySign']);
     }
     })
   }
@@ -131,12 +139,11 @@ function App() {
         setPackageId(resData.data[0].id)
         setAmount(resData.data[0].price)
       }
-      if(code != ''){
+      if(code == ''){
         let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com/price/')
         window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
       }else{
         request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
-          alert('openid=' + data.data['openid'])
           setOpenid(data.data['openid'])
         })
       }
