@@ -79,8 +79,6 @@ function App() {
       setPackage(res.data.data['package'])
       setPaySign(res.data.data['paySign'])
 
-      alert()
-
     if (typeof window.WeixinJSBridge == "undefined") {
         if (document.addEventListener) {
             document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
