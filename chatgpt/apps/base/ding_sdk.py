@@ -88,7 +88,7 @@ class DingBaseClient:
         """
         send bussiness message.
         """
-        if settings.DEBUG:
+        if settings.CURRENT_ENV == 'development':
             return logger.info('debug not send dingtalk')
 
         return cls._send_robot_msg(
