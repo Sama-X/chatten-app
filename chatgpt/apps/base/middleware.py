@@ -2,6 +2,7 @@
 middleware modules.
 """
 import logging
+import sys
 import traceback
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,6 +15,7 @@ from rest_framework.exceptions import (
 )
 
 from base.constants import ADMIN_LOGIN_TOKEN_ACCOUNT_KEY, LOGIN_TOKEN_ACCOUNT_KEY
+from base.ding_sdk import DingBaseClient
 from base.exception import SystemErrorCode
 from base.response import APIResponse
 from users.models import AccountModel
@@ -80,6 +82,30 @@ class AdminAuthentication(authentication.BaseAuthentication):
         """
         return True
 
+def get_current_error_markdown(request):
+    """
+    get error info with markdown.
+    """
+    e_type, e_value, _ = sys.exc_info()
+    note = f'''
+## api
+    {request.get_raw_uri()}
+
+### env
+    {"test" if settings.DEBUG else "production"}
+
+### error summay
+    **type**: {e_type}
+    **detail**: {str(e_value)}
+
+### params
+    **query**: {dict(request.query_params)}
+    **body**: {dict(request.data)}
+
+### location
+    {traceback.format_exc()}
+'''
+    return note
 
 def exception_catch(exception, ctx):
     """
@@ -93,8 +119,14 @@ def exception_catch(exception, ctx):
         errors = ';'.join(errors)
         return APIResponse(code=SystemErrorCode.HTTP_400_BAD_REQUEST, msg=errors)
 
-    logger.error("System error: %s", traceback.format_exc())
+    error_msg = traceback.format_exc()
+    logger.error("System error: %s", error_msg)
     if hasattr(exception, '__module__') and exception.__module__ == 'rest_framework.exceptions':
         return APIResponse(code=exception.status_code, msg=exception.detail)
+
+    if not settings.DEBUG:
+        title = f'[{settings.CURRENT_ENV}] system error. uri: {ctx["request"].get_raw_uri()}'
+        error = get_current_error_markdown(ctx['request'])
+        DingBaseClient.send_sys_error(title, error)
 
     return APIResponse(SystemErrorCode.HTTP_500_INTERNAL_SERVER_ERROR)

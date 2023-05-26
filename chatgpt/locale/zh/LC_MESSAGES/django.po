@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 11:39+0800\n"
+"POT-Creation-Date: 2023-05-26 18:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgid "Contact information"
 msgstr "提现人信息"
 
 #: apps/asset/models.py:102 apps/asset/serializer.py:60
-#: apps/order/serializer.py:127
+#: apps/order/serializer.py:156
 msgid "wechat openid"
 msgstr "微信openid"
 
@@ -343,8 +343,8 @@ msgstr "积分不够"
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
 
-#: apps/base/middleware.py:34 apps/base/middleware.py:44
-#: apps/base/middleware.py:66 apps/base/middleware.py:72
+#: apps/base/middleware.py:36 apps/base/middleware.py:46
+#: apps/base/middleware.py:68 apps/base/middleware.py:74
 msgid "auth: user need login"
 msgstr "需要登录"
 
@@ -448,7 +448,7 @@ msgstr "问题"
 msgid "serializer: chat topic id"
 msgstr "聊天话题id"
 
-#: apps/chat/serializer.py:49 apps/order/serializer.py:40
+#: apps/chat/serializer.py:49 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt键"
 
@@ -481,16 +481,16 @@ msgid "order user id"
 msgstr "下单用户"
 
 #: apps/order/admin/serializer.py:76 apps/order/models.py:81
-#: apps/order/serializer.py:47 apps/order/serializer.py:115
+#: apps/order/serializer.py:76 apps/order/serializer.py:144
 msgid "order package id"
 msgstr "套餐id"
 
-#: apps/order/admin/serializer.py:79 apps/order/serializer.py:50
+#: apps/order/admin/serializer.py:79 apps/order/serializer.py:79
 msgid "order number"
 msgstr "订单号"
 
 #: apps/order/admin/serializer.py:82 apps/order/models.py:84
-#: apps/order/serializer.py:53
+#: apps/order/serializer.py:82
 msgid "order status"
 msgstr "订单状态"
 
@@ -534,7 +534,7 @@ msgstr "微信"
 msgid "points"
 msgstr "积分"
 
-#: apps/order/models.py:82 apps/order/serializer.py:118
+#: apps/order/models.py:82 apps/order/serializer.py:147
 msgid "order quantity"
 msgstr "数量"
 
@@ -554,7 +554,7 @@ msgstr "支付时间"
 msgid "order pay method"
 msgstr "支付方式"
 
-#: apps/order/models.py:88 apps/order/serializer.py:124
+#: apps/order/models.py:88 apps/order/serializer.py:153
 msgid "order pay client"
 msgstr "支付客户端"
 
@@ -566,9 +566,17 @@ msgstr "订单编号"
 msgid "transaction_id"
 msgstr "微信支付订单号"
 
-#: apps/order/serializer.py:121
+#: apps/order/serializer.py:150
 msgid "order paymethod"
 msgstr "支付方式"
+
+#: apps/order/views.py:113
+msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
+msgstr "这个用户%(user_id)s支付了%(amount)s元，在%(now)s。"
+
+#: apps/order/views.py:118
+msgid "wechat pay notify"
+msgstr "微信支付通知"
 
 #: apps/users/admin/serializer.py:42 apps/users/models.py:196
 msgid "config item value"

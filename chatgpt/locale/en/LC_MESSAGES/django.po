@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 11:39+0800\n"
+"POT-Creation-Date: 2023-05-26 18:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,7 +92,7 @@ msgid "Contact information"
 msgstr ""
 
 #: apps/asset/models.py:102 apps/asset/serializer.py:60
-#: apps/order/serializer.py:127
+#: apps/order/serializer.py:156
 #, fuzzy
 #| msgid "db:chat topic id"
 msgid "wechat openid"
@@ -359,8 +359,8 @@ msgstr ""
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
 
-#: apps/base/middleware.py:34 apps/base/middleware.py:44
-#: apps/base/middleware.py:66 apps/base/middleware.py:72
+#: apps/base/middleware.py:36 apps/base/middleware.py:46
+#: apps/base/middleware.py:68 apps/base/middleware.py:74
 msgid "auth: user need login"
 msgstr "Login required"
 
@@ -464,7 +464,7 @@ msgstr "question"
 msgid "serializer: chat topic id"
 msgstr "chat topic id"
 
-#: apps/chat/serializer.py:49 apps/order/serializer.py:40
+#: apps/chat/serializer.py:49 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt key"
 
@@ -497,16 +497,16 @@ msgid "order user id"
 msgstr ""
 
 #: apps/order/admin/serializer.py:76 apps/order/models.py:81
-#: apps/order/serializer.py:47 apps/order/serializer.py:115
+#: apps/order/serializer.py:76 apps/order/serializer.py:144
 msgid "order package id"
 msgstr ""
 
-#: apps/order/admin/serializer.py:79 apps/order/serializer.py:50
+#: apps/order/admin/serializer.py:79 apps/order/serializer.py:79
 msgid "order number"
 msgstr ""
 
 #: apps/order/admin/serializer.py:82 apps/order/models.py:84
-#: apps/order/serializer.py:53
+#: apps/order/serializer.py:82
 msgid "order status"
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 msgid "points"
 msgstr ""
 
-#: apps/order/models.py:82 apps/order/serializer.py:118
+#: apps/order/models.py:82 apps/order/serializer.py:147
 msgid "order quantity"
 msgstr ""
 
@@ -570,7 +570,7 @@ msgstr ""
 msgid "order pay method"
 msgstr ""
 
-#: apps/order/models.py:88 apps/order/serializer.py:124
+#: apps/order/models.py:88 apps/order/serializer.py:153
 msgid "order pay client"
 msgstr ""
 
@@ -582,9 +582,20 @@ msgstr ""
 msgid "transaction_id"
 msgstr ""
 
-#: apps/order/serializer.py:121
+#: apps/order/serializer.py:150
 msgid "order paymethod"
 msgstr ""
+
+#: apps/order/views.py:113
+#, python-format
+msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
+msgstr ""
+
+#: apps/order/views.py:118
+#, fuzzy
+#| msgid "db:chat topic id"
+msgid "wechat pay notify"
+msgstr "chat topic id"
 
 #: apps/users/admin/serializer.py:42 apps/users/models.py:196
 msgid "config item value"

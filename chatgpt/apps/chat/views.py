@@ -49,6 +49,7 @@ class ChatViewset(viewsets.GenericViewSet):
             return SerializerErrorResponse(serializer, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
         question = serializer.validated_data["question"] # type: ignore
+        print('question = ', question)
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         user_id = request.user.id

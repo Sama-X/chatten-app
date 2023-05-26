@@ -31,6 +31,7 @@ SECRET_KEY = 'django-insecure-&7_%)frnf2fobw81)jjt5)8)i&a9!=mhezjsot$4o-a@mw!s$f
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('ENV', 'development') != 'production'
+CURRENT_ENV = os.environ.get('ENV', 'development')
 
 ALLOWED_HOSTS = ['*']
 
@@ -323,6 +324,10 @@ CHANNEL_LAYERS = {
 # share config
 
 SHARE_REWARD_EXPERIENCE = 10
+
+# dingtalk
+DINGTALK_BUSINESS_ROOM_SECRET = 'SEC653044f6b058177d402561efa38d07f03ac626af093b31496e2f6df78966ffaa'
+DINGTALK_BUSINESS_ROOM_TOKEN = 'a03cf9328ee662f6970968c0b9ed02b960ec32f5b1262ff41b66af319d7b3b5a'
 
 
 # local config

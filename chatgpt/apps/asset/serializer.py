@@ -80,8 +80,6 @@ class PointsLogSerializer(serializers.ModelSerializer):
 
     category_name = serializers.SerializerMethodField()
     add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
-    audit_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
-    finish_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
 
     def get_category_name(self, obj):
         """
@@ -95,5 +93,5 @@ class PointsLogSerializer(serializers.ModelSerializer):
         """
         model = PointsLogModel
         fields = (
-            'id', 'category', 'amount', 'note', 'add_time'
+            'id', 'category', 'category_name', 'amount', 'note', 'add_time'
         )

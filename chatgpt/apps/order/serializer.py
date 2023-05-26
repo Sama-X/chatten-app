@@ -1,3 +1,6 @@
+"""
+order serializer.
+"""
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -8,28 +11,54 @@ from order.models import OrderModel
 
 class OrderListSerializer(serializers.ModelSerializer):
     """
-    Chat record serializer.
+    order serializer.
     """
 
-    question_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
-    response_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
-    add_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')  # type: ignore
-    msg_type_name = serializers.SerializerMethodField()
+    status_name = serializers.SerializerMethodField()
+    payment_method_name = serializers.SerializerMethodField()
+    add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    payment_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    user_name = serializers.SerializerMethodField()
+    package_name = serializers.SerializerMethodField()
 
-    def get_msg_type_name(self, obj):
+    def get_payment_method_name(self, obj):
         """
-        get msg type name.
+        get payment method.
         """
-        return OrderModel.MSG_TYPES_DICT.get(obj.msg_type)
+        return OrderModel.METHODS_DICT.get(obj.payment_method)
+
+    def get_status_name(self, obj):
+        """
+        get status name.
+        """
+        return OrderModel.STATUS_DICT.get(obj.status)
+
+    def get_user_name(self, obj):
+        """
+        get user name.
+        """
+        user = self.context.get('user_dict', {}).get(obj.user_id)
+        if not user:
+            return None
+
+        return user.nickname or user.username
+
+    def get_package_name(self, obj):
+        """
+        get order package name.
+        """
+        package = self.context.get('order_package_dict', {}).get(obj.package_id)
+        return package.name if package else None
 
     class Meta:
         """
-        Meta class.
+        meta class.
         """
         model = OrderModel
         fields = (
-            'msg_type', 'msg_type_name', 'question', 'answer', 'approval',
-            'question_time', 'response_time', 'add_time'
+            'id', 'user_id', 'user_name', 'package_id', 'package_name', 'out_trade_no',
+            'quantity', 'actual_price', 'status', 'status_name', 'status_note', 'payment_time',
+            'payment_method', 'payment_method_name'
         )
 
 

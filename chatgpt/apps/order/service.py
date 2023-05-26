@@ -333,7 +333,7 @@ class OrderService(BaseService):
                 is_delete=False, out_trade_no=out_trade_no, status=OrderModel.STATUS_PENDING
             ).first()
             if not order_obj:
-                return False
+                return False, None
             if trade_state == "SUCCESS":
                 order_obj.transaction_id = transaction_id
                 order_obj.status = OrderModel.STATUS_SUCCESS
@@ -341,8 +341,8 @@ class OrderService(BaseService):
 
                 O2OPaymentService.add_payment_by_order(order_obj)
                 PointsService.add_invite_point_by_order(order_obj)
-                return True
+                return True, order_obj
             else:
                 order_obj.status = OrderModel.STATUS_FAILURE
                 order_obj.save()
-        return False
+        return False, None
