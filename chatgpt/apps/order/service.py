@@ -2,10 +2,9 @@
 api service.
 """
 import base64
+import logging
 from django.db import transaction
-from django.http import HttpResponse
-from asset.service import O2OPaymentService, PointsLogService, PointsService
-from base.common import CommonUtil
+from asset.service import O2OPaymentService, PointsService
 from base.exception import OrderErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
@@ -15,6 +14,8 @@ from order.admin.serializer import CreateOrderPackageSerializer, OrderPackageSer
 from order.models import OrderModel, OrderPackageModel
 from order.serializer import CreateOrderSeriralizer, OrderSerializer
 from users.models import AccountModel
+
+logger = logging.getLogger(__name__)
 
 
 class OrderPackageService(BaseService):
@@ -255,6 +256,7 @@ class OrderService(BaseService):
             return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
 
         data = serializer.validated_data
+        logger.info('[create order] payload: %s', data)
         package_id = data.get('package_id')  # type: ignore
         quantity = data['quantity']  # type: ignore
         payment_method = data.get('payment_method')  # type: ignore
@@ -287,7 +289,7 @@ class OrderService(BaseService):
             if client == OrderModel.CLIENT_NATIVE:
                 code_url = wechat.native_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
 
-                print('code_url = ', code_url)
+                logger.info('[create order] native prepay response: %s', code_url)
                 img_stream = utils.make_qrcode(data=code_url)
                 return APIResponse(result={
                     'image': f'data:image/png;base64,{base64.b64encode(img_stream).decode("utf8")}',
@@ -301,15 +303,14 @@ class OrderService(BaseService):
                     pass
                 h5_url = wechat.h5_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no, ip=ip_addr)
 
-                print('h5_url = ', h5_url)
+                logger.info('[create order] h5 prepay response: %s', h5_url)
                 return APIResponse(result={
                     'h5_url': h5_url,
                     'order_id': order_obj.id
                 })
             elif client == OrderModel.CLIENT_JSAPI:
-                print("openid = ", openid)
                 data = wechat.js_api_prepay(openid, order_obj.actual_price / 1000, order_obj.out_trade_no)
-                print('data = ', data)
+                logger.info('[create order] h5 prepay response: %s', data)
                 return APIResponse(result={
                     'data': data,
                     'order_id': order_obj.id

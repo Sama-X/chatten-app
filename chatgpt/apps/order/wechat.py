@@ -1,5 +1,6 @@
 # flake8: noqa
 # pylint: skip-file
+import logging
 import requests
 import time
 from chatgpt.settings import WECHAT
@@ -9,6 +10,8 @@ import base64
 import json
 from Cryptodome.PublicKey import RSA
 
+logger = logging.getLogger(__name__)
+
 mch_id = WECHAT["MCH_ID"]                    # 商户号
 app_id = WECHAT["APP_ID"]
 pay_notify_url = WECHAT["PAY_NOTIFY_URL"]
@@ -17,7 +20,7 @@ mch_api_v3_key = WECHAT["MCH_API_V3_KEY"]
 
 
 def js_api_prepay(openid, amount, out_trade_no):
-    print('amount=', amount)
+    logger.info('[wechat jsapi prepay] amount = %s', amount)
 
     description = "积分充值"
 
@@ -36,7 +39,7 @@ def js_api_prepay(openid, amount, out_trade_no):
         }
     }
 
-    print('total===', body)
+    logger.info('[wechat jsapi prepay] paload: %s', body)
 
     body = json.dumps(body).replace(' ', '')
     url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi'
@@ -50,7 +53,7 @@ def js_api_prepay(openid, amount, out_trade_no):
             "Accept": "application/json"
         }
     )
-    print('js api sign=', response.text)
+    logger.info('[wechat jsapi prepay] sign = %s', response.text)
 
     sign_type = 'RSA'
     package = 'prepay_id=' + response.json()['prepay_id']
@@ -80,7 +83,7 @@ def decryWePayNotify(params):
     plaintext = aesgcm.decrypt(nonce_bytes, data, ad_bytes)
     plaintext_str = bytes.decode(plaintext)
 
-    print('plaintext_str=', plaintext_str)
+    logger.info('[wechat decry notify] plaintext_str = %s', plaintext_str)
 
     return json.loads(plaintext_str)
 
@@ -125,7 +128,7 @@ def native_prepay(amount, out_trade_no):
 		"currency": "CNY"
 	  }
     }
-    print('native body=', body)
+    logger.info('[wechat native prepay] body = %s', body)
 
     body = json.dumps(body).replace(' ', '')
     url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/native'
@@ -139,7 +142,7 @@ def native_prepay(amount, out_trade_no):
             "Accept": "application/json"
         }
     )
-    print('native api response=', response.text)
+    logger.info('[wechat native prepay] response = %s', response.text)
 
     code_url = response.json()['code_url']
     return code_url
@@ -162,7 +165,7 @@ def h5_prepay(amount, out_trade_no, ip=None):
             }
         }
     }
-    print('native body=', body)
+    logger.info('[wechat h5 prepay] body = %s', body)
 
     body = json.dumps(body).replace(' ', '')
     url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/h5'
@@ -176,7 +179,7 @@ def h5_prepay(amount, out_trade_no, ip=None):
             "Accept": "application/json"
         }
     )
-    print('native api response=', response.text)
+    logger.info('[wechat h5 prepay] response = %s', response.text)
 
     h5_url = response.json()['h5_url']
     return h5_url
