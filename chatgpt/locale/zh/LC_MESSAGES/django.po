@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 17:43+0800\n"
+"POT-Creation-Date: 2023-05-26 11:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -219,7 +219,7 @@ msgstr "兑换积分"
 msgid "consume payment error"
 msgstr "积分消费失败"
 
-#: apps/asset/service.py:411
+#: apps/asset/service.py:412
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -307,35 +307,39 @@ msgstr "不支持匿名用户"
 msgid "chatgpt key already exists"
 msgstr "chatgpt键已存在"
 
-#: apps/base/exception.py:99
+#: apps/base/exception.py:100
 msgid "The timeliness package cannot be used without days"
 msgstr "失效套餐不能没有使用天数"
 
-#: apps/base/exception.py:100
+#: apps/base/exception.py:101
 msgid "Invalid package category"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:101
+#: apps/base/exception.py:102
 msgid "Package name already exists"
 msgstr "套餐名已存在"
 
-#: apps/base/exception.py:102
+#: apps/base/exception.py:103
 msgid "Invalid method of payment"
 msgstr "无效的支付方式"
 
-#: apps/base/exception.py:103
+#: apps/base/exception.py:104
 msgid "Invalid order package"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:104
+#: apps/base/exception.py:105
 msgid "Unsupported payment client"
 msgstr "不支持的客户端"
 
-#: apps/base/exception.py:117
+#: apps/base/exception.py:106
+msgid "Invalid wechat openid"
+msgstr "无效的微信openid"
+
+#: apps/base/exception.py:119
 msgid "Points are not enough"
 msgstr "积分不够"
 
-#: apps/base/exception.py:118
+#: apps/base/exception.py:120
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
 

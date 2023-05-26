@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-25 17:43+0800\n"
+"POT-Creation-Date: 2023-05-26 11:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -228,7 +228,7 @@ msgstr ""
 msgid "consume payment error"
 msgstr ""
 
-#: apps/asset/service.py:411
+#: apps/asset/service.py:412
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr ""
 
@@ -316,39 +316,45 @@ msgstr "Anonymous users are note supported to add chatgpt key"
 msgid "chatgpt key already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/exception.py:99
+#: apps/base/exception.py:100
 msgid "The timeliness package cannot be used without days"
 msgstr ""
 
-#: apps/base/exception.py:100
+#: apps/base/exception.py:101
 msgid "Invalid package category"
 msgstr ""
 
-#: apps/base/exception.py:101
+#: apps/base/exception.py:102
 #, fuzzy
 #| msgid "chatgpt key already exists"
 msgid "Package name already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/exception.py:102
+#: apps/base/exception.py:103
 msgid "Invalid method of payment"
 msgstr ""
 
-#: apps/base/exception.py:103
+#: apps/base/exception.py:104
 #, fuzzy
 #| msgid "invalid code"
 msgid "Invalid order package"
 msgstr "invalid code"
 
-#: apps/base/exception.py:104
+#: apps/base/exception.py:105
 msgid "Unsupported payment client"
 msgstr ""
 
-#: apps/base/exception.py:117
+#: apps/base/exception.py:106
+#, fuzzy
+#| msgid "db:chat topic id"
+msgid "Invalid wechat openid"
+msgstr "chat topic id"
+
+#: apps/base/exception.py:119
 msgid "Points are not enough"
 msgstr ""
 
-#: apps/base/exception.py:118
+#: apps/base/exception.py:120
 #, python-format
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
