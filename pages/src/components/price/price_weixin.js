@@ -20,7 +20,7 @@ function App() {
   const navigate = useHistory()
   const [packageList, setPackageList] = useState([])
 
-  const [appid, setAppid] = useState('')
+  const [appid, setAppid] = useState('wx638bec1594b09d2f')
   const [timeStamp, setTimeStamp] = useState('')
   const [nonceStr, setNonceStr] = useState('')
   const [packagex, setPackage] = useState('')
@@ -45,6 +45,7 @@ function App() {
   }
 
   function onBridgeReady() {
+    alert('appid=' + appid)
     window.WeixinJSBridge.invoke('getBrandWCPayRequest', {
         "appId": appid,     //公众号ID，由商户传入     
         "timeStamp": timeStamp,     //时间戳，自1970年以来的秒数     
@@ -62,6 +63,7 @@ function App() {
   }
 
   const payMoney = () => {
+    alert('payopenid=' +  openid)
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
@@ -76,6 +78,8 @@ function App() {
       setNonceStr(res.data.data['nonceStr'])
       setPackage(res.data.data['package'])
       setPaySign(res.data.data['paySign'])
+
+      alert()
 
     if (typeof window.WeixinJSBridge == "undefined") {
         if (document.addEventListener) {
@@ -114,10 +118,13 @@ function App() {
   [orderId])
 
   useEffect(()=>{
+
     let code = ''
-    if(history.location.search.indexOf('code=')){
+    if(history.location.search.indexOf('code=') != -1){
       code = history.location.search.split('&')[0].split('=')[1]
     }
+
+    console.log('88888=', code)
     let request = new Request({});
     request.get('/api/v1/order/order-packages/').then(function(resData){
       console.log(resData.data)
@@ -126,12 +133,12 @@ function App() {
         setPackageId(resData.data[0].id)
         setAmount(resData.data[0].price)
       }
-      if(code == undefined){
-        let appid = 'wx638bec1594b09d2f'
+      if(code != ''){
         let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com/price/')
         window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_base&state=123#wechat_redirect'
       }else{
         request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
+          alert('openid=' + data.data['openid'])
           setOpenid(data.data['openid'])
         })
       }
