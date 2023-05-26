@@ -572,7 +572,7 @@ msgstr "支付方式"
 
 #: apps/order/views.py:113
 msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
-msgstr "这个用户%(user_id)s支付了%(amount)s元，在%(now)s。"
+msgstr "用户(id:%(user_id)s)支付了%(amount)s元，在%(now)s。"
 
 #: apps/order/views.py:118
 msgid "wechat pay notify"
