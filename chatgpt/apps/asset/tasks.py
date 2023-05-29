@@ -2,14 +2,13 @@
 Celery task.
 """
 from datetime import datetime
-import json
 import logging
 
 from celery import shared_task
 
 from django.db import transaction
+from django.utils.translation import gettext as _
 
-from apps.users.service import UserService
 from asset.models import O2OPaymentLogModel, O2OPaymentModel
 
 logger = logging.getLogger(__name__)
@@ -37,7 +36,7 @@ def auto_clear_expired_payment():
                 category=O2OPaymentLogModel.CATEGORY_EXPIRED,
                 expire_time=payment.transient_expire_time,
                 usage_count=usage_count,
-                note=f'The order has expired. time: {payment.transient_expire_time} at: {datetime.now()}'
+                note=_('The order has expired')
             )
 
     logger.info("[clear expired payment] finish total: %s", len(payments))

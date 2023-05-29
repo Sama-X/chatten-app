@@ -27,7 +27,7 @@ class PointsModel(BaseModel):
         db_table = "asset_points"
 
     @classmethod
-    def add_point(cls, user_id, amount, note=None):
+    def add_point(cls, user_id, amount, note=None, source=None):
         """
         add point to user.
         """
@@ -46,7 +46,8 @@ class PointsModel(BaseModel):
             point_id=obj.id,
             category=PointsLogModel.CATEGORY_ADD,
             amount=amount,
-            note=note
+            note=note,
+            source=source
         )
 
 
@@ -63,10 +64,25 @@ class PointsLogModel(BaseModel):
     )
     CATEGORY_DICT = dict(CATEGORIES)
 
+    SOURCE_DIRECT_INVITE = 1
+    SOURCE_INDIRECT_INVITE = 2
+    SOURCE_EXCHANGE = 3
+    SOURCE_WITHDRAW = 4
+
+    SOURCES = (
+        (SOURCE_DIRECT_INVITE, _('Direct invite recharge reward')),
+        (SOURCE_INDIRECT_INVITE, _('Indirect invite recharge reward')),
+        (SOURCE_EXCHANGE, _('Exchange reduce')),
+        (SOURCE_WITHDRAW, _('Withdraw reduce')),
+    )
+
+    SOURCE_DICT = dict(SOURCES)
+
     user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
     point_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("points foreignkey id"))
     category = models.SmallIntegerField(default=CATEGORY_ADD, verbose_name=_("points change category"))
     amount = models.BigIntegerField(default=0, verbose_name=_("The number of points changed this time"))
+    source = models.SmallIntegerField(default=SOURCE_DIRECT_INVITE, null=True, verbose_name=_("points source"))
     note = models.CharField(max_length=256, null=True, verbose_name=_("Notes on integral changes"))
 
     class Meta:
