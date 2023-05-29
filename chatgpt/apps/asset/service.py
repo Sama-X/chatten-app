@@ -45,11 +45,11 @@ class O2OPaymentService(BaseService):
             note = ""
             if usage_expire_time is None:
                 payment.persistence_usage_count += usage_total
-                note = f"User has purchased a persistence package. total: {usage_total}"
+                note = _("User has purchased a persistence package")
             else:
                 payment.transient_usage_count += usage_total
                 payment.transient_expire_time = usage_expire_time
-                note = f"User has purchased a transient package. total: {usage_total} expired_at: {usage_expire_time}"
+                note = _("User has purchased a transient package")
 
             payment.save()
             O2OPaymentLogModel.objects.create(
@@ -87,10 +87,7 @@ class O2OPaymentService(BaseService):
             payment.free_expire_time = datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0))
             payment.free_usage_count = ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
             payment.save()
-            note = (
-                f"Get free experience. total: {payment.free_usage_count} "
-                f"expired_at: {payment.free_expire_time}"
-            )
+            note = _("Get free experience")
 
             if old_free_usage_count > 0:
                 O2OPaymentLogModel.objects.create(
@@ -99,7 +96,7 @@ class O2OPaymentService(BaseService):
                     category=O2OPaymentLogModel.CATEGORY_EXPIRED,
                     expire_time=payment.free_expire_time,
                     usage_count=payment.free_usage_count,
-                    note=f'Free emptying times per day'
+                    note=_('Free emptying times per day')
                 )
 
             O2OPaymentLogModel.objects.create(
@@ -127,7 +124,7 @@ class O2OPaymentService(BaseService):
 
             payment.persistence_usage_count += usage_total
             payment.save()
-            note = f"Users use points to exchange. total: {usage_total} "
+            note = _("Users use points to exchange")
             O2OPaymentLogModel.objects.create(
                 user_id=user_id,
                 payment_id=payment.id,
@@ -197,7 +194,7 @@ class O2OPaymentService(BaseService):
                     category=O2OPaymentLogModel.CATEGORY_CONSUME,
                     expire_time=None,
                     usage_count=sub_count,
-                    note=f'Used free number of times: {sub_count}'
+                    note=_('Used free number of times')
                 )
             if count > 0 and payment.transient_usage_count > 0:
                 sub_count = 0
@@ -215,7 +212,7 @@ class O2OPaymentService(BaseService):
                     category=O2OPaymentLogModel.CATEGORY_CONSUME,
                     expire_time=None,
                     usage_count=sub_count,
-                    note=f'Used transient number of times: {sub_count}'
+                    note=_('Used transient number of times')
                 )
             if count > 0 and payment.persistence_usage_count > 0:
                 sub_count = 0
@@ -234,7 +231,7 @@ class O2OPaymentService(BaseService):
                     category=O2OPaymentLogModel.CATEGORY_CONSUME,
                     expire_time=None,
                     usage_count=sub_count,
-                    note=f'Used persistence number of times: {sub_count}'
+                    note=_('Used persistence number of times')
                 )
 
             payment.save()
@@ -269,25 +266,19 @@ class PointsService(BaseService):
             super_parent_point = floor(total_point * (ConfigModel.get_int(ConfigModel.CONFIG_LEVEL2_COMMISSION_RATIO) / 10000))
             if invite_obj.inviter_user_id:
                 PointsModel.add_point(
-                    invite_obj.inviter_user_id, parent_point,
-                    _('The direct invitee has been recharged, get points: %(parent_point)s') % {
-                        'parent_point': parent_point
-                    }
+                    invite_obj.inviter_user_id, parent_point, _('The direct invitee has been recharged')
                 )
 
             if invite_obj.super_inviter_user_id:
                 PointsModel.add_point(
-                    invite_obj.super_inviter_user_id, super_parent_point,
-                    _('Indirect invitee has been recharged, get points: %(super_parent_point)s') % {
-                        'super_parent_point': super_parent_point
-                    }
+                    invite_obj.super_inviter_user_id, super_parent_point, _('Indirect invitee has been recharged')
                 )
 
         return True
 
     @classmethod
     @transaction.atomic
-    def reduce_point(cls, user_id, amount, description):
+    def reduce_point(cls, user_id, amount, description, source=None):
         """
         reduce point.
         """
@@ -307,6 +298,7 @@ class PointsService(BaseService):
                 point_id=obj.id,
                 category=PointsLogModel.CATEGORY_SUB,
                 amount=amount,
+                source=source,
                 note=description
             )
 
@@ -340,6 +332,11 @@ class PointsService(BaseService):
             O2OPaymentService.add_payment_by_points(user_id, point)
             obj.total -= point
             obj.save()
+
+            PointsService.reduce_point(
+                obj.user_id, point, _("The number of points exchanged for chat"),
+                source=PointsLogModel.SOURCE_EXCHANGE
+            )
 
         return APIResponse()
 
@@ -441,7 +438,8 @@ class PointsWithdrawService(BaseService):
             obj.save()
             if obj.status == PointsWithdrawModel.STATUS_REFUNDING:
                 PointsService.reduce_point(
-                    obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points")
+                    obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points"),
+                    source=PointsLogModel.SOURCE_WITHDRAW
                 )
 
         return APIResponse()

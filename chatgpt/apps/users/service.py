@@ -4,7 +4,6 @@ api service.
 from datetime import date, datetime, time, timedelta
 import json
 import re
-from urllib import request
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
