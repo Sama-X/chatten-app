@@ -210,7 +210,7 @@ function App() {
             dataSource={itemList}
           />: ""} 
           {selected === 'invite'? <div>
-            <div class='inviteCount'><span>直接邀请用户：{inviteUser.level1}</span>间接邀请用户：{inviteUser.level2}</div>
+            <div className='inviteCount'><span>直接邀请用户：{inviteUser.level1}</span>间接邀请用户：{inviteUser.level2}</div>
             <Table
             columns={inviteColumns}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
