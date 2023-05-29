@@ -1,10 +1,9 @@
-import './order.css'
+import './score.css'
 import { useEffect, useState } from 'react';
 import cookie from 'react-cookies'
 import { useHistory } from 'react-router-dom';
 import {Table} from 'antd'
 import Request from '../../../requestAdmin.ts';
-
 
 
 function App() {
@@ -14,14 +13,12 @@ function App() {
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(1)
 
-  const [selected, setSelected] = useState('order')
-  const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
+  const [selected, setSelected] = useState('score')
 
-  const clickOrder = (page) => {
-    setSelected('order')
+  const clickScore = (page) => {
+    setSelected('score')
     let request = new Request({});
-    request.get('/api/v1/admin/order/orders/?status=10&page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
+    request.get('/api/v1/admin/asset/points-log/?page=' + page + '&offset='+pageSize).then(function(resData){
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -32,33 +29,31 @@ function App() {
     })
   }
 
-
   useEffect(()=>{
-    clickOrder(page)
+    clickScore(page)
   }, [page])
 
-
-  const orderColumns = [
+  const scoreColumns = [
     {
-      title: '订单号',
-      dataIndex: 'out_trade_no',
+      title: '创建时间',
+      dataIndex: 'add_time',
     },
     {
         title: '用户昵称',
         dataIndex: 'user_name',
       },
     {
-      title: '套餐名称',
-      dataIndex: 'package_name',
+      title: '变化',
+      dataIndex: 'category_name',
     },
     {
-      title: '支付金额',
-      dataIndex: 'actual_price',
+      title: '变化数量',
+      dataIndex: 'amount',
     },
     {
-      title: '创建时间',
-      dataIndex: 'add_time',
-    }
+      title: '备注',
+      dataIndex: 'note',
+    },
   ]
 
   const changePage = (page, pageSize) => {
@@ -66,12 +61,12 @@ function App() {
   }
 
   return (
-    <div className='admin-order-record-container'>
+    <div className='admin-score-record-container'>
         <Table
-            columns={orderColumns}
+            columns={scoreColumns}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
             dataSource={itemList}
-        />
+          />
     </div>
 
   );

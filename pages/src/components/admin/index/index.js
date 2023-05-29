@@ -9,6 +9,10 @@ import Menu from '../menu/menu.js'
 import Dashboard from '../dashboard/dashboard.js'
 import PackageList from '../package/package.js'
 import ConfigList from '../config/config.js'
+import OrderList from '../order/order.js'
+import ScoreList from '../score/score.js'
+import WithdrawList from '../withdraw/withdraw.js'
+import UserList from '../user/user.js'
 
 
 function App(props) {
@@ -31,9 +35,10 @@ function App(props) {
           {props.location.pathname === '/admin' ? <Dashboard></Dashboard> : ""}
           {props.location.pathname === '/admin/packages' ? <PackageList></PackageList> : ""}
           {props.location.pathname === '/admin/configs' ? <ConfigList></ConfigList> : ""}
-          {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
-          {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
-          {props.menu === 'company_list' ? <PackageList></PackageList> : ""}
+          {props.location.pathname === '/admin/orders' ? <OrderList></OrderList> : ""}
+          {props.location.pathname === '/admin/scores' ? <ScoreList></ScoreList> : ""}
+          {props.location.pathname === '/admin/withdraws' ? <WithdrawList></WithdrawList> : ""}
+          {props.location.pathname === '/admin/users' ? <UserList></UserList> : ""}
         </div>
       </div>
     </div>

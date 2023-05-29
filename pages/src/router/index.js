@@ -34,6 +34,9 @@ export default class index extends Component {
         <Route component={Admin} path='/admin/packages'></Route>
         <Route component={Admin} path='/admin/configs'></Route>
         <Route component={Admin}  path='/admin/orders'></Route>
+        <Route component={Admin}  path='/admin/withdraws'></Route>
+        <Route component={Admin}  path='/admin/scores'></Route>
+        <Route component={Admin}  path='/admin/users'></Route>
         <Route component={Admin} path='/admin/' exact></Route>
         <Route component={ChatPage} path='/ChatPage' exact></Route>
         {/* <Route component={Index} path='/Index'></Route> */}

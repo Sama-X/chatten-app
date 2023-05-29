@@ -1,4 +1,4 @@
-import './order.css'
+import './user.css'
 import { useEffect, useState } from 'react';
 import cookie from 'react-cookies'
 import { useHistory } from 'react-router-dom';
@@ -14,13 +14,11 @@ function App() {
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(1)
 
-  const [selected, setSelected] = useState('order')
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
 
-  const clickOrder = (page) => {
-    setSelected('order')
+  const clickInvite = () => {
     let request = new Request({});
-    request.get('/api/v1/admin/order/orders/?status=10&page=' + page + '&offset='+pageSize).then(function(resData){
+    request.get('/api/v1/admin/users/?page=' + page + '&offset='+pageSize).then(function(resData){
       console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
@@ -29,35 +27,29 @@ function App() {
       }
       setItemList(result)
       setTotal(resData.count)
+      setInviteUser({
+        level1: resData.direct_invite_count,
+        level2: resData.indirect_invite_count
+      })
     })
   }
 
-
   useEffect(()=>{
-    clickOrder(page)
+    clickInvite(page)
   }, [page])
 
-
-  const orderColumns = [
-    {
-      title: '订单号',
-      dataIndex: 'out_trade_no',
-    },
-    {
-        title: '用户昵称',
-        dataIndex: 'user_name',
-      },
-    {
-      title: '套餐名称',
-      dataIndex: 'package_name',
-    },
-    {
-      title: '支付金额',
-      dataIndex: 'actual_price',
-    },
+  const inviteColumns = [
     {
       title: '创建时间',
       dataIndex: 'add_time',
+    },
+    {
+      title: '用户名称',
+      dataIndex: 'username',
+    },
+    {
+      title: '二级用户',
+      dataIndex: 'level2_user_name',
     }
   ]
 
@@ -66,14 +58,13 @@ function App() {
   }
 
   return (
-    <div className='admin-order-record-container'>
+    <div className='admin-user-record-container'>
         <Table
-            columns={orderColumns}
-            pagination={{total:total, pageSize:pageSize, onChange:changePage}}
-            dataSource={itemList}
-        />
+        columns={inviteColumns}
+        pagination={{total:total, pageSize:pageSize, onChange:changePage}}
+        dataSource={itemList}
+      />
     </div>
-
   );
 }
 

@@ -33,6 +33,15 @@ const items = [
   getItem('订单管理', 'sub4', <SettingOutlined />, [
     getItem('订单列表', '3'),
   ]),
+  getItem('提现管理', 'sub5', <SettingOutlined />, [
+    getItem('提现列表', '4'),
+  ]),
+  getItem('积分管理', 'sub6', <SettingOutlined />, [
+    getItem('积分列表', '5'),
+  ]),
+  getItem('用户管理', 'sub7', <SettingOutlined />, [
+    getItem('用户列表', '6'),
+  ]),
 ];
 
 // submenu keys of first level
@@ -62,6 +71,12 @@ const App = () => {
       navigate.push('/admin/configs')
     }else if(e.key == '3'){
       navigate.push('/admin/orders')
+    }else if(e.key == '4'){
+      navigate.push('/admin/withdraws')
+    }else if(e.key == '5'){
+      navigate.push('/admin/scores')
+    }else if(e.key == '6'){
+      navigate.push('/admin/users')
     }
   };
 

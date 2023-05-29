@@ -1,10 +1,7 @@
-import './order.css'
+import './withdraw.css'
 import { useEffect, useState } from 'react';
-import cookie from 'react-cookies'
-import { useHistory } from 'react-router-dom';
 import {Table} from 'antd'
 import Request from '../../../requestAdmin.ts';
-
 
 
 function App() {
@@ -17,10 +14,10 @@ function App() {
   const [selected, setSelected] = useState('order')
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
 
-  const clickOrder = (page) => {
-    setSelected('order')
+  const clickWithdraw = (page) => {
+    setSelected('withdraw')
     let request = new Request({});
-    request.get('/api/v1/admin/order/orders/?status=10&page=' + page + '&offset='+pageSize).then(function(resData){
+    request.get('/api/v1/admin/asset/points-withdraw/?page=' + page + '&offset='+pageSize).then(function(resData){
       console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
@@ -32,33 +29,31 @@ function App() {
     })
   }
 
-
   useEffect(()=>{
-    clickOrder(page)
+    clickWithdraw(page)
   }, [page])
 
-
-  const orderColumns = [
-    {
-      title: '订单号',
-      dataIndex: 'out_trade_no',
-    },
-    {
-        title: '用户昵称',
-        dataIndex: 'user_name',
-      },
-    {
-      title: '套餐名称',
-      dataIndex: 'package_name',
-    },
-    {
-      title: '支付金额',
-      dataIndex: 'actual_price',
-    },
+  const withdrawColumns = [
     {
       title: '创建时间',
       dataIndex: 'add_time',
-    }
+    },
+    {
+      title: '申请积分',
+      dataIndex: 'point',
+    },
+    {
+      title: '微信昵称',
+      dataIndex: 'realname',
+    },
+    {
+      title: '状态',
+      dataIndex: 'status_name',
+    },
+    {
+      title: '审核时间',
+      dataIndex: 'audit_time',
+    },
   ]
 
   const changePage = (page, pageSize) => {
@@ -66,14 +61,13 @@ function App() {
   }
 
   return (
-    <div className='admin-order-record-container'>
+    <div className='admin-withdraw-record-container'>
         <Table
-            columns={orderColumns}
-            pagination={{total:total, pageSize:pageSize, onChange:changePage}}
-            dataSource={itemList}
+          columns={withdrawColumns}
+          pagination={{total:total, pageSize:pageSize, onChange:changePage}}
+          dataSource={itemList}
         />
     </div>
-
   );
 }
 
