@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from base.serializer import BaseQuery
 
-from users.models import ConfigModel, InviteLogModel
+from users.models import AccountModel, ConfigModel, InviteLogModel
 
 
 class ConfigSeriazlier(serializers.ModelSerializer):
@@ -133,3 +133,21 @@ class AdminLoginSerializer(serializers.Serializer):
         required=True, allow_null=False, max_length=32, help_text=_("username")
     )
     password = serializers.CharField(max_length=32, required=False, help_text=_("password"))
+
+
+class AdminAccountSerializer(serializers.ModelSerializer):
+    """
+    account serializer.
+    """
+
+    add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    login_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+
+    class Meta:
+        """
+        meta class.
+        """
+        model = AccountModel
+        fields = (
+            'id', 'username', 'mobile', 'nickname', 'login_time', 'login_ip', 'add_time'
+        )
