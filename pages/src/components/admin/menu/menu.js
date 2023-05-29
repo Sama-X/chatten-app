@@ -1,7 +1,8 @@
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import cookie from 'react-cookies'
 
 
 function getItem(
@@ -45,13 +46,14 @@ const items = [
 ];
 
 // submenu keys of first level
-const rootSubmenuKeys = ['sub1x',];
+const rootSubmenuKeys = ['sub3',];
 
 const App = () => {
   const [openKeys, setOpenKeys] = useState(['sub1']);
   const navigate = useHistory();
 
   const onOpenChange = keys => {
+    console.log('keys=', keys)
     const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
     if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
       setOpenKeys(keys);
@@ -60,10 +62,17 @@ const App = () => {
     }
   };
 
+  useEffect(()=>{
+    let openKeys = cookie.load('openKeys')
+    if(openKeys){
+      setOpenKeys(openKeys);
+    }
+  }, [])
+
   const clickOption = e => {
-    console.log('click ', e);
+    console.log('click ', openKeys);
+    cookie.save('openKeys', openKeys, { path: '/' })
     if(e.key == '0'){
-      console.log("ccccc")
       navigate.push('/admin/dashboard')
     }else if(e.key == '1'){
       navigate.push('/admin/packages')
