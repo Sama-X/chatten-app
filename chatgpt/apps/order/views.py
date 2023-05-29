@@ -1,22 +1,21 @@
-# flake8: noqa
-# pylint: skip-file
 """
 order api module.
 """
+from datetime import datetime
 
 import json
 import logging
 
-from chatgpt.settings import WECHAT
+from django.utils.translation import gettext as _
 
 from rest_framework import mixins, viewsets
 
+from base.ding_sdk import DingBaseClient
 from base.middleware import AnonymousAuthentication
 from base.response import APIResponse
 from base.serializer import BaseQuery
 
-from order import wechat
-from order import utils
+from order import wechat, utils
 from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
 
@@ -80,10 +79,12 @@ class OrderViewSet(mixins.ListModelMixin, mixins.CreateModelMixin,
 
 class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
+    wechat pay notify api
     """
 
     def get_json_data(self):
         """
+        get json data
         """
         data = json.loads(self.request.body)
         logger.info("[wechat notify api] json data: %s", data)
@@ -91,6 +92,7 @@ class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def create(self, request):
         """
+        wechat pay notify handler.
         """
         logger.info("[wechat notify api] WePayNotifyHandler, header=%s", self.request.headers)
         logger.info("[wechat notify api] WePayNotifyHandler, body=%s", self.request.body)
@@ -102,12 +104,23 @@ class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
         # if serial != WECHAT['MCH_CERT_SERIAL_NO']:
         #     return HttpResponse({'status': 'fail'})
 
-        verify_ok = utils.check_notify_sign(headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'), certificate, headers['Wechatpay-Signature'])
+        verify_ok = utils.check_notify_sign(
+            headers['Wechatpay-Timestamp'], headers['Wechatpay-Nonce'], self.request.body.decode('utf-8'),
+            certificate, headers['Wechatpay-Signature']
+        )
         logger.info('[wechat notify api] verify_ok = %s', verify_ok)
         if verify_ok:
             data = utils.decryWePayNotify(self.get_json_data())
             logger.info("[wechat notify api] WePayNotifyHandler, data=%s", data)
-            OrderService.update_order_by_out_trade_no(data['out_trade_no'], data)
+            success, order_obj = OrderService.update_order_by_out_trade_no(data['out_trade_no'], data)
+            if success and order_obj:
+                content = _('The user(%(user_id)s) paid %(amount)s yuan at %(now)s.') % {
+                    'user_id': order_obj.user_id, 'amount': order_obj.actual_price,
+                    'now': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                }
+                DingBaseClient.send_bussiness_msg(
+                    title=_("wechat pay notify"), content=content
+                )
 
         return APIResponse()
 

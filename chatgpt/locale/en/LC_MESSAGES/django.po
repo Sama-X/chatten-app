@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-26 11:39+0800\n"
+"POT-Creation-Date: 2023-05-29 15:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: apps/asset/admin/serializer.py:14 apps/asset/serializer.py:16
 msgid "point withdraw status"
+msgstr ""
+
+#: apps/asset/admin/serializer.py:21 apps/order/admin/serializer.py:73
+msgid "order user id"
 msgstr ""
 
 #: apps/asset/models.py:18 apps/asset/models.py:66 apps/asset/models.py:99
@@ -92,7 +96,7 @@ msgid "Contact information"
 msgstr ""
 
 #: apps/asset/models.py:102 apps/asset/serializer.py:60
-#: apps/order/serializer.py:127
+#: apps/order/serializer.py:156
 #, fuzzy
 #| msgid "db:chat topic id"
 msgid "wechat openid"
@@ -224,11 +228,11 @@ msgstr ""
 msgid "Exchange point"
 msgstr ""
 
-#: apps/asset/service.py:217
+#: apps/asset/service.py:243
 msgid "consume payment error"
 msgstr ""
 
-#: apps/asset/service.py:412
+#: apps/asset/service.py:438
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr ""
 
@@ -268,99 +272,105 @@ msgstr "unsupport media type"
 msgid "too many requests"
 msgstr "too many requests"
 
-#: apps/base/exception.py:53
+#: apps/base/exception.py:54
 msgid "invalid code"
 msgstr "invalid code"
 
-#: apps/base/exception.py:54
+#: apps/base/exception.py:55
 msgid "user exists"
 msgstr "User already exists"
 
-#: apps/base/exception.py:55
+#: apps/base/exception.py:56
 msgid "wrong user name or password"
 msgstr "Wrong user name or password"
 
-#: apps/base/exception.py:56
+#: apps/base/exception.py:57
 msgid "code or password required"
 msgstr "Verification code or password is required"
 
-#: apps/base/exception.py:57
+#: apps/base/exception.py:58
 msgid "Invalid numeric type"
 msgstr ""
 
-#: apps/base/exception.py:58
+#: apps/base/exception.py:59
 msgid "This item is not enabled"
 msgstr ""
 
-#: apps/base/exception.py:76
+#: apps/base/exception.py:60
+#, fuzzy
+#| msgid "mobile phone number"
+msgid "Invalid mobile phone number"
+msgstr "mobile phone number"
+
+#: apps/base/exception.py:78
 msgid "no more experiences"
 msgstr "There are no more experiences"
 
-#: apps/base/exception.py:77
+#: apps/base/exception.py:79
 msgid "chat robot no resp"
 msgstr "Chat robot is not responding, please try again"
 
-#: apps/base/exception.py:78
+#: apps/base/exception.py:80
 msgid "chat robot context length exceeded"
 msgstr "This model's maximum context length"
 
-#: apps/base/exception.py:79
+#: apps/base/exception.py:81
 msgid "chatgpt key invalid"
 msgstr "Invalid chatgpt key"
 
-#: apps/base/exception.py:80
+#: apps/base/exception.py:82
 msgid "chatgpt key unsupport anony user"
 msgstr "Anonymous users are note supported to add chatgpt key"
 
-#: apps/base/exception.py:81
+#: apps/base/exception.py:83
 msgid "chatgpt key already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/exception.py:100
+#: apps/base/exception.py:102
 msgid "The timeliness package cannot be used without days"
 msgstr ""
 
-#: apps/base/exception.py:101
+#: apps/base/exception.py:103
 msgid "Invalid package category"
 msgstr ""
 
-#: apps/base/exception.py:102
+#: apps/base/exception.py:104
 #, fuzzy
 #| msgid "chatgpt key already exists"
 msgid "Package name already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/exception.py:103
+#: apps/base/exception.py:105
 msgid "Invalid method of payment"
 msgstr ""
 
-#: apps/base/exception.py:104
+#: apps/base/exception.py:106
 #, fuzzy
 #| msgid "invalid code"
 msgid "Invalid order package"
 msgstr "invalid code"
 
-#: apps/base/exception.py:105
+#: apps/base/exception.py:107
 msgid "Unsupported payment client"
 msgstr ""
 
-#: apps/base/exception.py:106
+#: apps/base/exception.py:108
 #, fuzzy
 #| msgid "db:chat topic id"
 msgid "Invalid wechat openid"
 msgstr "chat topic id"
 
-#: apps/base/exception.py:119
+#: apps/base/exception.py:121
 msgid "Points are not enough"
 msgstr ""
 
-#: apps/base/exception.py:120
+#: apps/base/exception.py:122
 #, python-format
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
 
-#: apps/base/middleware.py:34 apps/base/middleware.py:44
-#: apps/base/middleware.py:66 apps/base/middleware.py:72
+#: apps/base/middleware.py:36 apps/base/middleware.py:46
+#: apps/base/middleware.py:68 apps/base/middleware.py:74
 msgid "auth: user need login"
 msgstr "Login required"
 
@@ -464,7 +474,7 @@ msgstr "question"
 msgid "serializer: chat topic id"
 msgstr "chat topic id"
 
-#: apps/chat/serializer.py:49 apps/order/serializer.py:40
+#: apps/chat/serializer.py:49 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt key"
 
@@ -492,21 +502,17 @@ msgstr ""
 msgid "order package sort priority"
 msgstr ""
 
-#: apps/order/admin/serializer.py:73
-msgid "order user id"
-msgstr ""
-
 #: apps/order/admin/serializer.py:76 apps/order/models.py:81
-#: apps/order/serializer.py:47 apps/order/serializer.py:115
+#: apps/order/serializer.py:76 apps/order/serializer.py:144
 msgid "order package id"
 msgstr ""
 
-#: apps/order/admin/serializer.py:79 apps/order/serializer.py:50
+#: apps/order/admin/serializer.py:79 apps/order/serializer.py:79
 msgid "order number"
 msgstr ""
 
 #: apps/order/admin/serializer.py:82 apps/order/models.py:84
-#: apps/order/serializer.py:53
+#: apps/order/serializer.py:82
 msgid "order status"
 msgstr ""
 
@@ -550,7 +556,7 @@ msgstr ""
 msgid "points"
 msgstr ""
 
-#: apps/order/models.py:82 apps/order/serializer.py:118
+#: apps/order/models.py:82 apps/order/serializer.py:147
 msgid "order quantity"
 msgstr ""
 
@@ -570,7 +576,7 @@ msgstr ""
 msgid "order pay method"
 msgstr ""
 
-#: apps/order/models.py:88 apps/order/serializer.py:124
+#: apps/order/models.py:88 apps/order/serializer.py:153
 msgid "order pay client"
 msgstr ""
 
@@ -582,11 +588,22 @@ msgstr ""
 msgid "transaction_id"
 msgstr ""
 
-#: apps/order/serializer.py:121
+#: apps/order/serializer.py:150
 msgid "order paymethod"
 msgstr ""
 
-#: apps/users/admin/serializer.py:42 apps/users/models.py:196
+#: apps/order/views.py:117
+#, python-format
+msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
+msgstr ""
+
+#: apps/order/views.py:122
+#, fuzzy
+#| msgid "db:chat topic id"
+msgid "wechat pay notify"
+msgstr "chat topic id"
+
+#: apps/users/admin/serializer.py:42 apps/users/models.py:197
 msgid "config item value"
 msgstr ""
 
@@ -769,43 +786,43 @@ msgstr "invitation expiration time"
 msgid "db:InviteLogs"
 msgstr "InviteLogs"
 
-#: apps/users/models.py:195
+#: apps/users/models.py:196
 msgid "config item name"
 msgstr ""
 
-#: apps/users/models.py:197
+#: apps/users/models.py:198
 msgid "config item value type"
 msgstr ""
 
-#: apps/users/models.py:198
+#: apps/users/models.py:199
 msgid "config item description"
 msgstr ""
 
-#: apps/users/models.py:204
+#: apps/users/models.py:205
 msgid "Config"
 msgstr ""
 
-#: apps/users/models.py:272
+#: apps/users/models.py:273
 msgid "Number of free experiences, number type, must be greater than 0"
 msgstr ""
 
-#: apps/users/models.py:277
+#: apps/users/models.py:278 apps/users/service.py:48
 msgid "Whether to enable the verification rule of mobile phone number"
 msgstr ""
 
-#: apps/users/models.py:281
+#: apps/users/models.py:282
 msgid "The proportion of first level commission. Range is between (0-10000)"
 msgstr ""
 
-#: apps/users/models.py:286
+#: apps/users/models.py:287
 msgid "The proportion of second level commission. Range is between (0-10000)"
 msgstr ""
 
-#: apps/users/models.py:291
+#: apps/users/models.py:292
 msgid "Set the redemption ratio of points withdrawal."
 msgstr ""
 
-#: apps/users/models.py:295
+#: apps/users/models.py:296
 msgid "Set the proportion of points redemption times"
 msgstr ""
 
@@ -832,6 +849,15 @@ msgstr ""
 #: apps/users/serializer.py:64
 msgid "Incorrect format of mobile phone number"
 msgstr "Incorrect format of mobile phone number"
+
+#: apps/users/service.py:75
+msgid "Number of invitations for awards"
+msgstr ""
+
+#: apps/users/service.py:78
+#, python-format
+msgid "Invite user id: %(aid)s and get %(count)s times"
+msgstr ""
 
 #~ msgid "db:Score"
 #~ msgstr "score"

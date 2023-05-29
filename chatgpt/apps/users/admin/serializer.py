@@ -48,36 +48,59 @@ class InviteLogSerializer(serializers.ModelSerializer):
     invite log.
     """
     invite_level = serializers.SerializerMethodField()
-    user_name = serializers.SerializerMethodField()
-    inviter_user_name = serializers.SerializerMethodField()
+    level1_user_id = serializers.SerializerMethodField()
+    level1_user_name = serializers.SerializerMethodField()
+    level2_user_id = serializers.SerializerMethodField()
+    level2_user_name = serializers.SerializerMethodField()
     add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
 
     def get_invite_level(self, obj):
         """
         invite level.
         """
-        if obj.super_inviter_user_id:
+        current_user_id = self.context.get('current_user_id')
+        if obj.super_inviter_user_id == current_user_id:
             return 2
         return 1
 
-    def get_user_name(self, obj):
+    def get_level1_user_id(self, obj):
+        """
+        get level1 user id
+        """
+        if self.get_invite_level(obj) == 2:
+            return obj.inviter_user_id
+
+        return obj.user_id
+
+    def get_level2_user_id(self, obj):
+        """
+        get level2 user id
+        """
+        if self.get_invite_level(obj) == 2:
+            return obj.user_id
+
+        return None
+
+    def get_level1_user_name(self, obj):
         """
         get user name.
         """
-        user = self.context.get('user_dict', {}).get(obj.user_id)
+        user_id = self.get_level1_user_id(obj)
+        user = self.context.get('user_dict', {}).get(user_id)
         if not user:
             return None
 
         return user.nickname or user.username
 
-    def get_inviter_user_name(self, obj):
+    def get_level2_user_name(self, obj):
         """
         get inviter user name.
         """
-        if not obj.super_inviter_user_id:
+        user_id = self.get_level2_user_id(obj)
+        if not user_id:
             return None
 
-        user = self.context.get('user_dict', {}).get(obj.inviter_user_id)
+        user = self.context.get('user_dict', {}).get(user_id)
         if not user:
             return None
 
@@ -89,8 +112,8 @@ class InviteLogSerializer(serializers.ModelSerializer):
         """
         model = InviteLogModel
         fields = (
-            'id', 'user_id', 'user_name', 'inviter_user_id',
-            'inviter_user_name', 'invite_level', 'add_time'
+            'id', 'level1_user_id', 'level1_user_name', 'level2_user_id', 'level2_user_name',
+            'invite_level', 'add_time'
         )
 
 

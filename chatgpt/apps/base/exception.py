@@ -46,6 +46,7 @@ class UserErrorCode:
     USER_OAUTH_REQUIRED = 100101
     USER_INVALID_PASSWORD = 100102
     USER_EXISTS = 100103
+    USER_INVALID_MOBILE = 100103
     CONFIG_INVALID_INT_TYPE = 100200
     CONFIG_IS_FEATURE_ENABLED = 100201
 
@@ -56,6 +57,7 @@ class UserErrorCode:
         (USER_OAUTH_REQUIRED, _('code or password required')),
         (CONFIG_INVALID_INT_TYPE, _('Invalid numeric type')),
         (CONFIG_IS_FEATURE_ENABLED, _('This item is not enabled')),
+        (USER_INVALID_MOBILE, _('Invalid mobile phone number'))
     )
 
     ERRORS_DICT = dict(ERRORS)

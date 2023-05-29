@@ -4,9 +4,9 @@ admin api.
 
 from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
-from asset.admin.serializer import AdminWithdrawQuery
+from asset.admin.serializer import AdminWithdrawQuery, PointsLogQuery
 from asset.models import PointsWithdrawModel
-from asset.service import PointsWithdrawService
+from asset.service import PointsLogService, PointsWithdrawService
 from base.middleware import AdminAuthentication
 
 from base.serializer import BaseQuery
@@ -67,3 +67,30 @@ class AdminWithdrawAuditViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         """
         withdraw_id = kwargs["pk"]
         return PointsWithdrawService.audit(withdraw_id, request)
+
+
+class AdminPointsLogViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    points log api.
+    """
+
+    authentication_classes = (AdminAuthentication,)
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/admin/asset/points-log/
+        method: get
+        desc: get points withdraw list api
+        """
+        query = PointsLogQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+        user_id = query.validated_data.get('user_id')  # type: ignore
+
+        resp = PointsLogService.get_list(user_id, page, offset, order)
+
+        return resp
+
