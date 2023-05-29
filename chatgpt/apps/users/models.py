@@ -177,6 +177,7 @@ class ConfigModel(BaseModel):
     VALUE_TYPE_BOOL = "boolean"
 
     CONFIG_FREE_TRIAL_COUNT = "free-trial-count"
+    CONFIG_FREE_TRIAL_DAYS = "free-trial-days"
     CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED = "phone-number-validation-required"
     CONFIG_LEVEL1_COMMISSION_RATIO = "level1_commission-ratio"
     CONFIG_LEVEL2_COMMISSION_RATIO = "level2_commission-ratio"
@@ -185,12 +186,14 @@ class ConfigModel(BaseModel):
     CONFIG_INVITE_REWARD_COUNT = "invite-reward-count"
 
     CONFIGS = (
+        CONFIG_FREE_TRIAL_DAYS,
         CONFIG_FREE_TRIAL_COUNT,
         CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED,
         CONFIG_LEVEL1_COMMISSION_RATIO,
         CONFIG_LEVEL2_COMMISSION_RATIO,
         CONFIG_POINT_TO_CASH_RATIO,
         CONFIG_POINT_TO_CHAT_COUNT_RATIO,
+        CONFIG_INVITE_REWARD_COUNT,
     )
 
     name = models.CharField(max_length=32, blank=False, db_index=True, null=False, verbose_name=_("config item name"))

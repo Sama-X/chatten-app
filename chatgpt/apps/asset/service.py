@@ -269,11 +269,18 @@ class PointsService(BaseService):
             super_parent_point = floor(total_point * (ConfigModel.get_int(ConfigModel.CONFIG_LEVEL2_COMMISSION_RATIO) / 10000))
             if invite_obj.inviter_user_id:
                 PointsModel.add_point(
-                    invite_obj.inviter_user_id, parent_point, f'The direct invitee has been recharged, get points: {parent_point}'
+                    invite_obj.inviter_user_id, parent_point,
+                    _('The direct invitee has been recharged, get points: %(parent_point)s') % {
+                        'parent_point': parent_point
+                    }
                 )
+
             if invite_obj.super_inviter_user_id:
                 PointsModel.add_point(
-                    invite_obj.super_inviter_user_id, super_parent_point, f'Indirect invitee has been recharged, get points: {super_parent_point}'
+                    invite_obj.super_inviter_user_id, super_parent_point,
+                    _('Indirect invitee has been recharged, get points: %(super_parent_point)s') % {
+                        'super_parent_point': super_parent_point
+                    }
                 )
 
         return True

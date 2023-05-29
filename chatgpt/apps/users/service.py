@@ -4,6 +4,7 @@ api service.
 from datetime import date, datetime, time, timedelta
 import json
 import re
+from urllib import request
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
@@ -236,6 +237,19 @@ class UserService:
             return True
 
         payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        days = ConfigModel.get_int(
+            ConfigModel.CONFIG_FREE_TRIAL_DAYS, 7, _("Free experience days")
+        )
+        last_time = datetime.now() - timedelta(days=days)
+        user_obj = AccountModel.objects.filter(
+            id=user_id,
+            add_time__gte=last_time
+        ).first()
+
+        if not user_obj:
+            UserServiceHelper.update_given_gift_experience(user_id)
+            return True
+
         if not payment_obj or payment_obj.free_expire_time < datetime.now():
             O2OPaymentService.add_free_payment(user_id)
             UserServiceHelper.update_given_gift_experience(user_id)
@@ -475,7 +489,8 @@ class InviteLogService(BaseService):
             }
 
         serializer = InviteLogSerializer(objs, many=True, context={
-            'user_dict': user_dict
+            'user_dict': user_dict,
+            'current_user_id': user_id
         })
 
         first_level_total = InviteLogModel.objects.only("id").filter(inviter_user_id = user_id).count()
