@@ -15,7 +15,7 @@ from base.response import APIResponse, SerializerErrorResponse
 
 from base.serializer import BaseQuery
 from users.admin.serializer import AdminLoginSerializer, ReportQuery
-from users.service import ConfigService, ReportService
+from users.service import ConfigService, ReportService, UserService
 
 
 
@@ -135,3 +135,26 @@ class AdminLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             'nickname': user.username,
             'token': token
         })
+
+
+class AdminUserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    admin user api.
+    """
+
+    authentication_classes = (AdminAuthentication,)
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/admin/summary
+        method: get
+        desc: get summary api
+        """
+        query = BaseQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or '-id'  # type: ignore
+
+        return UserService.get_list(page, offset, order)

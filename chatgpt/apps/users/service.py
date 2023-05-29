@@ -23,7 +23,7 @@ from base.sama import SamaClient
 from base.service import BaseService
 from chat.models import ChatRecordModel
 from order.models import OrderModel
-from users.admin.serializer import ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
+from users.admin.serializer import AdminAccountSerializer, ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
 from users.models import (
     AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
@@ -31,7 +31,7 @@ from users.models import (
 from users.serializer import UpdateAccountSerializer
 
 
-class UserService:
+class UserService(BaseService):
     """
     user service.
     """
@@ -271,6 +271,23 @@ class UserService:
         account.save()
 
         return APIResponse()
+
+    @classmethod
+    def get_list(cls, page, offset, order):
+        """
+        get user list.
+        """
+        base = AccountModel.objects.filter(is_delete=False)
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            AccountModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        serializer = AdminAccountSerializer(objs, many=True)
+
+        return APIResponse(result=serializer.data, count=total)
 
 
 class UserServiceHelper:

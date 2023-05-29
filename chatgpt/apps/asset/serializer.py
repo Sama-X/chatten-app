@@ -80,6 +80,7 @@ class PointsLogSerializer(serializers.ModelSerializer):
 
     category_name = serializers.SerializerMethodField()
     source_name = serializers.SerializerMethodField()
+    user_name = serializers.SerializerMethodField()
     add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
 
     def get_category_name(self, obj):
@@ -94,11 +95,19 @@ class PointsLogSerializer(serializers.ModelSerializer):
         """
         return PointsLogModel.SOURCE_DICT.get(obj.source)
 
+    def get_user_name(self, obj):
+        """
+        get user name
+        """
+        user_obj = self.context.get('user_dict', {}).get(obj.user_id)
+        return user_obj.nickname or user_obj.username if user_obj else None
+
     class Meta:
         """
         meta class.
         """
         model = PointsLogModel
         fields = (
-            'id', 'category', 'category_name', 'amount', 'source', 'source_name', 'note', 'add_time'
+            'id', 'user_id', 'user_name', 'category', 'category_name', 'amount', 'source', 'source_name',
+            'note', 'add_time'
         )
