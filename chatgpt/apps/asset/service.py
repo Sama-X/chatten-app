@@ -140,6 +140,32 @@ class O2OPaymentService(BaseService):
 
     @classmethod
     @transaction.atomic
+    def add_payment_by_reward(cls, user_id, count, note):
+        """
+        add payment by reward.
+        """
+        with transaction.atomic():
+            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+            if not payment:
+                payment = cls.add_free_payment(user_id)
+
+            payment.persistence_usage_count += count
+            payment.save()
+
+            O2OPaymentLogModel.objects.create(
+                user_id=user_id,
+                payment_id=payment.id,
+                category=O2OPaymentLogModel.CATEGORY_REWARD,
+                expire_time=None,
+                usage_count=count,
+                note=note,
+                order_id=None
+            )
+
+        return True
+
+    @classmethod
+    @transaction.atomic
     def reduce_payment(cls, user_id, count):
         """
         reduce payment.
@@ -341,7 +367,6 @@ class PointsService(BaseService):
         ratio = ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CASH_RATIO)
         if point < ratio:
             error = AssetErrorCode.ERRORS_DICT.get(AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, '')
-            print('error = ', error)
             return APIResponse(code=AssetErrorCode.POINT_LESS_THAN_MIN_VALUE, msg=_(error) % {"count": ratio})
 
         PointsWithdrawModel.objects.create(

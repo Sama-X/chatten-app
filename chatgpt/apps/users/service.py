@@ -3,12 +3,16 @@ api service.
 """
 from datetime import date, datetime, time, timedelta
 import json
+import re
 from django.conf import settings
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
+from django.utils.translation import gettext as _
+
 from django_redis import get_redis_connection
+
 from asset.models import O2OPaymentModel, PointsModel, PointsWithdrawModel
 from asset.service import O2OPaymentService
 from base.common import CommonUtil
@@ -39,6 +43,14 @@ class UserService:
         """
         register user api.
         """
+        need_valid = ConfigModel.get_bool(
+            ConfigModel.CONFIG_PHONE_NUMBER_VALIDATION_REQUIRED, False,
+            _("Whether to enable the verification rule of mobile phone number")
+        )
+        if need_valid:
+            if not re.match(r'^1\d{10}$', username):
+                return APIResponse(code=UserErrorCode.USER_INVALID_MOBILE)
+
         conn = get_redis_connection()
         with transaction.atomic():
             exists = AccountModel.objects.filter(
@@ -58,6 +70,17 @@ class UserService:
                 invite_user_id = CommonUtil.decode_hashids(invite_code)
                 exists = AccountModel.objects.filter(pk=invite_user_id).count() > 0
                 if exists:
+                    invite_reward_count = ConfigModel.get_int(
+                        ConfigModel.CONFIG_INVITE_REWARD_COUNT, 10,
+                        _("Number of invitations for awards")
+                    )
+                    O2OPaymentService.add_payment_by_reward(
+                        invite_user_id, invite_reward_count, _('Invite user id: %(aid)s and get %(count)s times') % {
+                            'aid': account.id,
+                            'count': invite_reward_count
+                        }
+                    )
+
                     UserServiceHelper.clear_reward_experience_cache(invite_user_id)
                     super_inviter_user_id = None
                     super_inviter = InviteLogModel.objects.only('inviter_user_id').filter(

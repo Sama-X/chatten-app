@@ -182,6 +182,7 @@ class ConfigModel(BaseModel):
     CONFIG_LEVEL2_COMMISSION_RATIO = "level2_commission-ratio"
     CONFIG_POINT_TO_CASH_RATIO = "point-to-cash-ratio"
     CONFIG_POINT_TO_CHAT_COUNT_RATIO = "point-to-chat-count-ratio"
+    CONFIG_INVITE_REWARD_COUNT = "invite-reward-count"
 
     CONFIGS = (
         CONFIG_FREE_TRIAL_COUNT,
