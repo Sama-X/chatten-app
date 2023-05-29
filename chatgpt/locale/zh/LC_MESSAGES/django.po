@@ -241,11 +241,11 @@ msgstr "兑换积分"
 
 #: apps/asset/service.py:48
 msgid "User has purchased a persistence package"
-msgstr ""
+msgstr "用户购买永久套餐"
 
 #: apps/asset/service.py:52
 msgid "User has purchased a transient package"
-msgstr ""
+msgstr "用户购买时效套餐"
 
 #: apps/asset/service.py:90
 msgid "Get free experience"
