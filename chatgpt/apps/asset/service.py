@@ -15,7 +15,7 @@ from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
 
 from order.models import OrderModel, OrderPackageModel
-from users.models import ConfigModel, InviteLogModel
+from users.models import AccountModel, ConfigModel, InviteLogModel
 
 
 class O2OPaymentService(BaseService):
@@ -467,6 +467,17 @@ class PointsLogService(BaseService):
         )
         objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
 
-        serializer = PointsLogSerializer(objs, many=True)
+        user_dict = {}
+        user_ids = set()
+        for item in objs:
+            user_ids.add(item.user_id)
+
+        if user_ids:
+            user_dict = {
+                item.id: item for item in AccountModel.objects.filter(id__in=list(user_ids))
+            }
+        serializer = PointsLogSerializer(objs, many=True, context={
+            'user_dict': user_dict
+        })
 
         return APIResponse(result=serializer.data, count=total)
