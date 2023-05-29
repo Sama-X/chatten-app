@@ -50,6 +50,24 @@ const App = () => {
   const [isInputEnterStatus, setIsInputEnterStatus] = useState(true);
   const [language, setLanguage] = useState(get_default_language());
 
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+
+  const showWithdrawModal = () => {
+    setIsWithdrawModalOpen(true);
+  };
+
+  const handleWithdrawOk = () => {
+    setIsWithdrawModalOpen(false);
+    let appid = 'wx638bec1594b09d2f'
+    let redirect_uri = encodeURIComponent('https://pay.citypro-tech.com')
+    window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect'
+  };
+
+  const handleWithdrawCancel = () => {
+    setIsWithdrawModalOpen(false);
+  };
+
+
   const converter = new showdown.Converter()
   const history = useHistory()
   let str = '```import multiprocessing class MySingleton:    def __init__(self):        self.value = 0    def reset(self):        self.value = 0my_singleton = Nonedef get_singleton():    global my_singleton    if my_singleton is None:        my_singleton = multiprocessing.Manager().Value(MySingleton())    return my_singleton.value```'
@@ -347,6 +365,31 @@ const App = () => {
       message.success('Successfully cleared')
     })
   }
+
+  function isWeixinBrowser() {
+    let ua = navigator.userAgent.toLowerCase();
+    console.log('isWeixinBrowser=', /micromessenger/.test(ua) ? true : false)
+    return /micromessenger/.test(ua) ? true : false;
+  }
+
+
+  const bindWeixin = () =>{
+    if(!isWeixinBrowser()){
+      message.info("请使用微信浏览器打开本页面操作")
+    }else{
+      if(points<=10){
+        message.error("少于10积分，不支持提现")
+        return
+      }
+      console.log('withdraw')
+      showWithdrawModal()  
+    }
+  }
+
+  const goToRecord = () =>{
+    history.push('/record/')
+  }
+
 
   const showDrawer = () => {
     setOpen(true);
@@ -674,7 +717,10 @@ const App = () => {
                       </div>
                     </div>
                   </div>
-                  <div className='my-score'>{locales(language)['myscore']}:{points}</div>
+                  <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+                  <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
+                    <p>确定提现吗？</p>
+                  </Modal>
                 </div>
             </div>
           {
