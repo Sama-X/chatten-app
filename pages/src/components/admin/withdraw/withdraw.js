@@ -1,6 +1,6 @@
 import './withdraw.css'
 import { useEffect, useState } from 'react';
-import {Table} from 'antd'
+import { Button, Popconfirm, Table } from 'antd';
 import Request from '../../../requestAdmin.ts';
 
 
@@ -13,6 +13,7 @@ function App() {
 
   const [selected, setSelected] = useState('order')
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
+  
 
   const clickWithdraw = (page) => {
     setSelected('withdraw')
@@ -26,6 +27,14 @@ function App() {
       }
       setItemList(result)
       setTotal(resData.count)
+    })
+  }
+
+  const eidtItem = (_id, _type) => {
+    let request = new Request({});
+    request.put('/api/v1/admin/asset/points-withdraw/' + _id + '/audit/').then(function(resData){
+      console.log(resData.data)
+      clickWithdraw(page)
     })
   }
 
@@ -53,6 +62,29 @@ function App() {
     {
       title: '审核时间',
       dataIndex: 'audit_time',
+    },
+    {
+      title: '操作',
+      dataIndex: 'operation',
+      render: (_, record) => {
+        return (
+          <div>
+            {record.status === 0 ? 
+            <div>
+              <Popconfirm title="确定通过吗?" onConfirm={() => eidtItem(record.key, 'reject')} style={{ marginRight: 8 }}>
+              <Button type="primary" >通过</Button>
+              </Popconfirm>
+              &nbsp;&nbsp;
+              <Popconfirm title="确定拒绝吗?" onConfirm={() => eidtItem(record.key, 'pass')} style={{ marginRight: 8 }}>
+                <Button type="primary" >拒绝</Button>
+              </Popconfirm>
+            </div>
+            : ""
+            }
+
+          </div>
+        );
+      },
     },
   ]
 
