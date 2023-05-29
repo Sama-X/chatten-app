@@ -1,0 +1,48 @@
+.record-mobile-header img {
+    width: 80px;
+    margin-bottom: 30px;
+}
+
+.record-mobile-list {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.record-mobile-item {
+    background-color: #fff;
+    border-radius: 3px;
+    width: 30%;
+    color: #000;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.record-mobile-item-selected {
+    background-color: rgb(240, 183, 183);
+}
+
+.record-mobile-item-name {
+    margin-bottom: 5px;
+}
+
+.record-mobile-item-record {
+    color: red;
+    margin-bottom: 3px;
+}
+
+.record-mobile-item-content input {
+    width: 40px;
+    margin-right: 3px;
+}
+
+
+.record-mobile-pay {
+    margin-top: 100px;
+    width: 90%;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 4px;
+    background-color: #05c160;
+}

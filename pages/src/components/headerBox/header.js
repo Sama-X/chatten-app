@@ -346,7 +346,7 @@ const App = (data) => {
     }
   }
 
-  const goToRecords = () =>{
+  const goToRecord = () =>{
     history.push('/records/')
   }
 
@@ -493,7 +493,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecords}> 查看积分纪录</span></div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
               <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                 <p>确定提现吗？</p>
               </Modal>
@@ -599,7 +599,7 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
-              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecords}> 查看积分纪录</span></div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
             </div>
         </div>
       {
