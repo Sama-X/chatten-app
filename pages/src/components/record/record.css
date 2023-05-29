@@ -33,6 +33,10 @@
     color: #fff;
 }
 
+.record-menu-item-selected {
+    color: red;
+}
+
 .record-item-list {
     flex: 1;
     margin-left: 100px;

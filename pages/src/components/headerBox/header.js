@@ -347,7 +347,7 @@ const App = (data) => {
   }
 
   const goToRecord = () =>{
-    history.push('/records/')
+    history.push('/record/')
   }
 
   return (

@@ -188,10 +188,10 @@ function App() {
       <div className='record-header'><img src={require("../../assets/logo.png")} alt=""/></div>
       <div className='record-frame'>
         <div className='record-menu-list'>
-          <div className='record-menu-item' onClick={()=>{clickOrder(1)}}>我的订单</div>
-          <div className='record-menu-item' onClick={()=>{clickScore(1)}}>我的积分</div>
-          <div className='record-menu-item' onClick={()=>{clickWithdraw(1)}}>我的提现</div>
-          <div className='record-menu-item' onClick={()=>{clickInvite(1)}}>我的邀请</div>
+          <div className={selected === 'order' ? 'record-menu-item record-menu-item-selected': 'record-menu-item'} onClick={()=>{clickOrder(1)}}>我的订单</div>
+          <div className={selected === 'score' ? 'record-menu-item record-menu-item-selected': 'record-menu-item'} onClick={()=>{clickScore(1)}}>我的积分</div>
+          <div className={selected === 'widhtdraw' ? 'record-menu-item record-menu-item-selected': 'record-menu-item'} onClick={()=>{clickWithdraw(1)}}>我的提现</div>
+          <div className={selected === 'invite' ? 'record-menu-item record-menu-item-selected': 'record-menu-item'} onClick={()=>{clickInvite(1)}}>我的邀请</div>
         </div>
         <div className='record-item-list'>
           {selected === 'order'? <Table
