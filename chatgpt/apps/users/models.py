@@ -299,3 +299,36 @@ class ConfigModel(BaseModel):
             cls.CONFIG_POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times"),
             cls.VALUE_TYPE_INT
         )
+
+
+class FeedbackModel(BaseModel):
+    """
+    Feedback
+    """
+
+    STATUS_PENDING = 1
+    STATUS_REPLIED = 9
+
+    STATUSES = (
+        (STATUS_PENDING, _('pending')),
+        (STATUS_REPLIED, _('success')),
+    )
+
+    STATUS_DICT = dict(STATUSES)
+
+    user_id = models.BigIntegerField(null=False, db_index=True, verbose_name=_("user account id"))
+    title = models.CharField(max_length=256, db_index=True, null=False, verbose_name=_("feedback title"))
+    content = models.TextField(null=True, verbose_name=_("feedback conennt"))
+    status = models.SmallIntegerField(default=STATUS_PENDING, db_index=True, verbose_name=_("withdraw status"))
+    reply = models.TextField(null=True, verbose_name=_("feedback reply"))
+    reply_user_id = models.BigIntegerField(null=True, verbose_name=_("reply user id"))
+    reply_time = models.DateTimeField(null=True, verbose_name=_("reply time"))
+
+
+    class Meta:
+        """
+        Meta
+        """
+        verbose_name = _("Feedback")
+        verbose_name_plural = verbose_name
+        db_table = "feedback"

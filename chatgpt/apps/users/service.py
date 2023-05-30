@@ -25,10 +25,10 @@ from chat.models import ChatRecordModel
 from order.models import OrderModel
 from users.admin.serializer import AdminAccountSerializer, ConfigSeriazlier, InviteLogSerializer, UpdateConfigSerializer
 from users.models import (
-    AccountModel, ConfigModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
+    AccountModel, ConfigModel, FeedbackModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
 )
-from users.serializer import UpdateAccountSerializer
+from users.serializer import CreateFeedbackSerializer, FeedbackSerializer, ReplyFeedbackSerializer, UpdateAccountSerializer
 
 
 class UserService(BaseService):
@@ -617,3 +617,89 @@ class ReportService(BaseService):
             start_date += timedelta(days=1)
 
         return APIResponse(result=result)
+
+
+class FeedbackService(BaseService):
+    """
+    feedback service.
+    """
+
+    @classmethod
+    def get_list(cls, user_id, page, offset, order, status):
+        """
+        get list.
+        """
+        base = FeedbackModel.objects.filter(is_delete=False)
+
+        if status is not None:
+            base = base.filter(status=status)
+
+        if user_id is not None:
+            base = base.filter(user_id=user_id)
+
+        total = base.count()
+        order_fields = cls.check_order_fields(
+            FeedbackModel, [item.strip() for item in order.split(',') if item and item.strip()]
+        )
+        objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
+
+        user_dict = {}
+
+        user_ids = [item.user_id for item in objs]
+        if user_ids:
+            user_dict = {
+                item.id: item
+                for item in AccountModel.objects.filter(id__in=user_ids)
+            }
+
+        serializer = FeedbackSerializer(objs, many=True, context={
+            'user_dict': user_dict,
+        })
+
+        return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    def create_feedback(cls, request):
+        """
+        create feedback.
+        """
+        serializer = CreateFeedbackSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer=serializer)
+
+        data = serializer.validated_data
+
+        title = data.get('title')  # type: ignore
+        content = data.get('content')  # type: ignore
+
+        FeedbackModel.objects.create(
+            user_id=request.user.id,
+            title=title,
+            content=content
+        )
+
+        return APIResponse()
+
+    @classmethod
+    def reply_feedback(cls, feedback_id, request):
+        """
+        reply feedback.
+        """
+        serializer = ReplyFeedbackSerializer(data=request.data)
+        if not serializer.is_valid():
+            return SerializerErrorResponse(serializer=serializer)
+
+        data = serializer.validated_data
+        content = data.get('content')  # type: ignore
+
+        obj = FeedbackModel.objects.filter(id=feedback_id, is_delete=False).first()
+        if not obj:
+            return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
+
+        obj.status = FeedbackModel.STATUS_REPLIED
+        obj.reply = content
+        obj.reply_user_id = request.user.id
+        obj.reply_time = datetime.now()
+        obj.save()
+
+        return APIResponse()

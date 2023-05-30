@@ -77,7 +77,7 @@ class O2OPaymentService(BaseService):
             if not payment:
                 payment = O2OPaymentModel(
                     user_id=user_id,
-                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0)),
+                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time.min),
                     transient_usage_count=0,
                     persistence_usage_count=0,
                     free_expire_time=None,
@@ -448,6 +448,8 @@ class PointsWithdrawService(BaseService):
         """
         audit withdraw api.
         """
+        import ipdb
+        ipdb.set_trace()
         with transaction.atomic():
             obj = PointsWithdrawModel.objects.filter(
                 status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_FAILURE],

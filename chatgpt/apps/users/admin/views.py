@@ -10,12 +10,13 @@ from django.contrib.auth.models import User
 from base.common import CommonUtil
 
 from base.exception import SystemErrorCode, UserErrorCode
-from base.middleware import AdminAuthentication
+from base.middleware import AdminAuthentication, AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
 
 from base.serializer import BaseQuery
 from users.admin.serializer import AdminLoginSerializer, ReportQuery
-from users.service import ConfigService, ReportService, UserService
+from users.serializer import FeedbackQuery
+from users.service import ConfigService, FeedbackService, ReportService, UserService
 
 
 
@@ -158,3 +159,37 @@ class AdminUserViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         order = query.validated_data.get('order') or '-id'  # type: ignore
 
         return UserService.get_list(page, offset, order)
+
+
+class AdminFeedbackViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    admin feedback api.
+    """
+
+    authentication_classes = (AdminAuthentication,)
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/admin/feedback/
+        method: get
+        desc: get feedback api
+        """
+        query = FeedbackQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or 'status, -id'  # type: ignore
+        user_id = query.validated_data.get('user_id')  # type: ignore
+        status = query.validated_data.get('status')  # type: ignore
+
+        return FeedbackService.get_list(user_id, page, offset, order, status)
+
+    def update(self, request, *args, **kwargs):
+        """
+        url: /api/v1/admin/feedback/<feedback_id>/
+        method: put
+        desc: get feedback api
+        """
+        feedback_id = kwargs['pk']
+        return FeedbackService.reply_feedback(feedback_id, request)
