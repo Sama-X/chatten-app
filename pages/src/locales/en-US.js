@@ -27,5 +27,11 @@ export default {
     nodata: 'No data',
     ask_free: 'Question times',
     login_first: 'Please Login',
-    myscore: 'My Points'
+    myscore: 'My Points',
+    please_input: "please type here",
+    withdraw: "withdraw",
+    withdraw_confirm: "confirm?",
+    check_record: "records",
+    contact_us: "contact us, our wechat:xrkk2023"
+
   }

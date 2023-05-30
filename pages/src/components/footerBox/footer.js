@@ -70,7 +70,7 @@ const App = (data) => {
                   borderRadius: '10px',
                   textAlign: 'left',
                 }}
-                placeholder='请输入你的问题'
+                placeholder={locales(language)['please_input']}
               />
             {/* </Input.Group> */}
             <UpCircleFilled className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>

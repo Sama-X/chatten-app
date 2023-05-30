@@ -27,5 +27,10 @@ export default {
     nodata: '暂无数据',
     ask_free: '提问次数',
     login_first: '请先登录',
-    myscore: '我的积分'
+    myscore: '我的积分',
+    please_input: "请输入你的问题",
+    withdraw: "提现",
+    withdraw_confirm: "确定提现吗？",
+    check_record: "查看积分记录",
+    contact_us: "联系我们，请加微信号：xrkk2023"
 }

@@ -495,12 +495,12 @@ const App = (data) => {
                 </div>
               </div>
               {isToken?
-              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}> {locales(language)['check_record']}</span></div>
               :""}
-              <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
-                <p>确定提现吗？</p>
+              <Modal title={locales(language)['withdraw']} open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
+                <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
-              <div className='contactUs'>联系我们，请加微信号：xrkk2023</div>
+              <div className='contactUs'>{locales(language)['contact_us']}</div>
             </div>
 
           </div>
@@ -605,13 +605,13 @@ const App = (data) => {
                 </div>
               </div>
               {isToken?
-              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}> {locales(language)['check_record']}</span></div>
               :""
               }
-              <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
-                <p>确定提现吗？</p>
+              <Modal title={locales(language)['withdraw']} open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
+                <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
-              <div className='contactUs'>联系我们，请加微信号：xrkk2023</div>
+              <div className='contactUs'>{locales(language)['contact_us']}</div>
             </div>
         </div>
       {
