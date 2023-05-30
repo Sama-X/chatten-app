@@ -125,6 +125,7 @@ class PointsWithdrawModel(BaseModel):
     audit_user_id = models.BigIntegerField(null=True, db_index=True, verbose_name=_("withdraw auditor"))
     audit_time = models.DateTimeField(null=True, verbose_name=_("withdraw audit time"))
     finish_time = models.DateTimeField(null=True, verbose_name=_("withdraw finish time"))
+    transfer_note = models.TextField(null=True, verbose_name=_("Transfer note"))
 
     class Meta:
         """

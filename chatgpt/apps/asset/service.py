@@ -2,6 +2,7 @@
 api service.
 """
 from datetime import datetime, timedelta, time, date
+import json
 from math import floor
 from django.db import transaction
 from django.db.models import Sum
@@ -433,7 +434,7 @@ class PointsWithdrawService(BaseService):
         """
         with transaction.atomic():
             obj = PointsWithdrawModel.objects.filter(
-                status=PointsWithdrawModel.STATUS_PENDING,
+                status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_FAILURE],
                 id=withdraw_id
             ).first()
             if not obj:
@@ -458,6 +459,7 @@ class PointsWithdrawService(BaseService):
                 )
                 # TODO 这里需要修改：obj.amount
                 success, data = wechat.transfer(obj.openid, 0.5)
+                obj.transfer_note = json.dumps(data, ensure_ascii=False)
                 if success:
                     obj.status = PointsWithdrawModel.STATUS_SUCCESS
                     obj.save()

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 11:26+0800\n"
+"POT-Creation-Date: 2023-05-30 11:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,8 +24,8 @@ msgstr "提现状态"
 msgid "order user id"
 msgstr "下单用户"
 
-#: apps/asset/models.py:18 apps/asset/models.py:81 apps/asset/models.py:115
-#: apps/asset/models.py:140 apps/asset/models.py:179 apps/order/models.py:80
+#: apps/asset/models.py:18 apps/asset/models.py:81 apps/asset/models.py:117
+#: apps/asset/models.py:143 apps/asset/models.py:182 apps/order/models.py:80
 #: apps/users/models.py:153
 msgid "user account id"
 msgstr "用户id"
@@ -70,7 +70,7 @@ msgstr "用户id"
 msgid "points change category"
 msgstr "变动类别"
 
-#: apps/asset/models.py:84 apps/asset/models.py:119
+#: apps/asset/models.py:84 apps/asset/models.py:121
 msgid "The number of points changed this time"
 msgstr "变动积分数"
 
@@ -86,144 +86,152 @@ msgstr "备注"
 msgid "PointsLog"
 msgstr "积分记录"
 
-#: apps/asset/models.py:107
+#: apps/asset/models.py:108
 msgid "peding review"
 msgstr "待审核"
 
-#: apps/asset/models.py:108
+#: apps/asset/models.py:109
 msgid "refund in progress"
 msgstr "退款中"
 
-#: apps/asset/models.py:109 apps/base/exception.py:26 apps/order/models.py:52
+#: apps/asset/models.py:110
+msgid "reject"
+msgstr ""
+
+#: apps/asset/models.py:111 apps/base/exception.py:26 apps/order/models.py:52
 msgid "success"
 msgstr "成功"
 
-#: apps/asset/models.py:110 apps/order/models.py:53
+#: apps/asset/models.py:112 apps/order/models.py:53
 msgid "failure"
 msgstr "失败"
 
-#: apps/asset/models.py:116 apps/asset/serializer.py:52
+#: apps/asset/models.py:118 apps/asset/serializer.py:52
 msgid "The real name of the withdrawing person"
 msgstr "真实姓名"
 
-#: apps/asset/models.py:117
+#: apps/asset/models.py:119
 msgid "Contact information"
 msgstr "提现人信息"
 
-#: apps/asset/models.py:118 apps/asset/serializer.py:60
+#: apps/asset/models.py:120 apps/asset/serializer.py:60
 #: apps/order/serializer.py:156
 msgid "wechat openid"
 msgstr "微信openid"
 
-#: apps/asset/models.py:120
+#: apps/asset/models.py:122
 msgid "The amount exchanged"
 msgstr "兑换积分数"
 
-#: apps/asset/models.py:121
+#: apps/asset/models.py:123
 msgid "Ratio of points to cash"
 msgstr "积分与现金的比率"
 
-#: apps/asset/models.py:122
+#: apps/asset/models.py:124
 msgid "withdraw status"
 msgstr "提现状态"
 
-#: apps/asset/models.py:123
+#: apps/asset/models.py:125
 msgid "withdraw auditor"
 msgstr "审核人"
 
-#: apps/asset/models.py:124
+#: apps/asset/models.py:126
 msgid "withdraw audit time"
 msgstr "审核时间"
 
-#: apps/asset/models.py:125
+#: apps/asset/models.py:127
 msgid "withdraw finish time"
 msgstr "完成时间"
 
-#: apps/asset/models.py:131
+#: apps/asset/models.py:128
+msgid "Transfer note"
+msgstr "转账备注"
+
+#: apps/asset/models.py:134
 msgid "PointsWithdraw"
 msgstr "积分提现"
 
-#: apps/asset/models.py:142
+#: apps/asset/models.py:145
 msgid "Transient expiration time"
 msgstr "临时有限时间"
 
-#: apps/asset/models.py:143
+#: apps/asset/models.py:146
 msgid "Transient expiration usage count"
 msgstr "临时使用次数"
 
-#: apps/asset/models.py:144
+#: apps/asset/models.py:147
 msgid "Persistence expiration usage count"
 msgstr "永久使用次数"
 
-#: apps/asset/models.py:145
+#: apps/asset/models.py:148
 msgid "free expiration time"
 msgstr "免费过期时间"
 
-#: apps/asset/models.py:146
+#: apps/asset/models.py:149
 msgid "Free usage count"
 msgstr "免费次数"
 
-#: apps/asset/models.py:147
+#: apps/asset/models.py:150
 msgid "Whether it is available or not"
 msgstr "是否可用"
 
-#: apps/asset/models.py:153
+#: apps/asset/models.py:156
 msgid "O2OPayment"
 msgstr "资源"
 
-#: apps/asset/models.py:170
+#: apps/asset/models.py:173
 msgid "expired"
 msgstr "过期"
 
-#: apps/asset/models.py:171
+#: apps/asset/models.py:174
 msgid "consume"
 msgstr "消耗"
 
-#: apps/asset/models.py:172
+#: apps/asset/models.py:175
 msgid "free"
 msgstr "免费"
 
-#: apps/asset/models.py:173
+#: apps/asset/models.py:176
 msgid "buy"
 msgstr "购买"
 
-#: apps/asset/models.py:174
+#: apps/asset/models.py:177
 msgid "reward"
 msgstr "奖励"
 
-#: apps/asset/models.py:175
+#: apps/asset/models.py:178
 msgid "exchange"
 msgstr "兑换"
 
-#: apps/asset/models.py:180
+#: apps/asset/models.py:183
 msgid "o2opayment id"
 msgstr "记录id"
 
-#: apps/asset/models.py:181
+#: apps/asset/models.py:184
 msgid "log category"
 msgstr "钱包类型"
 
-#: apps/asset/models.py:183
+#: apps/asset/models.py:186
 msgid "expiration time"
 msgstr "过期时间"
 
-#: apps/asset/models.py:184
+#: apps/asset/models.py:187
 msgid "current usage count"
 msgstr "使用数"
 
-#: apps/asset/models.py:185
+#: apps/asset/models.py:188
 msgid "Notes on payment log"
 msgstr "备注"
 
-#: apps/asset/models.py:186
+#: apps/asset/models.py:189
 msgid "buy order id"
 msgstr "购买订单id"
 
-#: apps/asset/models.py:187
+#: apps/asset/models.py:190
 msgid "consume record id"
 msgstr "消耗记录id"
 
-#: apps/asset/models.py:193
+#: apps/asset/models.py:196
 msgid "O2OPaymentLog"
 msgstr "资源消耗记录"
 
@@ -239,55 +247,55 @@ msgstr "提现积分"
 msgid "Exchange point"
 msgstr "兑换积分"
 
-#: apps/asset/service.py:48
+#: apps/asset/service.py:50
 msgid "User has purchased a persistence package"
 msgstr "用户购买永久套餐"
 
-#: apps/asset/service.py:52
+#: apps/asset/service.py:54
 msgid "User has purchased a transient package"
 msgstr "用户购买时效套餐"
 
-#: apps/asset/service.py:90
+#: apps/asset/service.py:92
 msgid "Get free experience"
 msgstr "获得免费次数"
 
-#: apps/asset/service.py:99
+#: apps/asset/service.py:101
 msgid "Free emptying times per day"
 msgstr "清空免费剩余次数"
 
-#: apps/asset/service.py:127
+#: apps/asset/service.py:129
 msgid "Users use points to exchange"
 msgstr "使用积分兑换"
 
-#: apps/asset/service.py:197
+#: apps/asset/service.py:199
 msgid "Used free number of times"
 msgstr "使用免费次数"
 
-#: apps/asset/service.py:215
+#: apps/asset/service.py:217
 msgid "Used transient number of times"
 msgstr "使用临时次数"
 
-#: apps/asset/service.py:234
+#: apps/asset/service.py:236
 msgid "Used persistence number of times"
 msgstr "使用永久次数"
 
-#: apps/asset/service.py:240
+#: apps/asset/service.py:242
 msgid "consume payment error"
 msgstr "积分消费失败"
 
-#: apps/asset/service.py:269
+#: apps/asset/service.py:271
 msgid "The direct invitee has been recharged"
 msgstr "直接邀请人充值"
 
-#: apps/asset/service.py:275
+#: apps/asset/service.py:277
 msgid "Indirect invitee has been recharged"
 msgstr "间接邀请人充值"
 
-#: apps/asset/service.py:339
+#: apps/asset/service.py:341
 msgid "The number of points exchanged for chat"
 msgstr "积分兑换聊天次数"
 
-#: apps/asset/service.py:452
+#: apps/asset/service.py:457
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -411,17 +419,21 @@ msgstr "不支持的客户端"
 msgid "Invalid wechat openid"
 msgstr "无效的微信openid"
 
-#: apps/base/exception.py:122
+#: apps/base/exception.py:123
 msgid "Points are not enough"
 msgstr "积分不够"
 
-#: apps/base/exception.py:123
+#: apps/base/exception.py:124
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
 
-#: apps/base/exception.py:124
+#: apps/base/exception.py:125
 msgid "Withdrawal is in progress"
 msgstr "提现正在进行中"
+
+#: apps/base/exception.py:126
+msgid "Withdraw failure"
+msgstr "提现失败"
 
 #: apps/base/middleware.py:36 apps/base/middleware.py:46
 #: apps/base/middleware.py:68 apps/base/middleware.py:74
