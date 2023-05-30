@@ -48,8 +48,24 @@ function App() {
       dataIndex: 'username',
     },
     {
-      title: '二级用户',
-      dataIndex: 'level2_user_name',
+      title: '积分',
+      dataIndex: 'points',
+    },
+    {
+      title: '直接邀请总数',
+      dataIndex: 'level1_invite_total',
+    },
+    {
+      title: '间接邀请总数',
+      dataIndex: 'level2_invite_total',
+    },
+    {
+      title: '会员可使用次数',
+      dataIndex: 'transient_usage_count',
+    },
+    {
+      title: '永久可使用次数',
+      dataIndex: 'persistence_usage_count',
     }
   ]
 

@@ -84,7 +84,6 @@ function App() {
       console.log(resData.data)
       setPackageList(resData.data)
       if(!packageId){
-        console.log('88888')
         setPackageId(resData.data[0].id)
         setAmount(resData.data[0].price)
       }

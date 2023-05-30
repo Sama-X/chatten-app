@@ -4,6 +4,7 @@ import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
 import Request from '../../request.ts';
 import {Table} from 'antd'
+import { useHistory } from 'react-router-dom';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [total, setTotal] = useState(0)
   const [pageSize, setPageSize] = useState(50)
   const [page, setPage] = useState(1)
+  const navigate = useHistory()
 
   const [selected, setSelected] = useState('order')
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
@@ -106,9 +108,13 @@ function App() {
     setPage(page)
   }
 
+  const goToHome = () => {
+    navigate.push('/')
+  }
+
   return (
     <div className='mobile-record-container'>
-      <div className='mobile-record-header'><img src={require("../../assets/logo.png")} alt=""/></div>
+      <div className='mobile-record-header' onClick={goToHome}><img src={require("../../assets/logo.png")} alt=""/></div>
       <div className='mobile-record-frame'>
         <div className='mobile-record-menu-list'>
           <div className={selected === 'order' ? 'mobile-record-menu-item mobile-record-menu-item-selected': 'mobile-record-menu-item'} onClick={()=>{clickOrder(1)}}>我的订单</div>

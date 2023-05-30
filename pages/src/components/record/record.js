@@ -13,11 +13,11 @@ function App() {
   const [language, setLanguage] = useState(get_default_language())
   const [value, setValue] = useState(10)
   let request = new Request({});
-  const navigate = useHistory()
   const [itemList, setItemList] = useState([])
   const [total, setTotal] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(1)
+  const navigate = useHistory()
 
   const [selected, setSelected] = useState('order')
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
@@ -183,9 +183,13 @@ function App() {
     setPage(page)
   }
 
+  const goToHome = () => {
+    navigate.push('/')
+  }
+
   return (
     <div className='record-container'>
-      <div className='record-header'><img src={require("../../assets/logo.png")} alt=""/></div>
+      <div className='record-header' onClick={goToHome}><img src={require("../../assets/logo.png")} alt=""/></div>
       <div className='record-frame'>
         <div className='record-menu-list'>
           <div className={selected === 'order' ? 'record-menu-item record-menu-item-selected': 'record-menu-item'} onClick={()=>{clickOrder(1)}}>我的订单</div>
