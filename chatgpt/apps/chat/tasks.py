@@ -46,7 +46,7 @@ def generate_topic_title(topic_id):
         })
 
     helper = AIHelper()
-    resp = helper.sync_send_msg('总结一个简短的话题名', histories=messages)
+    resp = helper.sync_send_msg(_('Summarize a short title'), histories=messages)
 
     logger.info("[generate topic] genereate topic id: %s result: %s", topic_id, resp)
 
