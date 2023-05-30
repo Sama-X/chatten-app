@@ -606,6 +606,7 @@ const App = () => {
                         onChange={onChangeInput}
                         value={questionValue}
                         className="tokenInput"
+                        placeholder="请输入你的问题"
                       />
                   {/* </div> */}
                   <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
@@ -722,6 +723,7 @@ const App = () => {
                   <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                     <p>确定提现吗？</p>
                   </Modal>
+                  <div className='contactUs'>联系我们，请加微信号：xrkk2023</div>
                 </div>
             </div>
           {
@@ -842,6 +844,7 @@ const App = () => {
                             onChange={onChangeInput}
                             value={questionValue}
                             className="tokenInput"
+                            placeholder="请输入你的问题"
                           />
                       {/* </div> */}
                       <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
