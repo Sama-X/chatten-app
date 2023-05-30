@@ -142,6 +142,79 @@ class AdminAccountSerializer(serializers.ModelSerializer):
 
     add_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
     login_time = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S") # type: ignore
+    level1_invite_total = serializers.SerializerMethodField()
+    level2_invite_total = serializers.SerializerMethodField()
+    points = serializers.SerializerMethodField()
+    transient_expire_time = serializers.SerializerMethodField()
+    transient_usage_count = serializers.SerializerMethodField()
+    persistence_usage_count = serializers.SerializerMethodField()
+    free_expire_time = serializers.SerializerMethodField()
+    free_usage_count = serializers.SerializerMethodField()
+
+    def get_level1_invite_total(self, obj):
+        """
+        direct invite total
+        """
+        return self.context.get('direct_dict', {}).get(obj.id) or 0
+
+    def get_level2_invite_total(self, obj):
+        """
+        indirect invite total
+        """
+        return self.context.get('indirect_dict', {}).get(obj.id) or 0
+
+    def get_points(self, obj):
+        """
+        points
+        """
+        return self.context.get('point_dict', {}).get(obj.id) or 0
+
+    def get_asset_obj(self, obj):
+        """
+        get o2opayment object.
+        """
+        return self.context.get('payment_dict', {}).get(obj.id)
+
+    def get_transient_expire_time(self, obj):
+        """
+        transient expire time.
+        """
+        payment = self.get_asset_obj(obj)
+        if payment and payment.transient_expire_time:
+            return payment.transient_expire_time.strftime('%Y-%m-%d %H:%M:%S')
+
+        return None
+
+    def get_transient_usage_count(self, obj):
+        """
+        transient usage count
+        """
+        payment = self.get_asset_obj(obj)
+        return payment.transient_usage_count if payment else None
+
+    def get_persistence_usage_count(self, obj):
+        """
+        persistence usage count
+        """
+        payment = self.get_asset_obj(obj)
+        return payment.persistence_usage_count if payment else None
+
+    def get_free_expire_time(self, obj):
+        """
+        free expire time
+        """
+        payment = self.get_asset_obj(obj)
+        if payment and payment.free_expire_time:
+            return payment.free_expire_time.strftime('%Y-%m-%d %H:%M:%S')
+
+        return None
+
+    def get_free_usage_count(self, obj):
+        """
+        free usage count
+        """
+        payment = self.get_asset_obj(obj)
+        return payment.free_usage_count if payment else None
 
     class Meta:
         """
@@ -149,5 +222,7 @@ class AdminAccountSerializer(serializers.ModelSerializer):
         """
         model = AccountModel
         fields = (
-            'id', 'username', 'mobile', 'nickname', 'login_time', 'login_ip', 'add_time'
+            'id', 'username', 'mobile', 'nickname', 'login_time', 'login_ip', 'add_time',
+            'level1_invite_total', 'level2_invite_total', 'points', 'transient_expire_time',
+            'transient_usage_count', 'persistence_usage_count', 'free_expire_time', 'free_usage_count'
         )

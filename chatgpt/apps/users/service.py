@@ -285,7 +285,38 @@ class UserService(BaseService):
         )
         objs = base.order_by(*order_fields)[(page - 1) * offset: page * offset].all()
 
-        serializer = AdminAccountSerializer(objs, many=True)
+        direct_dict, indirect_dict = {}, {}
+        payment_dict, point_dict = {}, {}
+
+        user_ids = [item.id for item in objs]
+        if user_ids:
+            point_dict = {
+                item.user_id: item.total
+                for item in PointsModel.objects.filter(user_id__in=user_ids).only('user_id', 'total')
+            }
+            payment_dict = {
+                item.user_id: item
+                for item in O2OPaymentModel.objects.filter(user_id__in=user_ids)
+            }
+            direct_dict = {
+                item['inviter_user_id']: item['total']
+                for item in InviteLogModel.objects.filter(
+                    inviter_user_id__in=user_ids
+                ).values('inviter_user_id').annotate(total=Count('*'))
+            }
+            direct_dict = {
+                item['super_inviter_user_id']: item['total']
+                for item in InviteLogModel.objects.filter(
+                    inviter_user_id__in=user_ids
+                ).values('super_inviter_user_id').annotate(total=Count('*'))
+            }
+
+        serializer = AdminAccountSerializer(objs, many=True, context={
+            'direct_dict': direct_dict,
+            'indirect_dict': indirect_dict,
+            'payment_dict': payment_dict,
+            'point_dict': point_dict,
+        })
 
         return APIResponse(result=serializer.data, count=total)
 
