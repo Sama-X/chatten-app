@@ -6,7 +6,7 @@ import logging
 from celery import shared_task
 
 from django.utils.translation import gettext as _
-from base.ai import get_ai_instance
+from base.ai import AIHelper
 
 from chat.models import ChatRecordModel, ChatTopicModel
 
@@ -45,7 +45,7 @@ def generate_topic_title(topic_id):
             "content": chat.answer.replace('\n', '')
         })
 
-    helper = get_ai_instance()
+    helper = AIHelper()
     resp = helper.sync_send_msg('总结一个简短的话题名', histories=messages)
 
     logger.info("[generate topic] genereate topic id: %s result: %s", topic_id, resp)
