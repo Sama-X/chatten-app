@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-29 17:31+0800\n"
+"POT-Creation-Date: 2023-05-30 11:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -279,15 +279,15 @@ msgstr "积分消费失败"
 msgid "The direct invitee has been recharged"
 msgstr "直接邀请人充值"
 
-#: apps/asset/service.py:274
+#: apps/asset/service.py:275
 msgid "Indirect invitee has been recharged"
 msgstr "间接邀请人充值"
 
-#: apps/asset/service.py:337
+#: apps/asset/service.py:339
 msgid "The number of points exchanged for chat"
 msgstr "积分兑换聊天次数"
 
-#: apps/asset/service.py:441
+#: apps/asset/service.py:452
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -411,13 +411,17 @@ msgstr "不支持的客户端"
 msgid "Invalid wechat openid"
 msgstr "无效的微信openid"
 
-#: apps/base/exception.py:121
+#: apps/base/exception.py:122
 msgid "Points are not enough"
 msgstr "积分不够"
 
-#: apps/base/exception.py:122
+#: apps/base/exception.py:123
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
+
+#: apps/base/exception.py:124
+msgid "Withdrawal is in progress"
+msgstr "提现正在进行中"
 
 #: apps/base/middleware.py:36 apps/base/middleware.py:46
 #: apps/base/middleware.py:68 apps/base/middleware.py:74

@@ -361,6 +361,15 @@ class PointsService(BaseService):
         if not obj:
             return APIResponse(code=SystemErrorCode.HTTP_404_NOT_FOUND)
 
+        exists = PointsWithdrawModel.objects.filter(
+            user_id=user_id,
+            is_delete=False,
+            status=PointsWithdrawModel.STATUS_PENDING
+        ).count() > 0
+
+        if exists:
+            return APIResponse(AssetErrorCode.WITHDRAW_IS_IN_PROGRESS)
+
         withdraw = PointsWithdrawModel.objects.filter(
             user_id=user_id,
             is_delete=False,

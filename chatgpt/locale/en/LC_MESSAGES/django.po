@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-29 17:31+0800\n"
+"POT-Creation-Date: 2023-05-30 11:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -280,15 +280,15 @@ msgstr ""
 msgid "The direct invitee has been recharged"
 msgstr ""
 
-#: apps/asset/service.py:274
+#: apps/asset/service.py:275
 msgid "Indirect invitee has been recharged"
 msgstr ""
 
-#: apps/asset/service.py:337
+#: apps/asset/service.py:339
 msgid "The number of points exchanged for chat"
 msgstr ""
 
-#: apps/asset/service.py:441
+#: apps/asset/service.py:452
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr ""
 
@@ -412,13 +412,16 @@ msgstr ""
 msgid "Invalid wechat openid"
 msgstr ""
 
-#: apps/base/exception.py:121
+#: apps/base/exception.py:122
 msgid "Points are not enough"
 msgstr ""
 
-#: apps/base/exception.py:122
-#, python-format
+#: apps/base/exception.py:123
 msgid "The withdrawal point cannot be less than %(count)s"
+msgstr ""
+
+#: apps/base/exception.py:124
+msgid "Withdrawal is in progress"
 msgstr ""
 
 #: apps/base/middleware.py:36 apps/base/middleware.py:46
@@ -645,7 +648,6 @@ msgid "order paymethod"
 msgstr ""
 
 #: apps/order/views.py:117
-#, python-format
 msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
 msgstr ""
 
@@ -895,7 +897,6 @@ msgid "Number of invitations for awards"
 msgstr ""
 
 #: apps/users/service.py:78
-#, python-format
 msgid "Invite user id: %(aid)s and get %(count)s times"
 msgstr ""
 

@@ -116,10 +116,12 @@ class AssetErrorCode:
     """
     POINT_NOT_ENOUGH = 40000
     POINT_LESS_THAN_MIN_VALUE = 40001
+    WITHDRAW_IS_IN_PROGRESS = 40100
 
     ERRORS = (
         (POINT_NOT_ENOUGH, _('Points are not enough')),
         (POINT_LESS_THAN_MIN_VALUE, _('The withdrawal point cannot be less than %(count)s')),
+        (WITHDRAW_IS_IN_PROGRESS, _('Withdrawal is in progress')),
     )
     ERRORS_DICT = dict(ERRORS)
 
