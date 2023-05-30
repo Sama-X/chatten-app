@@ -44,6 +44,10 @@ function App() {
       dataIndex: 'add_time',
     },
     {
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    {
       title: '用户名称',
       dataIndex: 'username',
     },
