@@ -88,7 +88,7 @@ def decryWePayNotify(params):
     return json.loads(plaintext_str)
 
 
-def get_cert():
+def get_undecrypt_cert():
     url = 'https://api.mch.weixin.qq.com/v3/certificates'
     authorization = make_authorization_header("GET", '/v3/certificates', '')
 
@@ -101,7 +101,11 @@ def get_cert():
                         )
 
     cert = response.json()
+    return cert
 
+
+def get_cert():
+    cert = get_undecrypt_cert()
     key = mch_api_v3_key
     nonce = cert['data'][0]['encrypt_certificate']['nonce']
     associated_data = cert['data'][0]['encrypt_certificate']['associated_data']
@@ -205,7 +209,7 @@ def transfer(openid, amount):
 
     body = json.dumps(body).replace(' ', '')
     url = 'https://api.mch.weixin.qq.com/v3/transfer/batches'
-    authorization = make_authorization_header("POST", '/v3/pay/transactions/h5', body)
+    authorization = make_authorization_header("POST", '/v3/transfer/batches', body)
     response = requests.post(
         url=url,
         data=body,
@@ -213,14 +217,15 @@ def transfer(openid, amount):
             "Authorization": authorization,
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Wechatpay-Serial": get_cert()['data'][0]['serial_no']
+            "Wechatpay-Serial": get_undecrypt_cert()['data'][0]['serial_no']
         }
     )
     logger.info('[wechat h5 prepay] response = %s', response.text)
 
     data = response.json()
+    logger.info('[wechat transfer]  data = %s', data)
 
     if response.status_code == '200':
-        return data
+        return True, data
     else:
-        return data
+        return False, data

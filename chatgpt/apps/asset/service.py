@@ -13,6 +13,7 @@ from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer,
 from base.exception import AssetErrorCode, SystemErrorCode
 from base.response import APIResponse, SerializerErrorResponse
 from base.service import BaseService
+from order import wechat
 
 from order.models import OrderModel, OrderPackageModel
 from users.models import AccountModel, ConfigModel, InviteLogModel
@@ -448,10 +449,23 @@ class PointsWithdrawService(BaseService):
             obj.audit_user_id = request.user.id
             obj.save()
             if obj.status == PointsWithdrawModel.STATUS_REFUNDING:
+                if not obj.openid:
+                    return APIResponse()
+
                 PointsService.reduce_point(
                     obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points"),
                     source=PointsLogModel.SOURCE_WITHDRAW
                 )
+                # TODO 这里需要修改：obj.amount
+                success, data = wechat.transfer(obj.openid, 0.5)
+                if success:
+                    obj.status = PointsWithdrawModel.STATUS_SUCCESS
+                    obj.save()
+                    return APIResponse(result=data)
+
+                obj.status = PointsWithdrawModel.STATUS_FAILURE
+                obj.save()
+                return APIResponse(code=AssetErrorCode.WITHDRAW_FAILURE, msg=data.get('message'))
 
         return APIResponse()
 

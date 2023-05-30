@@ -100,12 +100,14 @@ class PointsWithdrawModel(BaseModel):
     """
     STATUS_PENDING = 0
     STATUS_REFUNDING = 5
+    STATUS_REJECT = 6
     STATUS_SUCCESS = 10
     STATUS_FAILURE = 11
 
     STATUSES = (
         (STATUS_PENDING, _("peding review")),
         (STATUS_REFUNDING, _("refund in progress")),
+        (STATUS_REJECT, _("reject")),
         (STATUS_SUCCESS, _("success")),
         (STATUS_FAILURE, _("failure")),
     )
