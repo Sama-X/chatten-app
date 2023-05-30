@@ -444,7 +444,7 @@ class PointsWithdrawService(BaseService):
             if success:
                 obj.status = PointsWithdrawModel.STATUS_REFUNDING
             else:
-                obj.status = PointsWithdrawModel.STATUS_FAILURE
+                obj.status = PointsWithdrawModel.STATUS_REJECT
             obj.audit_time = datetime.now()
             obj.audit_user_id = request.user.id
             obj.save()
