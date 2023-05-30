@@ -166,6 +166,61 @@ class AIHelper:
         self.strategy.release_key(key)
         return result
 
+    def sync_send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None):
+        """
+        sync send message.
+        """
+        print("sync send message.....")
+        if self.strategy is None:
+            self.set_strategy()
+
+        histories = histories or []
+        if retry_count <= 0:
+            histories.append({
+                "role": "user",
+                "content": question
+            })
+        key = key or self.strategy.get_api_key()
+        logger.info("【chatgpt sync send】 payload: %s api key: %s", histories, key[:6] if key else None)
+        result = {}
+        if not key:
+            result['error'] = 'The system is busy, please try again later'
+        start = time.time()
+        try:
+            resp = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120)
+            )
+            return resp.to_dict_recursive()  # type: ignore
+        except RateLimitError as err:
+            # rate limit exception
+            logger.error("【chatgpt send】reason: rate limit desc: %s", err)
+            if retry_count < 1:
+                time.sleep(5)
+                logger.error("【chatgpt send】RateLimit exceed, repeat retry %s times".format(retry_count+1))
+                return self.sync_send_msg(
+                    question, msg_type=msg_type, histories=histories, retry_count=retry_count+1, key=key,
+                    auth_token=auth_token
+                )
+            result["error"] = "rate limit error"
+        except APIConnectionError as err:
+            logger.error("【chatgpt send】APIConnection failed, reason: %s", err)
+            result["error"] = "api connection failed"
+        except Timeout as err:
+            logger.error("【chatgpt send】Timeout, reason: %s", err)
+            result["error"] = "timeout"
+        except openai.InvalidRequestError as err:
+            logger.error("【chatgpt send】InvalidRequestError, reason: %s", err)
+            result["error"] = err._message
+            result["error_code"] = err.code
+        except Exception as err:
+            logger.error("【chatgpt send】Exception, reason: %s", err)
+            result["error"] = f"exception {err}"
+
+        result['key_id'] = self.strategy.get_api_key_id(key)
+        logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
+        self.strategy.release_key(key)
+        return result
+
     def check_api_key(self, key) -> bool:
         """
         check api key is valid.
