@@ -45,7 +45,6 @@ function App() {
   }
 
   function onBridgeReady(timeStamp, nonceStr, packagex, paySign) {
-    alert('nonceStr=' + nonceStr)
     window.WeixinJSBridge.invoke('getBrandWCPayRequest', {
         "appId": appid,     //公众号ID，由商户传入     
         "timeStamp": timeStamp,     //时间戳，自1970年以来的秒数     
