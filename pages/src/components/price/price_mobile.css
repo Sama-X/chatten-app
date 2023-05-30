@@ -1,6 +1,12 @@
 .price-mobile-header img {
+    position: absolute;
+    left: 20px;
+    top: 30px;
     width: 80px;
-    margin-bottom: 30px;
+}
+
+.price-mobile-frame {
+    margin-top: 80px;
 }
 
 .price-mobile-list {
@@ -40,7 +46,7 @@
 
 .price-mobile-pay {
     margin-top: 100px;
-    width: 90%;
+    width: 100%;
     height: 60px;
     line-height: 60px;
     border-radius: 4px;

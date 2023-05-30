@@ -98,27 +98,28 @@ const App = (data) => {
   };
   const linkSkip =  () => {
     const isTokenStatus = cookie.load('token') ? true : false
+    alert(isTokenStatus)
     if(isTokenStatus) {
-      history.push({pathname: '/ChatPage', state: { test: 'login' }})
+      history.push({pathname: '/ChatPage', state: { test: 'signin' }})
     }else{
-      setSpinStatus(true)
-      let request = new Request({});
-      request.post('/api/v1/users/anonymous/',{
-        invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,
-      }).then(function(resData){
-        cookie.save('userName', resData.data.nickname, { path: '/' })
-        cookie.save('userId', resData.data.id, { path: '/' })
-        cookie.save('token', resData.data.token, { path: '/' })
-        cookie.save('topicId', '')
-        setTimeout(function(){
-          setSpinStatus(false)
-          history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-        },1000)
-      })
+      history.push({pathname: '/login', state: { test: 'login' }})
+      // setSpinStatus(true)
+      // let request = new Request({});
+      // request.post('/api/v1/users/anonymous/',{
+      //   invite_code: cookie.load('invite_code') ? cookie.load('invite_code') : null,
+      // }).then(function(resData){
+      //   cookie.save('userName', resData.data.nickname, { path: '/' })
+      //   cookie.save('userId', resData.data.id, { path: '/' })
+      //   cookie.save('token', resData.data.token, { path: '/' })
+      //   cookie.save('topicId', '')
+      //   setTimeout(function(){
+      //     setSpinStatus(false)
+      //     history.push({pathname: '/ChatPage', state: { test: 'signin' }})
+      //   },1000)
+      // })
     }
   }
   const historyMenu = async (e) => {
-
     if(e.length > 1){
       let request = new Request({});
       let itemsCopy = [...items]
@@ -493,7 +494,9 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
+              {isToken?
               <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+              :""}
               <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                 <p>确定提现吗？</p>
               </Modal>
@@ -599,7 +602,10 @@ const App = (data) => {
                   </div>
                 </div>
               </div>
+              {isToken?
               <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+              :""
+              }
               <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                 <p>确定提现吗？</p>
               </Modal>

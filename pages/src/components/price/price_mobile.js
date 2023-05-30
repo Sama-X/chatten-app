@@ -74,6 +74,10 @@ function App() {
     },
   [orderId])
 
+  const goToHome = () => {
+    navigate.push('/')
+  }
+
   useEffect(()=>{
     let request = new Request({});
     request.get('/api/v1/order/order-packages/').then(function(resData){
@@ -89,7 +93,7 @@ function App() {
 
   return (
     <div className='price-mobile-container'>
-      <div className='price-mobile-header'><img src={require("../../assets/logo.png")} alt=""/></div>
+      <div className='price-mobile-header' onClick={goToHome}><img src={require("../../assets/logo.png")} alt=""/></div>
       <div className='price-mobile-frame'>
         <div className='price-mobile-title'>价格</div>
         <div className='price-mobile-slogan'>选择适合你的最佳方案</div>

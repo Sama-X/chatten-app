@@ -125,7 +125,7 @@ const App = () => {
         }
       }
       setTimeout(function(){
-        setItem([getItem('chatTEN', 'sub1', '', menuSetitemList)])
+        setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
       },1000)
     })
@@ -717,7 +717,8 @@ const App = () => {
                       </div>
                     </div>
                   </div>
-                  <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+                  {isToken?<div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>提现</span><span className='points-records' onClick={goToRecord}> 查看积分纪录</span></div>
+                  : ""}
                   <Modal title="提现" open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                     <p>确定提现吗？</p>
                   </Modal>

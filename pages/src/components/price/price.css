@@ -13,11 +13,13 @@
     align-items: center;
 }
 
+
 .price-header img {
     height: 30px;
     position: fixed;
     left: 20px;
     top: 20px;
+    cursor: pointer;
 }
 .price-frame{
     margin-top: -80px;

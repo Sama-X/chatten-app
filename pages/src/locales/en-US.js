@@ -6,7 +6,7 @@ export default {
     create_new_talk: 'Create new talk',
     clear_chat_hitstory: 'Clear history',
     experience_count: 'Question times',
-    unlimit: 'Unlimit',
+    unlimit: 'Cheaper',
     faster: 'Faster',
     stable: 'Stable',
     share: 'Share',

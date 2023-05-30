@@ -28,6 +28,11 @@ function App() {
     navigate.push('/pay/?amount=' + value + '&package_id=' + package_id + '&quantity=' + quantity)
   }
 
+
+  const goToHome = () => {
+    navigate.push('/')
+  }
+
   useEffect(()=>{
     let request = new Request({});
     request.get('/api/v1/order/order-packages/').then(function(resData){
@@ -38,7 +43,7 @@ function App() {
 
   return (
     <div className='price-container'>
-      <div className='price-header'><img src={require("../../assets/logo.png")} alt=""/></div>
+      <div className='price-header' onClick={goToHome}><img src={require("../../assets/logo.png")} alt=""/></div>
       <div className='price-frame'>
         <div className='price-title'>价格</div>
         <div className='price-slogan'>选择适合你的最佳方案</div>

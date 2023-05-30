@@ -6,7 +6,7 @@ export default {
     create_new_talk: '创建新对话',
     clear_chat_hitstory: '清除聊天记录',
     experience_count: '提问次数',
-    unlimit: '无限次数',
+    unlimit: '更加便宜',
     faster: '更快响应',
     stable: '更加稳定',
     share: '分享',
