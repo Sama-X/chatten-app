@@ -307,7 +307,7 @@ class UserService(BaseService):
             indirect_dict = {
                 item['super_inviter_user_id']: item['total']
                 for item in InviteLogModel.objects.filter(
-                    inviter_user_id__in=user_ids
+                    super_inviter_user_id__in=user_ids
                 ).values('super_inviter_user_id').annotate(total=Count('*'))
             }
 
