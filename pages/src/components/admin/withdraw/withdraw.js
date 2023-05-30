@@ -32,7 +32,9 @@ function App() {
 
   const eidtItem = (_id, _type) => {
     let request = new Request({});
-    request.put('/api/v1/admin/asset/points-withdraw/' + _id + '/audit/').then(function(resData){
+    request.put('/api/v1/admin/asset/points-withdraw/' + _id + '/audit/',{
+      "success": _type === 'pass'? true: false
+    }).then(function(resData){
       console.log(resData.data)
       clickWithdraw(page)
     })
