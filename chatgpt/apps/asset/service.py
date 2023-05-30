@@ -469,14 +469,14 @@ class PointsWithdrawService(BaseService):
                 if not obj.openid:
                     return APIResponse()
 
-                PointsService.reduce_point(
-                    obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points"),
-                    source=PointsLogModel.SOURCE_WITHDRAW
-                )
                 # TODO 这里需要修改：obj.amount
                 success, data = wechat.transfer(obj.openid, 0.5)
                 obj.transfer_note = json.dumps(data, ensure_ascii=False)
                 if success:
+                    PointsService.reduce_point(
+                        obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points"),
+                        source=PointsLogModel.SOURCE_WITHDRAW
+                    )
                     obj.status = PointsWithdrawModel.STATUS_SUCCESS
                     obj.save()
                     return APIResponse(result=data)
