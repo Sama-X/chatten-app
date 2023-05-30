@@ -448,10 +448,8 @@ class PointsWithdrawService(BaseService):
         """
         audit withdraw api.
         """
-        import ipdb
-        ipdb.set_trace()
         with transaction.atomic():
-            obj = PointsWithdrawModel.objects.filter(
+            obj = PointsWithdrawModel.objects.select_for_update().filter(
                 status__in=[PointsWithdrawModel.STATUS_PENDING, PointsWithdrawModel.STATUS_FAILURE],
                 id=withdraw_id
             ).first()
