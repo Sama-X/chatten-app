@@ -183,3 +183,44 @@ def h5_prepay(amount, out_trade_no, ip=None):
 
     h5_url = response.json()['h5_url']
     return h5_url
+
+def transfer(openid, amount):
+    body = {
+        "appid": app_id,
+        "out_batch_no": gen_code(),
+        "batch_name": '提现',
+        "batch_remark": '提现',
+        "total_amount": int(float(amount) * 100),
+        "total_num": 1,
+        "transfer_detail_list": [
+            {
+                'out_detail_no': gen_code(),
+                'transfer_amount': int(float(amount) * 100),
+                'transfer_remark': 'ChatTEN提现',
+                'openid': openid
+            }
+        ],
+    }
+    logger.info('[wechat h5 prepay] body = %s', body)
+
+    body = json.dumps(body).replace(' ', '')
+    url = 'https://api.mch.weixin.qq.com/v3/transfer/batches'
+    authorization = make_authorization_header("POST", '/v3/pay/transactions/h5', body)
+    response = requests.post(
+        url=url,
+        data=body,
+        headers={
+            "Authorization": authorization,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Wechatpay-Serial": get_cert()['data'][0]['serial_no']
+        }
+    )
+    logger.info('[wechat h5 prepay] response = %s', response.text)
+
+    data = response.json()
+
+    if response.status_code == '200':
+        return data
+    else:
+        return data
