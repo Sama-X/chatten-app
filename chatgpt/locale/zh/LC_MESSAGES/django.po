@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 11:57+0800\n"
+"POT-Creation-Date: 2023-05-30 16:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr "下单用户"
 
 #: apps/asset/models.py:18 apps/asset/models.py:81 apps/asset/models.py:117
 #: apps/asset/models.py:143 apps/asset/models.py:182 apps/order/models.py:80
-#: apps/users/models.py:153
+#: apps/users/models.py:153 apps/users/models.py:319
 msgid "user account id"
 msgstr "用户id"
 
@@ -99,6 +99,7 @@ msgid "reject"
 msgstr ""
 
 #: apps/asset/models.py:111 apps/base/exception.py:26 apps/order/models.py:52
+#: apps/users/models.py:314
 msgid "success"
 msgstr "成功"
 
@@ -127,7 +128,7 @@ msgstr "兑换积分数"
 msgid "Ratio of points to cash"
 msgstr "积分与现金的比率"
 
-#: apps/asset/models.py:124
+#: apps/asset/models.py:124 apps/users/models.py:322
 msgid "withdraw status"
 msgstr "提现状态"
 
@@ -255,47 +256,67 @@ msgstr "用户购买永久套餐"
 msgid "User has purchased a transient package"
 msgstr "用户购买时效套餐"
 
-#: apps/asset/service.py:92
+#: apps/asset/service.py:91 apps/users/models.py:276
+msgid "Number of free experiences, number type, must be greater than 0"
+msgstr "免费体验数，数字类型，必须大于0"
+
+#: apps/asset/service.py:94
 msgid "Get free experience"
 msgstr "获得免费次数"
 
-#: apps/asset/service.py:101
+#: apps/asset/service.py:103
 msgid "Free emptying times per day"
 msgstr "清空免费剩余次数"
 
-#: apps/asset/service.py:129
+#: apps/asset/service.py:125 apps/users/models.py:299
+msgid "Set the proportion of points redemption times"
+msgstr "设置积分兑换次数比例"
+
+#: apps/asset/service.py:133
 msgid "Users use points to exchange"
 msgstr "使用积分兑换"
 
-#: apps/asset/service.py:199
+#: apps/asset/service.py:203
 msgid "Used free number of times"
 msgstr "使用免费次数"
 
-#: apps/asset/service.py:217
+#: apps/asset/service.py:221
 msgid "Used transient number of times"
 msgstr "使用临时次数"
 
-#: apps/asset/service.py:236
+#: apps/asset/service.py:240
 msgid "Used persistence number of times"
 msgstr "使用永久次数"
 
-#: apps/asset/service.py:242
+#: apps/asset/service.py:246
 msgid "consume payment error"
 msgstr "积分消费失败"
 
-#: apps/asset/service.py:271
+#: apps/asset/service.py:271 apps/users/models.py:285
+msgid "The proportion of first level commission. Range is between (0-10000)"
+msgstr "第一级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
+
+#: apps/asset/service.py:275 apps/users/models.py:290
+msgid "The proportion of second level commission. Range is between (0-10000)"
+msgstr "第二级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
+
+#: apps/asset/service.py:279 apps/users/models.py:295
+msgid "Set the redemption ratio of points withdrawal."
+msgstr "设置积分提现兑换率"
+
+#: apps/asset/service.py:287
 msgid "The direct invitee has been recharged"
 msgstr "直接邀请人充值"
 
-#: apps/asset/service.py:277
+#: apps/asset/service.py:293
 msgid "Indirect invitee has been recharged"
 msgstr "间接邀请人充值"
 
-#: apps/asset/service.py:341
+#: apps/asset/service.py:357
 msgid "The number of points exchanged for chat"
 msgstr "积分兑换聊天次数"
 
-#: apps/asset/service.py:457
+#: apps/asset/service.py:473
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -670,12 +691,12 @@ msgstr "微信支付通知"
 msgid "config item value"
 msgstr "配置项值"
 
-#: apps/users/admin/serializer.py:133 apps/users/serializer.py:27
+#: apps/users/admin/serializer.py:133 apps/users/serializer.py:30
 msgid "username"
 msgstr "用户名"
 
-#: apps/users/admin/serializer.py:135 apps/users/serializer.py:19
-#: apps/users/serializer.py:30
+#: apps/users/admin/serializer.py:135 apps/users/serializer.py:22
+#: apps/users/serializer.py:33
 msgid "password"
 msgstr "密码"
 
@@ -855,53 +876,77 @@ msgstr "配置项描述"
 msgid "Config"
 msgstr "配置表"
 
-#: apps/users/models.py:276
-msgid "Number of free experiences, number type, must be greater than 0"
-msgstr "免费体验数，数字类型，必须大于0"
-
 #: apps/users/models.py:281 apps/users/service.py:48
 msgid "Whether to enable the verification rule of mobile phone number"
 msgstr "是否启用手机号验证规则"
 
-#: apps/users/models.py:285
-msgid "The proportion of first level commission. Range is between (0-10000)"
-msgstr "第一级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
+#: apps/users/models.py:313
+msgid "pending"
+msgstr "待审核"
 
-#: apps/users/models.py:290
-msgid "The proportion of second level commission. Range is between (0-10000)"
-msgstr "第二级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
+#: apps/users/models.py:320 apps/users/serializer.py:115
+msgid "feedback title"
+msgstr ""
 
-#: apps/users/models.py:295
-msgid "Set the redemption ratio of points withdrawal."
-msgstr "设置积分提现兑换率"
+#: apps/users/models.py:321
+msgid "feedback conennt"
+msgstr ""
 
-#: apps/users/models.py:299
-msgid "Set the proportion of points redemption times"
-msgstr "设置积分兑换次数比例"
+#: apps/users/models.py:323
+msgid "feedback reply"
+msgstr ""
 
-#: apps/users/serializer.py:16 apps/users/serializer.py:54
+#: apps/users/models.py:324
+msgid "reply user id"
+msgstr "回复用户id"
+
+#: apps/users/models.py:325
+msgid "reply time"
+msgstr "回复时间"
+
+#: apps/users/models.py:332
+msgid "Feedback"
+msgstr "回复"
+
+#: apps/users/serializer.py:19 apps/users/serializer.py:57
 msgid "mobile phone number"
 msgstr "手机号"
 
-#: apps/users/serializer.py:18
+#: apps/users/serializer.py:21
 msgid "verification code"
 msgstr "验证码"
 
-#: apps/users/serializer.py:33
+#: apps/users/serializer.py:36
 msgid "invite code"
 msgstr "邀请码"
 
-#: apps/users/serializer.py:42
+#: apps/users/serializer.py:45
 msgid "nickname"
 msgstr "昵称"
 
-#: apps/users/serializer.py:45
+#: apps/users/serializer.py:48
 msgid "openid"
 msgstr "微信openid"
 
-#: apps/users/serializer.py:64
+#: apps/users/serializer.py:67
 msgid "Incorrect format of mobile phone number"
 msgstr "无效的手机号码"
+
+#: apps/users/serializer.py:106
+msgid "feedback status"
+msgstr "反馈状态"
+
+#: apps/users/serializer.py:107
+msgid "user id"
+msgstr "用户id"
+
+#: apps/users/serializer.py:118
+msgid "feedback content"
+msgstr "反馈内容"
+
+#: apps/users/serializer.py:127
+msgid "feedback reply content"
+msgstr "反馈回复内容"
 
 #: apps/users/service.py:75
 msgid "Number of invitations for awards"

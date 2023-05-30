@@ -23,8 +23,8 @@ from base.middleware import AnonymousAuthentication
 from base.response import APIResponse, SerializerErrorResponse
 from base.serializer import BaseQuery
 from users.models import AccountModel, MessageLogModel
-from users.serializer import CreateAccountSerializer, LoginSerializer, SendSmsMessageSerializer
-from users.service import InviteLogService, UserService
+from users.serializer import CreateAccountSerializer, FeedbackQuery, LoginSerializer, SendSmsMessageSerializer
+from users.service import FeedbackService, InviteLogService, UserService
 
 logger = logging.getLogger(__name__)
 
@@ -294,3 +294,36 @@ class WechatLoginViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         )
         resp = RequestClient.get(url)
         return APIResponse(result=resp)
+
+
+class FeedbackViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    feedback api.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def list(self, request, *args, **kwargs):
+        """
+        url: /api/v1/users/feedback/
+        method: get
+        desc: get feedback api
+        """
+        query = FeedbackQuery(data=request.GET)
+        query.is_valid()
+
+        page = query.validated_data.get('page') or 1  # type: ignore
+        offset = query.validated_data.get('offset') or 20  # type: ignore
+        order = query.validated_data.get('order') or 'status, -id'  # type: ignore
+        status = query.validated_data.get('status')  # type: ignore
+        user_id = request.user.id
+
+        return FeedbackService.get_list(user_id, page, offset, order, status)
+
+    def create(self, request, *args, **kwargs):
+        """
+        url: /api/v1/users/feedback/
+        method: post
+        desc: create feedback api
+        """
+        return FeedbackService.create_feedback(request)
