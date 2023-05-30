@@ -87,7 +87,9 @@ class O2OPaymentService(BaseService):
             old_free_usage_count = payment.free_usage_count
 
             payment.free_expire_time = datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0))
-            payment.free_usage_count = ConfigModel.get_int(ConfigModel.CONFIG_FREE_TRIAL_COUNT)
+            payment.free_usage_count = ConfigModel.get_int(
+                ConfigModel.CONFIG_FREE_TRIAL_COUNT, 10, _("Number of free experiences, number type, must be greater than 0")
+            )
             payment.save()
             note = _("Get free experience")
 
@@ -119,7 +121,9 @@ class O2OPaymentService(BaseService):
         add payment by point.
         """
         with transaction.atomic():
-            usage_total = floor(point * ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CHAT_COUNT_RATIO))
+            usage_total = floor(point * ConfigModel.get_int(
+                ConfigModel.CONFIG_POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times")
+            ))
             payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
             if not payment:
                 payment = cls.add_free_payment(user_id)
@@ -262,10 +266,22 @@ class PointsService(BaseService):
         if not invite_obj:
             return True
 
+        level1_ratio = ConfigModel.get_int(
+            ConfigModel.CONFIG_LEVEL1_COMMISSION_RATIO, 4000,
+            _("The proportion of first level commission. Range is between (0-10000)"),
+        )
+        level2_ratio = ConfigModel.get_int(
+            ConfigModel.CONFIG_LEVEL2_COMMISSION_RATIO, 800,
+            _("The proportion of second level commission. Range is between (0-10000)"),
+        )
+        cash_ratio = ConfigModel.get_int(
+            ConfigModel.CONFIG_POINT_TO_CASH_RATIO, 10,
+            _("Set the redemption ratio of points withdrawal.")
+        )
         with transaction.atomic():
-            total_point = float(order.actual_price) * ConfigModel.get_int(ConfigModel.CONFIG_POINT_TO_CASH_RATIO)
-            parent_point = floor(total_point * (ConfigModel.get_int(ConfigModel.CONFIG_LEVEL1_COMMISSION_RATIO) / 10000))
-            super_parent_point = floor(total_point * (ConfigModel.get_int(ConfigModel.CONFIG_LEVEL2_COMMISSION_RATIO) / 10000))
+            total_point = float(order.actual_price) * cash_ratio
+            parent_point = floor(total_point * (level1_ratio / 10000))
+            super_parent_point = floor(total_point * (level2_ratio / 10000))
             if invite_obj.inviter_user_id:
                 PointsModel.add_point(
                     invite_obj.inviter_user_id, parent_point, _('The direct invitee has been recharged'),
