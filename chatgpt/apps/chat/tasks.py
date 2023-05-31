@@ -26,24 +26,25 @@ def generate_topic_title(topic_id):
     if not topic:
         return logger.warning("[generate topic] ignore topic id: %s", topic_id)
 
-    chat = ChatRecordModel.objects.filter(
+    chats = ChatRecordModel.objects.filter(
         success=True,
         chat_topic_id=topic_id
-    ).first()
+    )[:3]
 
-    if not chat:
+    if not chats:
         return logger.warning("[generate topic] ignore reason: no chat record topic id: %s", topic_id)
 
     messages = []
-    messages.append({
-        "role": "user",
-        "content": chat.question
-    })
-    if chat.answer:
+    for chat in chats:
         messages.append({
-            "role": "assistant",
-            "content": chat.answer.replace('\n', '')
+            "role": "user",
+            "content": chat.question
         })
+        if chat.answer:
+            messages.append({
+                "role": "assistant",
+                "content": chat.answer.replace('\n', '')
+            })
 
     helper = AIHelper()
     resp = helper.sync_send_msg(_('Extract an appropriate and concise title according to the previous language'), histories=messages)
@@ -52,8 +53,11 @@ def generate_topic_title(topic_id):
 
     choices = resp.get('choices', [])
     if len(choices) > 0:
-        topic.title = choices[0].get('message', {}).get('content', '').replace("\"", '')
-        topic.success = True
+        title = choices[0].get('message', {}).get('content', '').replace("\"", '')
+        if len(title) >= 125:
+            title = chats[0].question[:125]
+        topic.title = title
+        topic.success = len(chats) > 2
         topic.save()
 
     logger.info("[generate topic] finish topic id: %s", topic_id)
