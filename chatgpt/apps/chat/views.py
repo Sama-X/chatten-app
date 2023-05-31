@@ -5,6 +5,7 @@ chat api module.
 from datetime import datetime
 import json
 import logging
+from math import log
 import traceback
 
 from asgiref.sync import async_to_sync
@@ -23,6 +24,7 @@ from base.serializer import BaseQuery
 from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
 from chat.serializer import ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
+from chat.tasks import generate_topic_title
 from users.models import AccountModel, SamaWalletModel
 from users.service import UserService, UserServiceHelper
 
@@ -49,7 +51,6 @@ class ChatViewset(viewsets.GenericViewSet):
             return SerializerErrorResponse(serializer, SystemErrorCode.HTTP_400_BAD_REQUEST)
 
         question = serializer.validated_data["question"] # type: ignore
-        print('question = ', question)
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
 
         user_id = request.user.id
@@ -76,7 +77,7 @@ class ChatViewset(viewsets.GenericViewSet):
         if len(choices) > 0:
             if not topic_id:
                 topic = ChatTopicModel.objects.create(
-                    title=question[:125],
+                    title="...",
                     user_id=request.user.id
                 )
                 topic_id = topic.id
@@ -92,6 +93,11 @@ class ChatViewset(viewsets.GenericViewSet):
         obj.resp_tokens = resp.get('usage', {}).get('completion_tokens', 0)
         obj.total_tokens = resp.get('usage', {}).get('total_tokens', 0)
         obj.save()
+
+        try:
+            generate_topic_title.delay(topic_id)
+        except Exception as err:
+            logger.error("[generate topic error] error: %s", err)
 
         if obj.answer:
             O2OPaymentService.reduce_payment(user_id, 1)

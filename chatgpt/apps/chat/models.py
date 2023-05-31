@@ -99,3 +99,4 @@ class ChatTopicModel(BaseModel):
 
     title = models.CharField(max_length=128, verbose_name=_("db:chat topic"))
     user_id = models.BigIntegerField(db_index=True, verbose_name=_("db:user foreign key"))
+    success = models.BooleanField(default=False, verbose_name=_("topic generate success"))

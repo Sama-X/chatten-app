@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 16:53+0800\n"
+"POT-Creation-Date: 2023-05-31 10:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -317,7 +317,7 @@ msgstr ""
 msgid "The number of points exchanged for chat"
 msgstr ""
 
-#: apps/asset/service.py:473
+#: apps/asset/service.py:477
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr ""
 
@@ -446,7 +446,6 @@ msgid "Points are not enough"
 msgstr ""
 
 #: apps/base/exception.py:124
-#, python-format
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
 
@@ -555,6 +554,10 @@ msgstr "chatgpt table"
 msgid "db:chat topic"
 msgstr "chat topic"
 
+#: apps/chat/models.py:102
+msgid "topic generate success"
+msgstr ""
+
 #: apps/chat/serializer.py:14
 msgid "serializer: question"
 msgstr "question"
@@ -566,6 +569,10 @@ msgstr "chat topic id"
 #: apps/chat/serializer.py:49 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt key"
+
+#: apps/chat/tasks.py:49
+msgid "Extract an appropriate and concise title according to the previous language"
+msgstr ""
 
 #: apps/order/admin/serializer.py:43
 msgid "order package name"
@@ -682,7 +689,6 @@ msgid "order paymethod"
 msgstr ""
 
 #: apps/order/views.py:117
-#, python-format
 msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
 msgstr ""
 
@@ -887,7 +893,7 @@ msgstr ""
 msgid "pending"
 msgstr ""
 
-#: apps/users/models.py:320 apps/users/serializer.py:115
+#: apps/users/models.py:320 apps/users/serializer.py:116
 msgid "feedback title"
 msgstr ""
 
@@ -935,19 +941,19 @@ msgstr ""
 msgid "Incorrect format of mobile phone number"
 msgstr "Incorrect format of mobile phone number"
 
-#: apps/users/serializer.py:106
+#: apps/users/serializer.py:107
 msgid "feedback status"
 msgstr ""
 
-#: apps/users/serializer.py:107
+#: apps/users/serializer.py:108
 msgid "user id"
 msgstr ""
 
-#: apps/users/serializer.py:118
+#: apps/users/serializer.py:119
 msgid "feedback content"
 msgstr ""
 
-#: apps/users/serializer.py:127
+#: apps/users/serializer.py:128
 msgid "feedback reply content"
 msgstr ""
 
@@ -956,7 +962,6 @@ msgid "Number of invitations for awards"
 msgstr ""
 
 #: apps/users/service.py:78
-#, python-format
 msgid "Invite user id: %(aid)s and get %(count)s times"
 msgstr ""
 

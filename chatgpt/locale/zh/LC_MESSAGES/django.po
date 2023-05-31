@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 16:53+0800\n"
+"POT-Creation-Date: 2023-05-31 10:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,11 +48,11 @@ msgstr "减少"
 
 #: apps/asset/models.py:73
 msgid "Direct invite recharge reward"
-msgstr ""
+msgstr "直接邀请充值奖励"
 
 #: apps/asset/models.py:74
 msgid "Indirect invite recharge reward"
-msgstr ""
+msgstr "间接邀请充值奖励"
 
 #: apps/asset/models.py:75
 msgid "Exchange reduce"
@@ -96,7 +96,7 @@ msgstr "退款中"
 
 #: apps/asset/models.py:110
 msgid "reject"
-msgstr ""
+msgstr "已拒绝"
 
 #: apps/asset/models.py:111 apps/base/exception.py:26 apps/order/models.py:52
 #: apps/users/models.py:314
@@ -316,7 +316,7 @@ msgstr "间接邀请人充值"
 msgid "The number of points exchanged for chat"
 msgstr "积分兑换聊天次数"
 
-#: apps/asset/service.py:473
+#: apps/asset/service.py:477
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -553,6 +553,10 @@ msgstr "chatgpt密钥表"
 msgid "db:chat topic"
 msgstr "聊天话题"
 
+#: apps/chat/models.py:102
+msgid "topic generate success"
+msgstr "话题是否生成成功"
+
 #: apps/chat/serializer.py:14
 msgid "serializer: question"
 msgstr "问题"
@@ -564,6 +568,10 @@ msgstr "聊天话题id"
 #: apps/chat/serializer.py:49 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt键"
+
+#: apps/chat/tasks.py:49
+msgid "Extract an appropriate and concise title according to the previous language"
+msgstr "根据对话内容和语言，生成一个相对应的简短标题"
 
 #: apps/order/admin/serializer.py:43
 msgid "order package name"
@@ -814,7 +822,7 @@ msgstr "积分余额"
 
 #: apps/users/models.py:120
 msgid "SamaScore"
-msgstr ""
+msgstr "Sama积分"
 
 #: apps/users/models.py:133
 msgid "db:ScoreLog:score id"
@@ -884,17 +892,17 @@ msgstr "是否启用手机号验证规则"
 msgid "pending"
 msgstr "待审核"
 
-#: apps/users/models.py:320 apps/users/serializer.py:115
+#: apps/users/models.py:320 apps/users/serializer.py:116
 msgid "feedback title"
-msgstr ""
+msgstr "反馈标题"
 
 #: apps/users/models.py:321
 msgid "feedback conennt"
-msgstr ""
+msgstr "反馈内容"
 
 #: apps/users/models.py:323
 msgid "feedback reply"
-msgstr ""
+msgstr "反馈回复内容"
 
 #: apps/users/models.py:324
 msgid "reply user id"
@@ -932,19 +940,19 @@ msgstr "微信openid"
 msgid "Incorrect format of mobile phone number"
 msgstr "无效的手机号码"
 
-#: apps/users/serializer.py:106
+#: apps/users/serializer.py:107
 msgid "feedback status"
 msgstr "反馈状态"
 
-#: apps/users/serializer.py:107
+#: apps/users/serializer.py:108
 msgid "user id"
 msgstr "用户id"
 
-#: apps/users/serializer.py:118
+#: apps/users/serializer.py:119
 msgid "feedback content"
 msgstr "反馈内容"
 
-#: apps/users/serializer.py:127
+#: apps/users/serializer.py:128
 msgid "feedback reply content"
 msgstr "反馈回复内容"
 
@@ -959,3 +967,6 @@ msgstr "邀请用户id:%(aid)s，获得%(count)s次"
 #: apps/users/service.py:240
 msgid "Free experience days"
 msgstr "免费体验天数"
+
+#~ msgid "Summarize a short title"
+#~ msgstr "根据之前的语言，提取一个合适的简洁的标题"
