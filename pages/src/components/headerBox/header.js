@@ -98,7 +98,6 @@ const App = (data) => {
   };
   const linkSkip =  () => {
     const isTokenStatus = cookie.load('token') ? true : false
-    alert(isTokenStatus)
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'signin' }})
     }else{
