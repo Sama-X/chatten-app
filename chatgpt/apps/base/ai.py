@@ -190,7 +190,7 @@ class AIHelper:
             resp = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120)
             )
-            return resp.to_dict_recursive()  # type: ignore
+            result = resp.to_dict_recursive()  # type: ignore
         except RateLimitError as err:
             # rate limit exception
             logger.error("【chatgpt send】reason: rate limit desc: %s", err)

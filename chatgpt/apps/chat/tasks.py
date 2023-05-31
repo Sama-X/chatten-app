@@ -46,13 +46,13 @@ def generate_topic_title(topic_id):
         })
 
     helper = AIHelper()
-    resp = helper.sync_send_msg(_('Summarize a short title'), histories=messages)
+    resp = helper.sync_send_msg(_('Extract an appropriate and concise title according to the previous language'), histories=messages)
 
     logger.info("[generate topic] genereate topic id: %s result: %s", topic_id, resp)
 
     choices = resp.get('choices', [])
     if len(choices) > 0:
-        topic.title = choices[0].get('message', {}).get('content')
+        topic.title = choices[0].get('message', {}).get('content', '').replace("\"", '')
         topic.success = True
         topic.save()
 

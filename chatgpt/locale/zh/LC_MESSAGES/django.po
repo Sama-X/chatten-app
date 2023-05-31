@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 18:57+0800\n"
+"POT-Creation-Date: 2023-05-31 10:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -570,8 +570,8 @@ msgid "serializer:chatgpt key"
 msgstr "chatgpt键"
 
 #: apps/chat/tasks.py:49
-msgid "Summarize a short title"
-msgstr "总结一个简短的话题名，不要带标点符号"
+msgid "Extract an appropriate and concise title according to the previous language"
+msgstr "根据之前的语言，提取一个合适的简洁的标题"
 
 #: apps/order/admin/serializer.py:43
 msgid "order package name"
@@ -967,3 +967,6 @@ msgstr "邀请用户id:%(aid)s，获得%(count)s次"
 #: apps/users/service.py:240
 msgid "Free experience days"
 msgstr "免费体验天数"
+
+#~ msgid "Summarize a short title"
+#~ msgstr "根据之前的语言，提取一个合适的简洁的标题"
