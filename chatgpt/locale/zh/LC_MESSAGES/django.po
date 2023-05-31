@@ -571,7 +571,7 @@ msgstr "chatgpt键"
 
 #: apps/chat/tasks.py:49
 msgid "Extract an appropriate and concise title according to the previous language"
-msgstr "根据之前的语言，提取一个合适的简洁的标题"
+msgstr "根据对话内容和语言，生成一个相对应的简短标题"
 
 #: apps/order/admin/serializer.py:43
 msgid "order package name"

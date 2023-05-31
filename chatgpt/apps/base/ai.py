@@ -166,7 +166,8 @@ class AIHelper:
         self.strategy.release_key(key)
         return result
 
-    def sync_send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None):
+    def sync_send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0,
+                      key=None, auth_token=None, temperature=1.0):
         """
         sync send message.
         """
@@ -188,7 +189,8 @@ class AIHelper:
         start = time.time()
         try:
             resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120)
+                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120),
+                temperature=temperature
             )
             result = resp.to_dict_recursive()  # type: ignore
         except RateLimitError as err:
