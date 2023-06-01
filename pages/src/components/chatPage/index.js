@@ -85,6 +85,9 @@ const App = () => {
           // if(resData.data[i].answer.indexOf('```') > -1){
           //   resData.data[i].answer = resData.data[i].answer.replace(/```/g,'```')
           // }
+          if(resData.data[i].answer.indexOf('\n') > -1){
+            resData.data[i].answer = resData.data[i].answer.replace(/\n/g,'<br />')
+          }
             resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
         setChatList(resData.data ? resData.data : [])
@@ -268,7 +271,6 @@ const App = () => {
             }else{
               // setIsModalOpen(true)
               // cookie.save('experience', resData.experience, { path: '/' })
-              console.log('rrrr=', resData.data)
               cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
               cookie.save('experience', resData.data.experience, { path: '/' })
 
@@ -369,7 +371,6 @@ const App = () => {
 
   function isWeixinBrowser() {
     let ua = navigator.userAgent.toLowerCase();
-    console.log('isWeixinBrowser=', /micromessenger/.test(ua) ? true : false)
     return /micromessenger/.test(ua) ? true : false;
   }
 
@@ -382,7 +383,6 @@ const App = () => {
         message.error("少于10积分，不支持提现")
         return
       }
-      console.log('withdraw')
       showWithdrawModal()  
     }
   }
