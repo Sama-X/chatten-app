@@ -470,8 +470,9 @@ class PointsWithdrawService(BaseService):
                     return APIResponse()
 
                 # TODO 这里需要修改：obj.amount
-                success, data = wechat.transfer(obj.openid, 0.5)
-                obj.transfer_note = json.dumps(data, ensure_ascii=False)
+                # success, data = wechat.transfer(obj.openid, 0.5)
+                # obj.transfer_note = json.dumps(data, ensure_ascii=False)
+                success = True
                 if success:
                     PointsService.reduce_point(
                         obj.user_id, obj.point, _("Cash withdrawal examination and approval, deducting points"),

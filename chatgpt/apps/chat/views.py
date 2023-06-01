@@ -77,7 +77,7 @@ class ChatViewset(viewsets.GenericViewSet):
         if len(choices) > 0:
             if not topic_id:
                 topic = ChatTopicModel.objects.create(
-                    title="...",
+                    title="New Talk",
                     user_id=request.user.id
                 )
                 topic_id = topic.id
