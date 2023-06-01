@@ -32,6 +32,6 @@ export default {
     withdraw: "withdraw",
     withdraw_confirm: "confirm?",
     check_record: "records",
-    contact_us: "contact us, our wechat:xrkk2023"
-
+    contact_us: "contact us, our wechat:xrkk2023",
+    policy: "View promotion policies",
   }

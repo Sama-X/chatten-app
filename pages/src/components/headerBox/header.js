@@ -1,5 +1,5 @@
 import './header.css'
-import { Drawer, Menu, message, Spin, Popconfirm, Modal, Button } from 'antd';
+import { Drawer, Menu, message, Spin, Popconfirm, Modal, Button, Alert } from 'antd';
 import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
@@ -49,6 +49,7 @@ const App = (data) => {
   const [spinStatus, setSpinStatus] = useState(true);
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPolicy, setShowPolicy] = useState(false);
   const language = data.language
   const setLanguage = data.setLanguage
 
@@ -82,6 +83,7 @@ const App = (data) => {
   const onClose = () => {
     setOpen(false);
   };
+
   const menuClick = (e) => {
     if(e.key == '01' && e.domEvent.target.textContent == locales(language)['create_new_talk'] + '…'){
 
@@ -244,6 +246,11 @@ const App = (data) => {
       setLanguage('中文')
     }
   };
+
+  const onClosePolicy = () => {
+    setShowPolicy(false);
+  };
+
   useEffect(()=>{
     if(history.location.search){
       let str = history.location.search.split('=')[1]
@@ -500,6 +507,23 @@ const App = (data) => {
                 <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
               <div className='contactUs'>{locales(language)['contact_us']}</div>
+              <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
+              {
+                showPolicy ?
+                  <Alert className='policy-info-mobile'
+                  message="AI助手ChatTEN用户运营推广政策"
+                  description={<div>
+                    <div>1、注册即享受连续7天每天10次免费使用额度。</div>
+                    <div>2、纯使用用户分享，比如用户A每分享给一个好友注册，用户A获得10次免费额度，他分享的好友注册成用户B，用户B即可获得连续7天每天10次的免费额度。</div>
+                    <div>3、推广会员转化，如A用户分享的好友注册成为用户B之后，开通了会员，支付了100元会员费，用户A获得40%佣金即40元，如果用户B分享的好友注册成为用户C并开通了会员，支付了100元，用户B获得40%佣金40元，用户A获得8%佣金8元。</div>
+                    <div>4、上述1、2和3不冲突，用户可以同时享受。</div>
+                    <div>5、申请提现先点击左下角提现，再加微信：向日葵 xrkk2023，备注（提现）</div>
+                  </div>}
+                  type="info"
+                  closeText={<div>X</div>}
+                  onClose={onClosePolicy}
+                />:""
+              }
             </div>
 
           </div>
@@ -611,6 +635,24 @@ const App = (data) => {
                 <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
               <div className='contactUs'>{locales(language)['contact_us']}</div>
+              <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
+              {
+                showPolicy ?
+                  <Alert className='policy-info'
+                  message="AI助手ChatTEN用户运营推广政策"
+                  description={<div>
+                    <div>1、注册即享受连续7天每天10次免费使用额度。</div>
+                    <div>2、纯使用用户分享，比如用户A每分享给一个好友注册，用户A获得10次免费额度，他分享的好友注册成用户B，用户B即可获得连续7天每天10次的免费额度。</div>
+                    <div>3、推广会员转化，如A用户分享的好友注册成为用户B之后，开通了会员，支付了100元会员费，用户A获得40%佣金即40元，如果用户B分享的好友注册成为用户C并开通了会员，支付了100元，用户B获得40%佣金40元，用户A获得8%佣金8元。</div>
+                    <div>4、上述1、2和3不冲突，用户可以同时享受。</div>
+                    <div>5、申请提现先点击左下角提现，再加微信：向日葵 xrkk2023，备注（提现）</div>
+                  </div>}
+                  type="info"
+                  closeText={<div>X</div>}
+                  onClose={onClosePolicy}
+                />:""
+              }
+
             </div>
         </div>
       {

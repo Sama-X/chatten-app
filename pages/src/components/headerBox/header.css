@@ -246,3 +246,24 @@
     margin-top: 20px;
     font-size: 16px;
   }
+
+  .policy {
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .policy-info {
+    text-align: left;
+    background-color: #fff;
+    position: absolute;
+    top: 200px;
+    left: 300px;
+    right: 300px;
+  }
+
+
+  .policy-info-mobile {
+    background-color: #fff;
+    margin-top: 5px;
+  }
