@@ -200,3 +200,10 @@
     cursor: pointer;
     font-size: 14px;
   }
+
+
+.protocol {
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+  }

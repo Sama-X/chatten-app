@@ -507,6 +507,10 @@ const App = () => {
     }
   }, [language])
 
+  const goToProtocol = () => {
+    history.push({pathname: '/protocol/'})
+  }
+
   return (
     <div  style={{width:'100%'}}>
       {
@@ -728,6 +732,7 @@ const App = () => {
                     <p>{locales(language)['withdraw_confirm']}</p>
                   </Modal>
                   <div className='contactUs'>{locales(language)['contact_us']}</div>
+                  <div className='protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
                   <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
               {
                 showPolicy ?

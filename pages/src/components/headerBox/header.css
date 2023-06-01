@@ -247,6 +247,12 @@
     font-size: 16px;
   }
 
+  .protocol {
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
   .policy {
     margin-top: 20px;
     font-size: 16px;

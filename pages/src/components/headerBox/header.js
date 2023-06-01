@@ -251,6 +251,10 @@ const App = (data) => {
     setShowPolicy(false);
   };
 
+  const goToProtocol = () => {
+    history.push({pathname: '/protocol/'})
+  }
+
   useEffect(()=>{
     if(history.location.search){
       let str = history.location.search.split('=')[1]
@@ -507,6 +511,7 @@ const App = (data) => {
                 <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
               <div className='contactUs'>{locales(language)['contact_us']}</div>
+              <div className='protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
               <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
               {
                 showPolicy ?
@@ -635,6 +640,7 @@ const App = (data) => {
                 <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
               <div className='contactUs'>{locales(language)['contact_us']}</div>
+              <div className='protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
               <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
               {
                 showPolicy ?

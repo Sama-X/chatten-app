@@ -6,6 +6,7 @@ import ChatPage from '../components/chatPage/index.js'
 import Index from '../components/index'
 import Price from '../components/price/index.js'
 import Pay from '../components/pay/pay_qrcode.js'
+import Protocol from '../components/protocol/index.js'
 import Record from '../components/record/index.js'
 import AdminLogin from '../components/admin/login/login.js'
 import AdminPackage from '../components/admin/package/package.js'
@@ -28,6 +29,7 @@ export default class index extends Component {
         <Route component={SignIn} path='/SignIn'></Route>
         <Route component={Price} path='/price'></Route>
         <Route component={Pay} path='/pay'></Route>
+        <Route component={Protocol} path='/protocol'></Route>
         <Route component={Record} path='/record'></Route>
         <Route component={AdminLogin} path='/admin/login'></Route>
         <Route component={Admin} path='/admin/dashboard'></Route>

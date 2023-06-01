@@ -34,4 +34,5 @@ export default {
     check_record: "records",
     contact_us: "contact us, our wechat:xrkk2023",
     policy: "View promotion policies",
+    protocol: "View user protocol",
   }
