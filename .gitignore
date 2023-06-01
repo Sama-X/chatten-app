@@ -164,3 +164,5 @@ test_local_settings.py
 1644933727_20230519_cert.zip
 1644933727_20230519_cert/
 apiclient_key.pem
+prod_slave_local_settings.py
+docker-compose-prod-slave.yaml
