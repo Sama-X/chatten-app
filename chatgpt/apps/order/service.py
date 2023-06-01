@@ -290,7 +290,7 @@ class OrderService(BaseService):
 
         if order_obj.payment_method == OrderModel.METHOD_WECHAT:
             if client == OrderModel.CLIENT_NATIVE:
-                code_url = wechat.native_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no)
+                code_url = wechat.native_prepay(order_obj.actual_price, order_obj.out_trade_no)
 
                 logger.info('[create order] native prepay response: %s', code_url)
                 img_stream = utils.make_qrcode(data=code_url)
@@ -304,7 +304,7 @@ class OrderService(BaseService):
                     ip_addr = request.headers['X-Forwarded-For']
                 except:
                     pass
-                h5_url = wechat.h5_prepay(order_obj.actual_price / 1000, order_obj.out_trade_no, ip=ip_addr)
+                h5_url = wechat.h5_prepay(order_obj.actual_price, order_obj.out_trade_no, ip=ip_addr)
 
                 logger.info('[create order] h5 prepay response: %s', h5_url)
                 return APIResponse(result={
@@ -312,7 +312,7 @@ class OrderService(BaseService):
                     'order_id': order_obj.id
                 })
             elif client == OrderModel.CLIENT_JSAPI:
-                data = wechat.js_api_prepay(openid, order_obj.actual_price / 1000, order_obj.out_trade_no)
+                data = wechat.js_api_prepay(openid, order_obj.actual_price, order_obj.out_trade_no)
                 logger.info('[create order] h5 prepay response: %s', data)
                 return APIResponse(result={
                     'data': data,
