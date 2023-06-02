@@ -87,9 +87,14 @@ def get_current_error_markdown(request):
     get error info with markdown.
     """
     e_type, e_value, _ = sys.exc_info()
+    uri = None
+    if hasattr(request, 'get_raw_uri'):
+        uri = request.get_raw_uri()
+    elif hasattr(request, 'stream'):
+        uri = request.stream.get_full_path_info()
     note = f'''
 ## api
-    {request.get_raw_uri()}
+    {uri}
 
 ### env
     {"test" if settings.DEBUG else "production"}
@@ -124,9 +129,16 @@ def exception_catch(exception, ctx):
     if hasattr(exception, '__module__') and exception.__module__ == 'rest_framework.exceptions':
         return APIResponse(code=exception.status_code, msg=exception.detail)
 
-    if not settings.DEBUG:
-        title = f'[{settings.CURRENT_ENV}] system error. uri: {ctx["request"].get_raw_uri()}'
-        error = get_current_error_markdown(ctx['request'])
+    if settings.DEBUG:
+        uri = None
+        request = ctx['request']
+        if hasattr(request, 'get_raw_uri'):
+            uri = request.get_raw_uri()
+        elif hasattr(request, 'stream'):
+            uri = request.stream.get_full_path_info()
+
+        title = f'[{settings.CURRENT_ENV}] system error. uri: {uri}'
+        error = get_current_error_markdown(request)
         DingBaseClient.send_sys_error(title, error)
 
     return APIResponse(SystemErrorCode.HTTP_500_INTERNAL_SERVER_ERROR)

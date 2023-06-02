@@ -17,6 +17,8 @@ from openai.error import RateLimitError, APIConnectionError, Timeout, Authentica
 from django.conf import settings
 from django_eventstream import send_event
 
+from base.ding_sdk import DingBaseClient
+
 openai.proxy = settings.CHATGPT_PROXY or None
 
 logger = logging.getLogger(__name__)
@@ -73,7 +75,6 @@ class AIHelper:
         """
         send message.
         """
-        print("send message.....")
         if self.strategy is None:
             self.set_strategy()
 
@@ -88,6 +89,13 @@ class AIHelper:
         result = {}
         if not key:
             result['error'] = 'The system is busy, please try again later'
+            DingBaseClient.send_sys_error(
+                title="No key error.",
+                content="There is no chatten key."
+            )
+            result["error"] = f"no chatten key"
+            return result
+
         start = time.time()
         try:
             encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
@@ -139,6 +147,17 @@ class AIHelper:
         except RateLimitError as err:
             # rate limit exception
             logger.error("【chatgpt send】reason: rate limit desc: %s", err)
+            err_msg = err.user_message
+            if err_msg == 'You exceeded your current quota, please check your plan and billing details.':
+                self.strategy.drop_key(key)
+                DingBaseClient.send_sys_error(
+                    title="chatgpt key error",
+                    content=f"chatgpt key error\n\nkey: {key}\n\n reason: {err_msg}"
+                )
+                return await self.send_msg(
+                    question, msg_type=msg_type, histories=histories, retry_count=retry_count+1,
+                    auth_token=auth_token
+                )
             if retry_count < 1:
                 time.sleep(5)
                 logger.error("【chatgpt send】RateLimit exceed, repeat retry %s times".format(retry_count+1))

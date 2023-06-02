@@ -2,6 +2,7 @@
 Chatgpt key selection strategy.
 """
 
+from gc import enable
 import heapq
 import random
 from random import shuffle
@@ -30,6 +31,12 @@ class BaseStrategy:
     def __init__(self) -> None:
         """
         init.
+        """
+        self.init_keys()
+
+    def init_keys(self):
+        """
+        init keys.
         """
         from chat.models import ChatgptKeyModel
         items = ChatgptKeyModel.objects.filter(
@@ -64,12 +71,17 @@ class BaseStrategy:
         """
         pass
 
-    def drop_key(self, key):
+    def drop_key(self, key, reason=None):
         """
         drop key.
         """
         self.UNUSED_KEYS.discard(key)
         self.USING_KEYS.discard(key)
+        from chat.models import ChatgptKeyModel
+        ChatgptKeyModel.objects.filter(
+            key=key,
+            enable=True
+        ).update(enable=False, reason=reason)
 
 
 class UnusedStrategy(BaseStrategy):
@@ -129,6 +141,7 @@ class PriorityStrategy(BaseStrategy):
         get api key.
         """
         if not self.TASKS:
+            self.init_keys()
             return None
 
         priority, key = heapq.heappop(self.TASKS)
@@ -151,17 +164,17 @@ class PriorityStrategy(BaseStrategy):
         self.USING_KEYS.discard(key)
         self.UNUSED_KEYS.add(key)
 
-    def drop_key(self, key):
+    def drop_key(self, key, reason=None):
         """
         drop key.
         """
         self.DROP_KEYS.add(key)
-        self.USING_KEYS.discard(key)
-        self.UNUSED_KEYS.discard(key)
         if key in self.TASK_MAP:
             self.TASK_MAP.pop(key)
         while self.TASKS and self.TASKS[0][1] in self.DROP_KEYS:
             heapq.heappop(self.TASKS)
+
+        super().drop_key(key, reason)
 
 
 class DurationWeightedStrategy(BaseStrategy):
@@ -221,11 +234,10 @@ class DurationWeightedStrategy(BaseStrategy):
         self.USING_KEYS.discard(key)
         self.UNUSED_KEYS.add(key)
 
-    def drop_key(self, key):
+    def drop_key(self, key, reason=None):
         """
         drop key
         """
         self.KEY_LAST_USED_MAP.pop(key, 0)
         self.WEIGHT_MAP.pop(key, 0)
-        self.USING_KEYS.discard(key)
-        self.UNUSED_KEYS.discard(key)
+        super().drop_key(key, reason)
