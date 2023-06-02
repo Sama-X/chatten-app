@@ -1,6 +1,6 @@
 import './price_mobile.css'
 import { useEffect, useState } from 'react';
-import { message } from 'antd';
+import { message, Button } from 'antd';
 import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
 import Request from '../../request.ts';
@@ -178,7 +178,7 @@ function App() {
               })
             }
         </div>
-        <div className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</div>
+        <Button className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</Button>
       </div>
     </div>
   );

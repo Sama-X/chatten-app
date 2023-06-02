@@ -1,5 +1,6 @@
 import './price.css'
 import { useEffect, useState } from 'react';
+import { Button } from 'antd';
 import cookie from 'react-cookies'
 import get_default_language from '../../utils/get_default_language.js'
 import Request from '../../request.ts';
@@ -60,7 +61,7 @@ function App() {
                     <div className='price-item' key={item.id}>
                       <div className='price-item-name'>按次购买</div>
                       <div className='price-item-content'><span className='price-item-limit'><input onChange={changeValue} value={value?value:''}/></span>次提问</div>
-                      <div className='price-item-btn' onClick={()=>{payMoney(value*item.price, item.id, value)}}>充值{value*item.price}元 👉 </div>
+                      <Button className='price-item-btn' onClick={()=>{payMoney(value*item.price, item.id, value)}}>充值{value*item.price}元 👉 </Button>
                     </div>
                     )
                   }
