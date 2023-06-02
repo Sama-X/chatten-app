@@ -229,7 +229,7 @@ const App = (data) => {
         message.success('Successfully copied, please share with friends')
       }
     }else{
-      message.info('Please log in first and proceed with the sharing operation')
+      message.info(locales(language)['login_first'])
       setTimeout(function(){
         history.push({pathname: '/SignIn/?type=1'})
       },1000)

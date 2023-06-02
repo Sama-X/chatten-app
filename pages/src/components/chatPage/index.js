@@ -429,7 +429,7 @@ const App = () => {
         })
       }
     }else{
-      message.info('Please log in first and proceed with the sharing operation')
+      message.info(locales(language)['login_first'])
       setTimeout(function(){
         history.push({pathname: '/SignIn'})
       },1000)

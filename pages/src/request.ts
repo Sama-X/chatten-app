@@ -73,6 +73,7 @@ class Request {
       cookie.remove("token")
       cookie.remove("userName")
       cookie.remove("userId")
+      window.location.href = '/'
     }
     return response
   }
