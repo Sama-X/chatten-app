@@ -82,6 +82,7 @@ class ChatgptKeyModel(BaseModel):
     user_id = models.BigIntegerField(db_index=True, verbose_name=_("db:user foreign key"))
     key = models.CharField(max_length=128, unique=True, null=False, verbose_name=_("db:chatgpt key"))
     enable = models.BooleanField(default=True, verbose_name=_("db:enable"))
+    reason = models.CharField(max_length=256, null=True, verbose_name="disable reason")
 
     class Meta:
         """

@@ -79,8 +79,8 @@ class DingBaseClient:
         send error message.
         """
         return cls._send_robot_msg(
-            title, content, metion_mobiles, metion_user_ids, is_at_all, secret=settings.DINGTALK_BUSINESS_ROOM_SECRET,
-            token=settings.DINGTALK_BUSINESS_ROOM_TOKEN
+            title, content, metion_mobiles, metion_user_ids, is_at_all, secret=settings.DINGTALK_ERROR_ROOM_SECRET,
+            token=settings.DINGTALK_ERROR_ROOM_TOKEN
         )
         
     @classmethod
