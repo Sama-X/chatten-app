@@ -25,6 +25,7 @@ function App() {
   const [nonceStr, setNonceStr] = useState('')
   const [packagex, setPackage] = useState('')
   const [paySign, setPaySign] = useState('')
+  const [color, setColor] = useState('#05c160')
   const history = useHistory()
 
 
@@ -70,6 +71,7 @@ function App() {
   }
 
   const payMoney = () => {
+    setColor('#fff')
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
@@ -178,7 +180,7 @@ function App() {
               })
             }
         </div>
-        <Button className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</Button>
+        <Button style={{'border': color, 'color': '#fff'}} className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</Button>
       </div>
     </div>
   );

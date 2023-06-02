@@ -20,6 +20,8 @@ function App() {
   const navigate = useHistory()
   const [packageList, setPackageList] = useState([])
 
+  const [color, setColor] = useState('#05c160')
+
   const changeValue = (e) => {
     let v = e.target.value.replace(/[^\d]/g, "");
     if(v==''){
@@ -37,6 +39,7 @@ function App() {
   }
 
   const payMoney = () => {
+    setColor('#fff')
     request.post('/api/v1/order/orders/', {
       package_id: parseInt(packageId),
       quantity: parseInt(quantity),
@@ -116,7 +119,7 @@ function App() {
               })
             }
         </div>
-        <Button className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</Button>
+        <Button style={{'border': color, 'color': '#fff'}} className='price-mobile-pay' onClick={payMoney}>微信支付¥{parseFloat(amount * quantity).toFixed(2)}</Button>
       </div>
     </div>
   );
