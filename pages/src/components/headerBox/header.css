@@ -224,10 +224,10 @@
   }
 
   .my-score {
-    position: absolute;
-    bottom: 30px;
-    left:30px;
+    text-align: left;
     font-size: 14px;
+    margin-top: 20px;
+    margin-left: 10px;
   }
 
   .points-widthdraw {
@@ -245,19 +245,26 @@
   .contactUs {
     margin-top: 3px;
     font-size: 14px;
+    text-align: left;
+    margin-left: 10px;
   }
 
   .protocol {
     margin-top: 3px;
     cursor: pointer;
     font-size: 14px;
-
+    text-align: left;
+    color: #E84142;
+    margin-left: 10px;
   }
 
   .policy {
     margin-top: 3px;
     font-size: 14px;
     cursor: pointer;
+    text-align: left;
+    color: #E84142;
+    margin-left: 10px;
   }
 
   .policy-info {
@@ -267,10 +274,44 @@
     top: 200px;
     left: 300px;
     right: 300px;
+    margin-left: 10px;
+    font-size: 14px;
   }
 
 
   .policy-info-mobile {
     background-color: #fff;
     margin-top: 5px;
+  }
+
+
+
+  .mobile-my-score {
+    text-align: left;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+
+
+
+  .mobile-contactUs {
+    margin-top: 3px;
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .mobile-protocol {
+    margin-top: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    color: #E84142;
+  }
+
+  .mobile-policy {
+    margin-top: 3px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    color: #E84142;
   }

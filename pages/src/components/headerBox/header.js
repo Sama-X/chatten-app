@@ -505,14 +505,14 @@ const App = (data) => {
                 </div>
               </div>
               {isToken?
-              <div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}> {locales(language)['check_record']}</span></div>
+              <div className='mobile-my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}>  |  {locales(language)['check_record']}</span></div>
               :""}
               <Modal title={locales(language)['withdraw']} open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                 <p>{locales(language)['withdraw_confirm']}</p>
               </Modal>
-              <div className='contactUs'>{locales(language)['contact_us']}</div>
-              <div className='protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
-              <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
+              <div className='mobile-contactUs'>{locales(language)['contact_us']}</div>
+              <div className='mobile-protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
+              <div className='mobile-policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
               {
                 showPolicy ?
                   <Alert className='policy-info-mobile'

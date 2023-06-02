@@ -726,17 +726,17 @@ const App = () => {
                       </div>
                     </div>
                   </div>
-                  {isToken?<div className='my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}> {locales(language)['check_record']}</span></div>
+                  {isToken?<div className='chat-my-score'>{locales(language)['myscore']}:{points} <span className='points-widthdraw' onClick={bindWeixin}>{locales(language)['withdraw']}</span><span className='points-records' onClick={goToRecord}>  |  {locales(language)['check_record']}</span></div>
                   : ""}
                   <Modal title={locales(language)['withdraw']} open={isWithdrawModalOpen} onOk={handleWithdrawOk} onCancel={handleWithdrawCancel}>
                     <p>{locales(language)['withdraw_confirm']}</p>
                   </Modal>
-                  <div className='contactUs'>{locales(language)['contact_us']}</div>
-                  <div className='protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
-                  <div className='policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
+                  <div className='chat-contactUs'>{locales(language)['contact_us']}</div>
+                  <div className='chat-protocol' onClick={()=>{goToProtocol()}}>{locales(language)['protocol']}</div>
+                  <div className='chat-policy' onClick={()=>{setShowPolicy(true)}}>{locales(language)['policy']}</div>
               {
                 showPolicy ?
-                  <Alert className='policy-info'
+                  <Alert className='chat-policy-info'
                   message="AI助手ChatTEN用户运营推广政策"
                   description={<div>
                     <div>1、注册即享受连续7天每天10次免费使用额度。</div>

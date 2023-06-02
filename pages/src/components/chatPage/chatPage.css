@@ -201,9 +201,40 @@
     font-size: 14px;
   }
 
+.chat-my-score {
+    text-align: left;
+    font-size: 14px;
+    margin-left: 10px;
+    margin-top: 30px;
+}
 
-.protocol {
+
+.chat-protocol {
     font-size: 14px;
     margin-top: 3px;
     cursor: pointer;
+    margin-left: 10px;
+    color: red;
+    text-align: left;
+  }
+
+
+  .chat-contactUs {
+    margin-top: 3px;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 10px;
+  }
+
+  .chat-policy {
+    margin-top: 3px;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 10px;
+    color: red;
+  }
+
+
+  .chat-policy-info {
+    font-size: 14px;
   }
