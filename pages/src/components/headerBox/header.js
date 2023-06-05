@@ -645,7 +645,7 @@ const App = (data) => {
               {
                 showPolicy ?
                   <Alert className='policy-info'
-                  message="AI助手ChatTEN用户运营推广政策"
+                  message="用户分享&推广政策"
                   description={<div>
                     <div>1、注册即享受连续7天每天10次免费使用额度。</div>
                     <div>2、纯使用用户分享，比如用户A每分享给一个好友注册，用户A获得10次免费额度，他分享的好友注册成用户B，用户B即可获得连续7天每天10次的免费额度。</div>
