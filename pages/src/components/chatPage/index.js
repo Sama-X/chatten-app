@@ -2,7 +2,7 @@ import './chatPage.css'
 import '../headerBox/header.css'
 
 
-import { Input, Spin, message, Menu, Popconfirm, Modal, Button, Alert } from 'antd';
+import { Drawer, Input, Spin, message, Menu, Popconfirm, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
 import { UpCircleFilled } from '@ant-design/icons';
 import { Link, useHistory } from 'react-router-dom'
@@ -14,6 +14,7 @@ import copy from 'copy-to-clipboard';
 import showdown from 'showdown'
 import locales from '../../locales/locales.js'
 import get_default_language from '../../utils/get_default_language.js'
+import QRCode from "qrcode.react";
 
 
 function getItem(label, key, icon, children, type) {
@@ -52,6 +53,19 @@ const App = () => {
 
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [showPolicy, setShowPolicy] = useState(false);
+  const [shareDrawer, setShareDrawer] = useState(false);
+  const [inviteCode, setInviteCode] = useState('');
+
+
+  const showShareDrawer = () => {
+    setShareDrawer(true);
+  };
+
+  const onShareClose = (event) => {
+    event.stopPropagation()
+    setShareDrawer(false);
+  };
+
 
   const showWithdrawModal = () => {
     setIsWithdrawModalOpen(true);
@@ -424,8 +438,10 @@ const App = () => {
       }else{
         let request = new Request({});
         request.get('/api/v1/users/profile/').then(function(resData){
-          copy('http://pay.citypro-tech.com/?invite_code='+resData.data.invite_code)
-          message.success('Successfully copied, please share with friends')
+          setInviteCode(resData.data.invite_code)
+          showShareDrawer()
+          // copy('http://pay.citypro-tech.com/?invite_code='+resData.data.invite_code)
+          // message.success('Successfully copied, please share with friends')
         })
       }
     }else{
@@ -692,6 +708,24 @@ const App = () => {
                               <img src={require("../../assets/share.png")} alt=""/>
                               <div>
                                 {locales(language)['share']}
+                                <Drawer className='shareDrawer1'
+                                  title="分享"
+                                  placement={'left'}
+                                  closable={false}
+                                  onClose={onShareClose}
+                                  open={shareDrawer}
+                                >
+                                  <p className='shareLink' onClick={()=>{copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
+                                              message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'http://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
+                                  <p className='shareLink'>邀请二维码（长按保存）：</p>
+                                  <QRCode
+                                    className="qrcode"
+                                    value={'http://pay.citypro-tech.com/?invite_code='+inviteCode}
+                                    size={120} // 二维码图片大小（宽高115px）
+                                    bgColor="#fff1d1" // 二维码背景颜色
+                                    fgColor="#c7594a" // 二维码图案颜色
+                                  />
+                                </Drawer>
                               </div>
                             </div>
                           </div>

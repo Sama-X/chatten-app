@@ -10,6 +10,7 @@ import Content from '../contentBox/content.js'
 import Footer from '../footerBox/footer.js'
 import copy from 'copy-to-clipboard';
 import locales from '../../locales/locales.js'
+import QRCode from "qrcode.react";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -50,6 +51,8 @@ const App = (data) => {
   const [widthNumber, setWidthNumber] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPolicy, setShowPolicy] = useState(false);
+  const [shareDrawer, setShareDrawer] = useState(false);
+
   const language = data.language
   const setLanguage = data.setLanguage
 
@@ -204,6 +207,15 @@ const App = (data) => {
   const handleOk = () => {
     setIsModalOpen(false);
   };
+  
+  const showShareDrawer = () => {
+    setShareDrawer(true);
+  };
+
+  const onShareClose = (event) => {
+    event.stopPropagation()
+    setShareDrawer(false);
+  };
 
   const goToPrice = () =>{
     if(isToken){
@@ -217,6 +229,7 @@ const App = (data) => {
     setIsModalOpen(false);
   };
   const shareFunction = () => {
+    console.log('zzzz')
     if(isToken){
       if(userName == '访客' || userName== 'anonymous'){
         message.info('Anonymous users cannot share')
@@ -225,8 +238,9 @@ const App = (data) => {
         },0)
         return
       }else{
-        copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
-        message.success('Successfully copied, please share with friends')
+        showShareDrawer()
+        // copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
+        // message.success('Successfully copied, please share with friends')
       }
     }else{
       message.info(locales(language)['login_first'])
@@ -279,7 +293,6 @@ const App = (data) => {
       getHistory()
       let request = new Request({});
       request.get('/api/v1/users/profile/').then(function(resData){
-        console.log('8888888', resData.data)
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
         cookie.save('points', resData.data.points)
@@ -305,8 +318,7 @@ const App = (data) => {
       if(execOnce == 1){
         return
       }
-      console.log('8888888', code)
-      console.log('9999', execOnce)
+
       setExecOnce(1)
       // setIsWithdrawModalOpen(true);
       request.post('/api/v1/users/wechat/', {code:code}).then(function(data){
@@ -377,7 +389,6 @@ const App = (data) => {
         <div className="headerLeft" onClick={showDrawer}>
           <img src={require("../../assets/leftMenu.png")} alt=""/>
         </div>
-
         {
           isToken ?
             // <div className="headerRight" onClick={signOut}>
@@ -472,6 +483,24 @@ const App = (data) => {
                         <img src={require("../../assets/share.png")} alt=""/>
                         <div>
                           {locales(language)['share']}
+                          <Drawer className='shareDrawer1'
+                            title="分享"
+                            placement={'bottom'}
+                            closable={false}
+                            onClose={onShareClose}
+                            open={shareDrawer}
+                          >
+                            <p className='shareLink' onClick={(eve)=>{copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
+                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'http://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
+                            <p className='shareLink'>邀请二维码（长按保存）：</p>
+                            <QRCode
+                              className="qrcode"
+                              value={'http://pay.citypro-tech.com/?invite_code='+inviteCode}
+                              size={120} // 二维码图片大小（宽高115px）
+                              bgColor="#fff1d1" // 二维码背景颜色
+                              fgColor="#c7594a" // 二维码图案颜色
+                            />
+                          </Drawer>
                         </div>
                       </div>
                     </div>
@@ -516,7 +545,7 @@ const App = (data) => {
               {
                 showPolicy ?
                   <Alert className='policy-info-mobile'
-                  message="AI助手ChatTEN用户运营推广政策"
+                  message="用户分享&推广政策"
                   description={<div>
                     <div>1、注册即享受连续7天每天10次免费使用额度。</div>
                     <div>2、纯使用用户分享，比如用户A每分享给一个好友注册，用户A获得10次免费额度，他分享的好友注册成用户B，用户B即可获得连续7天每天10次的免费额度。</div>
@@ -599,6 +628,24 @@ const App = (data) => {
                           <img src={require("../../assets/share.png")} alt=""/>
                           <div>
                            {locales(language)['share']}
+                           <Drawer className='shareDrawer1'
+                            title="分享"
+                            placement={'left'}
+                            closable={false}
+                            onClose={onShareClose}
+                            open={shareDrawer}
+                          >
+                            <p className='shareLink' onClick={(eve)=>{copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
+                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'http://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
+                            <p className='shareLink'>邀请二维码（长按保存）：</p>
+                            <QRCode
+                              className="qrcode"
+                              value={'http://pay.citypro-tech.com/?invite_code='+inviteCode}
+                              size={120} // 二维码图片大小（宽高115px）
+                              bgColor="#fff1d1" // 二维码背景颜色
+                              fgColor="#c7594a" // 二维码图案颜色
+                            />
+                          </Drawer>
                           </div>
                         </div>
                       </div>

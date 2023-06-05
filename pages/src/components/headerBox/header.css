@@ -265,6 +265,7 @@
     text-align: left;
     color: #E84142;
     margin-left: 10px;
+    margin-bottom: 20px;
   }
 
   .policy-info {
@@ -314,4 +315,13 @@
     cursor: pointer;
     text-align: left;
     color: #E84142;
+  }
+
+  .shareDrawer {
+    background-color: aquamarine;
+  }
+
+  .shareLink {
+    font-size: 16px;
+    cursor: pointer;
   }
