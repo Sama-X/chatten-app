@@ -238,3 +238,8 @@
   .chat-policy-info {
     font-size: 14px;
   }
+
+.shareLink {
+    font-size: 16px;
+    cursor: pointer;
+}
