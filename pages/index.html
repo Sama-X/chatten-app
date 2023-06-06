@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <style type="text/css">
+            body {text-align: center;margin-top: 100px; line-height: 50px;}
+        </style>
+    </head>
+    <body>
+        <div>我们的服务已经更新到新的站点，欢迎访问</div>
+        <div id="link">将在10秒后跳转到:https://pay.citypro-tech.com/</div>
+        <script>
+            var div = document.getElementById('link');
+            var time = 10;
+            setInterval(function(){
+                if(time === 0){
+                    window.location.href = "https://pay.citypro-tech.com/";
+                }else{
+                    div.innerHTML = '将在' + time + '秒后跳转到：<a href="https://pay.citypro-tech.com/">https://pay.citypro-tech.com/</a>';
+                    time--;
+                }
+            }, 1000)
+        </script>
+    </body>
+</html>

@@ -239,7 +239,7 @@ const App = (data) => {
         return
       }else{
         showShareDrawer()
-        // copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
+        // copy('https://pay.citypro-tech.com/?invite_code='+inviteCode)
         // message.success('Successfully copied, please share with friends')
       }
     }else{
@@ -490,12 +490,12 @@ const App = (data) => {
                             onClose={onShareClose}
                             open={shareDrawer}
                           >
-                            <p className='shareLink' onClick={(eve)=>{copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
-                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'http://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
+                            <p className='shareLink' onClick={(eve)=>{copy('https://pay.citypro-tech.com/?invite_code='+inviteCode)
+                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'https://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
                             <p className='shareLink'>邀请二维码（长按保存）：</p>
                             <QRCode
                               className="qrcode"
-                              value={'http://pay.citypro-tech.com/?invite_code='+inviteCode}
+                              value={'https://pay.citypro-tech.com/?invite_code='+inviteCode}
                               size={120} // 二维码图片大小（宽高115px）
                               bgColor="#fff1d1" // 二维码背景颜色
                               fgColor="#c7594a" // 二维码图案颜色
@@ -635,15 +635,16 @@ const App = (data) => {
                             onClose={onShareClose}
                             open={shareDrawer}
                           >
-                            <p className='shareLink' onClick={(eve)=>{copy('http://pay.citypro-tech.com/?invite_code='+inviteCode)
-                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'http://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
+                            <p className='shareLink' onClick={(eve)=>{copy('https://pay.citypro-tech.com/?invite_code='+inviteCode)
+                                        message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'https://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
                             <p className='shareLink'>邀请二维码（长按保存）：</p>
                             <QRCode
                               className="qrcode"
-                              value={'http://pay.citypro-tech.com/?invite_code='+inviteCode}
+                              value={'https://pay.citypro-tech.com/?invite_code='+inviteCode}
                               size={120} // 二维码图片大小（宽高115px）
                               bgColor="#fff1d1" // 二维码背景颜色
                               fgColor="#c7594a" // 二维码图案颜色
+                              renderAs="svg"
                             />
                           </Drawer>
                           </div>
