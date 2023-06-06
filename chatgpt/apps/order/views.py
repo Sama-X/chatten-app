@@ -18,6 +18,7 @@ from base.serializer import BaseQuery
 from order import wechat, utils
 from order.serializer import OrderQuery
 from order.service import OrderPackageService, OrderService
+from users.service import UserServiceHelper
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +122,7 @@ class WePayNotifyHandler(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 DingBaseClient.send_bussiness_msg(
                     title=_("wechat pay notify"), content=content
                 )
+                UserServiceHelper.clear_experience_cache(order_obj.user_id)
 
         return APIResponse()
 
