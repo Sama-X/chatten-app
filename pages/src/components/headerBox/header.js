@@ -637,7 +637,7 @@ const App = (data) => {
                           >
                             <p className='shareLink' onClick={(eve)=>{copy('https://pay.citypro-tech.com/?invite_code='+inviteCode)
                                         message.success(locales(language)['copy_link'])}}>邀请链接（点击复制）:<br />{'https://pay.citypro-tech.com/?invite_code='+inviteCode}</p>
-                            <p className='shareLink'>邀请二维码（长按保存）：</p>
+                            <p className='shareLink'>邀请二维码（右键保存）：</p>
                             <QRCode
                               className="qrcode"
                               value={'https://pay.citypro-tech.com/?invite_code='+inviteCode}
