@@ -35,5 +35,6 @@ export default {
     contact_us: "联系我们，请加微信号：xrkk2023",
     policy: "点击查看《运营推广政策》",
     protocol: "点击查看《用户协议》",
-    copy_link: "链接复制成功"
+    copy_link: "链接复制成功",
+    beyond_limit: "使用次数达到上限，可以充值会员继续使用噢"
 }

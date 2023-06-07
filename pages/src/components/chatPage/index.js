@@ -186,7 +186,7 @@ const App = () => {
       if(Number(experience) === 0){
         setQuestionValue('')
         value.target.value = ''
-        message.info('Questioning more than ten times, reaching the upper limit')
+        message.info(locales(language)['beyond_limit'])
         return
       }else{
         // setSpinStatus(true)

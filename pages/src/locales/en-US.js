@@ -35,5 +35,7 @@ export default {
     contact_us: "contact us, our wechat:xrkk2023",
     policy: "View promotion policies",
     protocol: "View user protocol",
-    copy_link: "Successfully copied, please share with friends"
+    copy_link: "Successfully copied, please share with friends",
+    beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge"
+
   }
