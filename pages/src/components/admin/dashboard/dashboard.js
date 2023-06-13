@@ -94,25 +94,21 @@ const App = () => {
               {
                 name: '注册用户数',
                 type: 'line',
-                stack: 'Total',
                 data: data1
               },
               {
                 name: '咨询使用次数',
                 type: 'line',
-                stack: 'Total',
                 data: data2
               },
               {
                 name: '充值订单数',
                 type: 'line',
-                stack: 'Total',
                 data: data3
               },
               {
                 name: '充值金额',
                 type: 'line',
-                stack: 'Total',
                 data: data4
               }
             ]
