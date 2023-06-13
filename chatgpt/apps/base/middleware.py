@@ -129,7 +129,7 @@ def exception_catch(exception, ctx):
     if hasattr(exception, '__module__') and exception.__module__ == 'rest_framework.exceptions':
         return APIResponse(code=exception.status_code, msg=exception.detail)
 
-    if settings.DEBUG:
+    if not settings.DEBUG:
         uri = None
         request = ctx['request']
         if hasattr(request, 'get_raw_uri'):
