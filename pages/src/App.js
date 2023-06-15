@@ -1,5 +1,5 @@
 import './App.css';
-import 'antd/dist/reset.css';
+import 'antd/dist/antd.css';
 
 import Router from './router/index'
 

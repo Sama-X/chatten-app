@@ -374,7 +374,7 @@ const App = (data) => {
   }
 
   return (
-    <div>
+    <div className="header-container">
     {
       isPhone ?
       <div>
@@ -433,7 +433,7 @@ const App = (data) => {
           onClose={onClose}
           open={open}
           key={placement}
-          style={{background:'#202123',color:'white'}}
+          drawerStyle={{background:'#202123',color:'white'}}
         >
           <div className="drawHeaderBox">
             <img src={require("../../assets/logo.png")} alt=""/>
@@ -451,14 +451,13 @@ const App = (data) => {
                   background:'#202123',
                   color:'white',
                   maxHeight: '400px',
-                  overflow: 'scroll'
+                  overflow: 'scroll',
                 }}
                 defaultSelectedKeys={['1']}
                 defaultOpenKeys={['sub1']}
                 mode="inline"
                 items={items}
-                theme="#202123"
-
+                theme="dark"
               />
               :''
             }
@@ -578,7 +577,7 @@ const App = (data) => {
       </Modal>
     </div>
     :
-    <div style={{display: 'flex',width: '100%'}}>
+    <div className='drawHeaderContainer' style={{display: 'flex',width: '100%'}}>
       <div style={{width: '30%', paddingTop: '15px',}}>
           <div className="drawHeaderBox" style={{marginBottom: '12px'}}>
               <img src={require("../../assets/logo.png")} alt=""/>
@@ -596,13 +595,14 @@ const App = (data) => {
                     background:'#202123',
                     color:'white',
                     maxHeight: '400px',
-                    overflow: 'scroll'
+                    overflow: 'scroll',
+                    padding: '0 5px'
                   }}
                   defaultSelectedKeys={['1']}
                   defaultOpenKeys={['sub1']}
                   mode="inline"
                   items={items}
-                  theme="#202123"
+                  theme="dark"
 
                 />
                 :''
@@ -765,9 +765,6 @@ const App = (data) => {
         <Footer language={language} setLanguage={setLanguage} style={{width:'70%',left:'30%'} }></Footer>
       </div>
 
-      <>
-
-      </>
       <Modal
         title="登录/注册"
         open={isModalOpen}
