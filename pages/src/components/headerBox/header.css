@@ -10,10 +10,17 @@
     display: inline-block;
     width: 40px;
 }
+.headerRightConfirm .ant-popover-message {
+  color: white;
+}
+.headerRightConfirm .ant-popover-arrow {
+  display: none;
+}
 .headerRight{
     display: flex;
     align-items: center;
     font-size: 16px;
+    color: white;
 }
 .headerRight div a{
     color: white;

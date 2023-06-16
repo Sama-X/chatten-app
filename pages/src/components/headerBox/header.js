@@ -398,6 +398,7 @@ const App = (data) => {
               <Popconfirm
               placement="leftTop"
               className="headerRight"
+              overlayClassName="headerRightConfirm"
               title={ locales(language)['logoutTitle']}
               description=''
               onConfirm={signOut}
@@ -731,8 +732,9 @@ const App = (data) => {
                   <Popconfirm
                     placement="leftTop"
                     className="headerRight"
+                    overlayClassName="headerRightConfirm"
+                    arrowPointAtCenter={false}
                     title={ locales(language)['logoutTitle']}
-                    description=''
                     onConfirm={signOut}
                     okText={locales(language)['yes']}
                     cancelText={locales(language)['no']}
