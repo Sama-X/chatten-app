@@ -114,7 +114,7 @@ const App = () => {
       setTimeout(function(){
         setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
         setSpinStatus(false)
-      },1000)
+      },100)
     })
   }
   const onSearchFunc = (value) => {
@@ -186,7 +186,7 @@ const App = () => {
               // newElement.textContent = JSON.parse(e.data).text
 
             })
-          },1000)
+          },100)
           setTimeout(function(){
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
           },10)
@@ -235,7 +235,7 @@ const App = () => {
                 isLoading(false)
                 setIsInputEnterStatus(true)
                 // evtSource.close();
-              },700)
+              },100)
             }
 
           }).catch(function(err) {
@@ -284,20 +284,8 @@ const App = () => {
   };
 
   const linkSkip =  () => {
-    const isTokenStatus = cookie.load('token') ? true : false
     cookie.save('topicId', '')
     setChatList([])
-    if(isTokenStatus) {
-      history.push({pathname: '/ChatPage', state: { test: 'login' }})
-      // fetchData(cookie.load('topicId'))
-    }else{
-      setSpinStatus(true)
-      setTimeout(function(){
-        setSpinStatus(false)
-        history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-        // fetchData(cookie.load('topicId'))
-      },1000)
-    }
   }
   const noFunction = () => {
     message.info('Not yet open, please look forward to...')
@@ -353,7 +341,7 @@ const App = () => {
     setTimeout(function(){
       setSpinStatus(false)
       history.push({pathname: '/'})
-    },1000)
+    },10)
   }
   const shareFunction = () => {
     if(isToken){
@@ -361,7 +349,7 @@ const App = () => {
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn'})
-        },1000)
+        },10)
         return
       }else{
         let request = new Request({});
@@ -376,7 +364,7 @@ const App = () => {
       message.info(locales(language)['login_first'])
       setTimeout(function(){
         history.push({pathname: '/SignIn'})
-      },1000)
+      },10)
       return
     }
   }
@@ -390,7 +378,7 @@ const App = () => {
     isFirst(true)
     setTimeout(function(){
       setChatList([])
-    },1000)
+    },10)
   };
 
   const handleCancel = () => {

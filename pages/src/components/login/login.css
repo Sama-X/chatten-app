@@ -36,6 +36,9 @@
     line-height: 52px;
     border-radius: 8px;
     color: #fff!important;
+  }
+.mobileAndCode .mobileInputPassword {
+  padding: 0px 11px;
 }
 .mobileAndCode .mobileInputPasswordBox{
   background: rgba(48, 50, 60, 1) !important;
