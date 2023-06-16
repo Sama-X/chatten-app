@@ -398,11 +398,11 @@ const App = (data) => {
               <Popconfirm
               placement="leftTop"
               className="headerRight"
-              title='Do you want to log out'
+              title={ locales(language)['logoutTitle']}
               description=''
               onConfirm={signOut}
-              okText="Yes"
-              cancelText="No"
+              okText={locales(language)['yes']}
+              cancelText={locales(language)['no']}
             >
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
               <div>{ userName }</div>
@@ -731,11 +731,11 @@ const App = (data) => {
                   <Popconfirm
                     placement="leftTop"
                     className="headerRight"
-                    title='Do you want to log out'
+                    title={ locales(language)['logoutTitle']}
                     description=''
                     onConfirm={signOut}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={locales(language)['yes']}
+                    cancelText={locales(language)['no']}
                   >
                     <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                     <div>{ userName }</div>

@@ -1,6 +1,9 @@
 export default {
     language: 'English',
     login: 'login',
+    logoutTitle: 'Do you want to log out',
+    yes: 'Yes',
+    no: 'No',
     register: 'register',
     noaccount: "Don't have a account? go to ",
     create_new_talk: 'Create new talk',

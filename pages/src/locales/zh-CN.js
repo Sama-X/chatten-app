@@ -1,6 +1,9 @@
 export default {
     language: '中文',
     login: '登录',
+    logoutTitle: '你想退出登录吗',
+    yes: '是',
+    no: '否',
     register: '注册',
     noaccount: "没有账号？去",
     create_new_talk: '创建新对话',
