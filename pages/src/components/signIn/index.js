@@ -103,7 +103,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;
         if (!myreg.test(e.target.value)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success
@@ -115,7 +115,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;;
         if (!myreg.test(mobileVal)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success request
@@ -133,7 +133,7 @@ export default memo(
       const myreg = /^1[3456789]\d{9}$/;;
       if (!myreg.test(mobileVal)) {
           // error
-          message.error('Mobile phone number is not compliant')
+          message.error(locales(language)['invalidMobile'])
           return false;
       }
       if(!passwordOne){

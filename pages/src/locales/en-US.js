@@ -6,6 +6,8 @@ export default {
     no: 'No',
     register: 'register',
     noaccount: "Don't have a account? go to ",
+    invalidMobile: 'Mobile phone number is not compliant',
+    requiredPassword: 'Please input a password',
     create_new_talk: 'Create new talk',
     clear_chat_hitstory: 'Clear history',
     experience_count: 'Question times',

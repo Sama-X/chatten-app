@@ -12,7 +12,6 @@ import { Link, useHistory } from 'react-router-dom'
 
 
 import styles from "./login.css";
-import { loginAccount } from '../../api/index.js';
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import locales from '../../locales/locales.js'
@@ -103,7 +102,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;;
         if (!myreg.test(e.target.value)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success
@@ -115,7 +114,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;;
         if (!myreg.test(mobileVal)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success request
@@ -133,11 +132,11 @@ export default memo(
       const myreg = /^1[3456789]\d{9}$/;;
       if (!myreg.test(mobileVal)) {
           // error
-          message.error('Mobile phone number is not compliant')
+          message.error(locales(language)['invalidMobile'])
           return false;
       }
       if(!passwordOne){
-        message.error('Please input a password')
+        message.error(locales(language)['requiredPassword'])
         return false;
       }
       setSpinStatus(true)

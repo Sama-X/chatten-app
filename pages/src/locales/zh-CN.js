@@ -6,6 +6,8 @@ export default {
     no: '否',
     register: '注册',
     noaccount: "没有账号？去",
+    invalidMobile: '手机号码不符合',
+    requiredPassword: '请输入密码',
     create_new_talk: '创建新对话',
     clear_chat_hitstory: '清除聊天记录',
     experience_count: '提问次数',
