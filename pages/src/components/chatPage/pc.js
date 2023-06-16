@@ -81,7 +81,7 @@ const App = () => {
       let request = new Request({});
       setSpinStatus(true)
       request.get('/api/v1/topics/'+topicId+'/records/?page=1&offset=20&order=id').then(function(resData){
-        if(resData.code != 0){
+        if(resData.code !== 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
         for(let i in resData.data){
@@ -91,17 +91,15 @@ const App = () => {
             resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
         setChatList(resData.data ? resData.data : [])
-        if(resData.code == 0){
+        if(resData.code === 0){
           setTimeout(function(){
             setSpinStatus(false)
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-          },700)
+          }, 100)
 
         }
       })
   }
-  const maxNumber = 100000000
-  const minNumber = 0
   const getHistory = () => {
     let request = new Request({});
     setSpinStatus(true)
@@ -121,7 +119,6 @@ const App = () => {
   }
   const onSearchFunc = (value) => {
     if(isInputEnterStatus){
-      // if(Number(totalExeNumber) >= Number(experience)){
       if(Number(experience) === 0){
         setQuestionValue('')
         value.target.value = ''
@@ -274,12 +271,15 @@ const App = () => {
 
   const menuClick = (e) => {
     console.log("e = ", e)
-    if(e.key == 'new_topic' && e.domEvent.target.textContent == locales(language)['create_new_talk'] + '…'){
+    if(e.key === 'new_topic' && e.domEvent.target.textContent === locales(language)['create_new_talk'] + '…'){
       cookie.save('topicId', '')
       isFirst(true)
       linkSkip()
-    }else if (e.keyPath[1] != cookie.load('topicId')){
-      cookie.save('topicId', e.keyPath[1])
+    }else if (e.key !== cookie.load('topicId')){
+      if (!isNaN(e.key)) {
+        cookie.save('topicId', e.key)
+        fetchData(e.key)
+      }
     }
   };
 
