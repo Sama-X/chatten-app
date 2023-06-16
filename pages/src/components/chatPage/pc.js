@@ -599,6 +599,7 @@ const App = () => {
                     <Popconfirm
                       placement="leftTop"
                       className="headerRight"
+                      overlayClassName="headerRightConfirm"
                       title={ locales(language)['logoutTitle']}
                       description=''
                       onConfirm={signOut}

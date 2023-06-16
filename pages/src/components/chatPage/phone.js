@@ -20,7 +20,6 @@ function getItem(label, key, icon, children, type) {
     type,
   };
 }
-let info = navigator.userAgent;
 const { TextArea } = Input;
 const App = () => {
   const isToken = cookie.load('token')
@@ -62,7 +61,7 @@ const App = () => {
             if(type == 1){
               // document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild.lastElementChild.style.display = 'none'
             }
-          },700)
+          }, 100)
 
         }
       })
@@ -340,6 +339,7 @@ const App = () => {
         <Popconfirm
             placement="leftTop"
             className="headerRight"
+            overlayClassName="headerRightConfirm"
             title={ locales(language)['logoutTitle']}
             description=''
             onConfirm={signOut}

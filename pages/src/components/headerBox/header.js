@@ -139,7 +139,7 @@ const App = (data) => {
         setTimeout(function(){
           setSpinStatus(false)
           setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
-        },1000)
+        }, 100)
       })
   }
   const noFunction = () => {
@@ -166,7 +166,7 @@ const App = (data) => {
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
-    },1000)
+    }, 100)
   }
   const showModal = () => {
     setIsModalOpen(true);
@@ -203,7 +203,7 @@ const App = (data) => {
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn/?type=1'})
-        },0)
+        }, 10)
         return
       }else{
         showShareDrawer()
@@ -214,7 +214,7 @@ const App = (data) => {
       message.info(locales(language)['login_first'])
       setTimeout(function(){
         history.push({pathname: '/SignIn/?type=1'})
-      },1000)
+      }, 10)
       return
     }
   }

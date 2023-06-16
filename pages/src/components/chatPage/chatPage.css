@@ -247,5 +247,12 @@
 
 /* pc chat page */
 .PCchatPageContainer .ant-menu-dark .ant-menu-inline.ant-menu-sub {
-    background: inherit;
+  background: inherit;
+}
+
+.headerRightConfirm .ant-popover-message {
+  color: white;
+}
+.headerRightConfirm .ant-popover-arrow {
+  display: none;
 }
