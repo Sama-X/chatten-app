@@ -6,20 +6,10 @@ import { useHistory } from 'react-router-dom'
 import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import {BASE_URL} from '../../utils/axios.js'
-import { PlusCircleFilled, MessageOutlined } from '@ant-design/icons';
 import showdown from 'showdown'
 import locales from '../../locales/locales.js'
 import get_default_language from '../../utils/get_default_language.js'
 
-function getItem(label, key, icon, children, type) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  };
-}
 const { TextArea } = Input;
 const App = () => {
   const isToken = cookie.load('token')
@@ -65,44 +55,6 @@ const App = () => {
 
         }
       })
-  }
-  const maxNumber = 100000000
-  const minNumber = 0
-  const getHistory = () => {
-    let request = new Request({});
-    setSpinStatus(true)
-
-    request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
-      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
-      for(let i in resData.data){
-        if(i < 9){
-          let subItem = []
-          // request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-          //   for(let j in resItemData.data){
-              subItem.push(getItem("  正在加载... ...", Math.random()*(maxNumber-minNumber+1)+minNumber))
-              // subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-          //   }
-          // })
-          menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
-          // menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,[]))
-        }
-      }
-      setTimeout(function(){
-        setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
-        setSpinStatus(false)
-      },1000)
-    })
-  }
-  const addMenu = (id,value) => {
-    let itemsCopy = [...items]
-    for(let i in itemsCopy[0].children){
-      if(itemsCopy[0].children[i].key == id){
-        itemsCopy[0].children[i].children.push(getItem("  "+value, Math.random()*(maxNumber-minNumber+1)+minNumber))
-      }
-    }
-    setTimeout(function(){
-      setItem(itemsCopy)
-    },700)
   }
 
   const onSearchFunc = (value) => {
@@ -216,10 +168,7 @@ const App = () => {
               cookie.save('topicId', resData.data.topic_id)
 
               if(isFirstStatus){
-                getHistory()
                 isFirst(false)
-              }else{
-                addMenu(resData.data.topic_id,questionValue)
               }
               setTimeout(function(){
                 value.target.value = ''
@@ -303,7 +252,6 @@ const App = () => {
     if(isToken){
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : locales(language)['anonymous']
       setUserName(authName)
-      getHistory()
       let request = new Request({});
       request.get('/api/v1/users/profile/').then(function(resData){
         cookie.save('experience', resData.data.experience)
@@ -318,6 +266,7 @@ const App = () => {
       isFirst(false)
     }else{
       isFirst(true)
+      setSpinStatus(false)
     }
   }, [language])
 

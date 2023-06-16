@@ -285,6 +285,7 @@ const App = () => {
 
   const linkSkip =  () => {
     const isTokenStatus = cookie.load('token') ? true : false
+    cookie.save('topicId', '')
     setChatList([])
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'login' }})

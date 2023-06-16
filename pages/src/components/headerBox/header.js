@@ -88,7 +88,7 @@ const App = (data) => {
   };
 
   const menuClick = (e) => {
-    console.log("e = ", e);
+    console.log('e ==== ', e)
     if(e.key === 'new_topic' && e.domEvent.target.textContent === locales(language)['create_new_talk'] + '…'){
       linkSkip()
     }else{
@@ -102,7 +102,9 @@ const App = (data) => {
     }
   };
   const linkSkip =  () => {
+    cookie.save('topicId', '')
     const isTokenStatus = cookie.load('token') ? true : false
+    console.log('token = ', isTokenStatus);
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'signin' }})
     }else{
@@ -161,7 +163,7 @@ const App = (data) => {
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
-    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic',<PlusCircleFilled />)]
     setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
     message.success('Exit succeeded')
     setTimeout(function(){
@@ -268,7 +270,7 @@ const App = (data) => {
       })
     }else{
       setSpinStatus(false)
-      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic',<PlusCircleFilled />)]
       setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
