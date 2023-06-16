@@ -232,6 +232,7 @@
     text-align: left;
     margin-left: 10px;
     color: red;
+    cursor: pointer;
   }
 
 
@@ -242,4 +243,9 @@
 .shareLink {
     font-size: 16px;
     cursor: pointer;
+}
+
+/* pc chat page */
+.PCchatPageContainer .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background: inherit;
 }
