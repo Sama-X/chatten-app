@@ -270,7 +270,6 @@ const App = () => {
   }
 
   const menuClick = (e) => {
-    console.log("e = ", e)
     if(e.key === 'new_topic' && e.domEvent.target.textContent === locales(language)['create_new_talk'] + '…'){
       cookie.save('topicId', '')
       isFirst(true)
@@ -443,7 +442,7 @@ const App = () => {
           <div style={{width: '30%', paddingTop: '15px',}}>
               <div className="drawHeaderBox" style={{marginBottom: '12px'}}>
                   <img src={require("../../assets/logo.png")} alt=""/>
-                  <div>BETA pc</div>
+                  <div>BETA</div>
                 </div>
 
                 <div>
