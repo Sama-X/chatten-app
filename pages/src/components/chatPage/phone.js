@@ -24,7 +24,7 @@ const App = () => {
   const [isFirstStatus, isFirst] = useState(false);
   const [isLoadingStatus, isLoading] = useState(false);
   const [widthNumber, setWidthNumber] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isInputEnterStatus, setIsInputEnterStatus] = useState(true);
   const [language, setLanguage] = useState(get_default_language());
 
