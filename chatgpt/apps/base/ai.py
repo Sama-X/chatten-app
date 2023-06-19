@@ -6,6 +6,7 @@ import json
 import multiprocessing
 import os
 import threading
+import traceback
 from typing import Dict, Optional, Type
 import tiktoken
 import logging
@@ -234,8 +235,8 @@ class AIHelper:
             result["error"] = err._message
             result["error_code"] = err.code
         except Exception as err:
-            logger.error("【chatgpt send】Exception, reason: %s", err)
-            result["error"] = f"exception {err}"
+            logger.error("【chatgpt send】Exception, reason: %s", traceback.format_exc())
+            result["error"] = f"exception {traceback.format_exc()}"
 
         result['key_id'] = self.strategy.get_api_key_id(key)
         logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
