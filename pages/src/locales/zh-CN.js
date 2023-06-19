@@ -28,6 +28,8 @@ export default {
     input_mobile: '请输入手机号',
     input_password: '请输入密码',
     input_password_again: '请再次输入密码',
+    min_password: '密码不能低于6位',
+    password_inconsistent: '两次密码不一致',
     anonymous: '访客',
     nodata: '暂无数据',
     ask_free: '提问次数',

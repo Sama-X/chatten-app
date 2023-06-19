@@ -28,6 +28,8 @@ export default {
     input_mobile: 'phone number',
     input_password: 'password',
     input_password_again: 'password again',
+    min_password: 'Password cannot be less than 6 digits',
+    password_inconsistent: 'The two passwords are inconsistent',
     anonymous: 'Anonymous',
     nodata: 'No data',
     ask_free: 'Question times',
