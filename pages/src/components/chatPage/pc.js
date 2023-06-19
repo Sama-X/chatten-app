@@ -377,7 +377,7 @@ const App = () => {
     isFirst(true)
     setTimeout(function(){
       setChatList([])
-    },10)
+    }, 10)
   };
 
   const handleCancel = () => {
@@ -712,25 +712,20 @@ const App = () => {
         </div>
 
       <Modal
-        title="Do you want to start a new topic"
+        title={locales(language)['whether_create_new_topic_title']}
         open={isModalOpen}
         footer={null}
         style={{top: "30%"}}
+        wrapClassName='new_topic_modal'
         onCancel={handleCancel}
         closable
       >
         <div>
-          The capacity of this topic is full. Please open a new topic to continue asking questions
+          { locales(language)['whether_create_new_topic_content']}
         </div>
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
-          <Button type="primary" onClick={handleOk}>ok</Button>
-          <Button type="default" onClick={handleCancel}>cancel</Button>
-          <Alert
-            message="Warning Text Warning Text Warning TextW arning Text Warning Text Warning TextWarning Text"
-            type="info"
-            closable
-            // onClose={onClose}
-          />
+          <Button type="primary" onClick={handleOk}>{locales(language)['ok']}</Button>
+          <Button type="default" onClick={handleCancel}>{locales(language)['cancel']}</Button>
         </div>
       </Modal>
     </div>

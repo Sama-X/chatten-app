@@ -4,6 +4,8 @@ export default {
     logoutTitle: '你想退出登录吗',
     yes: '是',
     no: '否',
+    ok: "好的",
+    cancel: "取消",
     register: '注册',
     noaccount: "没有账号？去",
     invalidMobile: '手机号码不符合',
@@ -43,5 +45,7 @@ export default {
     policy: "点击查看《运营推广政策》",
     protocol: "点击查看《用户协议》",
     copy_link: "链接复制成功",
-    beyond_limit: "使用次数达到上限，可以充值会员继续使用噢"
+    beyond_limit: "使用次数达到上限，可以充值会员继续使用噢",
+    whether_create_new_topic_title: "是否要开始一个新主题",
+    whether_create_new_topic_content: "当前主题的容量已满。请打开新主题继续提问",
 }

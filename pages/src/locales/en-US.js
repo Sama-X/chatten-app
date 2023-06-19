@@ -4,6 +4,8 @@ export default {
     logoutTitle: 'Do you want to log out',
     yes: 'Yes',
     no: 'No',
+    ok: "ok",
+    cancel: "cancel",
     register: 'register',
     noaccount: "Don't have a account? go to ",
     invalidMobile: 'Mobile phone number is not compliant',
@@ -43,6 +45,7 @@ export default {
     policy: "View promotion policies",
     protocol: "View user protocol",
     copy_link: "Successfully copied, please share with friends",
-    beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge"
-
+    beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge",
+    whether_create_new_topic_title: "Do you want to start a new topic",
+    whether_create_new_topic_content: "The capacity of this topic is full. Please open a new topic to continue asking questions",
   }
