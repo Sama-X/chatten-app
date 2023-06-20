@@ -703,7 +703,7 @@ const App = () => {
                       {/* <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div> */}
                       <div><span>{locales(language)['ask_free']}: </span>{experience}</div>
                     </div>
-                    {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
+                    <div className="footerTokenContent">投诉建议商业合作免费学习加微信 xrkk2023</div>
                   </div>
                 </div>
               </div>

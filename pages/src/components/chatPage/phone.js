@@ -386,13 +386,13 @@ const App = () => {
             </div>
             } */}
             <div className="footerBottomBox">
-            <div className="footerLeftBox">
+              <div className="footerLeftBox">
                 <img src={require("../../assets/reply.png")} className="footerQuestion" alt=""/>
                 {/* <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div> */}
                 <div><span>{locales(language)['ask_free']}: </span>{experience}</div>
+              </div>
             </div>
-            {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
-            </div>
+            <div className="footerTokenContent">投诉建议商业合作免费学习加微信 xrkk2023</div>
         </div>
         </div>
     </div>

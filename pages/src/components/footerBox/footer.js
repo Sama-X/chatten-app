@@ -84,7 +84,7 @@ const App = (data) => {
             以开始聊天
           </div>
         } */}
-        {/* <div  className="footerTokenContent">服务由 SAMA network 提供</div> */}
+        <div  className="footerTokenContent">投诉建议商业合作免费学习加微信 xrkk2023</div>
       </div>
     </div>
   );
