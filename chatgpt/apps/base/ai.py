@@ -109,15 +109,14 @@ class AIHelper:
             async for item in resp:  # type: ignore
                 if item.choices: # type: ignore
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
-                    if cont:
-                        report.append(cont)
-                        send_event(auth_token, 'message', {
-                            'id': item.id, # type: ignore
-                            'text': cont, 'index': index, 'channel': auth_token,
-                            'now': datetime.now(), 'status': 1
-                        })
-                        index += 1
-                        logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
+                    report.append(cont)
+                    send_event(auth_token, 'message', {
+                        'id': item.id, # type: ignore
+                        'text': cont, 'index': index, 'channel': auth_token,
+                        'now': datetime.now(), 'status': 1
+                    })
+                    index += 1
+                    logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
 
             send_event(auth_token, 'message', {
                 'status': -1
