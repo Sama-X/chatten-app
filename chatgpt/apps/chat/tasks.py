@@ -43,7 +43,7 @@ def generate_topic_title(topic_id):
         if chat.answer:
             messages.append({
                 "role": "assistant",
-                "content": chat.answer.replace('\n', '')
+                "content": chat.answer
             })
 
     helper = AIHelper()

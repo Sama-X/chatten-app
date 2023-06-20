@@ -64,7 +64,7 @@ class ChatRecordModel(BaseModel):
 
             messages.append({
                 "role": "assistant",
-                "content": item.answer.replace('\n', '')
+                "content": item.answer
             })
             messages.append({
                 "role": "user",
