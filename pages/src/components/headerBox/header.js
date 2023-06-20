@@ -88,21 +88,23 @@ const App = (data) => {
   };
 
   const menuClick = (e) => {
-    if(e.key == '01' && e.domEvent.target.textContent == locales(language)['create_new_talk'] + '…'){
-
+    console.log('e ==== ', e)
+    if(e.key === 'new_topic' && e.domEvent.target.textContent === locales(language)['create_new_talk'] + '…'){
       linkSkip()
-    }else if(e.domEvent.target.textContent == '  正在加载... ...'){
-      message.info('Loading, please do not click')
-      return
     }else{
-      cookie.save('topicId', e.keyPath[1])
-      cookie.load('topicId')
-      // return
+      if (isNaN(e.key)) {
+        linkSkip()
+      } else {
+        cookie.save('topicId', e.key)
+        cookie.load('topicId')
+      }
       history.push({pathname: '/ChatPage', state: { test: 'login' }})
     }
   };
   const linkSkip =  () => {
+    cookie.save('topicId', '')
     const isTokenStatus = cookie.load('token') ? true : false
+    console.log('token = ', isTokenStatus);
     if(isTokenStatus) {
       history.push({pathname: '/ChatPage', state: { test: 'signin' }})
     }else{
@@ -123,55 +125,23 @@ const App = (data) => {
       // })
     }
   }
-  const historyMenu = async (e) => {
-    if(e.length > 1){
-      let request = new Request({});
-      let itemsCopy = [...items]
-      await request.get('/api/v1/topics/'+e[e.length-1]+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-        let subItem = []
-        for(let j in resItemData.data){
-          subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-        }
-        for(let i in itemsCopy[0].children){
-          if(itemsCopy[0].children[i].key == e[e.length-1]){
-            itemsCopy[0].children[i].children = subItem
-          }
-        }
-        setTimeout(function(){
-          setItem(itemsCopy)
-        },700)
-        return items
-      })
-    }
-  }
   const getHistory = () => {
       let request = new Request({});
       setSpinStatus(true)
-      let maxNumber = 100000000
-      let minNumber = 0
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
-
         // cookie.save('experience', resData.experience, { path: '/' })
         // cookie.save('totalExeNumber', resData.used_experience, { path: '/' })
 
-        let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+        let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic', <PlusCircleFilled />)]
         for(let i in resData.data){
           if(i < 9){
-            let subItem = []
-            // request.get('/api/v1/topics/'+resData.data[i].id+'/records/?page=1&offset=20&order=id').then(function(resItemData){
-            //   for(let j in resItemData.data){
-                  subItem.push(getItem("  正在加载... ...", Math.random()*(maxNumber-minNumber+1)+minNumber))
-            //     subItem.push(getItem("  "+resItemData.data[j].question, resItemData.data[j].add_time))
-            //   }
-            // })
-            // menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,[]))
-            menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />,subItem))
+            menuSetitemList.push(getItem(resData.data[i].title, resData.data[i].id,<MessageOutlined />))
           }
         }
         setTimeout(function(){
           setSpinStatus(false)
           setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
-        },1000)
+        }, 100)
       })
   }
   const noFunction = () => {
@@ -193,12 +163,12 @@ const App = (data) => {
     cookie.save('token', '', { path: '/' })
     cookie.save('experience', '', { path: '/' })
     cookie.save('totalExeNumber', '', { path: '/' })
-    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic',<PlusCircleFilled />)]
     setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
     message.success('Exit succeeded')
     setTimeout(function(){
       setSpinStatus(false)
-    },1000)
+    }, 100)
   }
   const showModal = () => {
     setIsModalOpen(true);
@@ -235,7 +205,7 @@ const App = (data) => {
         message.info('Anonymous users cannot share')
         setTimeout(function(){
           history.push({pathname: '/SignIn/?type=1'})
-        },0)
+        }, 10)
         return
       }else{
         showShareDrawer()
@@ -246,7 +216,7 @@ const App = (data) => {
       message.info(locales(language)['login_first'])
       setTimeout(function(){
         history.push({pathname: '/SignIn/?type=1'})
-      },1000)
+      }, 10)
       return
     }
   }
@@ -300,7 +270,7 @@ const App = (data) => {
       })
     }else{
       setSpinStatus(false)
-      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', '01',<PlusCircleFilled />)]
+      let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic',<PlusCircleFilled />)]
       setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
       cookie.save('experience', '10', { path: '/' })
       cookie.save('totalExeNumber', '0', { path: '/' })
@@ -374,7 +344,7 @@ const App = (data) => {
   }
 
   return (
-    <div>
+    <div className="header-container">
     {
       isPhone ?
       <div>
@@ -398,11 +368,12 @@ const App = (data) => {
               <Popconfirm
               placement="leftTop"
               className="headerRight"
-              title='Do you want to log out'
+              overlayClassName="headerRightConfirm"
+              title={ locales(language)['logoutTitle']}
               description=''
               onConfirm={signOut}
-              okText="Yes"
-              cancelText="No"
+              okText={locales(language)['yes']}
+              cancelText={locales(language)['no']}
             >
               <img src={require("../../assets/noLoginIcon.png")} alt=""/>
               <div>{ userName }</div>
@@ -433,7 +404,7 @@ const App = (data) => {
           onClose={onClose}
           open={open}
           key={placement}
-          style={{background:'#202123',color:'white'}}
+          drawerStyle={{background:'#202123',color:'white'}}
         >
           <div className="drawHeaderBox">
             <img src={require("../../assets/logo.png")} alt=""/>
@@ -445,20 +416,18 @@ const App = (data) => {
               items ?
               <Menu className='chatBoxMenu'
                 onClick={menuClick}
-                onOpenChange={historyMenu}
                 style={{
                   width: '100%',
                   background:'#202123',
                   color:'white',
                   maxHeight: '400px',
-                  overflow: 'scroll'
+                  overflow: 'scroll',
                 }}
                 defaultSelectedKeys={['1']}
                 defaultOpenKeys={['sub1']}
                 mode="inline"
                 items={items}
-                theme="#202123"
-
+                theme="dark"
               />
               :''
             }
@@ -578,7 +547,7 @@ const App = (data) => {
       </Modal>
     </div>
     :
-    <div style={{display: 'flex',width: '100%'}}>
+    <div className='drawHeaderContainer' style={{display: 'flex',width: '100%'}}>
       <div style={{width: '30%', paddingTop: '15px',}}>
           <div className="drawHeaderBox" style={{marginBottom: '12px'}}>
               <img src={require("../../assets/logo.png")} alt=""/>
@@ -590,19 +559,19 @@ const App = (data) => {
                 items ?
                 <Menu className='chatBoxMenu'
                   onClick={menuClick}
-                  onOpenChange={historyMenu}
                   style={{
                     width: '100%',
                     background:'#202123',
                     color:'white',
                     maxHeight: '400px',
-                    overflow: 'scroll'
+                    overflow: 'scroll',
+                    padding: '0 5px'
                   }}
                   defaultSelectedKeys={['1']}
                   defaultOpenKeys={['sub1']}
                   mode="inline"
                   items={items}
-                  theme="#202123"
+                  theme="dark"
 
                 />
                 :''
@@ -731,11 +700,12 @@ const App = (data) => {
                   <Popconfirm
                     placement="leftTop"
                     className="headerRight"
-                    title='Do you want to log out'
-                    description=''
+                    overlayClassName="headerRightConfirm"
+                    arrowPointAtCenter={false}
+                    title={ locales(language)['logoutTitle']}
                     onConfirm={signOut}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={locales(language)['yes']}
+                    cancelText={locales(language)['no']}
                   >
                     <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                     <div>{ userName }</div>
@@ -765,9 +735,6 @@ const App = (data) => {
         <Footer language={language} setLanguage={setLanguage} style={{width:'70%',left:'30%'} }></Footer>
       </div>
 
-      <>
-
-      </>
       <Modal
         title="登录/注册"
         open={isModalOpen}

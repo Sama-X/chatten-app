@@ -10,10 +10,17 @@
     display: inline-block;
     width: 40px;
 }
+.headerRightConfirm .ant-popover-message {
+  color: white;
+}
+.headerRightConfirm .ant-popover-arrow {
+  display: none;
+}
 .headerRight{
     display: flex;
     align-items: center;
     font-size: 16px;
+    color: white;
 }
 .headerRight div a{
     color: white;
@@ -117,7 +124,6 @@
     margin-top: 1px;
 }
 
-
 .chatBoxMenu .ant-menu-submenu .ant-menu-submenu-title {
     padding-left: 5px !important;
     background: #30323C;
@@ -127,6 +133,9 @@
     padding-left: 5px !important;
 }
 
+.drawHeaderContainer .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: inherit;
+}
 
 /* huiyuan */
 .memberBox {

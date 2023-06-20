@@ -1,6 +1,5 @@
 import './dashboard.css'
 
-import { Button, Form, message, Popconfirm, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Request from '../../../requestAdmin.ts';
 import * as echarts from 'echarts/core';

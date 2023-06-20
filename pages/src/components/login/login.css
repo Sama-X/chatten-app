@@ -27,32 +27,35 @@
     width: 40px;
     height: 40px;
 }
-.mobileInput,.mobileInputPassword{
+.mobileAndCode .mobileInput,.mobileAndCode .mobileInputPassword{
     background: rgba(48, 50, 60, 1) !important;
     border: none;
-    width: 88%;
+    width: 88%!important;
     margin: 0 auto 10px;
     height: 52px;
     line-height: 52px;
     border-radius: 8px;
-    color: #fff;
+    color: #fff!important;
+  }
+.mobileAndCode .mobileInputPassword {
+  padding: 0px 11px;
 }
-.mobileInputPasswordBox{
+.mobileAndCode .mobileInputPasswordBox{
   background: rgba(48, 50, 60, 1) !important;
   border: none;
 }
-.ant-input-password .ant-input{
+.mobileAndCode .ant-input-password .ant-input{
   background: rgba(48, 50, 60, 1) !important;
   border: none;
 }
-.ant-input-number-input,.mobileInputPassword .ant-input{
+.mobileAndCode .ant-input-number-input,.mobileAndCode .mobileInputPassword .ant-input{
     height: 52px !important;
     line-height: 52px;
     color: #fff !important;
 }
 
-.mobileInput .ant-input-number-input::placeholder, .mobileInputPassword .ant-input::placeholder{
-    color: #FFFFFF;
+.mobileAndCode .mobileInput .ant-input-number-input::placeholder,.mobileAndCode .mobileInputPassword .ant-input::placeholder{
+    color: #FFFFFF!important;
 }
 .mobileInputPassword .anticon{
   color: white !important;

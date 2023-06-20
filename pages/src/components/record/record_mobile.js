@@ -24,7 +24,6 @@ function App() {
     setItemList([])
     let request = new Request({});
     request.get('/api/v1/order/orders/?status=10&page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -55,7 +54,6 @@ function App() {
     setItemList([])
     let request = new Request({});
     request.get('/api/v1/asset/points-withdraw/?page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -71,7 +69,6 @@ function App() {
     setItemList([])
     let request = new Request({});
     request.get('/api/v1/users/invite-logs/?page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -125,31 +122,31 @@ function App() {
         <div className='mobile-record-item-list'>
           {selected === 'order'? <div>
             {
-              itemList.map((item)=>{
+              itemList.length > 0 ? itemList.map((item)=>{
                 return <div className='mobile-record-item' key={item.id}>
                   <div>订单号：{item.out_trade_no}</div>
                   <div>套餐名称：{item.package_name}</div>
                   <div>支付金额：{item.actual_price}</div>
                   <div>创建时间：{item.add_time}</div>
                 </div>
-              })
+              }) : <div className='mobile-record-item text-center'>暂无记录</div>
             }
           </div>: ""}
           {selected === 'score'? <div>
             {
-              itemList.map((item)=>{
+              itemList.length > 0 ? itemList.map((item)=>{
                 return <div className='mobile-record-item' key={item.id}>
                   <div>创建时间：{item.add_time}</div>
                   <div>变化：{item.category_name}</div>
                   <div>变化数量：{item.amount}</div>
                   <div>备注：{item.note}</div>
                 </div>
-              })
+              }) : <div className='mobile-record-item text-center'>暂无记录</div>
             }
           </div>: ""}
           {selected === 'withdraw'? <div>
           {
-              itemList.map((item)=>{
+              itemList.length > 0 ? itemList.map((item)=>{
                 return <div className='mobile-record-item' key={item.id}>
                   <div>创建时间：{item.add_time}</div>
                   <div>申请积分：{item.point}</div>
@@ -157,20 +154,20 @@ function App() {
                   <div>状态：{item.status_name}</div>
                   <div>审核时间：{item.audit_time}</div>
                 </div>
-              })
+              }) : <div className='mobile-record-item text-center'>暂无记录</div>
             }
           </div>: ""} 
           {selected === 'invite'? <div>
             <div className='mobile-inviteCount'><span>直接邀请用户：{inviteUser.level1}</span>间接邀请用户：{inviteUser.level2}</div>
             <div>
             {
-              itemList.map((item)=>{
+              itemList.length > 0 ? itemList.map((item)=>{
                 return <div className='mobile-record-item' key={item.id}>
                   <div>创建时间：{item.add_time}</div>
                   <div>一级用户：{item.level1_user_name}</div>
                   <div>二级用户：{item.level2_user_name}</div>
                 </div>
-              })
+              }) : <div className='mobile-record-item text-center'>暂无记录</div>
             }
             </div>
           </div>: ""}

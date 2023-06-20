@@ -103,7 +103,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;
         if (!myreg.test(e.target.value)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success
@@ -115,7 +115,7 @@ export default memo(
         const myreg = /^1[3456789]\d{9}$/;;
         if (!myreg.test(mobileVal)) {
             // error
-            message.error('Mobile phone number is not compliant')
+            message.error(locales(language)['invalidMobile'])
             return false;
         } else {
             // success request
@@ -133,17 +133,17 @@ export default memo(
       const myreg = /^1[3456789]\d{9}$/;;
       if (!myreg.test(mobileVal)) {
           // error
-          message.error('Mobile phone number is not compliant')
+          message.error(locales(language)['invalidMobile'])
           return false;
       }
       if(!passwordOne){
-        message.error('Please set the password')
+        message.error(locales(language)['input_password'])
         return false;
       }else if(passwordOne.length < 6){
-        message.error('Password cannot be less than 6 digits')
+        message.error(locales(language)['min_password'])
         return false;
       }else if(passwordOne !== passwordTwo){
-        message.error('The two passwords are inconsistent')
+        message.error(locales(language)['password_inconsistent'])
         return false;
       }
       setSpinStatus(true)
@@ -224,10 +224,10 @@ export default memo(
                     {locales(language)['register']}
                     </div>
                     <div>
-                      <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder={locales(language)['input_mobile']}/>
+                      <InputNumber onChange={setMobileVal} onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder={locales(language)['input_mobile']}/>
                     </div>
                     {/* <div> */}
-                      <Input.Password type="password" onBlur={passWordOneChange} className="mobileInputPassword" placeholder={locales(language)['input_password']}/>
+                      <Input.Password type="password" onChange={passWordOneChange} onBlur={passWordOneChange} className="mobileInputPassword" placeholder={locales(language)['input_password']}/>
                     {/* </div>
                     <div> */}
                       <Input.Password type="password" onBlur={passWordTwoChange} className="mobileInputPassword" placeholder={locales(language)['input_password_again']}/>

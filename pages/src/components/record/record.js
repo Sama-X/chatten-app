@@ -26,7 +26,6 @@ function App() {
     setSelected('order')
     let request = new Request({});
     request.get('/api/v1/order/orders/?status=10&page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -55,7 +54,6 @@ function App() {
     setSelected('withdraw')
     let request = new Request({});
     request.get('/api/v1/asset/points-withdraw/?page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -70,7 +68,6 @@ function App() {
     setSelected('invite')
     let request = new Request({});
     request.get('/api/v1/users/invite-logs/?page=' + page + '&offset='+pageSize).then(function(resData){
-      console.log(resData.data)
       var result = []
       for(var i=0; i<resData.data.length; i++){
         resData.data[i]['key'] = resData.data[i]['id']
@@ -200,16 +197,19 @@ function App() {
         <div className='record-item-list'>
           {selected === 'order'? <Table
             columns={orderColumns}
+            locale={{ emptyText: '暂无记录' }}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
             dataSource={itemList}
           />: ""}
           {selected === 'score'? <Table
             columns={scoreColumns}
+            locale={{ emptyText: '暂无记录' }}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
             dataSource={itemList}
           />: ""}
           {selected === 'withdraw'? <Table
             columns={withdrawColumns}
+            locale={{ emptyText: '暂无记录' }}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
             dataSource={itemList}
           />: ""} 
@@ -217,6 +217,7 @@ function App() {
             <div className='inviteCount'><span>直接邀请用户：{inviteUser.level1}</span>间接邀请用户：{inviteUser.level2}</div>
             <Table
             columns={inviteColumns}
+            locale={{ emptyText: '暂无记录' }}
             pagination={{total:total, pageSize:pageSize, onChange:changePage}}
             dataSource={itemList}
           /></div>: ""}

@@ -232,6 +232,7 @@
     text-align: left;
     margin-left: 10px;
     color: red;
+    cursor: pointer;
   }
 
 
@@ -242,4 +243,29 @@
 .shareLink {
     font-size: 16px;
     cursor: pointer;
+}
+
+/* pc chat page */
+.PCchatPageContainer .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: inherit;
+}
+
+.headerRightConfirm .ant-popover-message {
+  color: white;
+}
+.headerRightConfirm .ant-popover-arrow {
+  display: none;
+}
+
+.new_topic_modal .ant-modal-header {
+    background: inherit;
+}
+
+.new_topic_modal .ant-modal-header {
+    border-bottom: 1px solid #5D5D67;
+    border-radius: 10px 10px 0 0;
+}
+.new_topic_modal .ant-modal-content {
+    border: 1px solid #5D5D67;
+    border-radius: 10px;
 }

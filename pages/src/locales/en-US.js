@@ -1,8 +1,15 @@
 export default {
     language: 'English',
     login: 'login',
+    logoutTitle: 'Do you want to log out',
+    yes: 'Yes',
+    no: 'No',
+    ok: "ok",
+    cancel: "cancel",
     register: 'register',
     noaccount: "Don't have a account? go to ",
+    invalidMobile: 'Mobile phone number is not compliant',
+    requiredPassword: 'Please input a password',
     create_new_talk: 'Create new talk',
     clear_chat_hitstory: 'Clear history',
     experience_count: 'Question times',
@@ -23,6 +30,8 @@ export default {
     input_mobile: 'phone number',
     input_password: 'password',
     input_password_again: 'password again',
+    min_password: 'Password cannot be less than 6 digits',
+    password_inconsistent: 'The two passwords are inconsistent',
     anonymous: 'Anonymous',
     nodata: 'No data',
     ask_free: 'Question times',
@@ -36,6 +45,7 @@ export default {
     policy: "View promotion policies",
     protocol: "View user protocol",
     copy_link: "Successfully copied, please share with friends",
-    beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge"
-
+    beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge",
+    whether_create_new_topic_title: "Do you want to start a new topic",
+    whether_create_new_topic_content: "The capacity of this topic is full. Please open a new topic to continue asking questions",
   }
