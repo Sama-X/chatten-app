@@ -49,6 +49,8 @@ const App = () => {
   const [inviteCode, setInviteCode] = useState('');
   const [newData, setNewData] = useState({})
 
+  const [experienceModal, setExperienceModal] = useState(false);
+
 
   const showShareDrawer = () => {
     setShareDrawer(true);
@@ -131,6 +133,7 @@ const App = () => {
         setQuestionValue('')
         value.target.value = ''
         message.info(locales(language)['beyond_limit'])
+        setExperienceModal(true)
         return
       }else{
         // setSpinStatus(true)
@@ -623,11 +626,11 @@ const App = () => {
                           {/* <div className="answer">{item.answer}</div> */}
                           <div className="answer" dangerouslySetInnerHTML={{__html: converter.makeHtml(item.answer)}}></div>
                           <div className="answerZanBox">
-                            此回答由AI生成，真假自辨。
+                            { locales(language)['ai_warning'] } 
                             <span
                               className="copy"
                               onClick={(eve)=>{copyContent(item.answer)}}>
-                              复制内容</span>
+                              { locales(language)['copy'] }</span>
                           </div>
                         </div>
                       </div>
@@ -736,6 +739,24 @@ const App = () => {
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
           <Button type="primary" onClick={handleOk}>{locales(language)['ok']}</Button>
           <Button type="default" onClick={handleCancel}>{locales(language)['cancel']}</Button>
+        </div>
+      </Modal>
+
+      <Modal
+        title={locales(language)['no_experience_title']}
+        open={experienceModal}
+        footer={null}
+        style={{top: "30%"}}
+        wrapClassName='no_experience_modal'
+        onCancel={() => setExperienceModal(false)}
+        closable
+      >
+        <div dangerouslySetInnerHTML={{__html: locales(language)['no_experience_content']}}>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
+          <Button type="primary" onClick={goToPrice}>{locales(language)['purchage']}</Button>
+          <Button type="primary" onClick={showShareDrawer}>{locales(language)['invite']}</Button>
+          <Button type="default" onClick={() => setExperienceModal(false)}>{locales(language)['cancel']}</Button>
         </div>
       </Modal>
     </div>
