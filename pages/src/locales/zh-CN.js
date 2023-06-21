@@ -53,7 +53,7 @@ export default {
     copy: "复制内容",
     empty_question_error: "问题不能为空",
     no_experience_title: "提问次数已耗尽",
-    no_experience_content: `1. 可以开通会员获得提问次数。<br>2.每成功邀请一位好友，可以获得10次提问次数。`,
-    purchage: '购买',
-    invite: '邀请',
+    no_experience_content: `1. 可以开通会员获得提问次数。<br>2.每邀请1位好友注册，可获10次提问次数。`,
+    purchase: '开通会员',
+    invite: '邀请好友',
 }

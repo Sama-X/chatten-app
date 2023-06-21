@@ -430,7 +430,7 @@ const App = () => {
         <div dangerouslySetInnerHTML={{__html: locales(language)['no_experience_content']}}>
         </div>
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
-          <Button type="primary" onClick={goToPrice}>{locales(language)['purchage']}</Button>
+          <Button type="primary" onClick={goToPrice}>{locales(language)['purchase']}</Button>
           <Button type="primary" onClick={() => setShareDrawer(true)}>{locales(language)['invite']}</Button>
           <Button type="default" onClick={() => setExperienceModal(false)}>{locales(language)['cancel']}</Button>
         </div>

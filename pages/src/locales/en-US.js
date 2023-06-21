@@ -54,6 +54,6 @@ export default {
     empty_question_error: "The question cannot be empty",
     no_experience_title: "The number of questions has been exhausted.",
     no_experience_content: "1. You can purchase vip to get the number of questions. <br> 2. For every successful invitation to a friend, you can get 10 questions.",
-    purchage: 'purchage',
-    invite: 'invite',
+    purchase: 'Purchase',
+    invite: 'Invite friends',
   }
