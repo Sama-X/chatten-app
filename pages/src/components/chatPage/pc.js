@@ -85,10 +85,7 @@ const App = () => {
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
         for(let i in resData.data){
-          if(resData.data[i].answer.indexOf('\n') > -1){
-            resData.data[i].answer = resData.data[i].answer.replace(/\n/g,'<br />')
-          }
-            resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
+          resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
         }
         setChatList(resData.data ? resData.data : [])
         if(resData.code === 0){

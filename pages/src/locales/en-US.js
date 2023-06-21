@@ -48,4 +48,5 @@ export default {
     beyond_limit: "Questioning more than ten times, reaching the upper limit, please recharge",
     whether_create_new_topic_title: "Do you want to start a new topic",
     whether_create_new_topic_content: "The capacity of this topic is full. Please open a new topic to continue asking questions",
+    copy_success: "Copy success."
   }

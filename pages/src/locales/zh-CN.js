@@ -48,4 +48,5 @@ export default {
     beyond_limit: "使用次数达到上限，可以充值会员继续使用噢",
     whether_create_new_topic_title: "是否要开始一个新主题",
     whether_create_new_topic_content: "当前主题的容量已满。请打开新主题继续提问",
+    copy_success: "复制成功",
 }
