@@ -200,12 +200,7 @@ const App = () => {
               setQuestionValue('')
               message.error(resData.msg)
               setIsInputEnterStatus(true)
-              // if(Number(totalExeNumber) >= Number(experience)){
-                // message.error(resData.msg)
-              // }else{
-              //   setIsModalOpen(true)
-              // }
-
+              setNewData({})
             }else if(resData.code == '200102'){
               setSpinStatus(false)
               isLoading(false)
@@ -214,9 +209,8 @@ const App = () => {
               setQuestionValue('')
               setIsModalOpen(true)
               setIsInputEnterStatus(true)
+              setNewData({})
             }else{
-              // setIsModalOpen(true)
-              // cookie.save('experience', resData.experience, { path: '/' })
               cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
               cookie.save('experience', resData.data.experience, { path: '/' })
 
@@ -240,6 +234,7 @@ const App = () => {
               // setInputDisabled(false)
               isLoading(false)
               setIsInputEnterStatus(true)
+              setNewData({})
           })
         }
       }

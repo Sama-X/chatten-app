@@ -143,7 +143,7 @@ const App = () => {
               // }else{
               //   setIsModalOpen(true)
               // }
-
+              setNewData({})
             }else if(resData.code == '200102'){
               setSpinStatus(false)
               isLoading(false)
@@ -152,6 +152,7 @@ const App = () => {
               setQuestionValue('')
               setIsModalOpen(true)
               setIsInputEnterStatus(true)
+              setNewData({})
             }else{
               // setIsModalOpen(true)
               // cookie.save('experience', resData.experience, { path: '/' })
@@ -178,6 +179,7 @@ const App = () => {
               // setInputDisabled(false)
               isLoading(false)
               setIsInputEnterStatus(true)
+              setNewData({})
           })
         }
       }
