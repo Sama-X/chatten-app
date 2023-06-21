@@ -87,9 +87,6 @@ const App = () => {
         if(resData.code !== 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
-        for(let i in resData.data){
-          resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
-        }
         setChatList(resData.data ? resData.data : [])
         if(resData.code === 0){
           setTimeout(function(){
