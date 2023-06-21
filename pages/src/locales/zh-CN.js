@@ -49,4 +49,5 @@ export default {
     whether_create_new_topic_title: "是否要开始一个新主题",
     whether_create_new_topic_content: "当前主题的容量已满。请打开新主题继续提问",
     copy_success: "复制成功",
+    empty_question_error: "问题不能为空",
 }
