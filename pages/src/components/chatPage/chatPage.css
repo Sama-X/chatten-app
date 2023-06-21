@@ -30,6 +30,7 @@
     border-radius: 5px;
     overflow: hidden;
     display: flex;
+    align-items: center;
 }
 .tokenInput{
     width: 100%;

@@ -49,7 +49,7 @@ const App = () => {
         if(resData.code == 0){
           setTimeout(function(){
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-          }, 100)
+          }, 500)
         }
       })
   }
@@ -230,9 +230,6 @@ const App = () => {
   }
 
   useEffect(()=>{
-    setTimeout(function(){
-      document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-    }, 10)
     setWidthNumber('77%')
     if(isToken){
       const authName = (cookie.load('userName') && cookie.load('userName') != 'null') ? cookie.load('userName') : locales(language)['anonymous']
@@ -379,7 +376,7 @@ const App = () => {
                     placeholder={locales(language)['please_input']}
                     />
                 {/* </div> */}
-                <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142", marginTop: '3px' }}/>
+                <UpCircleFilled onClick={onSearchFunc} className="tokenIcon" style={{ fontSize: '28px',color: "#E84142" }}/>
             </div>
             {/* :
             <div className="noTokenBtn">
