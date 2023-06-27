@@ -47,6 +47,9 @@ const App = () => {
   const [showPolicy, setShowPolicy] = useState(false);
   const [shareDrawer, setShareDrawer] = useState(false);
   const [inviteCode, setInviteCode] = useState('');
+  const [newData, setNewData] = useState({})
+
+  const [experienceModal, setExperienceModal] = useState(false);
 
 
   const showShareDrawer = () => {
@@ -84,12 +87,6 @@ const App = () => {
         if(resData.code !== 0){
           history.push({pathname: '/', state: { test: 'noToken' }})
         }
-        for(let i in resData.data){
-          if(resData.data[i].answer.indexOf('\n') > -1){
-            resData.data[i].answer = resData.data[i].answer.replace(/\n/g,'<br />')
-          }
-            resData.data[i].answer = converter.makeHtml(resData.data[i].answer)
-        }
         setChatList(resData.data ? resData.data : [])
         if(resData.code === 0){
           setTimeout(function(){
@@ -117,17 +114,28 @@ const App = () => {
       },100)
     })
   }
+
+  const onPressEnter = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSearchFunc(e)
+      return;
+    }
+  }
+
   const onSearchFunc = (value) => {
     if(isInputEnterStatus){
+      // if(Number(totalExeNumber) >= Number(experience)){
       if(Number(experience) === 0){
         setQuestionValue('')
         value.target.value = ''
         message.info(locales(language)['beyond_limit'])
+        setExperienceModal(true)
         return
       }else{
         // setSpinStatus(true)
-        if(!questionValue && !value.target.value && value.target.value.trim() === ''){
-          message.error('The question cannot be empty')
+        if(!questionValue && !value.target.value && value.target.value.trim() == ''){
+          message.error(locales(language)['empty_question_error'])
           setQuestionValue(value.target.value.trim())
           value.target.value = value.target.value.trim()
           setSpinStatus(false)
@@ -136,8 +144,7 @@ const App = () => {
           isLoading(true)
           setIsInputEnterStatus(false)
           setQuestionValue(value.target.value)
-          const questionObj = [...chatList]
-          questionObj.push({
+          let currentData = {
             "msg_type": 1, //消息类型
             "msg_type_name": "text", //消息类型描述
             "question": questionValue, //问题内容
@@ -145,9 +152,10 @@ const App = () => {
             "approval": 0, //点赞数
             "question_time": "2023-03-02 16:49:46", //提问时间
             "response_time": "2023-03-02 16:49:54", //回答时间
-            "add_time": "2023-03-02 16:49:46" //创建时间
-          })
-          setChatList(questionObj)
+            "add_time": "2023-03-02 16:49:46", //创建时间
+          }
+          setNewData(currentData)
+
           let request = new Request({});
           let obj = {}
           const topicId = cookie.load('topicId')
@@ -159,42 +167,32 @@ const App = () => {
           setQuestionValue('')
           // setInputDisabled(true)
           const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
-          const eventList = document.createElement("ul")
           setTimeout(function(){
             evtSource.addEventListener("message", function(e) {
-              const divBox = document.querySelector('.chatBox').lastElementChild.lastElementChild.lastElementChild.firstElementChild
               if(JSON.parse(e.data).status == '-1'){
                 setSpinStatus(false)
-                // setInputDisabled(false)
                 isLoading(false)
                 setIsInputEnterStatus(true)
                 evtSource.close();
-              }else{
-                const newElement = document.createElement("li");
-                newElement.innerHTML = converter.makeHtml(JSON.parse(e.data).text)
-                eventList.appendChild(newElement);
-                if(JSON.parse(e.data).text.indexOf('\n\n') > -1 || JSON.parse(e.data).text.indexOf('\n') > -1 || JSON.parse(e.data).text.indexOf('···') > -1){
-                  const newElementSpan = document.createElement("div");
-                  newElementSpan.innerHTML ="<br/><br/>"
-                  eventList.appendChild(newElementSpan);
-                  // divBox.append(eventList)
-                }
-                divBox.append(eventList)
+                setTimeout(() => {
+                  setChatList([...chatList, Object.assign({}, currentData)])
+                  setNewData({})
+                }, 10);
+              } else {
+                currentData.answer = (currentData.answer || "") + JSON.parse(e.data).text
+                setNewData(Object.assign({}, currentData))
               }
-              document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-
-              // newElement.textContent = JSON.parse(e.data).text
-
+              setTimeout(() => {
+                document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
+              }, 200);
             })
-          },100)
+          }, 100)
           setTimeout(function(){
             document.getElementsByClassName('chatBox')[0].scrollTop = document.getElementsByClassName('chatBox')[0].scrollHeight;
-          },10)
+          }, 100)
           // cookie.save('topicId', '')
           request.post('/api/v1/chat/question/',obj).then(function(resData){
             if(resData.code == '200100'){
-              questionObj.pop()
-              setChatList(questionObj)
               setSpinStatus(false)
               isLoading(false)
               evtSource.close();
@@ -202,9 +200,8 @@ const App = () => {
               setQuestionValue('')
               message.error(resData.msg)
               setIsInputEnterStatus(true)
+              setNewData({})
             }else if(resData.code == '200102'){
-              questionObj.pop()
-              setChatList(questionObj)
               setSpinStatus(false)
               isLoading(false)
               evtSource.close();
@@ -212,32 +209,17 @@ const App = () => {
               setQuestionValue('')
               setIsModalOpen(true)
               setIsInputEnterStatus(true)
+              setNewData({})
             }else{
-              // setIsModalOpen(true)
-              // cookie.save('experience', resData.experience, { path: '/' })
               cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
               cookie.save('experience', resData.data.experience, { path: '/' })
 
               cookie.save('topicId', resData.data.topic_id)
 
               if(isFirstStatus){
-                getHistory()
                 isFirst(false)
               }
-              setTimeout(function(){
-                value.target.value = ''
-                setQuestionValue('')
-                history.push({pathname: '/ChatPage', state: { test: 'signin' }})
-                evtSource.close();
-                fetchData(resData.data.topic_id,1)
-                setSpinStatus(false)
-                // setInputDisabled(false)
-                isLoading(false)
-                setIsInputEnterStatus(true)
-                // evtSource.close();
-              },100)
             }
-
           }).catch(function(err) {
               value.target.value = ''
               setQuestionValue('')
@@ -252,6 +234,7 @@ const App = () => {
               // setInputDisabled(false)
               isLoading(false)
               setIsInputEnterStatus(true)
+              setNewData({})
           })
         }
       }
@@ -303,6 +286,10 @@ const App = () => {
     return /micromessenger/.test(ua) ? true : false;
   }
 
+  const copyContent = (value) => {
+    copy(value)
+    message.success(locales(language)['copy_success'])
+  }
 
   const bindWeixin = () =>{
     if(!isWeixinBrowser()){
@@ -620,26 +607,44 @@ const App = () => {
                   :
                   chatList.map((item, index)=>{
 
-                    return  <div key={index} className="queAndans">
-                        <div className='questionBox'>
+                  return  <div key={index} className="queAndans">
+                      <div className='questionBox'>
                           <img src={require("../../assets/noLoginIcon.png")} alt=""/>
                           <div className="question">{item.question}</div>
-                        </div>
-
-                        <div className='answerBox'>
-                            <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
-                            <div className="answerContent">
-                              {/* <div className="answer">{item.answer}</div> */}
-                              <div className="answer" dangerouslySetInnerHTML={{__html: item.answer}}></div>
-                              <div className="answerZanBox">
-                                <img src={require("../../assets/zan.png")} className="zan" alt=""/>
-                                <img src={require("../../assets/cai.png")} className="noZan" alt=""/>
-                              </div>
-                            </div>
-                          </div>
                       </div>
+                      <div className='answerBox'>
+                        <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
+                        <div className="answerContent">
+                          {/* <div className="answer">{item.answer}</div> */}
+                          <div className="answer" dangerouslySetInnerHTML={{__html: converter.makeHtml(item.answer)}}></div>
+                          <div className="answerZanBox">
+                            { locales(language)['ai_warning'] } 
+                            <span
+                              className="copy"
+                              onClick={(eve)=>{copyContent(item.answer)}}>
+                              { locales(language)['copy'] }</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   })
-                }
+              }
+              {
+                (newData && newData.question) ?
+                  <div className="queAndans">
+                    <div className='questionBox'>
+                      <img src={require("../../assets/noLoginIcon.png")} alt=""/>
+                      <div className="question">{newData.question}</div>
+                    </div>
+                    <div className='answerBox'>
+                      <img className='answerAvator' src={require("../../assets/aiImg.png")} alt=""/>
+                      <div className="answerContent">
+                        <div className="answer" dangerouslySetInnerHTML={{__html: converter.makeHtml(newData.answer)}}></div>
+                      </div>
+                    </div>
+                  </div>
+                : ""
+              }
 
               </div>
               <ul className="isMessage"></ul>
@@ -680,7 +685,7 @@ const App = () => {
                               maxRows: 3,
                             }}
                             disabled={inputDisabled}
-                            onPressEnter={onSearchFunc}
+                            onPressEnter={onPressEnter}
                             onChange={onChangeInput}
                             value={questionValue}
                             className="tokenInput"
@@ -703,7 +708,6 @@ const App = () => {
                       {/* <div><span>{locales(language)['ask_free']}</span>{totalExeNumber ? totalExeNumber : 0}/{experience ? experience : 10}</div> */}
                       <div><span>{locales(language)['ask_free']}: </span>{experience}</div>
                     </div>
-                    {/* <div className="footerTokenContent">服务由 SAMA network 提供</div> */}
                   </div>
                 </div>
               </div>
@@ -726,6 +730,24 @@ const App = () => {
         <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
           <Button type="primary" onClick={handleOk}>{locales(language)['ok']}</Button>
           <Button type="default" onClick={handleCancel}>{locales(language)['cancel']}</Button>
+        </div>
+      </Modal>
+
+      <Modal
+        title={locales(language)['no_experience_title']}
+        open={experienceModal}
+        footer={null}
+        style={{top: "30%"}}
+        wrapClassName='no_experience_modal'
+        onCancel={() => setExperienceModal(false)}
+        closable
+      >
+        <div dangerouslySetInnerHTML={{__html: locales(language)['no_experience_content']}}>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'space-around', margin: '20px 0'}}>
+          <Button type="primary" onClick={goToPrice}>{locales(language)['purchase']}</Button>
+          <Button type="primary" onClick={showShareDrawer}>{locales(language)['invite']}</Button>
+          <Button type="default" onClick={() => setExperienceModal(false)}>{locales(language)['cancel']}</Button>
         </div>
       </Modal>
     </div>

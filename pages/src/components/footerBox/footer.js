@@ -84,7 +84,6 @@ const App = (data) => {
             以开始聊天
           </div>
         } */}
-        {/* <div  className="footerTokenContent">服务由 SAMA network 提供</div> */}
       </div>
     </div>
   );

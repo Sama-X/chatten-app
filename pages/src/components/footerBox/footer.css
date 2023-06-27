@@ -41,12 +41,10 @@
 }
 /* fengexian */
 .footerTokenContent{
-    font-size: 14px;
-    margin-top: 14px;
+    font-size: 12px;
+    margin-top: 0;
     font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    color: #ECECF1;
-    line-height: 20px;
+    color: #AAAAAA;
 }
 
 

@@ -1,14 +1,11 @@
 import './content.css'
-import { getCategoriesAsync } from '../../api/index.js';
 import locales from '../../locales/locales.js'
 
 
 import { useEffect, useState } from 'react';
 const App = (data) => {
-  console.log('locales====', locales)
   const language = data['language']
 
-  console.log('language====', data)
   const [dataList, setDataList] = useState([]);
   const fetchData = () => {
     const copyList = [
