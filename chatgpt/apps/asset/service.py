@@ -33,9 +33,7 @@ class O2OPaymentService(BaseService):
         """
         package = OrderPackageModel.objects.get(pk=order.package_id)
         with transaction.atomic():
-            payment = O2OPaymentModel.objects.filter(user_id=order.user_id).first()
-            if not payment:
-                payment = cls.add_free_payment(order.user_id)
+            payment = cls.init_payment(order.user_id)
 
             usage_total = order.quantity * package.usage_count
             usage_expire_time = None
@@ -67,23 +65,32 @@ class O2OPaymentService(BaseService):
         return True
 
     @classmethod
+    def init_payment(cls, user_id):
+        """
+        init payment.
+        """
+        payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+        if not payment:
+            payment = O2OPaymentModel(
+                user_id=user_id,
+                transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time.min),
+                transient_usage_count=0,
+                persistence_usage_count=0,
+                free_expire_time=datetime.combine(date.today() + timedelta(days=1), time.min),
+                free_usage_count=0
+            )
+            payment.save()
+
+        return payment
+
+    @classmethod
     @transaction.atomic
     def add_free_payment(cls, user_id):
         """
         add free payment.
         """
         with transaction.atomic():
-            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
-            if not payment:
-                payment = O2OPaymentModel(
-                    user_id=user_id,
-                    transient_expire_time=datetime.combine(date.today() + timedelta(days=1), time.min),
-                    transient_usage_count=0,
-                    persistence_usage_count=0,
-                    free_expire_time=None,
-                    free_usage_count=0
-                )
-
+            payment = cls.init_payment(user_id)
             old_free_usage_count = payment.free_usage_count
 
             payment.free_expire_time = datetime.combine(date.today() + timedelta(days=1), time(0, 0, 0))
@@ -124,9 +131,7 @@ class O2OPaymentService(BaseService):
             usage_total = floor(point * ConfigModel.get_int(
                 ConfigModel.CONFIG_POINT_TO_CHAT_COUNT_RATIO, 1, _("Set the proportion of points redemption times")
             ))
-            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
-            if not payment:
-                payment = cls.add_free_payment(user_id)
+            payment = cls.init_payment(user_id)
 
             payment.persistence_usage_count += usage_total
             payment.save()
@@ -148,9 +153,7 @@ class O2OPaymentService(BaseService):
         add payment by reward.
         """
         with transaction.atomic():
-            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
-            if not payment:
-                payment = cls.add_free_payment(user_id)
+            payment = cls.init_payment(user_id)
 
             payment.persistence_usage_count += count
             payment.save()
@@ -174,9 +177,7 @@ class O2OPaymentService(BaseService):
         reduce payment.
         """
         with transaction.atomic():
-            payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
-            if not payment:
-                payment = cls.add_free_payment(user_id)
+            payment = cls.init_payment(user_id)
 
             payment = O2OPaymentModel.objects.select_for_update().get(pk=payment.id)
 
