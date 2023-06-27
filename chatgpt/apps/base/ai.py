@@ -72,6 +72,36 @@ class AIHelper:
         else:
             self.strategy = strategry_cls()
 
+    def build_result(self, histories, report, item):
+        """
+        build result.
+        """
+        encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
+        prompt_tokens = len(encoding.encode(json.dumps(histories)))
+        content = ''.join(report)
+        completion_tokens = len(encoding.encode(content))
+        result = {
+            "id": item.id, # type: ignore
+            "object": item.model, # type: ignore
+            "created": item.created, # type: ignore
+            "model": item.model, # type: ignore
+            "usage": {
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": prompt_tokens + completion_tokens
+            },
+            "choices": [{
+                "message": {
+                    "role": "assistant",
+                    "content": content
+                },
+                "finish_reason": "stop",
+                "index": 0
+            }],
+            "key_id": 1
+        }
+        return result
+
     async def send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0, key=None, auth_token=None) -> Dict:
         """
         send message.
@@ -98,18 +128,18 @@ class AIHelper:
             return result
 
         start = time.time()
+        report = []
+        first_item = None
         try:
-            encoding = tiktoken.encoding_for_model('gpt-3.5-turbo')
-            prompt_tokens = len(encoding.encode(json.dumps(histories)))
             resp = await openai.ChatCompletion.acreate(
                 model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120), stream=True
             )
-            report = []
             index = 0
             async for item in resp:  # type: ignore
                 if item.choices: # type: ignore
                     cont = item.choices[0].delta.get('content', '')  # type: ignore
                     report.append(cont)
+                    first_item = item
                     send_event(auth_token, 'message', {
                         'id': item.id, # type: ignore
                         'text': cont, 'index': index, 'channel': auth_token,
@@ -122,28 +152,7 @@ class AIHelper:
                 'status': -1
             })
 
-            content = ''.join(report)
-            completion_tokens = len(encoding.encode(content))
-            result = {
-                "id": item.id, # type: ignore
-                "object": item.model, # type: ignore
-                "created": item.created, # type: ignore
-                "model": item.model, # type: ignore
-                "usage": {
-                    "prompt_tokens": prompt_tokens,
-                    "completion_tokens": completion_tokens,
-                    "total_tokens": prompt_tokens + completion_tokens
-                },
-                "choices": [{
-                    "message": {
-                        "role": "assistant",
-                        "content": content
-                    },
-                    "finish_reason": "stop",
-                    "index": 0
-                }],
-                "key_id": 1
-            }
+            result = self.build_result(histories, report, first_item)
         except RateLimitError as err:
             # rate limit exception
             logger.error("【chatgpt send】reason: rate limit desc: %s", err)
@@ -179,6 +188,9 @@ class AIHelper:
         except Exception as err:
             logger.error("【chatgpt send】Exception, reason: %s", traceback.format_exc())
             result["error"] = f"exception {traceback.format_exc()}"
+        finally:
+            if report:
+                result = self.build_result(histories, report, first_item)
 
         result['key_id'] = self.strategy.get_api_key_id(key)
         logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
