@@ -132,7 +132,7 @@ class AIHelper:
         first_item = None
         try:
             resp = await openai.ChatCompletion.acreate(
-                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120), stream=True
+                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 300), stream=True
             )
             index = 0
             async for item in resp:  # type: ignore

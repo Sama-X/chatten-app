@@ -192,24 +192,10 @@ const App = () => {
           }, 100)
           // cookie.save('topicId', '')
           request.post('/api/v1/chat/question/',obj).then(function(resData){
-            if(resData.code == '200100'){
-              setSpinStatus(false)
-              isLoading(false)
-              evtSource.close();
-              value.target.value = ''
-              setQuestionValue('')
+            if(resData.code == '200100') {
               message.error(resData.msg)
-              setIsInputEnterStatus(true)
-              setNewData({})
             }else if(resData.code == '200102'){
-              setSpinStatus(false)
-              isLoading(false)
-              evtSource.close();
-              value.target.value = ''
-              setQuestionValue('')
               setIsModalOpen(true)
-              setIsInputEnterStatus(true)
-              setNewData({})
             }else{
               cookie.save('totalExeNumber', resData.data.experience, { path: '/' })
               cookie.save('experience', resData.data.experience, { path: '/' })
@@ -221,20 +207,22 @@ const App = () => {
               }
             }
           }).catch(function(err) {
-              value.target.value = ''
-              setQuestionValue('')
-              evtSource.close();
               if(cookie.load('topicId')){
-                fetchData(cookie.load('topicId'),2)
+                fetchData(cookie.load('topicId'), 2)
                 isFirst(false)
               }else{
                 isFirst(true)
               }
               setSpinStatus(false)
               // setInputDisabled(false)
+            }).finally(_ => {
               isLoading(false)
               setIsInputEnterStatus(true)
               setNewData({})
+              setSpinStatus(false)
+              evtSource.close();
+              value.target.value = ''
+              setQuestionValue('')
           })
         }
       }
