@@ -214,15 +214,17 @@ const App = () => {
                 isFirst(true)
               }
               setSpinStatus(false)
+              evtSource.close();
               // setInputDisabled(false)
-            }).finally(_ => {
+          }).finally(_ => {
+            setTimeout(() => {
               isLoading(false)
               setIsInputEnterStatus(true)
               setNewData({})
               setSpinStatus(false)
-              evtSource.close();
               value.target.value = ''
               setQuestionValue('')
+            }, 100);
           })
         }
       }

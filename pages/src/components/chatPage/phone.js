@@ -150,14 +150,16 @@ const App = () => {
               }else{
                 isFirst(true)
               }
-            }).finally(_ => {
-              setSpinStatus(false)
-              isLoading(false)
-              value.target.value = ''
-              setQuestionValue('')
               evtSource.close();
-              setIsInputEnterStatus(true)
-              setNewData({})
+            }).finally(_ => {
+              setTimeout(() => {
+                isLoading(false)
+                setIsInputEnterStatus(true)
+                setNewData({})
+                setSpinStatus(false)
+                value.target.value = ''
+                setQuestionValue('')
+              }, 100);
           })
         }
       }
