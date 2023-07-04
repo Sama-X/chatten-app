@@ -4,11 +4,15 @@ Chatgpt key selection strategy.
 
 from gc import enable
 import heapq
+import os
 import random
 from random import shuffle
 
 from datetime import datetime
+import socket
+import threading
 from django.conf import settings
+from django.core.cache import cache
 
 
 class StrategyError(Exception):
@@ -21,6 +25,7 @@ class BaseStrategy:
     """
     base strategy.
     """
+    REDIS_CACHE_KEY = "new:key:add"
     USING_KEYS = set()
     UNUSED_KEYS = set()
     KEY_MAP = {}
@@ -83,6 +88,19 @@ class BaseStrategy:
             enable=True
         ).update(enable=False, reason=reason)
 
+    def has_new_key(self):
+        """
+        check has new key
+        """
+        local = f'{socket.gethostname()}-{threading.get_ident()}'
+        if cache.has_key(self.REDIS_CACHE_KEY):
+            values = cache.get(self.REDIS_CACHE_KEY) or []
+            if local not in values:
+                values.append(local)
+                cache.set(self.REDIS_CACHE_KEY, values, 86400)
+                return True
+        return False
+
 
 class UnusedStrategy(BaseStrategy):
     """
@@ -100,6 +118,9 @@ class UnusedStrategy(BaseStrategy):
         """
         get api key.
         """
+        if self.has_new_key():
+            self.__init__()
+
         if not self.UNUSED_KEYS:
             return None
 
@@ -140,6 +161,9 @@ class PriorityStrategy(BaseStrategy):
         """
         get api key.
         """
+        if self.has_new_key():
+            self.__init__()
+
         if not self.TASKS:
             self.init_keys()
             return None
@@ -197,6 +221,9 @@ class DurationWeightedStrategy(BaseStrategy):
         """
         get api key.
         """
+        if self.has_new_key():
+            self.__init__()
+
         if not self.UNUSED_KEYS:
             return None
 

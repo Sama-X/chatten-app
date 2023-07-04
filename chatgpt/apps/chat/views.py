@@ -10,6 +10,7 @@ import traceback
 
 from asgiref.sync import async_to_sync
 from django.conf import settings
+from django.core.cache import cache
 from django_redis import get_redis_connection
 
 from rest_framework import viewsets, mixins
@@ -163,6 +164,7 @@ class ChatgptKeyViewSet(viewsets.GenericViewSet):
                 )
             # dynamic update key
             get_ai_instance().strategy.release_key(key)
+            cache.set(get_ai_instance().strategy.REDIS_CACHE_KEY, [])
 
             return APIResponse()
 
