@@ -7,7 +7,7 @@ from math import floor
 from django.db import transaction
 from django.db.models import Sum
 from django.db.models.functions import Coalesce
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from asset.models import O2OPaymentLogModel, O2OPaymentModel, PointsLogModel, PointsModel, PointsWithdrawModel
 from asset.serializer import CreateWithdrawSerializer, ExchangePointsSerializer, PointsLogSerializer, WithdrawSerializer

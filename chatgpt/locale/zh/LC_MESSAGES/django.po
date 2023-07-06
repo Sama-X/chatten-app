@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 10:34+0800\n"
+"POT-Creation-Date: 2023-07-06 17:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -248,75 +248,75 @@ msgstr "提现积分"
 msgid "Exchange point"
 msgstr "兑换积分"
 
-#: apps/asset/service.py:50
+#: apps/asset/service.py:48
 msgid "User has purchased a persistence package"
 msgstr "用户购买永久套餐"
 
-#: apps/asset/service.py:54
+#: apps/asset/service.py:52
 msgid "User has purchased a transient package"
 msgstr "用户购买时效套餐"
 
-#: apps/asset/service.py:91 apps/users/models.py:276
+#: apps/asset/service.py:98 apps/users/models.py:276
 msgid "Number of free experiences, number type, must be greater than 0"
 msgstr "免费体验数，数字类型，必须大于0"
 
-#: apps/asset/service.py:94
+#: apps/asset/service.py:101
 msgid "Get free experience"
 msgstr "获得免费次数"
 
-#: apps/asset/service.py:103
+#: apps/asset/service.py:110
 msgid "Free emptying times per day"
 msgstr "清空免费剩余次数"
 
-#: apps/asset/service.py:125 apps/users/models.py:299
+#: apps/asset/service.py:132 apps/users/models.py:299
 msgid "Set the proportion of points redemption times"
 msgstr "设置积分兑换次数比例"
 
-#: apps/asset/service.py:133
+#: apps/asset/service.py:138
 msgid "Users use points to exchange"
 msgstr "使用积分兑换"
 
-#: apps/asset/service.py:203
+#: apps/asset/service.py:204
 msgid "Used free number of times"
 msgstr "使用免费次数"
 
-#: apps/asset/service.py:221
+#: apps/asset/service.py:222
 msgid "Used transient number of times"
 msgstr "使用临时次数"
 
-#: apps/asset/service.py:240
+#: apps/asset/service.py:241
 msgid "Used persistence number of times"
 msgstr "使用永久次数"
 
-#: apps/asset/service.py:246
+#: apps/asset/service.py:247
 msgid "consume payment error"
 msgstr "积分消费失败"
 
-#: apps/asset/service.py:271 apps/users/models.py:285
+#: apps/asset/service.py:272 apps/users/models.py:285
 msgid "The proportion of first level commission. Range is between (0-10000)"
 msgstr "第一级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
 
-#: apps/asset/service.py:275 apps/users/models.py:290
+#: apps/asset/service.py:276 apps/users/models.py:290
 msgid "The proportion of second level commission. Range is between (0-10000)"
 msgstr "第二级佣金的比例。范围介于(0-10000)之间，采用万分比计数。"
 
-#: apps/asset/service.py:279 apps/users/models.py:295
+#: apps/asset/service.py:280 apps/users/models.py:295
 msgid "Set the redemption ratio of points withdrawal."
 msgstr "设置积分提现兑换率"
 
-#: apps/asset/service.py:287
+#: apps/asset/service.py:288
 msgid "The direct invitee has been recharged"
 msgstr "直接邀请人充值"
 
-#: apps/asset/service.py:293
+#: apps/asset/service.py:294
 msgid "Indirect invitee has been recharged"
 msgstr "间接邀请人充值"
 
-#: apps/asset/service.py:357
+#: apps/asset/service.py:358
 msgid "The number of points exchanged for chat"
 msgstr "积分兑换聊天次数"
 
-#: apps/asset/service.py:477
+#: apps/asset/service.py:479
 msgid "Cash withdrawal examination and approval, deducting points"
 msgstr "提现审核通过，扣除积分"
 
@@ -360,99 +360,107 @@ msgstr "服务器无法处理请求附带的媒体格式"
 msgid "too many requests"
 msgstr "请求过于频繁"
 
-#: apps/base/exception.py:54
+#: apps/base/exception.py:56
 msgid "invalid code"
 msgstr "无效的验证码"
 
-#: apps/base/exception.py:55
+#: apps/base/exception.py:57
 msgid "user exists"
 msgstr "用户已存在"
 
-#: apps/base/exception.py:56
+#: apps/base/exception.py:58
 msgid "wrong user name or password"
 msgstr "错误的用户名或密码"
 
-#: apps/base/exception.py:57
+#: apps/base/exception.py:59
 msgid "code or password required"
 msgstr "验证码或密码必填"
 
-#: apps/base/exception.py:58
+#: apps/base/exception.py:60
 msgid "Invalid numeric type"
 msgstr "无效的数字类型"
 
-#: apps/base/exception.py:59
+#: apps/base/exception.py:61
 msgid "This item is not enabled"
 msgstr "当前项暂不支持"
 
-#: apps/base/exception.py:60
+#: apps/base/exception.py:62
 msgid "Invalid mobile phone number"
 msgstr "无效的手机号"
 
-#: apps/base/exception.py:78
+#: apps/base/exception.py:63
+msgid "Old password error"
+msgstr "旧密码错误"
+
+#: apps/base/exception.py:64
+msgid "New password does not match"
+msgstr "新密码不匹配"
+
+#: apps/base/exception.py:82
 msgid "no more experiences"
 msgstr "体验次数已用尽"
 
-#: apps/base/exception.py:79
+#: apps/base/exception.py:83
 msgid "chat robot no resp"
 msgstr "chat机器人未响应"
 
-#: apps/base/exception.py:80
+#: apps/base/exception.py:84
 msgid "chat robot context length exceeded"
 msgstr "chat机器人上下文超过最大限制"
 
-#: apps/base/exception.py:81
+#: apps/base/exception.py:85
 msgid "chatgpt key invalid"
 msgstr "无效的chatgpt键"
 
-#: apps/base/exception.py:82
+#: apps/base/exception.py:86
 msgid "chatgpt key unsupport anony user"
 msgstr "不支持匿名用户"
 
-#: apps/base/exception.py:83
+#: apps/base/exception.py:87
 msgid "chatgpt key already exists"
 msgstr "chatgpt键已存在"
 
-#: apps/base/exception.py:102
+#: apps/base/exception.py:106
 msgid "The timeliness package cannot be used without days"
 msgstr "失效套餐不能没有使用天数"
 
-#: apps/base/exception.py:103
+#: apps/base/exception.py:107
 msgid "Invalid package category"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:104
+#: apps/base/exception.py:108
 msgid "Package name already exists"
 msgstr "套餐名已存在"
 
-#: apps/base/exception.py:105
+#: apps/base/exception.py:109
 msgid "Invalid method of payment"
 msgstr "无效的支付方式"
 
-#: apps/base/exception.py:106
+#: apps/base/exception.py:110
 msgid "Invalid order package"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:107
+#: apps/base/exception.py:111
 msgid "Unsupported payment client"
 msgstr "不支持的客户端"
 
-#: apps/base/exception.py:108
+#: apps/base/exception.py:112
 msgid "Invalid wechat openid"
 msgstr "无效的微信openid"
 
-#: apps/base/exception.py:123
+#: apps/base/exception.py:127
 msgid "Points are not enough"
 msgstr "积分不够"
 
-#: apps/base/exception.py:124
+#: apps/base/exception.py:128
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
 
-#: apps/base/exception.py:125
+#: apps/base/exception.py:129
 msgid "Withdrawal is in progress"
 msgstr "提现正在进行中"
 
-#: apps/base/exception.py:126
+#: apps/base/exception.py:130
 msgid "Withdraw failure"
 msgstr "提现失败"
 
@@ -533,7 +541,7 @@ msgstr "聊天话题id"
 msgid "db:chatrecord:ChatRecord"
 msgstr "聊天记录"
 
-#: apps/chat/models.py:82 apps/chat/models.py:101
+#: apps/chat/models.py:82 apps/chat/models.py:102
 msgid "db:user foreign key"
 msgstr "用户id"
 
@@ -545,15 +553,15 @@ msgstr "chatgpt键"
 msgid "db:enable"
 msgstr "启用"
 
-#: apps/chat/models.py:90
+#: apps/chat/models.py:91
 msgid "db:chatgpt table"
 msgstr "chatgpt密钥表"
 
-#: apps/chat/models.py:100
+#: apps/chat/models.py:101
 msgid "db:chat topic"
 msgstr "聊天话题"
 
-#: apps/chat/models.py:102
+#: apps/chat/models.py:103
 msgid "topic generate success"
 msgstr "话题是否生成成功"
 
@@ -569,8 +577,9 @@ msgstr "聊天话题id"
 msgid "serializer:chatgpt key"
 msgstr "chatgpt键"
 
-#: apps/chat/tasks.py:49
-msgid "Extract an appropriate and concise title according to the previous language"
+#: apps/chat/tasks.py:50
+msgid ""
+"Extract an appropriate and concise title according to the previous language"
 msgstr "根据对话内容和语言，生成一个相对应的简短标题"
 
 #: apps/order/admin/serializer.py:43
@@ -687,11 +696,11 @@ msgstr "微信支付订单号"
 msgid "order paymethod"
 msgstr "支付方式"
 
-#: apps/order/views.py:117
+#: apps/order/views.py:118
 msgid "The user(%(user_id)s) paid %(amount)s yuan at %(now)s."
 msgstr "用户(id:%(user_id)s)支付了%(amount)s元，在%(now)s。"
 
-#: apps/order/views.py:122
+#: apps/order/views.py:123
 msgid "wechat pay notify"
 msgstr "微信支付通知"
 
@@ -955,6 +964,18 @@ msgstr "反馈内容"
 #: apps/users/serializer.py:128
 msgid "feedback reply content"
 msgstr "反馈回复内容"
+
+#: apps/users/serializer.py:137
+msgid "old password"
+msgstr "旧密码"
+
+#: apps/users/serializer.py:140
+msgid "new password"
+msgstr "新密码"
+
+#: apps/users/serializer.py:143
+msgid "new password again"
+msgstr "再次输入新密码"
 
 #: apps/users/service.py:75
 msgid "Number of invitations for awards"

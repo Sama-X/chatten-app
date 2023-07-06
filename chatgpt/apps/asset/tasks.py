@@ -7,7 +7,7 @@ import logging
 from celery import shared_task
 
 from django.db import transaction
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from asset.models import O2OPaymentLogModel, O2OPaymentModel
 

@@ -2,7 +2,7 @@
 exception module.
 """
 
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 class SystemErrorCode:
@@ -49,6 +49,8 @@ class UserErrorCode:
     USER_INVALID_MOBILE = 100104
     CONFIG_INVALID_INT_TYPE = 100200
     CONFIG_IS_FEATURE_ENABLED = 100201
+    CHANGE_PWD_OLD_PWD_ERROR = 100300
+    CHANGE_PWD_NEW_PWD_NOT_MATCH = 100301
 
     ERRORS = (
         (USER_INVALID_CODE, _('invalid code')),
@@ -57,7 +59,9 @@ class UserErrorCode:
         (USER_OAUTH_REQUIRED, _('code or password required')),
         (CONFIG_INVALID_INT_TYPE, _('Invalid numeric type')),
         (CONFIG_IS_FEATURE_ENABLED, _('This item is not enabled')),
-        (USER_INVALID_MOBILE, _('Invalid mobile phone number'))
+        (USER_INVALID_MOBILE, _('Invalid mobile phone number')),
+        (CHANGE_PWD_OLD_PWD_ERROR, _('Old password error')),
+        (CHANGE_PWD_NEW_PWD_NOT_MATCH, _('New password does not match')),
     )
 
     ERRORS_DICT = dict(ERRORS)

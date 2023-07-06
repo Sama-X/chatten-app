@@ -327,3 +327,19 @@ class FeedbackViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, viewsets.G
         desc: create feedback api
         """
         return FeedbackService.create_feedback(request)
+
+
+class UserChangePasswordViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    user change password api.
+    """
+
+    authentication_classes = [AnonymousAuthentication,]
+
+    def create(self, request, *args, **kwargs):
+        """
+        url: /api/v1/users/change-password/
+        method: post
+        desc: user change password api
+        """
+        return UserService.change_password(request)

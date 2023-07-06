@@ -9,7 +9,7 @@ from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Sum, F, Q, Count
 from django.db.models.functions import Coalesce
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from django_redis import get_redis_connection
 
@@ -28,7 +28,7 @@ from users.models import (
     AccountModel, ConfigModel, FeedbackModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
 )
-from users.serializer import CreateFeedbackSerializer, FeedbackSerializer, ReplyFeedbackSerializer, UpdateAccountSerializer
+from users.serializer import CreateFeedbackSerializer, FeedbackSerializer, ReplyFeedbackSerializer, UpdateAccountSerializer, UserChangePasswordSerializer
 
 
 class UserService(BaseService):
@@ -319,6 +319,31 @@ class UserService(BaseService):
         })
 
         return APIResponse(result=serializer.data, count=total)
+
+    @classmethod
+    def change_password(cls, request):
+        """
+        change password.
+        """
+        form = UserChangePasswordSerializer(data=request.data)
+        if not form.is_valid():
+            return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        old_password = form.validated_data.get('old_password')  # type: ignore
+        new_password = form.validated_data.get('new_password')  # type: ignore
+        new_password_again = form.validated_data.get('new_password_again')  # type: ignore
+
+        if not user.check_password(old_password):
+            return APIResponse(code=UserErrorCode.CHANGE_PWD_OLD_PWD_ERROR)
+
+        if new_password != new_password_again:
+            return APIResponse(code=UserErrorCode.CHANGE_PWD_NEW_PWD_NOT_MATCH)
+
+        user.password = new_password
+        user.save()
+
+        return APIResponse()
 
 
 class UserServiceHelper:

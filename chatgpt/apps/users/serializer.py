@@ -2,7 +2,7 @@
 Serializer module.
 """
 import re
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -126,4 +126,19 @@ class ReplyFeedbackSerializer(serializers.Serializer):
     """
     content = serializers.CharField(
         required=True, allow_null=False, help_text=_("feedback reply content")
+    )
+
+
+class UserChangePasswordSerializer(serializers.Serializer):
+    """
+    user change password serializer.
+    """
+    old_password = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("old password")
+    )
+    new_password = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("new password")
+    )
+    new_password_again = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("new password again")
     )

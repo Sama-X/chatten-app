@@ -1,7 +1,7 @@
 """
 custom response module.
 """
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
 
 from base.exception import ALL_ERROR_DICT
