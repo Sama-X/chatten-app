@@ -2,7 +2,13 @@
 import axios from "axios";
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import cookie from 'react-cookies'
+import get_default_language from './utils/get_default_language.js'
 import {BASE_URL} from './utils/axios.js'
+
+const LanguageMap = {
+    'English': 'en-us',
+    '中文': 'zh-cn',
+}
 
 type Result = {
   code: number;
@@ -14,19 +20,21 @@ class Request {
   instance: AxiosInstance;
   // 基础配置，url和超时时间
   baseConfig: AxiosRequestConfig = { baseURL: "/api", timeout: 600000 };
-
+  
   constructor(config: AxiosRequestConfig) {
     // 使用axios.create创建axios实例
     this.instance = axios.create(Object.assign(this.baseConfig, config));
-
+    
     this.instance.interceptors.request.use(
       (config) => {
         // 一般会请求拦截里面加token
         let token = cookie.load('token')
         // config.withCredentials = true
+        const language = get_default_language()
+        console.log('language=', language)
         if(config.headers){
             config.headers["Authorization"] = token;
-            config.headers["Accept-Language"] = 'zh-cn';
+            config.headers["Accept-Language"] = LanguageMap[language] || 'zh-cn';
             // config.headers["token"] = token;
             // config.headers["Access-Control-Allow-Origin"]="http://192.168.0.103:8000"
         }

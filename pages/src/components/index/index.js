@@ -2,9 +2,7 @@ import './index.css'
 import Header from '../headerBox/header.js'
 import Content from '../contentBox/content.js'
 import Footer from '../footerBox/footer.js'
-import locales from '../../locales/locales.js'
-import { useEffect, useState } from 'react';
-import cookie from 'react-cookies'
+import { useState } from 'react';
 import get_default_language from '../../utils/get_default_language.js'
 
 

@@ -1,6 +1,7 @@
 export default {
     language: 'English',
     login: 'login',
+    logout: 'logout',
     logoutTitle: 'Do you want to log out',
     yes: 'Yes',
     no: 'No',
@@ -56,4 +57,10 @@ export default {
     no_experience_content: "1. You can purchase vip to get the number of questions. <br> 2. For every successful invitation to a friend, you can get 10 questions.",
     purchase: 'Purchase',
     invite: 'Invite friends',
+    change_password: 'Change password',
+    change_old_pwd: 'Please enter the old password',
+    change_new_pwd: 'Please enter a new password',
+    change_new_pwd_again: 'Please enter the new password again',
+    password_format_error: 'Min length 6, max length 16, at least one number and one letter, support for special symbols',
+    change_password_fail: 'Change password failed',
   }

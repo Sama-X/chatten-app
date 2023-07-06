@@ -1,6 +1,7 @@
 export default {
     language: '中文',
     login: '登录',
+    logout: '退出登录',
     logoutTitle: '你想退出登录吗',
     yes: '是',
     no: '否',
@@ -56,4 +57,10 @@ export default {
     no_experience_content: `1. 可以开通会员获得提问次数。<br>2.每邀请1位好友注册，可获10次提问次数。`,
     purchase: '开通会员',
     invite: '邀请好友',
+    change_password: '更改密码',
+    change_old_pwd: '请输入旧密码',
+    change_new_pwd: '请输入新密码',
+    change_new_pwd_again: '请再次输入新密码',
+    password_format_error: '最小长度6，最大长度16，至少一个数字和一个字母，支持特殊符号',
+    change_password_fail: '修改密码失败',
 }
