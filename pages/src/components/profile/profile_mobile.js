@@ -6,7 +6,7 @@ import locales from '../../locales/locales.js'
 import Request from '../../request.ts';
 import get_default_language from '../../utils/get_default_language.js'
 import { useHistory } from 'react-router-dom';
-import { Input } from 'antd';
+import { Input, message } from 'antd';
 
 
 
@@ -47,12 +47,13 @@ function App() {
     }
     setEditing(null);
     const request = new Request()
-
-    request.post('/api/user/update', {
-      nickname: nickname,
-      email: email
+    request.put(`/api/v1/users/profile/${cookie.load("userId")}/`, {
+      nickname: cookie.load('nickname'),
+      email: cookie.load('email')
     }).then(res => {
-      console.log(res)
+      if (res.code === 0) {
+        message.success(res.msg)
+      }
     })
   }
 
