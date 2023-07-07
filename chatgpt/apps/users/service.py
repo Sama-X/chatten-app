@@ -36,6 +36,7 @@ class UserService(BaseService):
     user service.
     """
     SAMA_TASKS_KEY = "sama:task:pending"
+    FORGET_PASSWORD_KEY = "user:forgot:password:{username}:{email}"
 
     @classmethod
     @transaction.atomic
@@ -362,6 +363,10 @@ class UserService(BaseService):
         email = form.validated_data['email'] # type: ignore
         password = form.validated_data['password'] # type: ignore
 
+        key = cls.FORGET_PASSWORD_KEY.format(username=username, email=email)
+        if not cache.has_key(key):
+            return APIResponse(code=UserErrorCode.FORGET_PASSWORD_CODE_NOT_EXISTS)
+        cache.delete(key)
         user = AccountModel.objects.filter(username=username, email=email).first()
         if not user:
             return APIResponse(code=UserErrorCode.USER_NOT_EXISTS)
@@ -392,6 +397,8 @@ class UserService(BaseService):
 
         if not success:
             return APIResponse(code=UserErrorCode.USER_NOT_EXISTS)
+
+        cache.set(cls.FORGET_PASSWORD_KEY.format(username, email), 1, timeout=60 * 5)
 
         return APIResponse()
 

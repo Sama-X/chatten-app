@@ -6,6 +6,7 @@ from datetime import datetime
 import email
 import json
 import logging
+from os import path
 from django.conf import settings
 from django.core.cache import cache
 from django_redis import get_redis_connection
@@ -131,7 +132,7 @@ class LoginViewSet(viewsets.GenericViewSet):
 
         return UserService.register(username, password, invite_code, user_type=AccountModel.USER_TYPE_NORMAL)
 
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, url_path='forgot-password')
     def forgot_password(self, request, *args, **kwargs):
         """
         forgot password api.
@@ -139,7 +140,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         """
         return UserService.forgot_password(request)
     
-    @action(methods=['POST'], detail=False)
+    @action(methods=['POST'], detail=False, url_path='check-username')
     def check_username(self, request, *args, **kwargs):
         """
         check username api.

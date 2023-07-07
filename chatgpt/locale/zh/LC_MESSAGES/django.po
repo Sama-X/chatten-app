@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 17:20+0800\n"
+"POT-Creation-Date: 2023-07-07 17:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -360,115 +360,119 @@ msgstr "服务器无法处理请求附带的媒体格式"
 msgid "too many requests"
 msgstr "请求过于频繁"
 
-#: apps/base/exception.py:58
+#: apps/base/exception.py:59
 msgid "invalid code"
 msgstr "无效的验证码"
 
-#: apps/base/exception.py:59
+#: apps/base/exception.py:60
 msgid "user exists"
 msgstr "用户已存在"
 
-#: apps/base/exception.py:60
+#: apps/base/exception.py:61
 msgid "wrong user name or password"
 msgstr "错误的用户名或密码"
 
-#: apps/base/exception.py:61
+#: apps/base/exception.py:62
 msgid "code or password required"
 msgstr "验证码或密码必填"
 
-#: apps/base/exception.py:62
+#: apps/base/exception.py:63
 msgid "Invalid numeric type"
 msgstr "无效的数字类型"
 
-#: apps/base/exception.py:63
+#: apps/base/exception.py:64
 msgid "This item is not enabled"
 msgstr "当前项暂不支持"
 
-#: apps/base/exception.py:64
+#: apps/base/exception.py:65
 msgid "Invalid mobile phone number"
 msgstr "无效的手机号"
 
-#: apps/base/exception.py:65
+#: apps/base/exception.py:66
 msgid "Old password error"
 msgstr "旧密码错误"
 
-#: apps/base/exception.py:66
+#: apps/base/exception.py:67
 msgid "New password does not match"
 msgstr "新密码不匹配"
 
-#: apps/base/exception.py:67
+#: apps/base/exception.py:68
 msgid "user not exists"
 msgstr "用户不存在"
 
-#: apps/base/exception.py:68
+#: apps/base/exception.py:69
 msgid "password not empty"
 msgstr "密码不能为空"
 
-#: apps/base/exception.py:86
+#: apps/base/exception.py:70
+msgid "forget password code not exists"
+msgstr "忘记密码验证码不存在"
+
+#: apps/base/exception.py:88
 msgid "no more experiences"
 msgstr "体验次数已用尽"
 
-#: apps/base/exception.py:87
+#: apps/base/exception.py:89
 msgid "chat robot no resp"
 msgstr "chat机器人未响应"
 
-#: apps/base/exception.py:88
+#: apps/base/exception.py:90
 msgid "chat robot context length exceeded"
 msgstr "chat机器人上下文超过最大限制"
 
-#: apps/base/exception.py:89
+#: apps/base/exception.py:91
 msgid "chatgpt key invalid"
 msgstr "无效的chatgpt键"
 
-#: apps/base/exception.py:90
+#: apps/base/exception.py:92
 msgid "chatgpt key unsupport anony user"
 msgstr "不支持匿名用户"
 
-#: apps/base/exception.py:91
+#: apps/base/exception.py:93
 msgid "chatgpt key already exists"
 msgstr "chatgpt键已存在"
 
-#: apps/base/exception.py:110
+#: apps/base/exception.py:112
 msgid "The timeliness package cannot be used without days"
 msgstr "失效套餐不能没有使用天数"
 
-#: apps/base/exception.py:111
+#: apps/base/exception.py:113
 msgid "Invalid package category"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:112
+#: apps/base/exception.py:114
 msgid "Package name already exists"
 msgstr "套餐名已存在"
 
-#: apps/base/exception.py:113
+#: apps/base/exception.py:115
 msgid "Invalid method of payment"
 msgstr "无效的支付方式"
 
-#: apps/base/exception.py:114
+#: apps/base/exception.py:116
 msgid "Invalid order package"
 msgstr "无效的套餐"
 
-#: apps/base/exception.py:115
+#: apps/base/exception.py:117
 msgid "Unsupported payment client"
 msgstr "不支持的客户端"
 
-#: apps/base/exception.py:116
+#: apps/base/exception.py:118
 msgid "Invalid wechat openid"
 msgstr "无效的微信openid"
 
-#: apps/base/exception.py:131
+#: apps/base/exception.py:133
 msgid "Points are not enough"
 msgstr "积分不够"
 
-#: apps/base/exception.py:132
+#: apps/base/exception.py:134
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr "提现积分不能低于 %(count)s"
 
-#: apps/base/exception.py:133
+#: apps/base/exception.py:135
 msgid "Withdrawal is in progress"
 msgstr "提现正在进行中"
 
-#: apps/base/exception.py:134
+#: apps/base/exception.py:136
 msgid "Withdraw failure"
 msgstr "提现失败"
 

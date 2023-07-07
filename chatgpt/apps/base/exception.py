@@ -49,6 +49,7 @@ class UserErrorCode:
     USER_INVALID_MOBILE = 100104
     USER_NOT_EXISTS = 100105
     PASSWORD_NOT_EMPTY = 100106
+    FORGET_PASSWORD_CODE_NOT_EXISTS = 100107
     CONFIG_INVALID_INT_TYPE = 100200
     CONFIG_IS_FEATURE_ENABLED = 100201
     CHANGE_PWD_OLD_PWD_ERROR = 100300
@@ -65,7 +66,8 @@ class UserErrorCode:
         (CHANGE_PWD_OLD_PWD_ERROR, _('Old password error')),
         (CHANGE_PWD_NEW_PWD_NOT_MATCH, _('New password does not match')),
         (USER_NOT_EXISTS, _('user not exists')),
-        (PASSWORD_NOT_EMPTY, _('password not empty'))
+        (PASSWORD_NOT_EMPTY, _('password not empty')),
+        (FORGET_PASSWORD_CODE_NOT_EXISTS, _('forget password code not exists')),
     )
 
     ERRORS_DICT = dict(ERRORS)

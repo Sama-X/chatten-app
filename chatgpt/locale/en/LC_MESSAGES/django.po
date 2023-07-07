@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 17:20+0800\n"
+"POT-Creation-Date: 2023-07-07 17:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,115 +361,119 @@ msgstr "unsupport media type"
 msgid "too many requests"
 msgstr "too many requests"
 
-#: apps/base/exception.py:58
+#: apps/base/exception.py:59
 msgid "invalid code"
 msgstr "invalid code"
 
-#: apps/base/exception.py:59
+#: apps/base/exception.py:60
 msgid "user exists"
 msgstr "User already exists"
 
-#: apps/base/exception.py:60
+#: apps/base/exception.py:61
 msgid "wrong user name or password"
 msgstr "Wrong user name or password"
 
-#: apps/base/exception.py:61
+#: apps/base/exception.py:62
 msgid "code or password required"
 msgstr "Verification code or password is required"
 
-#: apps/base/exception.py:62
+#: apps/base/exception.py:63
 msgid "Invalid numeric type"
 msgstr ""
 
-#: apps/base/exception.py:63
+#: apps/base/exception.py:64
 msgid "This item is not enabled"
 msgstr ""
 
-#: apps/base/exception.py:64
+#: apps/base/exception.py:65
 msgid "Invalid mobile phone number"
 msgstr ""
 
-#: apps/base/exception.py:65
+#: apps/base/exception.py:66
 msgid "Old password error"
 msgstr ""
 
-#: apps/base/exception.py:66
+#: apps/base/exception.py:67
 msgid "New password does not match"
 msgstr ""
 
-#: apps/base/exception.py:67
+#: apps/base/exception.py:68
 msgid "user not exists"
 msgstr "User does not exist"
 
-#: apps/base/exception.py:68
+#: apps/base/exception.py:69
 msgid "password not empty"
 msgstr "Password cannot be empty"
 
-#: apps/base/exception.py:86
+#: apps/base/exception.py:70
+msgid "forget password code not exists"
+msgstr "Forget password code does not exist"
+
+#: apps/base/exception.py:88
 msgid "no more experiences"
 msgstr "There are no more experiences"
 
-#: apps/base/exception.py:87
+#: apps/base/exception.py:89
 msgid "chat robot no resp"
 msgstr "Chat robot is not responding, please try again"
 
-#: apps/base/exception.py:88
+#: apps/base/exception.py:90
 msgid "chat robot context length exceeded"
 msgstr "This model's maximum context length"
 
-#: apps/base/exception.py:89
+#: apps/base/exception.py:91
 msgid "chatgpt key invalid"
 msgstr "Invalid chatgpt key"
 
-#: apps/base/exception.py:90
+#: apps/base/exception.py:92
 msgid "chatgpt key unsupport anony user"
 msgstr "Anonymous users are note supported to add chatgpt key"
 
-#: apps/base/exception.py:91
+#: apps/base/exception.py:93
 msgid "chatgpt key already exists"
 msgstr "Chatgpt key already exists"
 
-#: apps/base/exception.py:110
+#: apps/base/exception.py:112
 msgid "The timeliness package cannot be used without days"
 msgstr ""
 
-#: apps/base/exception.py:111
+#: apps/base/exception.py:113
 msgid "Invalid package category"
 msgstr ""
 
-#: apps/base/exception.py:112
+#: apps/base/exception.py:114
 msgid "Package name already exists"
 msgstr ""
 
-#: apps/base/exception.py:113
+#: apps/base/exception.py:115
 msgid "Invalid method of payment"
 msgstr ""
 
-#: apps/base/exception.py:114
+#: apps/base/exception.py:116
 msgid "Invalid order package"
 msgstr ""
 
-#: apps/base/exception.py:115
+#: apps/base/exception.py:117
 msgid "Unsupported payment client"
 msgstr ""
 
-#: apps/base/exception.py:116
+#: apps/base/exception.py:118
 msgid "Invalid wechat openid"
 msgstr ""
 
-#: apps/base/exception.py:131
+#: apps/base/exception.py:133
 msgid "Points are not enough"
 msgstr ""
 
-#: apps/base/exception.py:132
+#: apps/base/exception.py:134
 msgid "The withdrawal point cannot be less than %(count)s"
 msgstr ""
 
-#: apps/base/exception.py:133
+#: apps/base/exception.py:135
 msgid "Withdrawal is in progress"
 msgstr ""
 
-#: apps/base/exception.py:134
+#: apps/base/exception.py:136
 msgid "Withdraw failure"
 msgstr ""
 
