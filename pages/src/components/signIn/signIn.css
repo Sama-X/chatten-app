@@ -27,7 +27,7 @@
     width: 40px;
     height: 40px;
 }
-.mobileInput,.mobileInputPassword{
+.mobileAndCode .mobileInput, .mobileAndCode .mobileInputPassword{
     background: rgba(48, 50, 60, 1) !important;
     border: none;
     width: 88%;

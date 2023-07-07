@@ -63,4 +63,11 @@ export default {
     change_new_pwd_again: '请再次输入新密码',
     password_format_error: '最小长度6，最大长度16，至少一个数字和一个字母，支持特殊符号',
     change_password_fail: '修改密码失败',
+    my_order: '我的订单',
+    my_profile: '我的资料',
+    input_nickname: '请输入昵称',
+    input_email: '请输入邮箱',
+    nickname: '昵称',
+    username: '用户名',
+    email: '邮箱',
 }

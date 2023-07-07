@@ -1,5 +1,5 @@
-import { Drawer, Menu, message, Spin, Modal, Alert, Space, Dropdown, MenuProps } from 'antd';
-import { PlusCircleFilled, MessageOutlined, DownOutlined, SmileOutlined } from '@ant-design/icons';
+import { Drawer, Menu, message, Spin, Modal, Alert, Space, Dropdown } from 'antd';
+import { PlusCircleFilled, MessageOutlined, DownOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import Request from '../../request.ts';
 import { Link } from 'react-router-dom'
@@ -35,7 +35,6 @@ const App = (data) => {
   const [placement] = useState('left');
   const [spinStatus, setSpinStatus] = useState(true);
   const [widthNumber, setWidthNumber] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPolicy, setShowPolicy] = useState(false);
   const [shareDrawer, setShareDrawer] = useState(false);
 
@@ -63,6 +62,19 @@ const App = (data) => {
     history.push({pathname: '/changePassword', state: { test: 'login' }})
   }
 
+  const goToRecord = () =>{
+    history.push('/record/')
+  }
+
+  const goToProfile = () =>{
+    if(isToken){
+      history.push({pathname: '/profile/'})
+    }else{
+      history.push({pathname: '/SignIn/'})
+    }
+  }
+
+
   const userItems = [
     {
       key: '1',
@@ -74,6 +86,22 @@ const App = (data) => {
     },
     {
       key: '2',
+      label: (
+        <a rel="noopener noreferrer" onClick={ goToRecord }>
+          {locales(language)['my_order']}
+        </a>
+      ),
+    },
+    {
+      key: '3',
+      label: (
+        <a rel="noopener noreferrer" onClick={ goToProfile }>
+          {locales(language)['my_profile']}
+        </a>
+      ),
+    },
+    {
+      key: '100',
       label: (
         <a rel="noopener noreferrer" onClick={ logout } >
           {locales(language)['logout']}
@@ -133,7 +161,7 @@ const App = (data) => {
   }
   const getHistory = () => {
       let request = new Request({});
-      setSpinStatus(true)
+      // setSpinStatus(true)
       request.get('/api/v1/topics/?page=1&offset=20&order=-id').then(function(resData){
         let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic', <PlusCircleFilled />)]
         for(let i in resData.data){
@@ -142,7 +170,7 @@ const App = (data) => {
           }
         }
         setTimeout(function(){
-          setSpinStatus(false)
+          // setSpinStatus(false)
           setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
         }, 100)
       })
@@ -154,21 +182,6 @@ const App = (data) => {
       getHistory()
       message.success('Successfully cleared')
     })
-  }
-
-  const signOut = () => {
-    setSpinStatus(true)
-    cookie.save('userName', '', { path: '/' })
-    cookie.save('userId', '', { path: '/' })
-    cookie.save('token', '', { path: '/' })
-    cookie.save('experience', '', { path: '/' })
-    cookie.save('totalExeNumber', '', { path: '/' })
-    let menuSetitemList = [getItem(locales(language)['create_new_talk'] + '…', 'new_topic',<PlusCircleFilled />)]
-    setItem([getItem('ChatTEN', 'sub1', '', menuSetitemList)])
-    message.success('Exit succeeded')
-    setTimeout(function(){
-      setSpinStatus(false)
-    }, 100)
   }
   
   const showShareDrawer = () => {
@@ -188,9 +201,6 @@ const App = (data) => {
     }
   }
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   const shareFunction = () => {
     if(isToken){
       if(userName == '访客' || userName== 'anonymous'){
@@ -323,10 +333,6 @@ const App = (data) => {
     }
   }
 
-  const goToRecord = () =>{
-    history.push('/record/')
-  }
-
   return (
     <div className="header-container">
       <div>
@@ -343,7 +349,6 @@ const App = (data) => {
         </div>
         {
           isToken ?
-            // <div className="headerRight" onClick={signOut}>
             <div className="headerRight">
               <img src={require("../../assets/language.png")} alt=""/>
               <div className='language' onClick={chooseLanguage}>{language}</div>

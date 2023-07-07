@@ -63,4 +63,11 @@ export default {
     change_new_pwd_again: 'Please enter the new password again',
     password_format_error: 'Min length 6, max length 16, at least one number and one letter, support for special symbols',
     change_password_fail: 'Change password failed',
+    my_order: 'My order',
+    my_profile: 'My profile',
+    input_nickname: 'Please enter a nickname',
+    input_email: 'Please enter your email',
+    nickname: 'Nickname',
+    username: 'Username',
+    email: 'Email',
   }

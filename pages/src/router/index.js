@@ -15,6 +15,7 @@ import Admin from '../components/admin/index/index.js'
 // 导入路由依赖
 import {  Route,BrowserRouter } from 'react-router-dom'
 import changePassword from '../components/changePassword/index.js'
+import Profile from '../components/profile/index.js'
 
 
 export default class index extends Component {
@@ -28,7 +29,6 @@ export default class index extends Component {
         <Route component={Index} path='/Index'></Route>
         <Route component={Login} path='/Login'></Route>
         <Route component={SignIn} path='/SignIn'></Route>
-        {/* change password */}
         <Route component={changePassword} path='/changePassword'></Route>
         <Route component={Price} path='/price'></Route>
         <Route component={Pay} path='/pay'></Route>
@@ -44,6 +44,7 @@ export default class index extends Component {
         <Route component={Admin}  path='/admin/users'></Route>
         <Route component={Admin} path='/admin/' exact></Route>
         <Route component={ChatPage} path='/ChatPage' exact></Route>
+        <Route component={Profile} path='/Profile' exact></Route>
         {/* <Route component={Index} path='/Index'></Route> */}
       </BrowserRouter>
     )
