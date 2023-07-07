@@ -1,18 +1,14 @@
+import './index.css';
 import React, {
   memo,
-  useImperativeHandle,
   forwardRef,
   useState,
-  useRef,
-  useCallback,
 } from "react";
 
-import { Input, message, InputNumber, Spin } from 'antd';
+import { Input, message, Spin } from 'antd';
 import { Link, useHistory } from 'react-router-dom'
 
 
-import styles from "./login.css";
-import cookie from 'react-cookies'
 import Request from '../../request.ts';
 import locales from '../../locales/locales.js'
 import get_default_language from '../../utils/get_default_language.js'
@@ -22,8 +18,6 @@ import get_default_language from '../../utils/get_default_language.js'
 
 export default memo(
   forwardRef(({ onChange }, ref) => {
-    const inputRef = useRef(null);
-    const fieldList = useRef(null);
     const [oldPwd, setOldPwd] = useState("");
     const [newPwd, setNewPwd] = useState("");
     const [newPwdAgain, setNewPwdAgain] = useState("");
@@ -46,9 +40,13 @@ export default memo(
     }
 
     // Min length 6, max length 16, at least one number and one letter, support for special symbols
-    const validatePassword = (pwd) => {
+    const validatePassword = (e) => {
       const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d][\s\S]{6,16}$/;
-      return reg.test(pwd);
+      if (!reg.test(e.target.value)) {
+        message.error(locales(language)['password_format_error'])
+        return false;
+      }
+      return true;
     }
 
     const validNewPwdIsSame = () => {
@@ -61,7 +59,6 @@ export default memo(
 
     const changePassword = () => {
       if (!validatePassword(newPwd)) {
-        message.error(locales(language)['password_format_error'])
         return;
       }
       if (!validNewPwdIsSame()) {
@@ -89,7 +86,7 @@ export default memo(
       })
     }
     return (
-        <div className="mobileAndCode mobileLogin">
+        <div className="change-pwd-container mobile-change">
             {
               spinStatus ?
               <div className="example">
@@ -97,19 +94,19 @@ export default memo(
               </div>
               : ''
             }
-            <div className="loginHeader">
+            <div className="change-pwd-header">
                 <img className="leftLogo" src={require("../../assets/logo.png")} alt=""/>
                 <Link to='/'>
                     <img className="rightClose" src={require("../../assets/close.png")} alt=""/>
                 </Link>
             </div>
             <div className="mobileCode">
-              <div className="quickLogin">
+              <div className="change-pwd-title">
                   {locales(language)['change_password']}
               </div>
               <Input.Password type="password" onChange={getOldPwd} onBlur={getOldPwd} className="mobileInputPassword" placeholder={locales(language)['change_old_pwd']}/>
-              <Input.Password type="password" onChange={getNewPwd} onBlur={getNewPwd} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd']}/>
-              <Input.Password type="password" onChange={getNewPwdAgain} onBlur={getNewPwdAgain} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd_again']}/>
+              <Input.Password type="password" onChange={getNewPwd} onBlur={validatePassword} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd']}/>
+              <Input.Password type="password" onChange={getNewPwdAgain} onBlur={validNewPwdIsSame} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd_again']}/>
               <div><img className="sendCode" onClick={changePassword} src={require("../../assets/rightBtn.png")} alt=""/></div>
             </div>
         </div>
