@@ -70,4 +70,7 @@ export default {
     nickname: 'Nickname',
     username: 'Username',
     email: 'Email',
+    forgetPassword: 'Forget password',
+    invalid_email: 'Invalid email',
+    forget_password_fail: 'Forget password failed',
   }

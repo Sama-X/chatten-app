@@ -40,9 +40,9 @@ export default memo(
     }
 
     // Min length 6, max length 16, at least one number and one letter, support for special symbols
-    const validatePassword = (e) => {
+    const validatePassword = (value) => {
       const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d][\s\S]{6,16}$/;
-      if (!reg.test(e.target.value)) {
+      if (!reg.test(value)) {
         message.error(locales(language)['password_format_error'])
         return false;
       }
@@ -71,9 +71,8 @@ export default memo(
         new_password: newPwd,
         new_password_again: newPwdAgain,
       }).then(res => {
-        console.log(res);
         if(res.code === 0){
-          message.success(locales(language)['change_password_success'])
+          message.success(res.msg)
           history.push('/')
         }else{
           message.error(res.msg)
@@ -105,7 +104,7 @@ export default memo(
                   {locales(language)['change_password']}
               </div>
               <Input.Password type="password" onChange={getOldPwd} onBlur={getOldPwd} className="mobileInputPassword" placeholder={locales(language)['change_old_pwd']}/>
-              <Input.Password type="password" onChange={getNewPwd} onBlur={validatePassword} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd']}/>
+              <Input.Password type="password" onChange={getNewPwd} onBlur={(e) => {validatePassword(e.target.value)}} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd']}/>
               <Input.Password type="password" onChange={getNewPwdAgain} onBlur={validNewPwdIsSame} className="mobileInputPassword" placeholder={locales(language)['change_new_pwd_again']}/>
               <div><img className="sendCode" onClick={changePassword} src={require("../../assets/rightBtn.png")} alt=""/></div>
             </div>

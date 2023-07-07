@@ -221,7 +221,17 @@ export default memo(
                     {/* </div> */}
                     {/* <InputNumber onPressEnter={sendCodeNext} onBlur={sendCodeNext}  className="mobileInput" placeholder="请输入手机号"/> */}
                     {/* <img className="sendCode" onClick={sendCodeFunc} src={require("../../assets/rightBtn.png")} alt=""/> */}
-                    <div className="signBtnBox">{locales(language)['noaccount']}<span><Link to='/SignIn'>{locales(language)['register']}</Link></span></div>
+                    <div className="signBtnBox">
+                      <div>
+                        {locales(language)['noaccount']}
+                        <span>
+                          <Link to='/SignIn'>{locales(language)['register']}</Link>
+                        </span>
+                      </div>
+                      <span className="forgetPassword">
+                        <Link to='/ForgetPassword'>{locales(language)['forgetPassword']}?</Link>
+                      </span>
+                    </div>
                     <div><img className="sendCode" onClick={signInFunc} src={require("../../assets/rightBtn.png")} alt=""/></div>
                 </div>
             }

@@ -16,6 +16,7 @@ import Admin from '../components/admin/index/index.js'
 import {  Route,BrowserRouter } from 'react-router-dom'
 import changePassword from '../components/changePassword/index.js'
 import Profile from '../components/profile/index.js'
+import ForgetPassword from '../components/forgetPassword/index.js'
 
 
 export default class index extends Component {
@@ -45,6 +46,7 @@ export default class index extends Component {
         <Route component={Admin} path='/admin/' exact></Route>
         <Route component={ChatPage} path='/ChatPage' exact></Route>
         <Route component={Profile} path='/Profile' exact></Route>
+        <Route component={ForgetPassword} path='/ForgetPassword' exact></Route>
         {/* <Route component={Index} path='/Index'></Route> */}
       </BrowserRouter>
     )

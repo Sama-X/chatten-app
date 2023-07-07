@@ -70,4 +70,7 @@ export default {
     nickname: '昵称',
     username: '用户名',
     email: '邮箱',
+    forgetPassword: '忘记密码',
+    invalid_email: '邮箱格式不正确',
+    forget_password_fail: '找回密码失败',
 }
