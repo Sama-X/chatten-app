@@ -3,6 +3,7 @@ account api module.
 """
 
 from datetime import datetime
+import email
 import json
 import logging
 from django.conf import settings
@@ -129,6 +130,22 @@ class LoginViewSet(viewsets.GenericViewSet):
         invite_code = form.validated_data.get('invite_code') # type: ignore
 
         return UserService.register(username, password, invite_code, user_type=AccountModel.USER_TYPE_NORMAL)
+
+    @action(methods=['POST'], detail=False)
+    def forgot_password(self, request, *args, **kwargs):
+        """
+        forgot password api.
+        url: /api/v1/users/forgot-password
+        """
+        return UserService.forgot_password(request)
+    
+    @action(methods=['POST'], detail=False)
+    def check_username(self, request, *args, **kwargs):
+        """
+        check username api.
+        url: /api/v1/users/check-username
+        """
+        return UserService.check_user_by_email(request)
 
 
 class SmsMessageViewSet(viewsets.GenericViewSet):

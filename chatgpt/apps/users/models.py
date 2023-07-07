@@ -26,6 +26,7 @@ class AccountModel(BaseModel):
     login_ip = models.CharField(max_length=32, null=True, verbose_name=_("db:account:user last login ip"))
     user_type = models.SmallIntegerField(default=USER_TYPE_ANONY, verbose_name=_("db:account:user type"))
     openid = models.CharField(max_length=128, null=True, verbose_name=_("db:account:user wechat openid"))
+    email = models.CharField(max_length=64, null=True, verbose_name=_("db:account:user email"))
 
     class Meta:
         """

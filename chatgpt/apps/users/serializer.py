@@ -45,7 +45,25 @@ class UpdateAccountSerializer(serializers.Serializer):
         required=True, allow_null=False, max_length=32, help_text=_("nickname")
     )
     openid = serializers.CharField(
-        required=True, allow_null=False, max_length=32, help_text=_("openid")
+        required=False, allow_null=True, max_length=32, help_text=_("openid")
+    )
+    email = serializers.CharField(
+        required=False, allow_null=True, max_length=32, help_text=_("email")
+    )
+
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    """
+    forgot password serializer.
+    """
+    username = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("mobile phone number")
+    )
+    email = serializers.CharField(
+        required=True, allow_null=False, max_length=32, help_text=_("email")
+    )
+    password = serializers.CharField(
+        required=False, allow_null=True, max_length=32, help_text=_("password")
     )
 
 

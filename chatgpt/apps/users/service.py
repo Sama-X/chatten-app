@@ -28,7 +28,7 @@ from users.models import (
     AccountModel, ConfigModel, FeedbackModel, InviteLogModel, SamaScoreLogModel, SamaScoreModel,
     SamaWalletModel
 )
-from users.serializer import CreateFeedbackSerializer, FeedbackSerializer, ReplyFeedbackSerializer, UpdateAccountSerializer, UserChangePasswordSerializer
+from users.serializer import CreateFeedbackSerializer, FeedbackSerializer, ForgotPasswordSerializer, ReplyFeedbackSerializer, UpdateAccountSerializer, UserChangePasswordSerializer
 
 
 class UserService(BaseService):
@@ -264,10 +264,14 @@ class UserService(BaseService):
 
         data = serializer.validated_data
         nickname = data['nickname']  # type: ignore
-        openid = data['openid']  # type: ignore
+        openid = data.get('openid')  # type: ignore
+        email = data.get('email')  # type: ignore
         account = AccountModel.objects.get(pk=request.user.id)
         account.nickname = nickname
-        account.openid = openid
+        if openid:
+            account.openid = openid
+        if email:
+            account.email = email
         account.save()
 
         return APIResponse()
@@ -342,6 +346,52 @@ class UserService(BaseService):
 
         user.password = new_password
         user.save()
+
+        return APIResponse()
+    
+    @classmethod
+    def forgot_password(cls, request):
+        """
+        forgot password.
+        """
+        form = ForgotPasswordSerializer(data=request.data)
+        if not form.is_valid():
+            return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
+
+        username = form.validated_data['username']  # type: ignore
+        email = form.validated_data['email'] # type: ignore
+        password = form.validated_data['password'] # type: ignore
+
+        user = AccountModel.objects.filter(username=username, email=email).first()
+        if not user:
+            return APIResponse(code=UserErrorCode.USER_NOT_EXISTS)
+        
+        if not password:
+            return APIResponse(code=UserErrorCode.PASSWORD_NOT_EMPTY)
+
+        user.password = password
+        user.save()
+
+        return APIResponse()
+    
+    @classmethod
+    def check_user_by_email(cls, request):
+        """
+        check user by username and email.
+        """
+        form = ForgotPasswordSerializer(data=request.data)
+        if not form.is_valid():
+            return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
+
+        username = form.validated_data['username']  # type: ignore
+        email = form.validated_data['email'] # type: ignore
+
+        success = AccountModel.objects.filter(
+            username=username, email=email
+        ).exists()
+
+        if not success:
+            return APIResponse(code=UserErrorCode.USER_NOT_EXISTS)
 
         return APIResponse()
 
