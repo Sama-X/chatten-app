@@ -2,3 +2,30 @@
     position: absolute;
     width: 80%;
 }
+.recharge-model .ant-modal-header {
+    background: #212121;
+}
+
+.recharge-input-item {
+    margin-top:5px;
+}
+
+.recharge-input-item-list {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.recharge-input-item-name {
+    display: inline-block;
+    width: 100px;
+}
+
+.recharge-input-item input{
+    color: #000;
+}
+.recharge-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}

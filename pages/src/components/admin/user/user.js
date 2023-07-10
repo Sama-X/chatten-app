@@ -1,8 +1,6 @@
 import './user.css'
 import { useEffect, useState } from 'react';
-import cookie from 'react-cookies'
-import { useHistory } from 'react-router-dom';
-import {Table} from 'antd'
+import {Button, Modal, Table, message} from 'antd'
 import Request from '../../../requestAdmin.ts';
 
 
@@ -13,8 +11,16 @@ function App() {
   const [total, setTotal] = useState(0)
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [times, setTimes] = useState(1)
+  const [mobile, setMobile] = useState('')
+  const [err, setErr] = useState('')
 
   const [inviteUser, setInviteUser] = useState({'level1':0, 'level2': 0})
+
+  const innerRecharge = () => {
+    setIsModalOpen(true)
+  }
 
   const clickInvite = () => {
     let request = new Request({});
@@ -77,8 +83,49 @@ function App() {
     setPage(page)
   }
 
+  const handleOk = () => {
+    const request = new Request({});
+    request.post('/api/v1/admin/asset/recharge/', {
+      'mobiles': mobile.split(","),
+      'times': times
+    }).then(function(resData){
+      if (resData.code === 0){
+        if (resData.data.sub_mobiles.length > 0) {
+          setErr(resData.data.sub_mobiles.join(";"))
+          message.error("部分充值失败")
+        } else {
+          message.success("充值成功")
+          setErr('')
+        }
+        setTimes(1)
+        setMobile('')
+      } else {
+        message.error("充值失败: " + resData.msg)
+      }
+    }).catch(function(err){
+      message.error("充值失败: " + err.message)
+    })
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className='admin-user-record-container'>
+        <Button type="primary" className='add-recharge-btn' onClick={innerRecharge}>+内部充值</Button>
+        <Modal title="创建套餐" theme="dark" className='recharge-model' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <div className='recharge-input-item-list'>
+            <div className='recharge-input-item'><div className='recharge-input-item-name'>充值次数</div><input onChange={(e) => setTimes(e.target.value)} value={times} /></div>
+            <div className='recharge-input-item'><div className='recharge-input-item-name'>充值手机号</div><input onChange={(e) => setMobile(e.target.value)} value={mobile} /></div>
+            {
+              err ? <div className='recharge-input-item'>
+                <div className='recharge-input-item-name'>充值失败: </div>
+                <div className='recharge-error'>{ err }</div>
+              </div> : ""
+            }
+          </div>
+        </Modal>
         <Table
         columns={inviteColumns}
         pagination={{total:total, pageSize:pageSize, onChange:changePage}}
