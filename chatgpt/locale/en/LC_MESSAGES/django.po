@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 17:39+0800\n"
+"POT-Creation-Date: 2023-07-10 15:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,19 @@ msgstr ""
 
 #: apps/asset/admin/serializer.py:21 apps/order/admin/serializer.py:73
 msgid "order user id"
+msgstr ""
+
+#: apps/asset/admin/serializer.py:31 apps/users/serializer.py:19
+#: apps/users/serializer.py:60 apps/users/serializer.py:75
+msgid "mobile phone number"
+msgstr "mobile phone number"
+
+#: apps/asset/admin/serializer.py:33
+msgid "recharge times"
+msgstr ""
+
+#: apps/asset/admin/views.py:131
+msgid "inner recharge"
 msgstr ""
 
 #: apps/asset/models.py:18 apps/asset/models.py:81 apps/asset/models.py:117
@@ -910,7 +923,7 @@ msgstr ""
 msgid "Config"
 msgstr ""
 
-#: apps/users/models.py:282 apps/users/service.py:48
+#: apps/users/models.py:282 apps/users/service.py:49
 msgid "Whether to enable the verification rule of mobile phone number"
 msgstr ""
 
@@ -941,11 +954,6 @@ msgstr ""
 #: apps/users/models.py:333
 msgid "Feedback"
 msgstr ""
-
-#: apps/users/serializer.py:19 apps/users/serializer.py:60
-#: apps/users/serializer.py:75
-msgid "mobile phone number"
-msgstr "mobile phone number"
 
 #: apps/users/serializer.py:21
 msgid "verification code"
@@ -999,14 +1007,14 @@ msgstr "new password"
 msgid "new password again"
 msgstr "new password again"
 
-#: apps/users/service.py:75
+#: apps/users/service.py:76
 msgid "Number of invitations for awards"
 msgstr ""
 
-#: apps/users/service.py:78
+#: apps/users/service.py:79
 msgid "Invite user id: %(aid)s and get %(count)s times"
 msgstr ""
 
-#: apps/users/service.py:240
+#: apps/users/service.py:241
 msgid "Free experience days"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-07 17:39+0800\n"
+"POT-Creation-Date: 2023-07-10 15:29+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,19 @@ msgstr "提现状态"
 #: apps/asset/admin/serializer.py:21 apps/order/admin/serializer.py:73
 msgid "order user id"
 msgstr "下单用户"
+
+#: apps/asset/admin/serializer.py:31 apps/users/serializer.py:19
+#: apps/users/serializer.py:60 apps/users/serializer.py:75
+msgid "mobile phone number"
+msgstr "手机号"
+
+#: apps/asset/admin/serializer.py:33
+msgid "recharge times"
+msgstr "充值次数"
+
+#: apps/asset/admin/views.py:131
+msgid "inner recharge"
+msgstr "内部充值"
 
 #: apps/asset/models.py:18 apps/asset/models.py:81 apps/asset/models.py:117
 #: apps/asset/models.py:143 apps/asset/models.py:182 apps/order/models.py:80
@@ -909,7 +922,7 @@ msgstr "配置项描述"
 msgid "Config"
 msgstr "配置表"
 
-#: apps/users/models.py:282 apps/users/service.py:48
+#: apps/users/models.py:282 apps/users/service.py:49
 msgid "Whether to enable the verification rule of mobile phone number"
 msgstr "是否启用手机号验证规则"
 
@@ -940,11 +953,6 @@ msgstr "回复时间"
 #: apps/users/models.py:333
 msgid "Feedback"
 msgstr "回复"
-
-#: apps/users/serializer.py:19 apps/users/serializer.py:60
-#: apps/users/serializer.py:75
-msgid "mobile phone number"
-msgstr "手机号"
 
 #: apps/users/serializer.py:21
 msgid "verification code"
@@ -998,15 +1006,15 @@ msgstr "新密码"
 msgid "new password again"
 msgstr "再次输入新密码"
 
-#: apps/users/service.py:75
+#: apps/users/service.py:76
 msgid "Number of invitations for awards"
 msgstr "邀请奖励次数"
 
-#: apps/users/service.py:78
+#: apps/users/service.py:79
 msgid "Invite user id: %(aid)s and get %(count)s times"
 msgstr "邀请用户id:%(aid)s，获得%(count)s次"
 
-#: apps/users/service.py:240
+#: apps/users/service.py:241
 msgid "Free experience days"
 msgstr "免费体验天数"
 

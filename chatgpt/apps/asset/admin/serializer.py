@@ -20,3 +20,14 @@ class PointsLogQuery(BaseQuery):
     """
     user_id = serializers.IntegerField(required=False, allow_null=True, help_text=_("order user id"))
 
+
+class RechargeSerializer(serializers.Serializer):
+    """
+    recharge serializer.
+    """
+    mobiles = serializers.ListField(
+        child=serializers.CharField(max_length=32),
+        min_length=1,
+        required=True, allow_null=False, help_text=_("mobile phone number")
+    )
+    times = serializers.IntegerField(required=True, min_value=1, allow_null=False, help_text=_("recharge times"))
