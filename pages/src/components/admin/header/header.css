@@ -61,10 +61,18 @@
 .admin-header-dropdown-container {
     position: absolute;
     color: #646566;
-    right: 30px;
+    right: 20px;
     top: 48px;
     padding: 0 10px;
     width: 120px;
+    z-index: 999;
+    text-align: center;
+    background-color: #01101F;
+    color: #fff;
+}
+
+.admin-header-dropdown-item:hover {
+    opacity: 0.8;
 }
 
 .admin-header-dropdown-item {
@@ -97,6 +105,7 @@
 
 .admin-header-dropwond-item-text {
     margin-left: 3px;
+    font-size: 14px;
 }
 
 

@@ -25,3 +25,7 @@
 .package-category-select {
     width: 150px;
 }
+
+.package-model .ant-modal-header {
+    background: #202123;
+}

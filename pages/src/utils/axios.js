@@ -13,8 +13,8 @@
 //     err => Promise.reject(err)
 // )
 // const proBaseURL = 'http://chattop.club';//online
-const proBaseURL = 'http://192.168.0.109:8000';//tan-bendi
-// const proBaseURL  = 'https://pay-api.citypro-tech.com';
+// const proBaseURL = 'http://192.168.0.107:8000';//tan-bendi
+const proBaseURL  = 'https://pay-api.citypro-tech.com';
 
 // const ENV = 'prod'    // dev或者prod
 

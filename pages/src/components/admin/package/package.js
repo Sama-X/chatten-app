@@ -250,7 +250,7 @@ const App = () => {
           }}
         />
       </Form>
-      <Modal title="Basic Modal" className='package-model' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="创建套餐" theme="dark" className='package-model' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <div className='package-input-item-list'>
           <div className='package-input-item'><div className='package-input-item-name'>名称</div><input onChange={changeName} value={name} /></div>
           <div className='package-input-item'><div className='package-input-item-name'>套餐类型</div>
