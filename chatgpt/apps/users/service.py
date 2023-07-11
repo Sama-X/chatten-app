@@ -261,7 +261,7 @@ class UserService(BaseService):
         """
         serializer = UpdateAccountSerializer(data=request.data)
         if not serializer.is_valid():
-            return SerializerErrorResponse(serializer)
+            return SerializerErrorResponse(serializer, code=SystemErrorCode.PARAMS_INVALID)
 
         data = serializer.validated_data
         nickname = data['nickname']  # type: ignore

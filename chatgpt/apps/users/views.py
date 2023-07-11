@@ -124,7 +124,7 @@ class LoginViewSet(viewsets.GenericViewSet):
         """
         form = CreateAccountSerializer(data=request.data)
         if not form.is_valid():
-            return SerializerErrorResponse(form, SystemErrorCode.HTTP_400_BAD_REQUEST)
+            return SerializerErrorResponse(form, code=SystemErrorCode.HTTP_400_BAD_REQUEST)
 
         username = form.validated_data['username']  # type: ignore
         password = form.validated_data['password']  # type: ignore
