@@ -260,6 +260,7 @@ const App = (data) => {
         cookie.save('totalExeNumber', resData.data.used_experience)
         cookie.save('experience', resData.data.reward_experience+resData.data.experience)
         cookie.save('points', resData.data.points)
+        cookie.save('email', resData.data.email)
         setInviteCode(resData.data.invite_code)
       })
     }else{
