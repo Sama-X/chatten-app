@@ -36,12 +36,21 @@ function App() {
     }
   }
 
+  const validateEmail = (email) => {
+    const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    return reg.test(email);
+  }
+
   const onCommit = (e) => {
     const value = e.target.value;
     if (editing === 'nickname') {
       setNickname(value);
       cookie.save('nickname', value, { path: '/' })
     } else if (editing === 'email') {
+      if (!validateEmail(value)) {
+        message.error(locales(language)['invalid_email'])
+        return
+      }
       setEmail(value);
       cookie.save('email', value, { path: '/' })
     }

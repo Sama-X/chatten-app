@@ -64,7 +64,7 @@ export default memo(
     }
 
     const validateEmail = (value) => {
-      const reg = /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/;
+      const reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
       if (!reg.test(value)) {
         message.error(locales(language)['invalid_email'])
         return false;
