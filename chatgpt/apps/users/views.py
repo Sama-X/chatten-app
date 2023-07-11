@@ -213,7 +213,8 @@ class UserProfileViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             'used_experience': 0,
             'points': UserService.get_user_points(user.id),
             'invite_code': None,
-            'openid': user.openid
+            'openid': user.openid,
+            'email': user.email,
         }
         if request.user.user_type == AccountModel.USER_TYPE_NORMAL:
             result['invite_code'] = CommonUtil.encode_hashids(user.id)
