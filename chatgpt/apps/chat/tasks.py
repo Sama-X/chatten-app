@@ -5,7 +5,7 @@ import logging
 
 from celery import shared_task
 
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from base.ai import AIHelper
 
 from chat.models import ChatRecordModel, ChatTopicModel

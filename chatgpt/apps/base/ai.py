@@ -198,7 +198,7 @@ class AIHelper:
         return result
 
     def sync_send_msg(self, question: str, msg_type: str ='text', histories=None, retry_count=0,
-                      key=None, auth_token=None, temperature=1.0):
+                      key=None, auth_token=None):
         """
         sync send message.
         """
@@ -220,37 +220,36 @@ class AIHelper:
         start = time.time()
         try:
             resp = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120),
-                temperature=temperature
+                model="gpt-3.5-turbo", messages=histories, api_key=key, request_timeout=(10, 120)
             )
             result = resp.to_dict_recursive()  # type: ignore
         except RateLimitError as err:
             # rate limit exception
-            logger.error("【chatgpt send】reason: rate limit desc: %s", err)
+            logger.error("【chatgpt sync send】reason: rate limit desc: %s", err)
             if retry_count < 1:
                 time.sleep(5)
-                logger.error("【chatgpt send】RateLimit exceed, repeat retry %s times".format(retry_count+1))
+                logger.error("【chatgpt sync send】RateLimit exceed, repeat retry %s times".format(retry_count+1))
                 return self.sync_send_msg(
                     question, msg_type=msg_type, histories=histories, retry_count=retry_count+1, key=key,
                     auth_token=auth_token
                 )
             result["error"] = "rate limit error"
         except APIConnectionError as err:
-            logger.error("【chatgpt send】APIConnection failed, reason: %s", err)
+            logger.error("【chatgpt sync send】APIConnection failed, reason: %s", err)
             result["error"] = "api connection failed"
         except Timeout as err:
-            logger.error("【chatgpt send】Timeout, reason: %s", err)
+            logger.error("【chatgpt sync send】Timeout, reason: %s", err)
             result["error"] = "timeout"
         except openai.InvalidRequestError as err:
-            logger.error("【chatgpt send】InvalidRequestError, reason: %s", err)
+            logger.error("【chatgpt sync send】InvalidRequestError, reason: %s", err)
             result["error"] = err._message
             result["error_code"] = err.code
         except Exception as err:
-            logger.error("【chatgpt send】Exception, reason: %s", traceback.format_exc())
+            logger.error("【chatgpt sync send】Exception, reason: %s", traceback.format_exc())
             result["error"] = f"exception {traceback.format_exc()}"
 
         result['key_id'] = self.strategy.get_api_key_id(key)
-        logger.info("【chatgpt send】 resp: %s total cost: %s", result, time.time() - start)
+        logger.info("【chatgpt sync send】 resp: %s total cost: %s", result, time.time() - start)
         self.strategy.release_key(key)
         return result
 
