@@ -64,7 +64,7 @@ function App() {
       </div>
       <div className='profile-body'>
         <div className='profile-body-avatar'>
-          <img src={require("../../assets/avatar.jpeg")} alt=""/>
+          <img src={require("../../assets/avatar2.jpg")} alt=""/>
         </div>
         <div className='profile-body-item'>
           <div className='profile-body-item-title'>{ locales(language)['nickname'] }：</div>
