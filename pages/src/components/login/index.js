@@ -151,6 +151,7 @@ export default memo(
           // cookie.save('userName', resData.data.nickname, { path: '/' })
           cookie.save('userId', resData.data.id, { path: '/' })
           cookie.save('token', resData.data.token, { path: '/' })
+          cookie.save('email', resData.data.email, { path: '/' })
           // cookie.save('experience', resData.data.experience, { path: '/' })
           message.success(resData.msg)
           setTimeout(function(){

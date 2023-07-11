@@ -62,7 +62,8 @@ class CommonUtil:
             'id': user.id,
             'nickname': user.nickname,
             'token': token,
-            'experience': user.experience
+            'experience': user.experience,
+            'email': user.email
         }
 
     @classmethod
