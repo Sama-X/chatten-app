@@ -67,7 +67,7 @@ function App() {
           <img src={require("../../assets/avatar2.jpg")} alt=""/>
         </div>
         <div className='profile-body-item'>
-          <div className='profile-body-item-title'>{ locales(language)['nickname'] }：</div>
+          <div className='profile-body-item-title'>{ locales(language)['nickname'] }: </div>
           <div className='profile-body-item-content'>
             { 
               editing === 'nickname' ? <Input className="mobileInput" ref={inputNickname} defaultValue={nickname} placeholder={ locales(language)['input_nickname'] } onBlur={ onCommit } /> :<span>
