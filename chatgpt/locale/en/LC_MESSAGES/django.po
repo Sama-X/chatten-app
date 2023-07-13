@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-10 15:29+0800\n"
+"POT-Creation-Date: 2023-07-13 11:03+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -599,7 +599,11 @@ msgstr "question"
 msgid "serializer: chat topic id"
 msgstr "chat topic id"
 
-#: apps/chat/serializer.py:49 apps/order/serializer.py:69
+#: apps/chat/serializer.py:16
+msgid "serializer: channel"
+msgstr ""
+
+#: apps/chat/serializer.py:50 apps/order/serializer.py:69
 msgid "serializer:chatgpt key"
 msgstr "chatgpt key"
 

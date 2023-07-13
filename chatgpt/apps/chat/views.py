@@ -53,6 +53,7 @@ class ChatViewset(viewsets.GenericViewSet):
 
         question = serializer.validated_data["question"] # type: ignore
         topic_id = serializer.validated_data.get('topic_id') # type: ignore
+        channel = serializer.validated_data.get('channel') # type: ignore
 
         user_id = request.user.id
 
@@ -73,7 +74,9 @@ class ChatViewset(viewsets.GenericViewSet):
             question_time=datetime.now()
         )
 
-        resp = await get_ai_instance().send_msg(question, histories=messages, auth_token=request.headers.get('Authorization'))
+        resp = await get_ai_instance().send_msg(
+            question, histories=messages, auth_token=channel or request.headers.get('Authorization')
+        )
         choices = resp.get('choices', [])
         if len(choices) > 0:
             if not topic_id:
