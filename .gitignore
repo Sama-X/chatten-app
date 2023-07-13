@@ -140,6 +140,7 @@ node_modules
 
 # production
 build
+prod_build
 
 # misc
 .DS_Store

@@ -96,15 +96,16 @@ const App = () => {
 
           let request = new Request({});
           let obj = {}
+          const channel = `${isToken}${new Date().getTime()}`
           const topicId = cookie.load('topicId')
           if(!topicId){
-            obj = {question:questionValue}
+            obj = {question:questionValue, channel: channel}
           }else{
-            obj = {question:questionValue,topic_id:topicId}
+            obj = {question:questionValue, topic_id:topicId, channel: channel}
           }
           setQuestionValue('')
           // setInputDisabled(true)
-          const evtSource = new EventSource(BASE_URL+'/chats/'+isToken);
+          const evtSource = new EventSource(BASE_URL+'/chats/' + channel);
           setTimeout(function(){
             evtSource.addEventListener("message", function(e) {
               if(JSON.parse(e.data).status == '-1'){

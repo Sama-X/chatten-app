@@ -147,11 +147,9 @@ class AIHelper:
                     })
                     index += 1
                     logger.info('【chatgpt send】reponse %s: %ss result: %s', index, time.time() - start, cont)
-
             send_event(auth_token, 'message', {
                 'status': -1
             })
-
             result = self.build_result(histories, report, first_item)
         except RateLimitError as err:
             # rate limit exception
