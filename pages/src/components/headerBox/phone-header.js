@@ -55,6 +55,7 @@ const App = (data) => {
     cookie.save('nickname', '', { path: '/' })
     cookie.save('avatar', '', { path: '/' })
     cookie.save('isLogin', '', { path: '/' })
+    history.push({pathname: '/Login'})
   }
 
   const changePassword = () => {
