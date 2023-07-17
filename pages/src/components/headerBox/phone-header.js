@@ -55,7 +55,6 @@ const App = (data) => {
     cookie.save('nickname', '', { path: '/' })
     cookie.save('avatar', '', { path: '/' })
     cookie.save('isLogin', '', { path: '/' })
-    window.location.href = '/login'
   }
 
   const changePassword = () => {
