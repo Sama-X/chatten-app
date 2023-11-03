@@ -109,6 +109,11 @@ class ChatViewset(viewsets.GenericViewSet):
 
         if obj.answer:
             O2OPaymentService.reduce_payment(user_id, 1)
+            try:
+                sync_user_info_to_icp.delay(user_id)
+            except Exception as err:
+                logger.error("[sync user info to icp] error: %s", err)
+
             UserServiceHelper.update_experience_cache(user_id, total_experience - 1, 60)
             try:
                 wallet = SamaWalletModel.objects.filter(
@@ -121,11 +126,9 @@ class ChatViewset(viewsets.GenericViewSet):
                 logger.error('[chat sama transaction] error: %s', traceback.format_exc())
 
             try:
-                sync_user_info_to_icp.delay(user_id)
-                await asyncio.sleep(1)
                 sync_user_chat_logs.delay(topic_id)
-            except:
-                pass
+            except Exception as err:
+                logger.error("[sync user chat logs] error: %s", err)
 
             return APIResponse(result={
                 "answer": obj.answer,
