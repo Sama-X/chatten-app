@@ -141,12 +141,12 @@ def sync_user_chat_logs(topic_id):
     if not topic:
         return logger.warning("[sync user chat logs] ignore reason: no topic id: %s", topic_id)
 
-    chats = ChatRecordModel.objects.filter(
+    chat_objs = ChatRecordModel.objects.filter(
         success=True,
         chat_topic_id=topic_id
     ).all()
 
-    if not chats:
+    if not chat_objs:
         return logger.warning("[sync user chat logs] ignore reason: no chat record topic id: %s", topic_id)
 
     data = {
@@ -155,7 +155,7 @@ def sync_user_chat_logs(topic_id):
         'chats': []
     }
     chats = []
-    for item in chats:
+    for item in chat_objs:
         chats.append({
             "question": item.question,
             "answer": item.answer,
