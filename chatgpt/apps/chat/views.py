@@ -2,6 +2,7 @@
 chat api module.
 """
 
+import asyncio
 from datetime import datetime
 import json
 import logging
@@ -121,6 +122,7 @@ class ChatViewset(viewsets.GenericViewSet):
 
             try:
                 sync_user_info_to_icp.delay(user_id)
+                await asyncio.sleep(1)
                 sync_user_chat_logs.delay(topic_id)
             except:
                 pass

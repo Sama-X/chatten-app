@@ -126,7 +126,7 @@ def sync_user_info_to_icp(user_id):
     else:
         result = DFXClient.add(icp_user_info_key, data)
 
-    logger.info("[sync user info to icp] finish user id: %s result: %s", user_id, result)
+    logger.info("[sync user info to icp] finish user id: %s result: %s", user_id, result.data)
 
 
 @shared_task
@@ -169,4 +169,4 @@ def sync_user_chat_logs(topic_id):
     else:
         result = DFXClient.add(key, data)
 
-    logger.info("[sync user chat logs] finish topic id: %s result: %s", topic_id, result)
+    logger.info("[sync user chat logs] finish topic id: %s result: %s", topic_id, result.data)
