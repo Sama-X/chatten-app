@@ -33,5 +33,9 @@ app.conf.beat_schedule = {
     'auto-clear-expired-payment': {
         'task': 'asset.tasks.auto_clear_expired_payment',
         'schedule': crontab(hour="*/6", minute="0")
+    },
+    'sync-dfx-map-name': {
+        'task': 'chat.tasks.sync_dfx_map_name',
+        'schedule': crontab(hour="0", minute='0')
     }
 }

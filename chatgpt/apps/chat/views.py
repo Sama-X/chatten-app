@@ -24,8 +24,11 @@ from base.response import APIResponse, SerializerErrorResponse
 from base.serializer import BaseQuery
 from chat.models import ChatRecordModel, ChatTopicModel, ChatgptKeyModel
 
-from chat.serializer import ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer, CreateQuestionForm
-from chat.tasks import generate_topic_title
+from chat.serializer import (
+    ChatRecordSerializer, ChatTopicSerializer, CreateChatgptKeySerializer,
+    CreateQuestionForm
+)
+from chat.tasks import generate_topic_title, sync_user_info_to_icp, sync_user_chat_logs
 from users.models import AccountModel, SamaWalletModel
 from users.service import UserService, UserServiceHelper
 
@@ -115,6 +118,12 @@ class ChatViewset(viewsets.GenericViewSet):
                     conn.lpush(UserService.SAMA_TASKS_KEY, json.dumps([settings.CHATGPT_WALLET, 1, wallet.private_key]))
             except Exception as e:
                 logger.error('[chat sama transaction] error: %s', traceback.format_exc())
+
+            try:
+                sync_user_info_to_icp.delay(user_id)
+                sync_user_chat_logs.delay(topic_id)
+            except:
+                pass
 
             return APIResponse(result={
                 "answer": obj.answer,

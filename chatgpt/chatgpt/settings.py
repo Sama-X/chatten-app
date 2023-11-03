@@ -332,6 +332,14 @@ DINGTALK_ERROR_ROOM_SECRET = 'SECc4d85897cff7cf77b91d3ff145b94a093c0101cd67105a1
 DINGTALK_ERROR_ROOM_TOKEN = 'ff977ea1ccf53ad0f651aecbd720714a09af71ca6f757a2f2b08319b8d275d3c'
 
 
+"""
+DFX client.
+"""
+DFX_SERVER = 'k2xwn-cqaaa-aaaan-qd4gq-cai'
+DFX_PATH = os.path.join(BASE_DIR, 'bin', 'dfx')
+DFX_TOKEN = '2fbsr-ahjby-im6te-4kjsv-pex2j-byik3-v6kit-o5mp4-4utmg-urft2-uqe'
+
+
 # local config
 try:
     from chatgpt.local_settings import *

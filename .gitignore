@@ -167,3 +167,4 @@ test_local_settings.py
 apiclient_key.pem
 prod_slave_local_settings.py
 docker-compose-prod-slave.yaml
+chatgpt/bin/dfx

@@ -1,14 +1,18 @@
 """
 Celery task.
 """
+from datetime import datetime
 import logging
 
 from celery import shared_task
 
 from django.utils.translation import gettext as _
+from asset.models import O2OPaymentModel
 from base.ai import AIHelper
+from base.dfx import DFXClient
 
 from chat.models import ChatRecordModel, ChatTopicModel
+from users.models import AccountModel
 
 logger = logging.getLogger(__name__)
 
@@ -61,3 +65,104 @@ def generate_topic_title(topic_id):
         topic.save()
 
     logger.info("[generate topic] finish topic id: %s", topic_id)
+
+
+@shared_task
+def sync_dfx_map_name():
+    """
+    every day sync dfx map name.
+    """
+    logger.info("[sync dfx map name] start")
+    item = DFXClient.get_store_name()
+    if item.data != DFXClient.DFX_TOKEN:
+        DFXClient.set_store_name(DFXClient.DFX_TOKEN)
+
+    logger.info("[sync dfx map name] finish")
+
+
+@shared_task
+def sync_user_info_to_icp(user_id):
+    """
+    sync user info to icp server.
+    """
+    logger.info("[sync user info to icp] start user id: %s", user_id)
+    user = AccountModel.objects.filter(id=user_id).first()
+    if not user:
+        return logger.warning("[sync user info to icp] ignore reason: no user id: %s", user_id)
+
+    data = {
+        'id': user.id,
+        'username': user.username,
+        'mobile': user.mobile,
+        'nickname': user.nickname,
+        'login_time': str(user.login_time),
+        'login_ip': user.login_ip,
+        'user_type': user.user_type,
+        'openid': user.openid,
+        'email': user.email,
+        'transient_expire_time': None,
+        'transient_usage_count': 0,
+        'persistence_usage_count': 0,
+        'free_expire_time': None,
+        'free_usage_count': 0,
+        'sync_time': str(datetime.now())
+    }
+    payment = O2OPaymentModel.objects.filter(user_id=user_id).first()
+    if payment:
+        data.update({
+            'transient_expire_time': str(payment.transient_expire_time),
+            'transient_usage_count': payment.transient_usage_count,
+            'persistence_usage_count': payment.persistence_usage_count,
+            'free_expire_time': payment.free_expire_time,
+            'free_usage_count': payment.free_usage_count,
+        })
+
+    icp_user_info_key = f'user_info_{user_id}'
+    result = None
+    if DFXClient.get(icp_user_info_key).data:
+        result = DFXClient.update(icp_user_info_key, data)
+    else:
+        result = DFXClient.add(icp_user_info_key, data)
+
+    logger.info("[sync user info to icp] finish user id: %s result: %s", user_id, result)
+
+
+@shared_task
+def sync_user_chat_logs(topic_id):
+    """
+    sync user topic chat logs to icp server.
+    """
+    logger.info("[sync user chat logs] start topic id: %s", topic_id)
+    topic = ChatTopicModel.objects.filter(id=topic_id).first()
+    if not topic:
+        return logger.warning("[sync user chat logs] ignore reason: no topic id: %s", topic_id)
+
+    chats = ChatRecordModel.objects.filter(
+        success=True,
+        chat_topic_id=topic_id
+    ).all()
+
+    if not chats:
+        return logger.warning("[sync user chat logs] ignore reason: no chat record topic id: %s", topic_id)
+
+    data = {
+        'topic': topic.title,
+        'sync_time': str(datetime.now()),
+        'chats': []
+    }
+    chats = []
+    for item in chats:
+        chats.append({
+            "question": item.question,
+            "answer": item.answer,
+            "question_time": str(item.question_time)
+        })
+    data['chats'] = chats
+
+    key = f'chat_topic_{topic_id}'
+    if DFXClient.get(key).data:
+        result = DFXClient.update(key, data)
+    else:
+        result = DFXClient.add(key, data)
+
+    logger.info("[sync user chat logs] finish topic id: %s result: %s", topic_id, result)

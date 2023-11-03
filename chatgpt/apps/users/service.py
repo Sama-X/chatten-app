@@ -236,6 +236,12 @@ class UserService(BaseService):
         if UserServiceHelper.had_given_gift_experience(user_id):
             return True
 
+        try:
+            from chat.tasks import sync_user_info_to_icp
+            sync_user_info_to_icp.delay(user_id)
+        except:
+            pass
+
         payment_obj = O2OPaymentModel.objects.filter(user_id=user_id).first()
         days = ConfigModel.get_int(
             ConfigModel.CONFIG_FREE_TRIAL_DAYS, 7, _("Free experience days")
