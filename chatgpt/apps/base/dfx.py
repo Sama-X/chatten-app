@@ -59,6 +59,9 @@ class DFXClient:
         if resp.error:
             logger.error("【dfx init】 reason: %s", resp.error)
             return False
+
+        cls.IS_INIT = True
+
         logger.info("【dfx init】 resp: %s", resp.data)
 
     @classmethod
