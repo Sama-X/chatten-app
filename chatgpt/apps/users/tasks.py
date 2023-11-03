@@ -1,7 +1,6 @@
 """
 Celery task.
 """
-from datetime import datetime, timedelta
 import json
 import logging
 
@@ -10,7 +9,6 @@ from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
 from django_redis import get_redis_connection
-from requests import delete
 from apps.base.sama import SamaClient
 
 from apps.users.service import UserService

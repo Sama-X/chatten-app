@@ -74,9 +74,12 @@ def sync_dfx_map_name():
     every day sync dfx map name.
     """
     logger.info("[sync dfx map name] start")
+    if DFXClient.IS_INIT:
+        return logger.warning("[sync dfx map name] ignore reason: dfx is init")
+
     item = DFXClient.get_store_name()
     if item.data != DFXClient.DFX_TOKEN:
-        DFXClient.set_store_name(DFXClient.DFX_TOKEN)
+        DFXClient.init()
 
     logger.info("[sync dfx map name] finish")
 
