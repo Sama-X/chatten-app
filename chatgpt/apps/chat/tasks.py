@@ -114,7 +114,7 @@ def sync_user_info_to_icp(user_id):
             'transient_expire_time': str(payment.transient_expire_time),
             'transient_usage_count': payment.transient_usage_count,
             'persistence_usage_count': payment.persistence_usage_count,
-            'free_expire_time': payment.free_expire_time,
+            'free_expire_time': str(payment.free_expire_time),
             'free_usage_count': payment.free_usage_count,
         })
 
