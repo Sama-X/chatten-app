@@ -2,6 +2,7 @@
 Celery task.
 """
 from datetime import datetime
+import json
 import logging
 
 from celery import shared_task
@@ -119,6 +120,7 @@ def sync_user_info_to_icp(user_id):
 
     icp_user_info_key = f'user_info_{user_id}'
     result = None
+    data = json.dumps(data, ensure_ascii=False)
     if DFXClient.get(icp_user_info_key).data:
         result = DFXClient.update(icp_user_info_key, data)
     else:
@@ -158,6 +160,8 @@ def sync_user_chat_logs(topic_id):
             "question_time": str(item.question_time)
         })
     data['chats'] = chats
+
+    data = json.dumps(data, ensure_ascii=False)
 
     key = f'chat_topic_{topic_id}'
     if DFXClient.get(key).data:
