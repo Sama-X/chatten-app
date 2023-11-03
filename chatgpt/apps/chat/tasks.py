@@ -73,7 +73,7 @@ def sync_dfx_map_name():
     """
     every day sync dfx map name.
     """
-    logger.info("[sync dfx map name] start is init: ", DFXClient.IS_INIT)
+    logger.info("[sync dfx map name] start is init: %s", DFXClient.IS_INIT)
     if DFXClient.IS_INIT:
         return logger.warning("[sync dfx map name] ignore reason: dfx is init")
 
