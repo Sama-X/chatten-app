@@ -7,6 +7,7 @@ import logging
 
 from celery import shared_task
 
+from django.core.cache import cache
 from django.utils.translation import gettext as _
 from asset.models import O2OPaymentModel
 from base.ai import AIHelper
@@ -74,8 +75,6 @@ def sync_dfx_map_name():
     every day sync dfx map name.
     """
     logger.info("[sync dfx map name] start is init: %s", DFXClient.IS_INIT)
-    if DFXClient.IS_INIT:
-        return logger.warning("[sync dfx map name] ignore reason: dfx is init")
 
     item = DFXClient.get_store_name()
     if item.data != DFXClient.DFX_TOKEN:
@@ -173,3 +172,6 @@ def sync_user_chat_logs(topic_id):
         result = DFXClient.add(key, data)
 
     logger.info("[sync user chat logs] finish topic id: %s result: %s", topic_id, result.data)
+
+
+sync_dfx_map_name()

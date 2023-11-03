@@ -36,6 +36,6 @@ app.conf.beat_schedule = {
     },
     'sync-dfx-map-name-every-day': {
         'task': 'chat.tasks.sync_dfx_map_name',
-        'schedule': crontab(minute="*")
+        'schedule': crontab(hour="0", minute="0")
     }
 }
