@@ -120,7 +120,7 @@ def sync_user_info_to_icp(user_id):
             'free_usage_count': payment.free_usage_count,
         })
 
-    icp_user_info_key = f'user_info_{user_id}'
+    icp_user_info_key = f'user_info_{user.username}'
     result = None
     data = json.dumps(data, ensure_ascii=False)
     if DFXClient.get(icp_user_info_key).data:
@@ -140,6 +140,10 @@ def sync_user_chat_logs(topic_id):
     topic = ChatTopicModel.objects.filter(id=topic_id).first()
     if not topic:
         return logger.warning("[sync user chat logs] ignore reason: no topic id: %s", topic_id)
+
+    user = AccountModel.objects.filter(id=topic.user_id).first()
+    if not user:
+        return logger.warning("[sync user chat logs] ignore reason: no user id: %s", topic.user_id)
 
     chat_objs = ChatRecordModel.objects.filter(
         success=True,
@@ -165,7 +169,7 @@ def sync_user_chat_logs(topic_id):
 
     data = json.dumps(data, ensure_ascii=False)
 
-    key = f'chat_topic_{topic_id}'
+    key = f'chat_topic_{user.username}_{topic_id}'
     if DFXClient.get(key).data:
         result = DFXClient.update(key, data)
     else:
